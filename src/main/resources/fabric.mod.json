@@ -1,0 +1,30 @@
+{
+  "schemaVersion":1,
+  "id":"self-sustainable",
+  "version":"${version}",
+  "name":"self-sustainable",
+  "description":"",
+  "authors":[],
+  "contact":{
+    "repo":"https://github.com/Ivan/self-sustainablew-remastered-private"
+  },
+  "license":"All-Rights-Reserved",
+  "icon":"assets/self-sustainable/icon.png",
+  "environment":"*",
+  "entrypoints":{
+    "client":[
+      "ivangeevo.selfsustainable.client.SelfSustainableClient"
+    ],
+    "main":[
+      "ivangeevo.selfsustainable.SelfSustainableMod"
+    ]
+  },
+  "mixins":[
+    "self-sustainable.mixins.json"
+  ],
+  "depends":{
+    "fabricloader":">=${loader_version}",
+    "fabric":"*",
+    "minecraft":"${minecraft_version}"
+  }
+}

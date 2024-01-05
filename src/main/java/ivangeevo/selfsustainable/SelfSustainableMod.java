@@ -2,7 +2,7 @@ package ivangeevo.selfsustainable;
 
 import ivangeevo.selfsustainable.block.ModBlocks;
 import ivangeevo.selfsustainable.entity.ModEntities;
-import ivangeevo.selfsustainable.item.ModItems;
+import ivangeevo.selfsustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ public class SelfSustainableMod implements ModInitializer {
         ModBlocks.registerModBlocks();
         ModItems.registerModItems();
         ModEntities.Blocks.registerBlockEntities();
+        ModRecipes.registerRecipes();
 
     }
 }

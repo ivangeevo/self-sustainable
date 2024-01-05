@@ -1,7 +1,5 @@
-package ivangeevo.selfsustainable.item;
+package ivangeevo.selfsustainable;
 
-import ivangeevo.selfsustainable.ModItems;
-import ivangeevo.selfsustainable.SelfSustainableMod;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

@@ -1,8 +1,6 @@
 package ivangeevo.selfsustainable.block;
 
-import ivangeevo.selfsustainable.block.blocks.BrickOvenBlock;
-import ivangeevo.selfsustainable.block.blocks.StoneOvenBlock;
-import ivangeevo.selfsustainable.item.ModItemGroup;
+import ivangeevo.selfsustainable.ModItemGroup;
 import ivangeevo.selfsustainable.SelfSustainableMod;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;

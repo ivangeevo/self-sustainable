@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 
 public class SmeltingRecipe extends AbstractCookingRecipe {
     public SmeltingRecipe(Identifier id, String group, Ingredient input, ItemStack output, float experience, int cookTime) {
-        super(BTWR_RecipeType.SMELTING, id, group, input, output, experience, cookTime);
+        super(ModRecipeType.SMELTING, id, group, input, output, experience, cookTime);
     }
 
     public ItemStack createIcon() {

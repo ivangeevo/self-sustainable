@@ -6,10 +6,12 @@ package net.ivangeevo.selfsustainable.block.entity;
 import net.ivangeevo.selfsustainable.block.blocks.BrickOvenBlock;
 import net.ivangeevo.selfsustainable.entity.ModBlockEntities;
 import net.ivangeevo.selfsustainable.recipe.OvenCookingRecipe;
+import net.ivangeevo.selfsustainable.util.ItemUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -37,12 +39,83 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     private final int[] cookingTotalTimes;
     private final RecipeManager.MatchGetter<Inventory, OvenCookingRecipe> matchGetter =  RecipeManager.createCachedMatchGetter(OvenCookingRecipe.Type.INSTANCE);
 
+    // Added variables from BTW
+    private ItemStack cookStack = null;
+
+    protected ItemStack[] furnaceItemStacks = new ItemStack[3];
+
+
+
     protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
     public BrickOvenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.OVEN_BRICK, pos, state);
         this.cookingTimes = new int[4];
         this.cookingTotalTimes = new int[4];
+    }
+
+    public void givePlayerCookStack(World world,  BlockPos pos, BlockState state, PlayerEntity player, Direction facing)
+    {
+        if (!world.isClient)
+        {
+            // this is legacy support to clear all inventory items that may have been added through the GUI
+
+            ejectAllNotCookStacksToFacing(world,pos, state, player, facing);
+        }
+
+        ItemUtils.givePlayerStackOrEjectFromTowardsFacing(player, state, cookStack, pos, facing);
+
+        furnaceItemStacks[0] = null;
+        furnaceItemStacks[1] = null;
+        furnaceItemStacks[2] = null;
+
+        setCookStack(null);
+    }
+
+    private void ejectAllNotCookStacksToFacing(World world, BlockPos pos, BlockState state, PlayerEntity player, Direction facing)
+    {
+
+
+
+        if ( furnaceItemStacks[0] != null && !ItemStack.areEqual(furnaceItemStacks[0], cookStack) )
+        {
+            ItemUtils.ejectStackFromBlockTowardsFacing(world, pos,state, furnaceItemStacks[0], facing);
+
+            furnaceItemStacks[0] = null;
+        }
+
+        if ( furnaceItemStacks[1] != null && !ItemStack.areEqual(furnaceItemStacks[1], cookStack) )
+        {
+            ItemUtils.ejectStackFromBlockTowardsFacing(world, pos, state, cookStack, facing);
+
+            furnaceItemStacks[1] = null;
+        }
+
+        if ( furnaceItemStacks[2] != null && !ItemStack.areEqual(furnaceItemStacks[2], cookStack) )
+        {
+            ItemUtils.ejectStackFromBlockTowardsFacing(world, pos, state, furnaceItemStacks[2], facing);
+
+            furnaceItemStacks[2] = null;
+        }
+
+        markDirty();
+    }
+
+    public void setCookStack(ItemStack stack)
+    {
+        if ( stack != null )
+        {
+            cookStack = stack.copy();
+        }
+        else
+        {
+            cookStack = null;
+        }
+
+        if (world != null && !world.isClient) {
+            BlockPos pos = getPos();
+            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+        }
     }
 
     public static void litServerTick(World world, BlockPos pos, BlockState state, BrickOvenBlockEntity oven) {

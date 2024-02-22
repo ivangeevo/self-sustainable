@@ -3,6 +3,7 @@ package net.ivangeevo.selfsustainable.block.blocks;
 import net.ivangeevo.selfsustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.selfsustainable.entity.ModBlockEntities;
 import net.ivangeevo.selfsustainable.recipe.OvenCookingRecipe;
+import net.ivangeevo.selfsustainable.util.ItemUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -56,6 +57,11 @@ public class BrickOvenBlock
     private final boolean emitsParticles;
     private final int fireDamage;
 
+
+    protected final float clickYTopPortion = (6F / 16F );
+    protected final float clickYBottomPortion = (6F / 16F );
+
+
     public BrickOvenBlock(boolean emitsParticles, int fireDamage, AbstractBlock.Settings settings) {
         super(settings);
         this.emitsParticles = emitsParticles;
@@ -68,16 +74,26 @@ public class BrickOvenBlock
         ItemStack itemStack;
         BrickOvenBlockEntity BrickOvenBlockEntity;
         Optional<OvenCookingRecipe> optional;
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof BrickOvenBlockEntity && (optional = (BrickOvenBlockEntity = (BrickOvenBlockEntity)blockEntity).getRecipeFor(itemStack = player.getStackInHand(hand))).isPresent()) {
+        BrickOvenBlockEntity blockEntity = (BrickOvenBlockEntity) world.getBlockEntity(pos);
+        float fYClick = hit.getSide().getOffsetY();
+
+        if (blockEntity instanceof BrickOvenBlockEntity && (optional = (BrickOvenBlockEntity = blockEntity).getRecipeFor(itemStack = player.getStackInHand(hand))).isPresent()) {
             if (!world.isClient && BrickOvenBlockEntity.addItem(player, player.getAbilities().creativeMode ? itemStack.copy() : itemStack, optional.get().getCookTime())) {
-                player.incrementStat(Stats.INTERACT_WITH_CAMPFIRE);
-                return ActionResult.SUCCESS;
+                if (fYClick > clickYTopPortion) {
+                    blockEntity.givePlayerCookStack(world, pos, state,player, player.getHorizontalFacing().getOpposite());
+
+                    return ActionResult.SUCCESS;
+                }
             }
             return ActionResult.CONSUME;
         }
         return ActionResult.PASS;
     }
+
+
+
+
+
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {

@@ -2,12 +2,14 @@ package net.ivangeevo.selfsustainable.block.entity.renderer;
 
 import net.ivangeevo.selfsustainable.block.blocks.BrickOvenBlock;
 import net.ivangeevo.selfsustainable.block.entity.BrickOvenBlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -27,39 +29,25 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
 
     @Override
     public void render(BrickOvenBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+
+        // Get the itemsBeingCooked from the entity
+        DefaultedList<ItemStack> itemsBeingCooked = entity.getItemsBeingCooked();
         Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
 
-        // Get the itemsBeingCooked from the entity (similar to CampfireBlockEntity)
-        DefaultedList<ItemStack> itemsBeingCooked = entity.getItemsBeingCooked();
+        float yawDegrees = facing.asRotation();
 
         matrices.push();
-
-        matrices.translate(0.5f, 0.6f, 0.5f);
-        float yawDegrees = -facing.asRotation();
+        matrices.translate(0.5f, 0.6f, 0.7f);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(yawDegrees));
+        matrices.scale(0.35f, 0.35f, 0.35f);
 
-        // Use the logic from CampfireBlockEntityRenderer for rendering items
-        float scale = 0.375f;
-
-        for (ItemStack itemStack : itemsBeingCooked) {
-            if (itemStack.isEmpty()) continue;
-
-            matrices.push();
-
-            matrices.scale(scale, scale, scale);
-
-            // Use the itemRenderer to render the item
-            itemRenderer.renderItem(itemStack, ModelTransformationMode.GUI, manuallySetLightLevel(entity.getWorld(),
-                    entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
-            matrices.pop();
-        }
+        // Use the itemRenderer to render the item
+        this.itemRenderer.renderItem(itemsBeingCooked.get(0), ModelTransformationMode.GUI,
+                LightmapTextureManager.pack(8, 15), OverlayTexture.DEFAULT_UV,
+                matrices, vertexConsumers, entity.getWorld(), 1);
 
         matrices.pop();
-    }
 
-    private int manuallySetLightLevel(World world, BlockPos pos) {
-        // Return a constant light level of 8
-        return LightmapTextureManager.pack(8, 15);
     }
 
 

@@ -2,12 +2,14 @@ package net.ivangeevo.selfsustainable.block.blocks;
 
 import net.ivangeevo.selfsustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.selfsustainable.entity.ModBlockEntities;
+import net.ivangeevo.selfsustainable.item.interfaces.ItemAdded;
 import net.ivangeevo.selfsustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.selfsustainable.util.ItemUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
@@ -32,6 +35,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
@@ -66,28 +70,76 @@ public class BrickOvenBlock
         super(settings);
         this.emitsParticles = emitsParticles;
         this.fireDamage = fireDamage;
-        this.setDefaultState(this.stateManager.getDefaultState().with(LIT, true).with(SIGNAL_FIRE, false).with(WATERLOGGED, false).with(FACING, Direction.NORTH));
+        this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false).with(SIGNAL_FIRE, false).with(WATERLOGGED, false).with(FACING, Direction.NORTH));
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ItemStack itemStack;
-        BrickOvenBlockEntity BrickOvenBlockEntity;
+        BrickOvenBlockEntity brickOvenBlockEntity;
         Optional<OvenCookingRecipe> optional;
-        BrickOvenBlockEntity blockEntity = (BrickOvenBlockEntity) world.getBlockEntity(pos);
-        float fYClick = hit.getSide().getOffsetY();
+        BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof BrickOvenBlockEntity && (optional = (BrickOvenBlockEntity = blockEntity).getRecipeFor(itemStack = player.getStackInHand(hand))).isPresent()) {
-            if (!world.isClient && BrickOvenBlockEntity.addItem(player, player.getAbilities().creativeMode ? itemStack.copy() : itemStack, optional.get().getCookTime())) {
-                if (fYClick > clickYTopPortion) {
-                    blockEntity.givePlayerCookStack(world, pos, state,player, player.getHorizontalFacing().getOpposite());
+        double relativeClickY = hit.getPos().getY() - pos.getY();
+
+        if (hit.getSide() != state.get(FACING)) {
+            return ActionResult.FAIL;
+        }
+
+        if (relativeClickY > clickYTopPortion) {
+            if (blockEntity instanceof BrickOvenBlockEntity) {
+                brickOvenBlockEntity = (BrickOvenBlockEntity) blockEntity;
+                ItemStack itemStack = player.getStackInHand(hand);
+
+                // Check for cooking
+                if ((optional = brickOvenBlockEntity.getRecipeFor(itemStack)).isPresent()) {
+                    if (!world.isClient && brickOvenBlockEntity.addItem(player, player.getAbilities().creativeMode ? itemStack.copy() : itemStack, optional.get().getCookTime()))
+                    {
+                        return ActionResult.SUCCESS;
+                    }
+                } else {
+                    // Check for retrieving
+                    brickOvenBlockEntity.retrieveItem(player, itemStack);
+                    return ActionResult.CONSUME_PARTIAL;
+                }
+            }
+        } else if (relativeClickY < clickYBottomPortion) {
+            // Reuse the blockEntity from the first if block
+            if (blockEntity instanceof BrickOvenBlockEntity) {
+                brickOvenBlockEntity = (BrickOvenBlockEntity) blockEntity;
+                ItemStack heldStack = player.getStackInHand(hand);
+
+                int fuelTime = brickOvenBlockEntity.getFuelTimeForStack(heldStack);
+                int itemsBurned = brickOvenBlockEntity.attemptToAddFuel(heldStack, fuelTime);
+
+                // handle fuel here
+                Item item = heldStack.getItem();
+
+                if (((ItemAdded) item).getCanBeFedDirectlyIntoBrickOven(fuelTime)) {
+                    if (!world.isClient) {
+
+                        if (itemsBurned > 0) {
+                            BlockPos soundPos = new BlockPos(
+                                    (int) ((double) pos.getX() + 0.5D),
+                                    (int) ((double) pos.getY() + 0.5D),
+                                    (int) ((double) pos.getZ() + 0.5D));
+
+                            if (state.get(LIT)) {
+                                world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS,
+                                        0.2F + world.random.nextFloat() * 0.1F, world.random.nextFloat() * 0.25F + 1.25F);
+                            } else {
+                                world.playSound(null, soundPos, SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS,
+                                        0.25F, (world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F);
+                            }
+
+                            heldStack.decrement(1);
+                        }
+                    }
 
                     return ActionResult.SUCCESS;
                 }
             }
-            return ActionResult.CONSUME;
         }
-        return ActionResult.PASS;
+        return ActionResult.FAIL;
     }
 
 
@@ -95,7 +147,8 @@ public class BrickOvenBlock
 
 
 
-    @Override
+
+        @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }

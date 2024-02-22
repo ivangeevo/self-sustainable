@@ -13,10 +13,10 @@
   "environment":"*",
   "entrypoints":{
     "client":[
-      "ivangeevo.selfsustainable.client.SelfSustainableClient"
+      "net.ivangeevo.selfsustainable.client.SelfSustainableClient"
     ],
     "main":[
-      "ivangeevo.selfsustainable.SelfSustainableMod"
+      "net.ivangeevo.selfsustainable.SelfSustainableMod"
     ]
   },
   "mixins":[
@@ -26,5 +26,15 @@
     "fabricloader":">=${loader_version}",
     "fabric":"*",
     "minecraft":"${minecraft_version}"
+  },
+
+  "accessWidener" : "self_sustainable.accesswidener",
+
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_1792": ["net/ivangeevo/selfsustainable/item/interfaces/ItemAdded"]
+
+    }
   }
+
 }

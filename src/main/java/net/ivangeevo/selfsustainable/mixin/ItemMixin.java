@@ -9,7 +9,8 @@ public class ItemMixin implements ItemAdded {
     @Override
     public boolean getCanBeFedDirectlyIntoBrickOven(int iItemDamage) {
         return !getCanItemBeSetOnFireOnUse(iItemDamage) && !getCanItemStartFireOnUse(iItemDamage) &&
-                getFurnaceBurnTime(iItemDamage) > 0;    }
+                getOvenBurnTime(iItemDamage) > 0;
+    }
 
     @Override
     public boolean getCanItemBeSetOnFireOnUse(int iItemDamage) {
@@ -22,7 +23,7 @@ public class ItemMixin implements ItemAdded {
     }
 
     @Override
-    public int getFurnaceBurnTime(int iItemDamage) {
+    public int getOvenBurnTime(int iItemDamage) {
         return defaultFurnaceBurnTime;
     }
 }

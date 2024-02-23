@@ -8,14 +8,12 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
-import org.joml.Vector3f;
 
 public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOvenBlockEntity> {
 
@@ -25,11 +23,14 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
         this.itemRenderer = ctx.getItemRenderer();
     }
 
+
+    // TODO: Fix the item model orientation.
+    // It displays with a wrong orientation for different directions.
     @Override
     public void render(BrickOvenBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
         // Get the itemsBeingCooked from the entity
-        DefaultedList<ItemStack> itemsBeingCooked = entity.getItemsBeingCooked();
+        DefaultedList<ItemStack> itemsBeingCooked = entity.getItemBeingCooked();
         Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
 
         matrices.push();

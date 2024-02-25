@@ -10,4 +10,5 @@ public interface ItemAdded {
     boolean getCanBeFedDirectlyIntoBrickOven(int fuelTicks);
 
 
+
 }

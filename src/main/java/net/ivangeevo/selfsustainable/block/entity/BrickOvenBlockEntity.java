@@ -3,37 +3,26 @@
  */
 package net.ivangeevo.selfsustainable.block.entity;
 
-import com.google.common.collect.Maps;
 import net.ivangeevo.selfsustainable.block.blocks.BrickOvenBlock;
 import net.ivangeevo.selfsustainable.entity.ModBlockEntities;
-import net.ivangeevo.selfsustainable.item.interfaces.ItemAdded;
+import net.ivangeevo.selfsustainable.item.FuelTicksManager;
 import net.ivangeevo.selfsustainable.recipe.OvenCookingRecipe;
-import net.ivangeevo.selfsustainable.util.ItemUtils;
-import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.Clearable;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.Util;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -50,29 +39,16 @@ import static net.ivangeevo.selfsustainable.block.blocks.BrickOvenBlock.LIT;
 public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     private final DefaultedList<ItemStack> itemBeingCooked = DefaultedList.ofSize(1, ItemStack.EMPTY);;
 
-
-    private final int[] cookingTimes;
-    private final int[] cookingTotalTimes;
     private final RecipeManager.MatchGetter<Inventory, OvenCookingRecipe> matchGetter =  RecipeManager.createCachedMatchGetter(OvenCookingRecipe.Type.INSTANCE);
 
     // Added variables from BTW
 
     private boolean lightOnNextUpdate = false;
 
-
-    private Map<Item, Integer> fuelTimeMap;
-    public ItemStack cookStack;
-
-    protected ItemStack[] furnaceItemStacks = new ItemStack[3];
-
-    private int unlitFuelBurnTime = 0;
-
-    private int visualFuelLevel = 0;
-
     private final int brickBurnTimeMultiplier = 4; // applied on top of base multiplier of standard furnace
 
     private final int cookTimeMultiplier = 4;
-
+    private int visualFuelLevel = 0;
     private final int visualFuelLevelIncrement = (200 * 2 * brickBurnTimeMultiplier);
     private final int visualSputterFuelLevel = (visualFuelLevelIncrement / 4 );
 
@@ -89,48 +65,25 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     public static final int DEFAULT_COOK_TIME = 400;
 
     /** DEFINITIONS OF WHAT EACH PROPERTY MEANS **/
+
+    // the amount of ticks that the oven has in its buffer.
+    int unlitFuelBurnTime;
+
     // remaining time (in ticks) for which the current fuel item will continue to burn.
-    int ovenBurnTime;
+    int fuelBurnTime;
 
-    // the total burn time (in ticks) that the current fuel item could provide when initially inserted into the furnace.
-    int fuelTime;
     // the progress (in ticks) of the cooking process for the item in the input slot of the furnace.
-    int cookTime;
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate(){
+    private final int[] cookingTimes;
 
-        @Override
-        public int get(int index) {
-            return switch (index) {
-                case 0 -> BrickOvenBlockEntity.this.ovenBurnTime;
-                case 1 -> BrickOvenBlockEntity.this.fuelTime;
-                case 2 -> BrickOvenBlockEntity.this.cookTime;
-                default -> 0;
-            };
-        }
+    // the total time needed for the cooked item to complete.
+    private final int[] cookingTotalTimes;
 
-        @Override
-        public void set(int index, int value) {
-            switch (index) {
-                case 0: {
-                    BrickOvenBlockEntity.this.ovenBurnTime = value;
-                    break;
-                }
-                case 1: {
-                    BrickOvenBlockEntity.this.fuelTime = value;
-                    break;
-                }
-                case 2: {
-                    BrickOvenBlockEntity.this.cookTime = value;
-                    break;
-                }
-            }
-        }
 
-        @Override
-        public int size() {
-            return 4;
-        }
-    };
+    // Update fuel level
+    public void updateFuelLevel(int newFuelLevel) {
+        this.visualFuelLevel = MathHelper.clamp(newFuelLevel, 0, 9); // Ensure the fuel level is within valid range
+        markDirty(); // Mark the block entity as dirty to save changes
+    }
 
 
 
@@ -141,70 +94,9 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         super(ModBlockEntities.OVEN_BRICK, pos, state);
         this.cookingTimes = new int[4];
         this.cookingTotalTimes = new int[4];
-        this.fuelTimeMap = createFuelTimeMap();
     }
 
-    public void givePlayerCookStack(World world,  BlockPos pos, BlockState state, PlayerEntity player, Direction facing)
-    {
-        if (!world.isClient)
-        {
-            // this is legacy support to clear all inventory items that may have been added through the GUI
 
-            ejectAllNotCookStacksToFacing(world,pos, state, player, facing);
-        }
-
-        ItemUtils.givePlayerStackOrEjectFromTowardsFacing(player, state, cookStack, pos, facing);
-
-        furnaceItemStacks[0] = null;
-        furnaceItemStacks[1] = null;
-        furnaceItemStacks[2] = null;
-
-        setCookStack(null);
-    }
-
-    private void ejectAllNotCookStacksToFacing(World world, BlockPos pos, BlockState state, PlayerEntity player, Direction facing)
-    {
-
-        if ( furnaceItemStacks[0] != null && !ItemStack.areEqual(furnaceItemStacks[0], cookStack) )
-        {
-            ItemUtils.ejectStackFromBlockTowardsFacing(world, pos,state, furnaceItemStacks[0], facing);
-
-            furnaceItemStacks[0] = null;
-        }
-
-        if ( furnaceItemStacks[1] != null && !ItemStack.areEqual(furnaceItemStacks[1], cookStack) )
-        {
-            ItemUtils.ejectStackFromBlockTowardsFacing(world, pos, state, cookStack, facing);
-
-            furnaceItemStacks[1] = null;
-        }
-
-        if ( furnaceItemStacks[2] != null && !ItemStack.areEqual(furnaceItemStacks[2], cookStack) )
-        {
-            ItemUtils.ejectStackFromBlockTowardsFacing(world, pos, state, furnaceItemStacks[2], facing);
-
-            furnaceItemStacks[2] = null;
-        }
-
-        markDirty();
-    }
-
-    public void setCookStack(ItemStack stack)
-    {
-        if ( stack != null )
-        {
-            cookStack = stack.copy();
-        }
-        else
-        {
-            cookStack = null;
-        }
-
-        if (world != null && !world.isClient) {
-            BlockPos pos = getPos();
-            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-        }
-    }
 
     public static void litServerTick(World world, BlockPos pos, BlockState state, BrickOvenBlockEntity oven) {
         boolean bl = false;
@@ -265,68 +157,63 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         Optional<OvenCookingRecipe> optional = oven.getRecipeFor(oven.itemBeingCooked.get(0));
 
         // Check if the furnace was burning in the previous tick
-        boolean bWasBurning = oven.ovenBurnTime > 0;
+        boolean bWasBurning = oven.fuelBurnTime > 0;
         boolean inventoryChanged = false;
 
         // Decrease furnace burn time if it's still burning
-        if (oven.ovenBurnTime > 0)
-        {
-            --oven.ovenBurnTime;
+        if (oven.fuelBurnTime > 0) {
+            --oven.fuelBurnTime;
         }
 
         // Check if the furnace is burning and update burn time
-        if (!world.isClient)
-        {
+        if (!world.isClient) {
 
-            if (bWasBurning || oven.lightOnNextUpdate)
-            {
-            oven.ovenBurnTime += oven.unlitFuelBurnTime;
-            oven.unlitFuelBurnTime = 0;
-            oven.lightOnNextUpdate = false;
-        }
+            if (bWasBurning || oven.lightOnNextUpdate) {
+                oven.fuelBurnTime += oven.unlitFuelBurnTime;
+                oven.unlitFuelBurnTime = 0;
+                oven.lightOnNextUpdate = false;
+            }
 
-        // Check if the furnace is burning and can smelt
-        if (bWasBurning && oven.canSmelt() && optional.isPresent()) {
-            int cookTime = optional.map(OvenCookingRecipe::getCookTime).orElse(0);
+            // Check if the furnace is burning and can smelt
+            if (bWasBurning && oven.canSmelt() && optional.isPresent()) {
+                int cookTime = optional.map(OvenCookingRecipe::getCookTime).orElse(0);
                 ++cookTime;
 
-            // Check if the ovenBurnTime is greater than or equal to the cookTime
-            if (optional.get().getCookTime() >= cookTime)
-            {
-                // Consume fuel
-                oven.ovenBurnTime -= cookTime;
+                // Check if the ovenBurnTime is greater than or equal to the cookTime
+                if (optional.get().getCookTime() >= cookTime) {
+                    // Consume fuel
+                    oven.fuelBurnTime -= cookTime;
 
-                // Get the smelting result from the recipe
-                ItemStack resultStack = optional.map(recipe -> recipe.getOutput(null)).orElse(ItemStack.EMPTY);
+                    // Get the smelting result from the recipe
+                    ItemStack resultStack = optional.map(recipe -> recipe.getOutput(null)).orElse(ItemStack.EMPTY);
 
-                // Check if the output can be inserted into the output slot
-                if (oven.itemBeingCooked.get(1).isEmpty() || ItemStack.canCombine(oven.itemBeingCooked.get(1), resultStack)) {
-                    // Update the output slot
-                    oven.itemBeingCooked.set(1, resultStack.copy());
-                    inventoryChanged = true;
+                    // Check if the output can be inserted into the output slot
+                    if (oven.itemBeingCooked.get(1).isEmpty() || ItemStack.canCombine(oven.itemBeingCooked.get(1), resultStack)) {
+                        // Update the output slot
+                        oven.itemBeingCooked.set(1, resultStack.copy());
+                        inventoryChanged = true;
+                    }
                 }
+            } else {
+                oven.fuelBurnTime = 0;
             }
-        } else {
-            oven.ovenBurnTime = 0;
-        }
 
-        // Check for fire spread
-        if (state.get(LIT) && random.nextFloat() <= CHANCE_OF_FIRE_SPREAD) {
-            BlockState frontState = world.getBlockState(pos);
-            Direction facing = frontState.get(BrickOvenBlock.FACING); // Assuming FACING is the property for facing direction
+            // Check for fire spread
+            if (state.get(LIT) && random.nextFloat() <= CHANCE_OF_FIRE_SPREAD) {
+                BlockState frontState = world.getBlockState(pos);
+                Direction facing = frontState.get(BrickOvenBlock.FACING); // Assuming FACING is the property for facing direction
 
-            pos.offset(facing);
-            //FireBlock.checkForFireSpreadAndDestructionToOneBlockLocation(world, frontPos.getX(), frontPos.getY(), frontPos.getZ());
-        }
+                pos.offset(facing);
+                //FireBlock.checkForFireSpreadAndDestructionToOneBlockLocation(world, frontPos.getX(), frontPos.getY(), frontPos.getZ());
+            }
 
-        // Update furnace block state if burning status changed
-        if (bWasBurning != state.get(LIT)) {
-            inventoryChanged = true;
-            world.setBlockState(pos, state, Block.NOTIFY_LISTENERS);
-        }
+            // Update furnace block state if burning status changed
+            if (bWasBurning != state.get(LIT)) {
+                inventoryChanged = true;
+                world.setBlockState(pos, state, Block.NOTIFY_LISTENERS);
+            }
 
             // Update inventory and visual fuel level
-            oven.updateCookStack();
             oven.updateVisualFuelLevel();
         }
 
@@ -334,28 +221,32 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         if (inventoryChanged) {
             oven.markDirty();
         }
-    }
 
 
-    protected int getCookTimeForCurrentItem()
-    {
-        return getCookTimeForCurrentItemFromCookStack(this) * cookTimeMultiplier;
-    }
+        boolean hasItemToCook = false;
 
-    protected int getCookTimeForCurrentItemFromCookStack(BrickOvenBlockEntity oven)
-    {
-        int iCookTimeShift = 0;
+        for (Direction direction : Direction.Type.HORIZONTAL) {
+            int j = direction.getHorizontal();
 
-        Optional<OvenCookingRecipe> optional = oven.getRecipeFor(oven.itemBeingCooked.get(0));
+            if (!hasItemToCook && j < oven.itemBeingCooked.size() && !oven.itemBeingCooked.get(j).isEmpty() && random.nextFloat() < 0.2f) {
+                float f = 0.3125f;
+                double d = (double) pos.getX() + 0.5 - (double) ((float) direction.getOffsetX() * 0.25f) + (double) ((float) direction.rotateYClockwise().getOffsetX() * 0.3125f);
+                double e = Math.max(pos.getY() + 0.5, Math.min(pos.getY() + 1.0, (double) pos.getY() + 0.7)); // Clamped Y coordinate
+                double g = (double) pos.getZ() + 0.5 - (double) ((float) direction.getOffsetZ() * 0.25f) + (double) ((float) direction.rotateYClockwise().getOffsetZ() * 0.3125f);
 
-        if ( itemBeingCooked.get(0).getItem() != null && optional.isPresent() )
-        {
-            iCookTimeShift = optional.get().getCookTime();
+                for (int k = 0; k < 4; ++k) {
+                    world.addParticle(ParticleTypes.SMOKE, d, e, g, 0.0, 5.0E-4, 0.0);
+                }
+
+                hasItemToCook = true; // Set the boolean to true to avoid spawning more than one set of particles
+            }
         }
 
-        return DEFAULT_COOK_TIME << iCookTimeShift;
+
+
 
     }
+    
 
 
 
@@ -418,7 +309,8 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
             System.arraycopy(is, 0, this.cookingTotalTimes, 0, Math.min(this.cookingTotalTimes.length, is.length));
         }
 
-        this.ovenBurnTime = nbt.getShort("BurnTime");
+        this.fuelBurnTime = nbt.getShort("BurnTime");
+        this.visualFuelLevel = nbt.getShort("VisualFuelLevel");
 
     }
 
@@ -428,7 +320,8 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         nbt.putIntArray("CookingTimes", this.cookingTimes);
         nbt.putIntArray("CookingTotalTimes", this.cookingTotalTimes);
 
-        nbt.putShort("BurnTime", (short)this.ovenBurnTime);
+        nbt.putShort("BurnTime", (short)this.fuelBurnTime);
+        nbt.putShort("VisualFuelLevel", (short)this.visualFuelLevel);
 
     }
 
@@ -447,14 +340,7 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
                 .stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.matchGetter.getFirstMatch(new SimpleInventory(new ItemStack[]{stack}), this.world);
     }
 
-    public Optional<Integer> getFuelFor(ItemStack stack) {
-        // Check if the item is present in the fuelTimeMap
-        if (fuelTimeMap.containsKey(stack.getItem())) {
-            return Optional.of(fuelTimeMap.get(stack.getItem()));
-        } else {
-            return Optional.empty();
-        }
-    }
+    
 
     public boolean addItem(@Nullable Entity user, ItemStack stack, int cookTime) {
         for (int i = 0; i < this.itemBeingCooked.size(); ++i) {
@@ -480,6 +366,7 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
                 // Optionally handle different retrieval logic here
                 this.cookingTimes[i] = 0;
                 this.itemBeingCooked.set(i, ItemStack.EMPTY); // Clear the slot
+                assert this.world != null;
                 this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(user, this.getCachedState()));
                 this.updateListeners();
 
@@ -492,38 +379,29 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     }
 
 
-
-
-    public int getFuelTimeForStack(ItemStack stack) {
-        Item item = stack.getItem();
-        return fuelTimeMap.getOrDefault(item,-1);
-    }
-
-    public int attemptToAddFuel(ItemStack stack)
-    {
-        int iTotalBurnTime = unlitFuelBurnTime + propertyDelegate.get(0);
+    public int attemptToAddFuel(ItemStack stack) {
+        int iTotalBurnTime = unlitFuelBurnTime + fuelBurnTime;
         int iDeltaBurnTime = maxFuelBurnTime - iTotalBurnTime;
         int iNumItemsBurned = 0;
 
-        if ( iDeltaBurnTime > 0 )
-        {
-            iNumItemsBurned = iDeltaBurnTime / getItemBurnTime(stack);
+        if (iDeltaBurnTime > 0) {
+            int fuelTicksToAdd = getFuelTicksForItem(stack);
 
-            if ( iNumItemsBurned == 0 && getVisualFuelLevel() <= 2 )
-            {
+            // Calculate the maximum number of items that can be burned based on fuel ticks
+            iNumItemsBurned = iDeltaBurnTime / fuelTicksToAdd;
+
+            if (iNumItemsBurned == 0 && getVisualFuelLevel() <= 2) {
                 // once the fuel level hits the bottom visual stage, you can jam anything in
-
                 iNumItemsBurned = 1;
             }
 
-            if ( iNumItemsBurned > 0 )
-            {
-                if ( iNumItemsBurned > stack.getCount() )
-                {
+            if (iNumItemsBurned > 0) {
+                if (iNumItemsBurned > stack.getCount()) {
                     iNumItemsBurned = stack.getCount();
                 }
 
-                unlitFuelBurnTime += getItemBurnTime(stack) * iNumItemsBurned;
+                // Add the item to the furnace
+                unlitFuelBurnTime += fuelTicksToAdd * iNumItemsBurned;
 
                 markDirty();
             }
@@ -533,128 +411,31 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     }
 
 
-    public static Map<Item, Integer> createFuelTimeMap() {
-        LinkedHashMap<Item, Integer> map = Maps.newLinkedHashMap();
-        BrickOvenBlockEntity.addFuel(map, Items.LAVA_BUCKET, 20000);
-        BrickOvenBlockEntity.addFuel(map, Blocks.COAL_BLOCK, 16000);
-        BrickOvenBlockEntity.addFuel(map, Items.BLAZE_ROD, 2400);
-        BrickOvenBlockEntity.addFuel(map, Items.COAL, 1600);
-        BrickOvenBlockEntity.addFuel(map, Items.CHARCOAL, 1600);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.LOGS, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.BAMBOO_BLOCKS, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.PLANKS, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.BAMBOO_MOSAIC, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOODEN_STAIRS, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.BAMBOO_MOSAIC_STAIRS, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOODEN_SLABS, 150);
-        BrickOvenBlockEntity.addFuel(map, Blocks.BAMBOO_MOSAIC_SLAB, 150);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOODEN_TRAPDOORS, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOODEN_PRESSURE_PLATES, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOODEN_FENCES, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.FENCE_GATES, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.NOTE_BLOCK, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.BOOKSHELF, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.CHISELED_BOOKSHELF, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.LECTERN, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.JUKEBOX, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.CHEST, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.TRAPPED_CHEST, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.CRAFTING_TABLE, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.DAYLIGHT_DETECTOR, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.BANNERS, 300);
-        BrickOvenBlockEntity.addFuel(map, Items.BOW, 300);
-        BrickOvenBlockEntity.addFuel(map, Items.FISHING_ROD, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.LADDER, 300);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.SIGNS, 200);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.HANGING_SIGNS, 800);
-        BrickOvenBlockEntity.addFuel(map, Items.WOODEN_SHOVEL, 200);
-        BrickOvenBlockEntity.addFuel(map, Items.WOODEN_SWORD, 200);
-        BrickOvenBlockEntity.addFuel(map, Items.WOODEN_HOE, 200);
-        BrickOvenBlockEntity.addFuel(map, Items.WOODEN_AXE, 200);
-        BrickOvenBlockEntity.addFuel(map, Items.WOODEN_PICKAXE, 200);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOODEN_DOORS, 200);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.BOATS, 1200);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOOL, 100);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOODEN_BUTTONS, 100);
-        BrickOvenBlockEntity.addFuel(map, Items.STICK, 100);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.SAPLINGS, 100);
-        BrickOvenBlockEntity.addFuel(map, Items.BOWL, 100);
-        BrickOvenBlockEntity.addFuel(map, ItemTags.WOOL_CARPETS, 67);
-        BrickOvenBlockEntity.addFuel(map, Blocks.DRIED_KELP_BLOCK, 4001);
-        BrickOvenBlockEntity.addFuel(map, Items.CROSSBOW, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.BAMBOO, 50);
-        BrickOvenBlockEntity.addFuel(map, Blocks.DEAD_BUSH, 100);
-        BrickOvenBlockEntity.addFuel(map, Blocks.SCAFFOLDING, 50);
-        BrickOvenBlockEntity.addFuel(map, Blocks.LOOM, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.BARREL, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.CARTOGRAPHY_TABLE, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.FLETCHING_TABLE, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.SMITHING_TABLE, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.COMPOSTER, 300);
-        BrickOvenBlockEntity.addFuel(map, Blocks.AZALEA, 100);
-        BrickOvenBlockEntity.addFuel(map, Blocks.FLOWERING_AZALEA, 100);
-        BrickOvenBlockEntity.addFuel(map, Blocks.MANGROVE_ROOTS, 300);
-        return map;
-    }
+    public int getFuelTicksForItem(ItemStack stack) { return getFuelItemBase(stack) * brickBurnTimeMultiplier; }
 
-    private static void addFuel(Map<Item, Integer> fuelTimes, TagKey<Item> tag, int fuelTime) {
-        for (RegistryEntry<Item> registryEntry : Registries.ITEM.iterateEntries(tag)) {
-            if (BrickOvenBlockEntity.isNonFlammableWood(registryEntry.value())) continue;
-            fuelTimes.put(registryEntry.value(), fuelTime);
-        }
-    }
-
-    private static void addFuel(Map<Item, Integer> fuelTimes, ItemConvertible item, int fuelTime) {
-        Item item2 = item.asItem();
-        if (BrickOvenBlockEntity.isNonFlammableWood(item2)) {
-            if (SharedConstants.isDevelopment) {
-                throw Util.throwOrPause(new IllegalStateException("A developer tried to explicitly make fire resistant item " + item2.getName(null).getString() + " a furnace fuel. That will not work!"));
-            }
-            return;
-        }
-        fuelTimes.put(item2, fuelTime);
-    }
-
-
-
-    private static boolean isNonFlammableWood(Item item) {
-        return item.getRegistryEntry().isIn(ItemTags.NON_FLAMMABLE_WOOD);
-    }
-
-    private void updateCookStack()
+    public int getFuelItemBase(ItemStack stack)
     {
-        ItemStack newCookStack = furnaceItemStacks[0];
 
-        if ( newCookStack == null )
+        if ( stack != null )
         {
-            newCookStack = furnaceItemStacks[2];
-
-            if ( newCookStack == null )
-            {
-                newCookStack = furnaceItemStacks[1];
-            }
+            Identifier itemId = Registries.ITEM.getId(stack.getItem());
+            return FuelTicksManager.getFuelTicks(itemId) * BASE_BURN_TIME_MULTIPLIER;
         }
 
-        if ( !ItemStack.areEqual(newCookStack, cookStack) )
-        {
-            setCookStack(newCookStack);
-        }
+        return 0;
     }
 
 
-    private void updateVisualFuelLevel()
-    {
-        int iTotalBurnTime = unlitFuelBurnTime + ovenBurnTime;
+
+
+    public void updateVisualFuelLevel() {
+        int iTotalBurnTime = unlitFuelBurnTime + fuelBurnTime;
         int iNewFuelLevel = 0;
 
-        if ( iTotalBurnTime > 0 )
-        {
-            if (iTotalBurnTime < visualSputterFuelLevel)
-            {
+        if (iTotalBurnTime > 0) {
+            if (iTotalBurnTime < visualSputterFuelLevel) {
                 iNewFuelLevel = 1;
-            }
-            else
-            {
+            } else {
                 iNewFuelLevel = (iTotalBurnTime / visualFuelLevelIncrement) + 2;
             }
         }
@@ -662,51 +443,35 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         setVisualFuelLevel(iNewFuelLevel);
     }
 
-    public int getVisualFuelLevel()
-    {
+
+
+    public int getVisualFuelLevel() {
         return visualFuelLevel;
     }
 
-
-    public void setVisualFuelLevel(int iLevel)
-    {
-        if (visualFuelLevel != iLevel )
-        {
+    public void setVisualFuelLevel(int iLevel) {
+        if (world != null && visualFuelLevel != iLevel ) {
             visualFuelLevel = iLevel;
 
-            world.updateListeners( pos, world.getBlockState(pos), world.getBlockState(pos), 3 );
+            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
         }
     }
 
-    public int getItemBurnTime( ItemStack stack )
-    {
-        return getItemBurnTimeBase( stack ) * brickBurnTimeMultiplier;
-    }
 
-    public int getItemBurnTimeBase( ItemStack stack )
-    {
-        if ( stack != null )
-        {
-            return ((ItemAdded)stack.getItem()).getOvenBurnTime(stack.getDamage()) * BASE_BURN_TIME_MULTIPLIER;
-        }
 
-        return 0;
-    }
 
 
     private void updateListeners() {
         this.markDirty();
-        this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
+
+        if (this.getWorld() != null)
+        {
+            this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
+        }
     }
 
     public void clear() {
         this.itemBeingCooked.clear();
     }
 
-    public void spawnItemsBeingCooked() {
-        if (this.world != null) {
-            this.updateListeners();
-        }
-
-    }
 }

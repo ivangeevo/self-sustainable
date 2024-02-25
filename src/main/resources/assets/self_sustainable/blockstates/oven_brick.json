@@ -1,34 +1,12 @@
 {
   "variants": {
-    "facing=east,lit=false": {
-      "model": "self_sustainable:block/oven_brick",
-      "y": 90
-    },
-    "facing=east,lit=true": {
-      "model": "self_sustainable:block/oven_brick_lit",
-      "y": 90
-    },
-    "facing=north,lit=false": {
-      "model": "self_sustainable:block/oven_brick"
-    },
-    "facing=north,lit=true": {
-      "model": "self_sustainable:block/oven_brick_lit"
-    },
-    "facing=south,lit=false": {
-      "model": "self_sustainable:block/oven_brick",
-      "y": 180
-    },
-    "facing=south,lit=true": {
-      "model": "self_sustainable:block/oven_brick_lit",
-      "y": 180
-    },
-    "facing=west,lit=false": {
-      "model": "self_sustainable:block/oven_brick",
-      "y": 270
-    },
-    "facing=west,lit=true": {
-      "model": "self_sustainable:block/oven_brick_lit",
-      "y": 270
-    }
+    "facing=east,lit=false": { "model": "self_sustainable:block/oven_brick", "y": 90 },
+    "facing=east,lit=true": { "model": "self_sustainable:block/oven_brick_lit", "y": 90 },
+    "facing=north,lit=false": { "model": "self_sustainable:block/oven_brick" },
+    "facing=north,lit=true": { "model": "self_sustainable:block/oven_brick_lit" },
+    "facing=south,lit=false": { "model": "self_sustainable:block/oven_brick", "y": 180 },
+    "facing=south,lit=true": { "model": "self_sustainable:block/oven_brick_lit", "y": 180 },
+    "facing=west,lit=false": { "model": "self_sustainable:block/oven_brick", "y": 270 },
+    "facing=west,lit=true": { "model": "self_sustainable:block/oven_brick_lit", "y": 270 }
   }
 }

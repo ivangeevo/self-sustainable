@@ -1,23 +1,35 @@
 package net.ivangeevo.selfsustainable.block.entity.renderer;
 
+import net.ivangeevo.selfsustainable.SelfSustainableMod;
+import net.ivangeevo.selfsustainable.block.ModBlocks;
 import net.ivangeevo.selfsustainable.block.blocks.BrickOvenBlock;
+import net.ivangeevo.selfsustainable.block.blocks.OvenFuelLevelBlock;
 import net.ivangeevo.selfsustainable.block.entity.BrickOvenBlockEntity;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.*;
+import net.minecraft.client.render.block.BlockModelRenderer;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 
+import java.util.Objects;
+
 public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOvenBlockEntity> {
 
     private final ItemRenderer itemRenderer;
+
 
     public BrickOvenBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
         this.itemRenderer = ctx.getItemRenderer();
@@ -29,6 +41,49 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
     @Override
     public void render(BrickOvenBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
+        // Render the fuel level overlay as a whole block
+        renderFuelLevelOverlay(entity, matrices, vertexConsumers, light, overlay);
+
+
+        // Render the item being in the oven
+        renderCookItem(entity, matrices, vertexConsumers, light, overlay);
+
+
+
+
+    }
+
+    private void applyVisualOffset(MatrixStack matrices, Direction facing) {
+        float visualOffset = 0.25f;
+
+        switch (facing) {
+            case NORTH:
+                matrices.translate(0.0f, 0.0f, -0.5f + visualOffset);
+                break;
+            case SOUTH:
+                matrices.translate(0.0f, 0.0f, 0.5f - visualOffset);
+                break;
+            case WEST:
+                matrices.translate(-0.5f + visualOffset, 0.0f, 0.0f);
+                break;
+            case EAST:
+                matrices.translate(0.5f - visualOffset, 0.0f, 0.0f);
+                break;
+        }
+    }
+
+    // Get RotationAxis based on facing direction
+    private RotationAxis getRotationAxis(Direction facing) {
+        return switch (facing) {
+            case NORTH -> RotationAxis.POSITIVE_Z;
+            case SOUTH -> RotationAxis.POSITIVE_Z;
+            case WEST -> RotationAxis.POSITIVE_Y;
+            case EAST -> RotationAxis.POSITIVE_Y;
+            default -> RotationAxis.POSITIVE_Y; // Default to Y-axis if facing direction is not recognized
+        };
+    }
+
+    private void renderCookItem(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         // Get the itemsBeingCooked from the entity
         DefaultedList<ItemStack> itemsBeingCooked = entity.getItemBeingCooked();
         Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
@@ -56,36 +111,36 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
         matrices.pop();
     }
 
-    // Revised visual offset logic for better alignment
-    private void applyVisualOffset(MatrixStack matrices, Direction facing) {
-        float visualOffset = 0.25f; // Adjust the value as needed
 
-        switch (facing) {
-            case NORTH:
-                matrices.translate(0.0f, 0.0f, -0.5f + visualOffset);
-                break;
-            case SOUTH:
-                matrices.translate(0.0f, 0.0f, 0.5f - visualOffset);
-                break;
-            case WEST:
-                matrices.translate(-0.5f + visualOffset, 0.0f, 0.0f);
-                break;
-            case EAST:
-                matrices.translate(0.5f - visualOffset, 0.0f, 0.0f);
-                break;
-            // Add more cases as needed for other directions
-        }
+    // TODO: FIX THE RENDERING OF THE FUEL OVERLAY
+
+    private void renderFuelLevelOverlay(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        matrices.push();
+
+        Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
+
+        int fuelLevel = entity.getVisualFuelLevel();
+
+        BlockRenderManager blockRenderManager = MinecraftClient.getInstance().getBlockRenderManager();
+        BlockModelRenderer blockModelRenderer = blockRenderManager.getModelRenderer();
+
+        // Use your custom block entry instead of block state
+        BlockState blockState = ModBlocks.OVEN_BRICK.getDefaultState()
+                .with(BrickOvenBlock.FACING, facing)
+                .with(BrickOvenBlock.FUEL_LEVEL, fuelLevel);
+
+        int blockLight = WorldRenderer.getLightmapCoordinates(Objects.requireNonNull(entity.getWorld()), entity.getPos().offset(facing));
+        int blockOverlay = OverlayTexture.DEFAULT_UV;
+
+        // Get the baked model for your custom block entry
+        BakedModel bakedModel = blockRenderManager.getModel(blockState);
+
+        // Render the baked model using BlockModelRenderer
+        blockModelRenderer.render(matrices.peek(), vertexConsumers.getBuffer(RenderLayer.getCutout()), blockState,
+                bakedModel, 1.0f, 1.0f, 1.0f, blockLight, blockOverlay);
+
+        matrices.pop();
     }
 
-    // Get RotationAxis based on facing direction
-    private RotationAxis getRotationAxis(Direction facing) {
-        return switch (facing) {
-            case NORTH -> RotationAxis.POSITIVE_Z;
-            case SOUTH -> RotationAxis.POSITIVE_Z;
-            case WEST -> RotationAxis.POSITIVE_Y;
-            case EAST -> RotationAxis.POSITIVE_Y;
-            // Add more cases as needed for other directions
-            default -> RotationAxis.POSITIVE_Y; // Default to Y-axis if facing direction is not recognized
-        };
-    }
+
 }

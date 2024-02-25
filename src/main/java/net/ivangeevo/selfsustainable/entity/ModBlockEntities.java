@@ -13,10 +13,10 @@ public class ModBlockEntities {
 
         public static BlockEntityType<BrickOvenBlockEntity> OVEN_BRICK;
 
-        public static void registerBlockEntities() {
-
-            OVEN_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID, "oven_brick"),
-                    FabricBlockEntityTypeBuilder.create(BrickOvenBlockEntity::new,
+        public static void registerBlockEntities()
+        {
+            OVEN_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
+                            "oven_brick"), FabricBlockEntityTypeBuilder.create(BrickOvenBlockEntity::new,
                             ModBlocks.OVEN_BRICK).build(null));
 
         }

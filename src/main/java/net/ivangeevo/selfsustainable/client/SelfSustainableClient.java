@@ -15,8 +15,6 @@ public class SelfSustainableClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
 
-
-
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OVEN_BRICK, RenderLayer.getCutout());
         BlockEntityRendererFactories.register(ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntityRenderer::new);
 

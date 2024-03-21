@@ -18,7 +18,7 @@ public class FuelTicksManager {
 
     // Method to register the fuel values for items set in the Json file.
     public static void loadFuelTicks() {
-        InputStream stream = FuelTicksManager.class.getResourceAsStream("/data/self_sustainable/items/oven_fuel_values.json");
+        InputStream stream = FuelTicksManager.class.getResourceAsStream("/data/self_sustainable/items/oven_fuel_items.json");
 
         if (stream != null) {
             try (InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {

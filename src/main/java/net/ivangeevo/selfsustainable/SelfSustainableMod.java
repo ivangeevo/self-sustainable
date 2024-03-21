@@ -5,6 +5,7 @@ import net.ivangeevo.selfsustainable.block.ModBlocks;
 import net.ivangeevo.selfsustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.selfsustainable.entity.ModBlockEntities;
 import net.ivangeevo.selfsustainable.item.FuelTicksManager;
+import net.ivangeevo.selfsustainable.networking.NetworkMessagesRegistry;
 import net.ivangeevo.selfsustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.Block;
@@ -31,6 +32,9 @@ public class SelfSustainableMod implements ModInitializer {
         ModItems.registerModItems();
         ModBlockEntities.registerBlockEntities();
         ModRecipes.registerRecipes();
+
+        NetworkMessagesRegistry.registerS2CPackets();
+        NetworkMessagesRegistry.registerC2SPackets();
         // Class registering item fuel values for the Brick oven.
         FuelTicksManager.loadFuelTicks();
     }

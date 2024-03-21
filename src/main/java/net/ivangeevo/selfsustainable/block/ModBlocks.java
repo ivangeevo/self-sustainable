@@ -1,11 +1,10 @@
 package net.ivangeevo.selfsustainable.block;
 
-import net.ivangeevo.selfsustainable.ModItemGroup;
-import net.ivangeevo.selfsustainable.SelfSustainableMod;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.ivangeevo.selfsustainable.ModItemGroup;
+import net.ivangeevo.selfsustainable.SelfSustainableMod;
 import net.ivangeevo.selfsustainable.block.blocks.BrickOvenBlock;
-import net.ivangeevo.selfsustainable.block.blocks.OvenFuelLevelBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
@@ -23,7 +22,6 @@ public class ModBlocks {
 
     public static final Block OVEN_BRICK = registerBlock("oven_brick", new BrickOvenBlock(FabricBlockSettings.create().strength(1.5F,2.0F).luminance(setLightLevel(13)).sounds(BlockSoundGroup.STONE)), ModItemGroup.SS_GROUP);
 
-    public static final Block OVEN_FUEL_LEVEL = registerBlockWithoutItem("oven_fuel_level", new OvenFuelLevelBlock(FabricBlockSettings.create()));
 
 
 

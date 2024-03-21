@@ -1,11 +1,11 @@
 package net.ivangeevo.selfsustainable.block.entity.renderer;
 
-import net.ivangeevo.selfsustainable.SelfSustainableMod;
 import net.ivangeevo.selfsustainable.block.ModBlocks;
 import net.ivangeevo.selfsustainable.block.blocks.BrickOvenBlock;
-import net.ivangeevo.selfsustainable.block.blocks.OvenFuelLevelBlock;
 import net.ivangeevo.selfsustainable.block.entity.BrickOvenBlockEntity;
+import net.ivangeevo.selfsustainable.state.property.ModProperties;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.BlockModelRenderer;
@@ -14,12 +14,10 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
@@ -42,15 +40,41 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
     public void render(BrickOvenBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
         // Render the fuel level overlay as a whole block
-        renderFuelLevelOverlay(entity, matrices, vertexConsumers, light, overlay);
-
+        /** Done as Blockstates currently **/
+       // this.renderFuelLevelOverlay(entity, matrices, vertexConsumers, light, overlay);
 
         // Render the item being in the oven
-        renderCookItem(entity, matrices, vertexConsumers, light, overlay);
+        this.renderCookItem(entity, matrices, vertexConsumers, light, overlay);
+
+    }
 
 
+    private void renderCookItem(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        // Get the itemsBeingCooked from the entity
+        DefaultedList<ItemStack> itemsBeingCooked = entity.getCookStack();
+        Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
 
+        matrices.push();
 
+        // Move to the center of the block
+        matrices.translate(0.5f, 0.6f, 0.5f);
+
+        // Integrate the visual offset logic
+        applyVisualOffset(matrices, facing);
+
+        // Rotate based on the facing direction
+        RotationAxis rotationAxis = getRotationAxis(facing);
+        matrices.multiply(rotationAxis.rotationDegrees(facing.asRotation()));
+
+        // Scale the item to an appropriate size
+        matrices.scale(0.35f, 0.35f, 0.35f);
+
+        // Use the itemRenderer to render the item
+        this.itemRenderer.renderItem(itemsBeingCooked.get(0), ModelTransformationMode.GUI,
+                LightmapTextureManager.pack(8, 15), OverlayTexture.DEFAULT_UV,
+                matrices, vertexConsumers, entity.getWorld(), 1);
+
+        matrices.pop();
     }
 
     private void applyVisualOffset(MatrixStack matrices, Direction facing) {
@@ -83,64 +107,43 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
         };
     }
 
-    private void renderCookItem(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        // Get the itemsBeingCooked from the entity
-        DefaultedList<ItemStack> itemsBeingCooked = entity.getItemBeingCooked();
-        Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
-
-        matrices.push();
-
-        // Move to the center of the block
-        matrices.translate(0.5f, 0.6f, 0.5f);
-
-        // Integrate the visual offset logic
-        applyVisualOffset(matrices, facing);
-
-        // Rotate based on the facing direction
-        RotationAxis rotationAxis = getRotationAxis(facing);
-        matrices.multiply(rotationAxis.rotationDegrees(facing.asRotation()));
-
-        // Scale the item to an appropriate size
-        matrices.scale(0.35f, 0.35f, 0.35f);
-
-        // Use the itemRenderer to render the item
-        this.itemRenderer.renderItem(itemsBeingCooked.get(0), ModelTransformationMode.GUI,
-                LightmapTextureManager.pack(8, 15), OverlayTexture.DEFAULT_UV,
-                matrices, vertexConsumers, entity.getWorld(), 1);
-
-        matrices.pop();
-    }
-
 
     // TODO: FIX THE RENDERING OF THE FUEL OVERLAY
-
+/**
     private void renderFuelLevelOverlay(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        matrices.push();
 
-        Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
+        boolean shouldDisplay = entity.getCachedState().get(ModProperties.HAS_FUEL)
+                && entity.getCachedState().get(Properties.LIT);
 
-        int fuelLevel = entity.getVisualFuelLevel();
+        if (shouldDisplay) {
+            matrices.push();
 
-        BlockRenderManager blockRenderManager = MinecraftClient.getInstance().getBlockRenderManager();
-        BlockModelRenderer blockModelRenderer = blockRenderManager.getModelRenderer();
 
-        // Use your custom block entry instead of block state
-        BlockState blockState = ModBlocks.OVEN_BRICK.getDefaultState()
-                .with(BrickOvenBlock.FACING, facing)
-                .with(BrickOvenBlock.FUEL_LEVEL, fuelLevel);
+            Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
 
-        int blockLight = WorldRenderer.getLightmapCoordinates(Objects.requireNonNull(entity.getWorld()), entity.getPos().offset(facing));
-        int blockOverlay = OverlayTexture.DEFAULT_UV;
+            int fuelLevel = entity.getVisualFuelLevel();
 
-        // Get the baked model for your custom block entry
-        BakedModel bakedModel = blockRenderManager.getModel(blockState);
+            BlockRenderManager blockRenderManager = MinecraftClient.getInstance().getBlockRenderManager();
+            BlockModelRenderer blockModelRenderer = blockRenderManager.getModelRenderer();
 
-        // Render the baked model using BlockModelRenderer
-        blockModelRenderer.render(matrices.peek(), vertexConsumers.getBuffer(RenderLayer.getCutout()), blockState,
-                bakedModel, 1.0f, 1.0f, 1.0f, blockLight, blockOverlay);
+            // Use your custom block entry instead of block state
+            BlockState blockState = entity.getCachedState().with(ModProperties.FUEL_LEVEL, fuelLevel);
 
-        matrices.pop();
+
+            int blockLight = WorldRenderer.getLightmapCoordinates(Objects.requireNonNull(entity.getWorld()), entity.getPos().offset(facing));
+            int blockOverlay = OverlayTexture.DEFAULT_UV;
+
+            // Get the baked model for your custom block entry
+            BakedModel bakedModel = blockRenderManager.getModel(blockState);
+
+            // Render the baked model using BlockModelRenderer
+            blockModelRenderer.render(matrices.peek(), vertexConsumers.getBuffer(RenderLayer.getCutout()), blockState,
+                    bakedModel, 1.0f, 1.0f, 1.0f, blockLight, blockOverlay);
+
+            matrices.pop();
+        }
     }
+ **/
 
 
 }

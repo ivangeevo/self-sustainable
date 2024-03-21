@@ -28,7 +28,7 @@
     "minecraft":"${minecraft_version}"
   },
 
-  "accessWidener" : "self_sustainable.accesswidener",
+  "accessWidener": "self_sustainable.accesswidener",
 
   "custom": {
     "loom:injected_interfaces": {

@@ -1,6 +1,6 @@
 {
   "type": "self_sustainable:oven_cooking",
-  "category": "misc",
+  "category": "food",
   "cookingtime": 600,
   "experience": 0.35,
   "ingredient": {

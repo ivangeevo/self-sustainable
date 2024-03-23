@@ -2,7 +2,6 @@ package net.ivangeevo.selfsustainable.block.blocks;
 
 import net.ivangeevo.selfsustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.selfsustainable.entity.ModBlockEntities;
-import net.ivangeevo.selfsustainable.item.interfaces.ItemAdded;
 import net.ivangeevo.selfsustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.selfsustainable.state.property.ModProperties;
 import net.minecraft.block.*;

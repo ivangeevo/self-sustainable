@@ -1,8 +1,8 @@
 {
   "schemaVersion":1,
-  "id":"self-sustainable",
+  "id":"self_sustainable",
   "version":"${version}",
-  "name":"self-sustainable",
+  "name":"self_sustainable",
   "description":"",
   "authors":[],
   "contact":{
@@ -13,14 +13,17 @@
   "environment":"*",
   "entrypoints":{
     "client":[
-      "net.ivangeevo.selfsustainable.client.SelfSustainableClient"
+      "net.ivangeevo.self_sustainable.client.SelfSustainableClient"
     ],
     "main":[
-      "net.ivangeevo.selfsustainable.SelfSustainableMod"
+      "net.ivangeevo.self_sustainable.SelfSustainableMod"
+    ],
+    "fabric-datagen": [
+      "net.ivangeevo.self_sustainable.SelfSustainableDataGenerator"
     ]
   },
   "mixins":[
-    "self-sustainable.mixins.json"
+    "self_sustainable.mixins.json"
   ],
   "depends":{
     "fabricloader":">=${loader_version}",
@@ -30,9 +33,12 @@
 
   "accessWidener": "self_sustainable.accesswidener",
 
-  "custom": {
-    "loom:injected_interfaces": {
-      "net/minecraft/class_1792": ["net/ivangeevo/selfsustainable/item/interfaces/ItemAdded"]
+  "custom":
+  {
+    "loom:injected_interfaces":
+    {
+
+      "net/minecraft/class_1792": ["net/ivangeevo/self_sustainable/item/interfaces/ItemAdded"]
 
     }
   }

@@ -1,0 +1,10 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "food",
+  "cookingtime": 600,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "tough_environment:ore_iron_chunk"
+  },
+  "result": "minecraft:iron_nugget"
+}

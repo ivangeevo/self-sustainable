@@ -6,6 +6,26 @@ plugins {
 version = project.mod_version
 group = project.maven_group
 
+
+def dataOutput = 'src/main/generated'
+
+loom {
+    runs {
+        //
+        // This adds a new gradle task that runs the datagen API: "gradlew runDatagenClient"
+        //
+        datagenClient {
+            inherit client
+            name "Data Generation"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.output-dir=${file(dataOutput)}"
+            vmArg "-Dfabric-api.datagen.modid=self_sustainable"
+
+            runDir "build/datagen"
+        }
+    }
+}
+
 repositories {
 
     mavenCentral()

@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.block.blocks;
 
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
+import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.minecraft.block.*;
@@ -35,7 +36,6 @@ import java.util.Optional;
 public class BrickOvenBlock extends BlockWithEntity {
     public static final BooleanProperty LIT = Properties.LIT;
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
-
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
 
     protected final float clickYTopPortion = (6F / 16F);
@@ -52,19 +52,18 @@ public class BrickOvenBlock extends BlockWithEntity {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        ItemStack heldStack = player.getMainHandStack();
-        BrickOvenBlockEntity brickOvenBlockEntity;
-        Optional<OvenCookingRecipe> optional;
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-
-
-        double relativeClickY = hit.getPos().getY() - pos.getY();
 
         if (hit.getSide() != state.get(FACING))
         {
             return ActionResult.FAIL;
         }
 
+        ItemStack heldStack = player.getMainHandStack();
+        BrickOvenBlockEntity brickOvenBlockEntity;
+        Optional<OvenCookingRecipe> optional;
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+
+        double relativeClickY = hit.getPos().getY() - pos.getY();
 
         if (relativeClickY > clickYTopPortion)
         {
@@ -80,7 +79,9 @@ public class BrickOvenBlock extends BlockWithEntity {
                     {
                         return ActionResult.SUCCESS;
                     }
-                } else {
+                }
+                else
+                {
                     // Check for retrieving
                     ItemStack retrievedItem = brickOvenBlockEntity.retrieveItem(player);
                     if (retrievedItem != null && !player.isCreative()) {
@@ -98,31 +99,35 @@ public class BrickOvenBlock extends BlockWithEntity {
         {
 
             // handle fuel here
-            if (blockEntity instanceof BrickOvenBlockEntity) {
+            if (blockEntity instanceof BrickOvenBlockEntity)
+            {
                 brickOvenBlockEntity = (BrickOvenBlockEntity) blockEntity;
 
                 Item item = heldStack.getItem();
 
-                // if (((ItemAdded) item).getCanBeFedDirectlyIntoBrickOven(stackFuelAmount)) {
-                if (!world.isClient) {
+                /** if ((optional = brickOvenBlockEntity.getRecipeFor(heldStack)).isPresent()
+                 *
+                && ((ItemAdded) item).getCanBeFedDirectlyIntoBrickOven(optional.get().getCookTime())) { **/
 
-                    int iItemsConsumed = brickOvenBlockEntity.attemptToAddFuel(heldStack);
+                    if (!world.isClient)
+                    {
+                        int iItemsConsumed = brickOvenBlockEntity.attemptToAddFuel(heldStack);
 
-                    if (iItemsConsumed > 0) {
+                        if (iItemsConsumed > 0) {
 
-                        if (state.get(LIT)) {
-                            this.playLitFX(world, pos);
-                        } else {
-                            this.playPopSound(world, pos);
-                        }
+                            if (state.get(LIT)) {
+                                this.playLitFX(world, pos);
+                            } else {
+                                this.playPopSound(world, pos);
+                            }
 
-                        if (!player.isCreative()) {
-                            heldStack.decrement(iItemsConsumed);
+                            if (!player.isCreative()) {
+                                heldStack.decrement(iItemsConsumed);
+                            }
                         }
                     }
+                    return ActionResult.SUCCESS;
                 }
-                return ActionResult.SUCCESS;
-            }
         }
         return ActionResult.FAIL;
     }
@@ -136,14 +141,18 @@ public class BrickOvenBlock extends BlockWithEntity {
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.isOf(newState.getBlock())) {
-            return;
-        }
+
+        if (state.isOf(newState.getBlock()))
+        {return;}
+
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof BrickOvenBlockEntity) {
-            // Drops the contents when the block is destroyed
+
+        if (blockEntity instanceof BrickOvenBlockEntity)
+        {
+            // Drops the contents inside when the block is destroyed
              ItemScatterer.spawn(world, pos, ((BrickOvenBlockEntity)blockEntity).getCookStack());
         }
+
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 
@@ -174,7 +183,7 @@ public class BrickOvenBlock extends BlockWithEntity {
         double relativeClickY = hit.getPos().getY() - blockPos.getY();
 
         // Allow projectile interaction only from the facing side
-        if (hit.getSide() == state.get(FACING) && this.isHavingFuel() && relativeClickY < clickYBottomPortion)
+        if (hit.getSide() == state.get(FACING) && relativeClickY < clickYBottomPortion)
         {
             if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, blockPos) && !state.get(LIT))
             {
@@ -237,8 +246,8 @@ public class BrickOvenBlock extends BlockWithEntity {
         return new BrickOvenBlockEntity(pos, state);
     }
 
+
     public boolean isHavingFuel () {
-        BlockState state = this.getDefaultState();
         return FUEL_LEVEL.stream().spliterator().getExactSizeIfKnown() >= 0;
     }
 
@@ -247,10 +256,9 @@ public class BrickOvenBlock extends BlockWithEntity {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
         if (world.isClient) {
-            if (state.get(LIT))
-            {
+
                 return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::clientTick);
-            }
+
         }
         else
         {
@@ -258,10 +266,15 @@ public class BrickOvenBlock extends BlockWithEntity {
             {
                 return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::litServerTick);
             }
-            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::unlitServerTick);
+            else if (!state.get(LIT))
+            {
+                return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::unlitServerTick);
+            }
+
+            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::mainServerTick);
         }
-        return null;
     }
+
 
     @Override
     public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {

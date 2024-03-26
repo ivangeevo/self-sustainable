@@ -31,7 +31,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock.FUEL_LEVEL;
@@ -39,10 +38,10 @@ import static net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock.LIT;
 
 public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
 
-    // the progress (in ticks) of the cooking process for the item that's currently cooking.
+    /** the progress (in ticks) of the item that's currently cooking. **/
     private final int[] cookingTimes;
 
-    // the total ticks needed for the item that's cooking to complete.
+    /** the total ticks needed for the item that's cooking to complete. **/
     private final int[] cookingTotalTimes;
     private final RecipeManager.MatchGetter<Inventory, OvenCookingRecipe> matchGetter =
             RecipeManager.createCachedMatchGetter(OvenCookingRecipe.Type.INSTANCE);
@@ -60,8 +59,6 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     private final int brickBurnTimeMultiplier = 4; // applied on top of base multiplier of standard furnace
     private final int cookTimeMultiplier = 4;
 
-
-
     // the following is not the actual maximum time, but rather the point above which additional fuel can no longer be added
     //private final int m_iMaxFuelBurnTime = ( 1600 * 2 * 2 ); // 1600 oak log burn time, 2x base furnace multiplier, 2x brick furnace multiplier
     // the following is an actual max
@@ -74,14 +71,8 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
 
     public static final int DEFAULT_COOK_TIME = 400;
 
-    /** DEFINITIONS OF WHAT EACH PROPERTY MEANS **/
-
-    // remaining amount of ticks for which the oven will continue to burn.
+    /** remaining amount of ticks for which the oven will continue to burn **/
    public int ovenBurnTime = 0;
-
-
-
-
 
     protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
@@ -124,6 +115,89 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         return (BrickOvenBlockEntity) blockEntity;
     }
 
+    public static void mainServerTick(World world, BlockPos pos, BlockState state, BrickOvenBlockEntity oven) {
+        Random random = world.random;
+        Optional<OvenCookingRecipe> optional = oven.getRecipeFor(oven.cookStack.get(0));
+
+        // Check if the furnace was burning in the previous tick
+        boolean bWasBurning = oven.ovenBurnTime > 0;
+        boolean inventoryChanged = false;
+
+        // Decrease furnace burn time if it's still burning
+        if (oven.ovenBurnTime > 0)
+        {
+            --oven.ovenBurnTime;
+        }
+
+        // Check if the furnace is burning and update burn time
+        if (!world.isClient)
+        {
+            if (bWasBurning || oven.lightOnNextUpdate)
+            {
+                oven.ovenBurnTime += oven.unlitFuelBurnTime;
+                oven.unlitFuelBurnTime = 0;
+
+                oven.lightOnNextUpdate = false;
+            }
+
+            // Check if the furnace is burning and can smelt
+            if (bWasBurning && oven.canSmelt() && optional.isPresent())
+            {
+                int cookTime = optional.map(OvenCookingRecipe::getCookTime).orElse(0);
+
+                ++cookTime;
+
+                // Check if the ovenBurnTime is greater than or equal to the cookTime
+                // TODO: Maybe this needs to be set to the optional.getCookTime() instead of the cookingTimes??
+                //  Have a 2nd look.
+                if (oven.cookingTimes.length >= oven.getCookTimeForCurrentItem())
+                {
+
+                    // Consume fuel
+                    oven.ovenBurnTime -= cookTime;
+
+                    // Get the smelting result from the recipe
+                    ItemStack resultStack = optional.map(recipe -> recipe.getOutput(null)).orElse(ItemStack.EMPTY);
+
+                    // Check if the output can be inserted into the output slot
+                    if (oven.cookStack.get(1).isEmpty() || ItemStack.canCombine(oven.cookStack.get(1), resultStack)) {
+                        // Update the output slot
+                        oven.cookStack.set(1, resultStack.copy());
+                        inventoryChanged = true;
+                    }
+                }
+            }
+            else
+            {
+                oven.ovenBurnTime = 0;
+            }
+
+            // Check for fire spread
+            if (state.get(LIT) && random.nextFloat() <= CHANCE_OF_FIRE_SPREAD) {
+                BlockState frontState = world.getBlockState(pos);
+                Direction facing = frontState.get(BrickOvenBlock.FACING); // Assuming FACING is the property for facing direction
+
+                pos.offset(facing);
+                //FireBlock.checkForFireSpreadAndDestructionToOneBlockLocation(world, frontPos.getX(), frontPos.getY(), frontPos.getZ());
+            }
+
+            // Update furnace block state if burning status changed
+            if (bWasBurning != oven.isBurning()) {
+                inventoryChanged = true;
+                world.setBlockState(pos, state.with(LIT, true), Block.NOTIFY_LISTENERS);
+            }
+
+            // Update inventory and visual fuel level
+            oven.updateVisualFuelLevel();
+
+        }
+
+        // Notify inventory change if necessary
+        if (inventoryChanged) {
+            oven.markDirty();
+        }
+    }
+
 
     public static void litServerTick(World world, BlockPos pos, BlockState state, BrickOvenBlockEntity oven) {
         boolean bl = false;
@@ -158,7 +232,10 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
 
 
 
+
+
     public static void unlitServerTick(World world, BlockPos pos, BlockState state, BrickOvenBlockEntity oven) {
+
         boolean bl = false;
 
         for (int i = 0; i < oven.cookStack.size(); ++i) {
@@ -177,88 +254,10 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBlockEntity oven) {
         Random random = world.random;
 
-        Optional<OvenCookingRecipe> optional = oven.getRecipeFor(oven.cookStack.get(0));
-
-        // Check if the furnace was burning in the previous tick
-        boolean bWasBurning = oven.ovenBurnTime > 0;
-        boolean inventoryChanged = false;
-
-        // Decrease furnace burn time if it's still burning
-        if (oven.ovenBurnTime > 0)
-        {
-            --oven.ovenBurnTime;
-        }
-
-        // Check if the furnace is burning and update burn time
-        if (!world.isClient)
-        {
-
-
-            if (bWasBurning || oven.lightOnNextUpdate)
-            {
-                oven.ovenBurnTime += oven.unlitFuelBurnTime;
-                oven.unlitFuelBurnTime = 0;
-
-                oven.lightOnNextUpdate = false;
-            }
-
-            // Check if the furnace is burning and can smelt
-            if (state.get(LIT) && oven.canSmelt() && optional.isPresent())
-            {
-                int cookTime = optional.map(OvenCookingRecipe::getCookTime).orElse(0);
-                ++cookTime;
-
-                // Check if the ovenBurnTime is greater than or equal to the cookTime
-                // TODO: Maybe this needs to be set to the optional.getCookTime() instead of the cookingTimes??
-                //  Have a 2nd look.
-                if (oven.cookingTimes.length >= oven.getCookTimeForCurrentItem()) {
-
-                    // Consume fuel
-                    oven.ovenBurnTime -= cookTime;
-
-                    // Get the smelting result from the recipe
-                    ItemStack resultStack = optional.map(recipe -> recipe.getOutput(null)).orElse(ItemStack.EMPTY);
-
-                    // Check if the output can be inserted into the output slot
-                    if (oven.cookStack.get(1).isEmpty() || ItemStack.canCombine(oven.cookStack.get(1), resultStack)) {
-                        // Update the output slot
-                        oven.cookStack.set(1, resultStack.copy());
-                        inventoryChanged = true;
-                    }
-                }
-            } else {
-                oven.ovenBurnTime = 0;
-            }
-
-            // Check for fire spread
-            if (state.get(LIT) && random.nextFloat() <= CHANCE_OF_FIRE_SPREAD) {
-                BlockState frontState = world.getBlockState(pos);
-                Direction facing = frontState.get(BrickOvenBlock.FACING); // Assuming FACING is the property for facing direction
-
-                pos.offset(facing);
-                //FireBlock.checkForFireSpreadAndDestructionToOneBlockLocation(world, frontPos.getX(), frontPos.getY(), frontPos.getZ());
-            }
-
-            // Update furnace block state if burning status changed
-            if (bWasBurning != oven.isBurning()) {
-                inventoryChanged = true;
-                world.setBlockState(pos, state.with(LIT, true), Block.NOTIFY_LISTENERS);
-            }
-
-            // Update inventory and visual fuel level
-            oven.updateVisualFuelLevel();
-
-        }
-
-        // Notify inventory change if necessary
-        if (inventoryChanged) {
-            oven.markDirty();
-        }
-
-
         boolean hasItemToCook = false;
 
         for (Direction direction : Direction.Type.HORIZONTAL) {
+
             int j = direction.getHorizontal();
 
             if (!hasItemToCook && j < oven.cookStack.size() && !oven.cookStack.get(j).isEmpty() && random.nextFloat() < 0.2f) {
@@ -276,19 +275,6 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         }
 
     }
-
-/**
-    public void setCookStackToInv(DefaultedList<ItemStack> inventory) {
-        for (int i = 0; i < inventory.size(); i++) {
-            this.inventory.set(i, inventory.get(i));
-        }
-    }
- **/
-
-
-
-
-
 
 
     protected boolean canSmelt()
@@ -374,11 +360,6 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
 
         nbt.putShort("VisualFuelLevel", (short)this.visualFuelLevel);
 
-    }
-
-    public boolean isHavingFuel () {
-        BlockState state = Objects.requireNonNull(getOven()).getCachedState();
-        return FUEL_LEVEL.stream().spliterator().getExactSizeIfKnown() >= 0;
     }
 
     public BlockEntityUpdateS2CPacket toUpdatePacket() {

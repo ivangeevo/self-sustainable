@@ -30,6 +30,7 @@ public class ModTags {
         public static final TagKey<Item> MID_VALUE_FUELS = createTag("mid_value_fuels");
         public static final TagKey<Item> HIGH_VALUE_FUELS = createTag("high_value_fuels");
         public static final TagKey<Item> VERY_HIGH_VALUE_FUELS = createTag("very_high_value_fuels");
+        public static final TagKey<Item> PRIMITIVE_FIRESTARTERS = createTag("primitive_firestarters");
 
         public static final TagKey<Item> SPIT_CAMPFIRE_ITEMS = createTag("spit_campfire_items");
         public static final TagKey<Item> WOOL_ITEMS = createTag("wool_items");

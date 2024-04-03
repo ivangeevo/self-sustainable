@@ -3,31 +3,20 @@
 package net.ivangeevo.self_sustainable.item.items;
 
 
-import com.google.common.base.Predicates;
 import net.ivangeevo.self_sustainable.block.interfaces.BlockAdded;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-
-import java.util.Iterator;
-import java.util.List;
 
 public abstract class FireStarterItem extends Item
 {
@@ -36,7 +25,6 @@ public abstract class FireStarterItem extends Item
     public FireStarterItem(Item.Settings settings, float fExhaustionPerUse )
     {
         super( settings );
-        //settings.maxDamageIfAbsent( iMaxUses );
         exhaustionPerUse = fExhaustionPerUse;
     }
 

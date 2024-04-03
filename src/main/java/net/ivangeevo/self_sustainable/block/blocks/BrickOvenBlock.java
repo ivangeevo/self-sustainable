@@ -4,6 +4,7 @@ import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
+import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -49,11 +51,9 @@ public class BrickOvenBlock extends BlockWithEntity {
 
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 
-        if (hit.getSide() != state.get(FACING))
-        {
+        if (hit.getSide() != state.get(FACING)) {
             return ActionResult.FAIL;
         }
 
@@ -64,23 +64,17 @@ public class BrickOvenBlock extends BlockWithEntity {
 
         double relativeClickY = hit.getPos().getY() - pos.getY();
 
-        if (relativeClickY > clickYTopPortion)
-        {
-            if (blockEntity instanceof BrickOvenBlockEntity)
-            {
+        if (relativeClickY > clickYTopPortion) {
+            if (blockEntity instanceof BrickOvenBlockEntity) {
                 brickOvenBlockEntity = (BrickOvenBlockEntity) blockEntity;
 
                 // Check for cooking
-                if (!heldStack.isEmpty() && (optional = brickOvenBlockEntity.getRecipeFor(heldStack)).isPresent())
-                {
+                if (!heldStack.isEmpty() && (optional = brickOvenBlockEntity.getRecipeFor(heldStack)).isPresent()) {
                     if (!world.isClient && brickOvenBlockEntity.addItem(player, player.getAbilities().creativeMode ?
-                            heldStack.copy() : heldStack, optional.get().getCookTime()))
-                    {
+                            heldStack.copy() : heldStack, optional.get().getCookTime())) {
                         return ActionResult.SUCCESS;
                     }
-                }
-                else
-                {
+                } else {
                     // Check for retrieving
                     ItemStack retrievedItem = brickOvenBlockEntity.retrieveItem(player);
                     if (retrievedItem != null && !player.isCreative()) {
@@ -93,42 +87,53 @@ public class BrickOvenBlock extends BlockWithEntity {
                     }
                 }
             }
-        }
-        else if (relativeClickY < clickYBottomPortion && heldStack != null)
+        } else if (relativeClickY < clickYBottomPortion && heldStack != null)
         {
+            /**
+             // handle fuel here
+             if (blockEntity instanceof BrickOvenBlockEntity)
+             {
+             brickOvenBlockEntity = (BrickOvenBlockEntity) blockEntity;
 
-            // handle fuel here
-            if (blockEntity instanceof BrickOvenBlockEntity)
+             /**
+             Item item = heldStack.getItem();
+
+             if ((optional = brickOvenBlockEntity.getRecipeFor(heldStack)).isPresent()
+             && ((ItemAdded) item).getCanBeFedDirectlyIntoBrickOven(optional.get().getCookTime()))
+             {
+
+
+             if (!world.isClient)
+             {
+             int iItemsConsumed = brickOvenBlockEntity.attemptToAddFuel(heldStack);
+
+             if (iItemsConsumed > 0) {
+
+             if (state.get(LIT)) {
+             this.playLitFX(world, pos);
+             } else {
+             this.playPopSound(world, pos);
+             }
+
+             if (!player.isCreative()) {
+             heldStack.decrement(iItemsConsumed);
+             }
+             }
+             }
+             return ActionResult.SUCCESS;
+             }
+             }
+             return ActionResult.FAIL;
+             **/
+
+            //temp logic
+            if (!state.get(LIT) && heldStack.isOf(Items.FLINT_AND_STEEL) || heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS))
             {
-                brickOvenBlockEntity = (BrickOvenBlockEntity) blockEntity;
+                world.setBlockState(pos, state.with(LIT, true));
+                this.playLitFX(world, pos);
 
-                /**
-                Item item = heldStack.getItem();
+            }
 
-                 if ((optional = brickOvenBlockEntity.getRecipeFor(heldStack)).isPresent()
-                && ((ItemAdded) item).getCanBeFedDirectlyIntoBrickOven(optional.get().getCookTime()))
-                 {
-                 **/
-
-                    if (!world.isClient)
-                    {
-                        int iItemsConsumed = brickOvenBlockEntity.attemptToAddFuel(heldStack);
-
-                        if (iItemsConsumed > 0) {
-
-                            if (state.get(LIT)) {
-                                this.playLitFX(world, pos);
-                            } else {
-                                this.playPopSound(world, pos);
-                            }
-
-                            if (!player.isCreative()) {
-                                heldStack.decrement(iItemsConsumed);
-                            }
-                        }
-                    }
-                    return ActionResult.SUCCESS;
-                }
         }
         return ActionResult.FAIL;
     }

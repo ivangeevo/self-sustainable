@@ -6,6 +6,7 @@ import net.ivangeevo.self_sustainable.item.FuelTicksManager;
 import net.ivangeevo.self_sustainable.networking.NetworkMessagesRegistry;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
+import net.ivangeevo.self_sustainable.util.WorldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +17,17 @@ public class SelfSustainableMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ModBlocks.registerModBlocks();
         ModItems.registerModItems();
+        ModItemGroup.registerItemGroups();
+        ModBlocks.registerModBlocks();
         ModBlockEntities.registerBlockEntities();
         ModRecipes.registerRecipes();
 
         NetworkMessagesRegistry.registerS2CPackets();
         NetworkMessagesRegistry.registerC2SPackets();
+
+        WorldUtils.init();
+
         // Class registering item fuel values for the Brick oven.
         FuelTicksManager.loadFuelTicks();
     }

@@ -97,7 +97,7 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
     }
 
 
-    // TODO: FIX THE RENDERING OF THE FUEL OVERLAY
+    // TODO: FIX THE RENDERING OF THE FUEL OVERLAY OR DO IT IN BLOCKSTATES WITH DIFFERENT MODELS
 /**
     private void renderFuelLevelOverlay(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 

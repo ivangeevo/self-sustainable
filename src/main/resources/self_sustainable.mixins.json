@@ -4,11 +4,14 @@
   "package": "net.ivangeevo.self_sustainable.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockEntityMixin",
+    "BlockMixin",
+    "CampfireBlockMixin",
+    "DifficultyMixin",
     "HungerManagerMixin",
     "ItemMixin",
-    "LivingEntityAccessor",
+    "ItemStackMixin",
     "PlayerEntityMixin",
-    "SheepEntityMixin",
     "SpawnHelperMixin"
   ],
   "client": [

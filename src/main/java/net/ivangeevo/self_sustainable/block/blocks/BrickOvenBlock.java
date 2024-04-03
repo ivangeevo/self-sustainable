@@ -2,7 +2,6 @@ package net.ivangeevo.self_sustainable.block.blocks;
 
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
-import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.minecraft.block.*;
@@ -12,7 +11,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
@@ -29,6 +27,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -103,11 +102,13 @@ public class BrickOvenBlock extends BlockWithEntity {
             {
                 brickOvenBlockEntity = (BrickOvenBlockEntity) blockEntity;
 
+                /**
                 Item item = heldStack.getItem();
 
-                /** if ((optional = brickOvenBlockEntity.getRecipeFor(heldStack)).isPresent()
-                 *
-                && ((ItemAdded) item).getCanBeFedDirectlyIntoBrickOven(optional.get().getCookTime())) { **/
+                 if ((optional = brickOvenBlockEntity.getRecipeFor(heldStack)).isPresent()
+                && ((ItemAdded) item).getCanBeFedDirectlyIntoBrickOven(optional.get().getCookTime()))
+                 {
+                 **/
 
                     if (!world.isClient)
                     {
@@ -167,6 +168,7 @@ public class BrickOvenBlock extends BlockWithEntity {
         if (!state.get(LIT)) {
             return;
         }
+
         if (random.nextInt(10) == 0) {
             world.playSound((double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5,
                     SoundEvents.BLOCK_CAMPFIRE_CRACKLE, SoundCategory.BLOCKS, 0.5f + random.nextFloat(),
@@ -183,7 +185,7 @@ public class BrickOvenBlock extends BlockWithEntity {
         double relativeClickY = hit.getPos().getY() - blockPos.getY();
 
         // Allow projectile interaction only from the facing side
-        if (hit.getSide() == state.get(FACING) && relativeClickY < clickYBottomPortion)
+        if (hit.getSide() == state.get(FACING) && canLightUp(state) && relativeClickY < clickYBottomPortion)
         {
             if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, blockPos) && !state.get(LIT))
             {
@@ -215,7 +217,7 @@ public class BrickOvenBlock extends BlockWithEntity {
                 (int) ((double) pos.getY() + 0.5D),
                 (int) ((double) pos.getZ() + 0.5D));
 
-        world.playSound(null, soundPos, SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS,
+        world.playSound(null, soundPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS,
                 0.25F, (world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F);
 
     }
@@ -247,31 +249,22 @@ public class BrickOvenBlock extends BlockWithEntity {
     }
 
 
-    public boolean isHavingFuel () {
-        return FUEL_LEVEL.stream().spliterator().getExactSizeIfKnown() >= 0;
+    public boolean canLightUp(BlockState state)
+    {
+        return state.get(FUEL_LEVEL) > 0 && !(state.get(LIT));
     }
 
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        if (world.isClient) {
-
-                return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::clientTick);
-
+        if (world.isClient)
+        {
+            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::clientTick);
         }
         else
         {
-            if (state.get(LIT))
-            {
-                return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::litServerTick);
-            }
-            else if (!state.get(LIT))
-            {
-                return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::unlitServerTick);
-            }
-
-            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::mainServerTick);
+            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::serverTick);
         }
     }
 
@@ -282,7 +275,18 @@ public class BrickOvenBlock extends BlockWithEntity {
     }
 
 
+    @Override
+    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
+        return false;
+    }
 
+    @Override
+    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
+        return false;
+    }
 
-
+    @Override
+    public boolean setOnFireDirectly(World world, BlockPos pos) {
+        return false;
+    }
 }

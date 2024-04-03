@@ -11,15 +11,12 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 public class SelfSustainableClient implements ClientModInitializer {
 
 
-    public static final RenderLayer FUEL_OVERLAY = RenderLayer.getSolid(); // Example custom render layer
     @Override
     public void onInitializeClient() {
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OVEN_BRICK, RenderLayer.getCutout());
         BlockEntityRendererFactories.register(ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntityRenderer::new);
 
-        // Associate your block with the custom render layer
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OVEN_BRICK, FUEL_OVERLAY);
 
     }
 }

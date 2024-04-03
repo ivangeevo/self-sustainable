@@ -15,7 +15,9 @@ public interface ItemAdded {
     boolean getCanItemBeSetOnFireOnUse(int fuelTicks);
     boolean getCanItemStartFireOnUse(int fuelTicks);
     boolean getCanBeFedDirectlyIntoBrickOven(int fuelTicks);
+    boolean getCanBeFedDirectlyIntoCampfire(int fuelTicks);
 
+    int getCampfireBurnTime(int fuelTicks);
 
     default boolean canHarvestBlock(ItemStack stack, World world, BlockState state) {
         return false;
@@ -33,6 +35,7 @@ public interface ItemAdded {
 
     void updateUsingItem(ItemStack stack, World world, PlayerEntity player);
 
+    int getItemUseWarmupDuration();
 
 
 }

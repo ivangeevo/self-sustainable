@@ -1,9 +1,11 @@
 package net.ivangeevo.self_sustainable.mixin;
 
+import net.ivangeevo.self_sustainable.entity.interfaces.PlayerEntityAdded;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.HungerManager;
+import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -17,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdded
+public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdded, PlayerEntityAdded
 {
     @Shadow public abstract boolean isPlayer();
 
@@ -25,9 +27,27 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 
     @Shadow public abstract PlayerInventory getInventory();
 
+    @Shadow public abstract PlayerAbilities getAbilities();
+
+    /**
+     * This is the item that is in use when the player is holding down the useItemButton (e.g., bow, food, sword)
+     */
+    private ItemStack itemInUse;
+
+
+    /**
+     * This field starts off equal to getMaxItemUseDuration and is decremented on each tick
+     */
+    private int itemInUseCount;
+    protected float speedOnGround = 0.1F;
+    protected float speedInAir = 0.02F;
+    private int field_82249_h = 0;
+
+
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
 
 
     // Injected logic for periodic exhaustion
@@ -75,6 +95,25 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
         //updateUsingItem(stack,world, player);
         // END FCMOD
 
+    }
+
+    /**
+     * sets the itemInUse when the use item button is clicked. Args: itemstack, int maxItemUseDuration
+     */
+    public void setItemInUse(ItemStack stack, int par2)
+    {
+        PlayerEntity user = (PlayerEntity) (Object) this;
+        World world = user.getWorld();
+        if (stack != this.itemInUse)
+        {
+            this.itemInUse = stack;
+            this.itemInUseCount = par2;
+
+            if (!this.getWorld().isClient)
+            {
+                user.eatFood(world, stack);
+            }
+        }
     }
 
 

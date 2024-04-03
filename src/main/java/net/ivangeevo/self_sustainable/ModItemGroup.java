@@ -13,17 +13,21 @@ public class ModItemGroup {
     public static final ItemGroup SS_GROUP = Registry.register(Registries.ITEM_GROUP,
             new Identifier(SelfSustainableMod.MOD_ID, "ss_group"),
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.ss_group"))
-                    .icon(() -> new ItemStack(ModItems.SS_GROUP)).entries((displayContext, entries) -> {
-                        /**
-                        entries.add(Mod.CREEPER_OYSTERS);
-                        entries.add(BTWR_Items.CLUB_BONE);
-                        entries.add(BTWR_Items.CLUB_WOOD);
-                        entries.add(BTWR_Items.DIAMOND_INGOT);
-                        entries.add(BTWR_Items.DIAMOND_SHEARS);
-                         **/
+                    .icon(() -> new ItemStack(ModItems.SS_GROUP)).entries((displayContext, entries) ->
+                    {
+                        entries.add(ModItems.KNITTING_NEEDLES);
+                        entries.add(ModItems.FIRESTARTER_STICKS);
+                        entries.add(ModItems.FIRESTARTER_BOW);
 
 
-                    }).build());
+                    })
+                    .build());
+
+    public static void registerItemGroups()
+    {
+        SelfSustainableMod.LOGGER.info("Registering Item Groups for " + SelfSustainableMod.MOD_ID);
+
+    }
 
 
 }

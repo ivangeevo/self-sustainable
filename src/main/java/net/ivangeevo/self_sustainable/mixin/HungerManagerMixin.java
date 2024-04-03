@@ -52,6 +52,9 @@ public abstract class HungerManagerMixin
             }
         }
 
+        /** Removed the logic for saturation based healing, & difficulty based healing **/
+
+
         // Custom logic for starvation when food level is 0
         if (this.foodLevel <= 0) {
             ++this.foodTickTimer;

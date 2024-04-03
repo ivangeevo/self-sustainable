@@ -31,6 +31,11 @@ public class ModTags {
         public static final TagKey<Item> HIGH_VALUE_FUELS = createTag("high_value_fuels");
         public static final TagKey<Item> VERY_HIGH_VALUE_FUELS = createTag("very_high_value_fuels");
 
+        public static final TagKey<Item> SPIT_CAMPFIRE_ITEMS = createTag("spit_campfire_items");
+        public static final TagKey<Item> WOOL_ITEMS = createTag("wool_items");
+        public static final TagKey<Item> WOOL_KNIT_ITEMS = createTag("wool_knit_items");
+
+
 
         private static TagKey<Item> createTag (String name) {
             return TagKey.of(RegistryKeys.ITEM, new Identifier(SelfSustainableMod.MOD_ID, name));

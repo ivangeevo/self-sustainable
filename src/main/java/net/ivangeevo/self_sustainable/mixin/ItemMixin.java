@@ -13,6 +13,18 @@ public abstract class ItemMixin implements ItemAdded
                 getOvenBurnTime(fuelTicks) > 0;
     }
 
+    @Override
+    public boolean getCanBeFedDirectlyIntoCampfire(int fuelTicks)
+    {
+        return !getCanItemBeSetOnFireOnUse(fuelTicks) && !getCanItemStartFireOnUse(fuelTicks) &&
+                getCampfireBurnTime(fuelTicks) > 0;
+    }
+
+    @Override
+    public int getCampfireBurnTime(int iItemDamage)
+    {
+        return getCampfireBurnTime(iItemDamage);
+    }
 
     @Override
     public boolean getCanItemBeSetOnFireOnUse(int fuelTicks) {
@@ -30,5 +42,8 @@ public abstract class ItemMixin implements ItemAdded
         return defaultFurnaceBurnTime;
     }
 
-
+    @Override
+    public int getItemUseWarmupDuration() {
+        return 7;
+    }
 }

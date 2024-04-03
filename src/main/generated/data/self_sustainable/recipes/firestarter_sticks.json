@@ -3,15 +3,14 @@
   "category": "misc",
   "key": {
     "#": {
-      "item": "minecraft:brick_slab"
+      "item": "minecraft:stick"
     }
   },
   "pattern": [
-    "##",
     "##"
   ],
   "result": {
-    "item": "self_sustainable:oven_brick"
+    "item": "self_sustainable:firestarter_sticks"
   },
   "show_notification": true
 }

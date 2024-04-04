@@ -42,10 +42,12 @@
       "net/minecraft/class_1799": ["net/ivangeevo/self_sustainable/item/interfaces/ItemStackAdded"],
 
       "net/minecraft/class_2248": ["net/ivangeevo/self_sustainable/block/interfaces/BlockAdded"],
+      "net/minecraft/class_3924": ["net/ivangeevo/self_sustainable/block/interfaces/CampfireBlockEntityAdded"],
 
 
       "net/minecraft/class_1657": ["net/ivangeevo/self_sustainable/entity/interfaces/PlayerEntityAdded"],
       "net/minecraft/class_1429": ["net/ivangeevo/self_sustainable/entity/interfaces/AnimalEntityAdded"],
+
 
       "net/minecraft/class_1267": ["net/ivangeevo/self_sustainable/world/interfaces/DifficultyAdded"]
 

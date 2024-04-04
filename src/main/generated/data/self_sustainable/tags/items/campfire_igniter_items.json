@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#self_sustainable:primitive_firestarters",
+    "minecraft:flint_and_steel",
+    "minecraft:torch",
+    "minecraft:soul_torch"
+  ]
+}

@@ -22,7 +22,6 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
         super(output);
     }
 
-
     @Override
     public void generate(Consumer<RecipeJsonProvider> exporter)
     {

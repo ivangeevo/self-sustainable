@@ -6,8 +6,10 @@
   "mixins": [
     "BlockEntityMixin",
     "BlockMixin",
+    "CampfireBlockEntityMixin",
     "CampfireBlockMixin",
     "DifficultyMixin",
+    "FlintAndSteelItemMixin",
     "HungerManagerMixin",
     "ItemMixin",
     "ItemStackMixin",

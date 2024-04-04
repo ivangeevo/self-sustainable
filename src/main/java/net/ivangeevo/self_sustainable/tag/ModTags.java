@@ -24,7 +24,7 @@ public class ModTags {
     public static class Items {
 
         public static final TagKey<Item> OVEN_COOKABLE = createTag("oven_cookable");
-
+        public static final TagKey<Item> CAMPFIRE_IGNITER_ITEMS = createTag("campfire_igniter_items");
 
         public static final TagKey<Item> LOW_VALUE_FUELS = createTag("low_value_fuels");
         public static final TagKey<Item> MID_VALUE_FUELS = createTag("mid_value_fuels");

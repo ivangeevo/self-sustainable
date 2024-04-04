@@ -26,6 +26,19 @@ loom {
     }
 }
 
+//
+// Adds the generated files into the jar you distribute to players.
+//
+sourceSets {
+    main {
+        resources {
+            srcDirs += [
+                    'src/main/generated'
+            ]
+        }
+    }
+}
+
 repositories {
 
     mavenCentral()

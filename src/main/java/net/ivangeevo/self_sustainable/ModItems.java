@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.ivangeevo.self_sustainable.item.items.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
@@ -23,10 +24,19 @@ public class ModItems {
 
     public static final Item KNITTING_NEEDLES = registerItem("knitting_needles", new KnittingNeedlesItem(ToolMaterials.WOOD, new FabricItemSettings().maxDamage(8).recipeRemainder(ModItems.KNITTING_NEEDLES)));
     public static final Item KNITTING = registerItem("knitting", new KnittingItem(new FabricItemSettings().maxDamage(0)));
+
+    /**
     public static final Item FIRESTARTER_STICKS = registerItem("firestarter_sticks",
             new FireStarterItemPrimitive(new FabricItemSettings().maxDamage(250), 0.05F, -0.1F, 0.1F, 0.001F));
     public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
             new FireStarterItemPrimitive(new FabricItemSettings().maxDamage(250),0.025F, -0.1F, 0.1F, 0.004F));
+     **/
+
+    // Temporarily adding them as items only until I figure out Firestarter code.
+    public static final Item FIRESTARTER_STICKS = registerItem("firestarter_sticks",
+            new FlintAndSteelItem(new FabricItemSettings().maxDamage(1)));
+    public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
+            new FlintAndSteelItem(new FabricItemSettings().maxDamage(8)));
 
 
 

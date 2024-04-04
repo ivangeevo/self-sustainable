@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.block.blocks;
 
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
+import net.ivangeevo.self_sustainable.mixin.FlintAndSteelItemMixin;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.ivangeevo.self_sustainable.tag.ModTags;
@@ -12,11 +13,13 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
@@ -126,11 +129,15 @@ public class BrickOvenBlock extends BlockWithEntity {
              return ActionResult.FAIL;
              **/
 
+
+
             //temp logic
-            if (!state.get(LIT) && heldStack.isOf(Items.FLINT_AND_STEEL) || heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS))
+            if (!state.get(LIT) && (heldStack.getItem() instanceof FlintAndSteelItem) || player.getStackInHand(hand).isIn(ModTags.Items.CAMPFIRE_IGNITER_ITEMS) )
             {
                 world.setBlockState(pos, state.with(LIT, true));
                 this.playLitFX(world, pos);
+                heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
+             return ActionResult.SUCCESS;
 
             }
 

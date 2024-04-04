@@ -4,6 +4,8 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
 import net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock;
+import net.ivangeevo.self_sustainable.block.entity.util.CampfireExtinguisher;
+import net.ivangeevo.self_sustainable.block.entity.util.OvenExtinguisher;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.item.FuelTicksManager;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
@@ -30,6 +32,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Optional;
 
@@ -77,6 +80,22 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     private static final int FUEL_LEVEL_STATES = 9;
 
     protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+
+
+    // TEMPORARY STATS FOR A SEMI WORKING LOGIC //
+
+    @Unique
+    private int litTime = 0;
+
+    public int getLitTime() {
+        return litTime;
+    }
+
+    public void setLitTime(int value) {
+        this.litTime = value;
+    }
+
+    // END OF TEMP LOGIC //
 
     public BrickOvenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.OVEN_BRICK, pos, state);
@@ -172,6 +191,9 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
 
     public static void serverTick(World world, BlockPos pos, BlockState state, BrickOvenBlockEntity oven)
     {
+
+        OvenExtinguisher.onLitServerTick(world, pos, state, oven);
+
         Random random = world.random;
         Optional<OvenCookingRecipe> optional = oven.getRecipeFor(oven.cookStack.get(0));
 
@@ -400,6 +422,11 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         this.ovenBurnTime = nbt.getShort("BurnTime");
 
 
+        if (nbt.contains("LitTime"))
+        {
+            litTime = nbt.getInt("LitTime");
+        }
+
     }
 
     protected void writeNbt(NbtCompound nbt)
@@ -413,6 +440,9 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         nbt.putInt("UnlitFuel", this.unlitFuelBurnTime);
 
         nbt.putShort("VisualFuelLevel", (short)this.visualFuelLevel);
+
+        nbt.putInt("LitTime", litTime);
+
 
     }
 

@@ -10,13 +10,15 @@ import net.ivangeevo.self_sustainable.util.WorldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SelfSustainableMod implements ModInitializer {
+public class SelfSustainableMod implements ModInitializer
+{
 
     public static final String MOD_ID = "self_sustainable";
     public static final Logger LOGGER = LoggerFactory.getLogger("self_sustainable");
 
     @Override
-    public void onInitialize() {
+    public void onInitialize()
+    {
         ModItems.registerModItems();
         ModItemGroup.registerItemGroups();
         ModBlocks.registerModBlocks();

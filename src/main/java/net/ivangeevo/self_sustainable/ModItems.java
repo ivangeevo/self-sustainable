@@ -40,11 +40,13 @@ public class ModItems {
 
 
 
-    private static Item registerItem(String name, Item item) {
+    private static Item registerItem(String name, Item item)
+    {
         return Registry.register(Registries.ITEM, new Identifier(SelfSustainableMod.MOD_ID, name), item);
     }
 
-    public static void registerModItems() {
+    public static void registerModItems()
+    {
         SelfSustainableMod.LOGGER.info("Registering Mod Items for " + SelfSustainableMod.MOD_ID);
 
     }

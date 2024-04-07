@@ -8,7 +8,8 @@ public class WorldUtils {
 
     private static MinecraftServer serverInstance;
 
-    public static void init() {
+    public static void init()
+    {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             serverInstance = server;
         });
@@ -18,8 +19,10 @@ public class WorldUtils {
         });
     }
 
-    public static long getOverworldTimeServerOnly() {
-        if (serverInstance != null) {
+    public static long getOverworldTimeServerOnly()
+    {
+        if (serverInstance != null)
+        {
             LevelProperties worldProperties = (LevelProperties) serverInstance.getOverworld().getLevelProperties();
             return worldProperties.getTime();
         }

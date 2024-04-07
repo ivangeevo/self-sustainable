@@ -17,7 +17,7 @@ public class CampfireExtinguisher
         final int tickBurningFor = accessCampfire.getLitTime() + 1;
         accessCampfire.setLitTime(tickBurningFor);
 
-        int burnTime = 18000; // 15 minutes
+        int burnTime = 13000; // 10.83 minutes
 
         if (tickBurningFor > burnTime && world.setBlockState(pos, state.with(CampfireBlock.LIT, false)))
         {

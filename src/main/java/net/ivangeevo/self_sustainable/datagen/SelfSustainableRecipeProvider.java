@@ -22,26 +22,6 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
         super(output);
     }
 
-    @Override
-    public void generate(Consumer<RecipeJsonProvider> exporter)
-    {
-
-        offerThreeInputShapelessRecipe(exporter, ModItems.FIRESTARTER_BOW, Items.STICK, Items.STICK, Items.STRING,"group_btwr",1);
-
-
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK).input('#', Items.BRICK_SLAB)
-                .pattern("##")
-                .pattern("##")
-                .criterion("has_brick_slab", RecipeProvider.conditionsFromItem(Items.BRICK_SLAB)).offerTo(exporter);
-
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.FIRESTARTER_STICKS).input('#', Items.STICK)
-                .pattern("##")
-                .criterion("has_stick", RecipeProvider.conditionsFromItem(Items.STICK)).offerTo(exporter);
-
-
-
-    }
-
     public static void offerTwoInputShapelessRecipe(Consumer<RecipeJsonProvider> exporter, ItemConvertible output, ItemConvertible input, ItemConvertible input2, @Nullable String group, int outputCount) {
         ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, output, outputCount)
                 .input(input).input(input2)
@@ -65,6 +45,29 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(input), conditionsFromItem(input))
                 .offerTo(exporter,  convertBetween(output, input));
     }
+
+
+    @Override
+    public void generate(Consumer<RecipeJsonProvider> exporter)
+    {
+
+
+        offerThreeInputShapelessRecipe(exporter, ModItems.FIRESTARTER_BOW, Items.STICK, Items.STICK, Items.STRING,"group_btwr",1);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.FIRESTARTER_STICKS).input('#', Items.STICK)
+                .pattern("##")
+                .criterion("has_stick", RecipeProvider.conditionsFromItem(Items.STICK)).offerTo(exporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK).input('#', Items.BRICK_SLAB)
+                .pattern("##")
+                .pattern("##")
+                .criterion("has_brick_slab", RecipeProvider.conditionsFromItem(Items.BRICK_SLAB)).offerTo(exporter);
+
+
+
+
+    }
+
 
 
 }

@@ -4,12 +4,13 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.ivangeevo.self_sustainable.ModItems;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.data.server.recipe.RecipeProvider;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
+import net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.*;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
+import net.minecraft.recipe.AbstractCookingRecipe;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.RecipeCategory;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,11 +47,15 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter,  convertBetween(output, input));
     }
 
+    public static void offerOvenCooking(Consumer<RecipeJsonProvider> exporter, ItemConvertible input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {
+        ModCookingRecipeJsonBuilder.createOvenCooking(Ingredient.ofStacks(input.asItem().getDefaultStack()), category, output, experience, cookingTime).group(group).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter, getItemPath(output) + "_from_oven_cooking" + "_" + getItemPath(input));
+
+    }
 
     @Override
     public void generate(Consumer<RecipeJsonProvider> exporter)
     {
-
+        offerOvenCooking(exporter, Items.POTATO, RecipeCategory.FOOD, Items.BAKED_POTATO, 0.35f, 100, "group_btwr");
 
         offerThreeInputShapelessRecipe(exporter, ModItems.FIRESTARTER_BOW, Items.STICK, Items.STICK, Items.STRING,"group_btwr",1);
 

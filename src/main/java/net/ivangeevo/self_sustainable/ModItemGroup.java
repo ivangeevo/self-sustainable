@@ -21,8 +21,6 @@ public class ModItemGroup {
                         entries.add(ModItems.FIRESTARTER_BOW);
 
                         entries.add(ModBlocks.OVEN_BRICK);
-                        entries.add(ModBlocks.CRUDE_TORCH);
-                        entries.add(ModBlocks.TORCH);
 
 
 

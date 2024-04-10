@@ -16,7 +16,7 @@ import net.minecraft.world.event.GameEvent;
 
 public abstract class TorchExtinguisher {
 
-    /**
+
     public static class Item {
         public static void onLitServerTick(World world, BlockPos pos, BlockState state, TorchBlockEntity torch) {
             final int tickBurningFor = torch.getLitTime() + 1;
@@ -70,7 +70,7 @@ public abstract class TorchExtinguisher {
             }
         }
     }
-     **/
+
 
 
 }

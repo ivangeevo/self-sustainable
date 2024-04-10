@@ -42,9 +42,6 @@ public class ModItems {
             new FlintAndSteelItem(new FabricItemSettings().maxDamage(8)));
 
 
-    //public static final Item TORCH = registerItem("torch", new TorchItem(ModBlocks.TORCH, ModBlocks.WALL_TORCH, new FabricItemSettings(), Direction.DOWN));
-
-    //public static final Item CRUDE_TORCH = registerItem("crude_torch", new CrudeTorchItem(ModBlocks.CRUDE_TORCH, ModBlocks.WALL_CRUDE_TORCH,new FabricItemSettings(), Direction.DOWN));
 
 
 

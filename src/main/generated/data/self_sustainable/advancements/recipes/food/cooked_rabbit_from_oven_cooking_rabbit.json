@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_potato": {
+    "has_rabbit": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:potato"
+              "minecraft:rabbit"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:baked_potato_from_oven_cooking_potato"
+        "recipe": "minecraft:cooked_rabbit_from_oven_cooking_rabbit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_potato",
+      "has_rabbit",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:baked_potato_from_oven_cooking_potato"
+      "minecraft:cooked_rabbit_from_oven_cooking_rabbit"
     ]
   },
   "sends_telemetry_event": false

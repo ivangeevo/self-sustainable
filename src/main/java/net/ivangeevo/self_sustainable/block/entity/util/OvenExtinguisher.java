@@ -10,7 +10,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class OvenExtinguisher
+public abstract class OvenExtinguisher
 {
     public static void onLitServerTick(World world, BlockPos pos, BlockState state, BrickOvenBlockEntity brickOvenBlockEntity)
     {

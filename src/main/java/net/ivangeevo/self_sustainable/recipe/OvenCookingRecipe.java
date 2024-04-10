@@ -28,7 +28,6 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
     public RecipeSerializer<?> getSerializer() {
         return Serializer.INSTANCE;
     }
-
     @Override
     public RecipeType<?> getType() {
         return Type.INSTANCE;
@@ -38,7 +37,8 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
         public static final Type INSTANCE = new Type();
         public static final String ID = "oven_cooking";
     }
-    public static class Serializer implements RecipeSerializer<OvenCookingRecipe> {
+    public static class Serializer implements RecipeSerializer<OvenCookingRecipe>
+    {
 
         private final int cookingTime;
         private final RecipeFactory<?> recipeFactory;

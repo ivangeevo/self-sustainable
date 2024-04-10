@@ -1,0 +1,11 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "food",
+  "cookingtime": 1200,
+  "experience": 0.05,
+  "group": "group_btwr",
+  "ingredient": {
+    "item": "minecraft:rabbit"
+  },
+  "result": "minecraft:cooked_rabbit"
+}

@@ -11,6 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CampfireCookingRecipe;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
@@ -39,7 +41,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void construct(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci) {
-        setDefaultState(getDefaultState().with(CampfireBlock.LIT, false));
+        this.setDefaultState(getDefaultState().with(CampfireBlock.LIT, false));
     }
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
@@ -54,9 +56,22 @@ public abstract class CampfireBlockMixin extends BlockWithEntity
 
             ItemStack heldStack = player.getMainHandStack();
             heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
+            this.playLitFX(world, pos);
 
             cir.setReturnValue(ActionResult.SUCCESS);
         }
+    }
+
+    @Unique
+    private void playLitFX(World world, BlockPos pos) {
+        BlockPos soundPos = new BlockPos(
+                (int) ((double) pos.getX() + 0.5D),
+                (int) ((double) pos.getY() + 0.5D),
+                (int) ((double) pos.getZ() + 0.5D));
+
+        world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS,
+                0.2F + world.random.nextFloat() * 0.1F, world.random.nextFloat() * 0.25F + 1.25F);
+
     }
 
 }

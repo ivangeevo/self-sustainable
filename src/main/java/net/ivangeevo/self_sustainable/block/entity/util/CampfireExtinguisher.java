@@ -9,19 +9,19 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CampfireExtinguisher
+public abstract class CampfireExtinguisher
 {
     public static void onLitServerTick(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfireBlockEntity) {
-        CampfireBlockEntityAdded accessCampfire = (CampfireBlockEntityAdded) campfireBlockEntity;
+        CampfireBlockEntityAdded fire = (CampfireBlockEntityAdded) campfireBlockEntity;
 
-        final int tickBurningFor = accessCampfire.getLitTime() + 1;
-        accessCampfire.setLitTime(tickBurningFor);
+        final int tickBurningFor = fire.getLitTime() + 1;
+        fire.setLitTime(tickBurningFor);
 
-        int burnTime = 13000; // 10.83 minutes
+        int burnTime = 13000; // 11.23 minutes
 
         if (tickBurningFor > burnTime && world.setBlockState(pos, state.with(CampfireBlock.LIT, false)))
         {
-            accessCampfire.setLitTime(0);
+            fire.setLitTime(0);
             CampfireBlock.extinguish(null, world, pos, state);
             world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }

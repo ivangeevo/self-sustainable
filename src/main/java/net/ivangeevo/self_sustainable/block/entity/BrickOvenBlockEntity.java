@@ -4,7 +4,6 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
 import net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock;
-import net.ivangeevo.self_sustainable.block.entity.util.CampfireExtinguisher;
 import net.ivangeevo.self_sustainable.block.entity.util.OvenExtinguisher;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.item.FuelTicksManager;

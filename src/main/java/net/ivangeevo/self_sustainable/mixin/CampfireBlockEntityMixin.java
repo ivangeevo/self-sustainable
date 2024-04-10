@@ -39,6 +39,7 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     @Inject(method = "litServerTick", at = @At("HEAD"))
     private static void injectedExtinguishLogic(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci)
     {
+        // Adding burn logic and respectively extinguishing it.
         CampfireExtinguisher.onLitServerTick(world, pos, state, campfire);
     }
 

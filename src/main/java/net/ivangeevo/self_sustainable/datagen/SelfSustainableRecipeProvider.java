@@ -12,8 +12,11 @@ import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
@@ -47,7 +50,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter,  convertBetween(output, input));
     }
 
-    public static void offerOvenCooking(Consumer<RecipeJsonProvider> exporter, ItemConvertible input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {
+    public static void offerOvenCooking(Consumer<RecipeJsonProvider> exporter, ItemConvertible output, RecipeCategory category,  ItemConvertible input, float experience, int cookingTime, String group) {
         ModCookingRecipeJsonBuilder.createOvenCooking(Ingredient.ofStacks(input.asItem().getDefaultStack()), category, output, experience, cookingTime).group(group).criterion(hasItem(input), conditionsFromItem(input)).offerTo(exporter, getItemPath(output) + "_from_oven_cooking" + "_" + getItemPath(input));
 
     }
@@ -55,9 +58,27 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     @Override
     public void generate(Consumer<RecipeJsonProvider> exporter)
     {
-        offerOvenCooking(exporter, Items.POTATO, RecipeCategory.FOOD, Items.BAKED_POTATO, 0.35f, 100, "group_btwr");
+        /** Oven Recipes **/
+
+        // Food
+        offerOvenCooking(exporter, Items.POTATO, RecipeCategory.FOOD, Items.BAKED_POTATO, 0.25f, 100, "group_btwr");
+
+        offerOvenCooking(exporter, Items.COOKED_CHICKEN, RecipeCategory.FOOD, Items.CHICKEN, 0.15f, 1800, "group_btwr");
+        offerOvenCooking(exporter, Items.COOKED_BEEF, RecipeCategory.FOOD, Items.BEEF, 0.15f, 1800, "group_btwr");
+        offerOvenCooking(exporter, Items.COOKED_PORKCHOP, RecipeCategory.FOOD, Items.PORKCHOP, 0.15f, 1800, "group_btwr");
+        offerOvenCooking(exporter, Items.COOKED_MUTTON, RecipeCategory.FOOD, Items.MUTTON, 0.15f, 1800, "group_btwr");
+        offerOvenCooking(exporter, Items.COOKED_RABBIT, RecipeCategory.FOOD, Items.RABBIT, 0.10f, 1200, "group_btwr");
+        offerOvenCooking(exporter, Items.COOKED_COD, RecipeCategory.FOOD, Items.COD, 0.10f, 1200, "group_btwr");
+        offerOvenCooking(exporter, Items.COOKED_SALMON, RecipeCategory.FOOD, Items.SALMON, 0.10f, 1200, "group_btwr");
+
+        offerOvenCooking(exporter, Items.IRON_NUGGET, RecipeCategory.MISC, Items.RAW_IRON, 0.25f, 120, "group_btwr");
+
+
+        /** Shapeless Recipes **/
 
         offerThreeInputShapelessRecipe(exporter, ModItems.FIRESTARTER_BOW, Items.STICK, Items.STICK, Items.STRING,"group_btwr",1);
+
+        /** Shaped Recipes **/
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.FIRESTARTER_STICKS).input('#', Items.STICK)
                 .pattern("##")
@@ -67,8 +88,6 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .pattern("##")
                 .pattern("##")
                 .criterion("has_brick_slab", RecipeProvider.conditionsFromItem(Items.BRICK_SLAB)).offerTo(exporter);
-
-
 
 
     }

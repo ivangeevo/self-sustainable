@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.ivangeevo.self_sustainable.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BlockEntityMixin",
+    "BlockMixin",
+    "CampfireBlockEntityMixin",
+    "CampfireBlockMixin",
+    "DifficultyMixin",
+    "FlintAndSteelItemMixin",
+    "HungerManagerMixin",
+    "ItemMixin",
+    "ItemStackMixin",
+    "PlayerEntityMixin",
+    "SpawnHelperMixin",
+    "TorchBlockMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "block/oven_brick",
+      "textures": {
+        "particle": "block/oven_brick",
+        "0": "block/overlay_oven_brick_fuel_0",
+        "1": "block/overlay_oven_brick_fuel_1",
+        "2": "block/overlay_oven_brick_fuel_2",
+        "3": "block/overlay_oven_brick_fuel_3",
+        "4": "block/overlay_oven_brick_fuel_4",
+        "5": "block/overlay_oven_brick_fuel_5",
+        "6": "block/overlay_oven_brick_fuel_6",
+        "7": "block/overlay_oven_brick_fuel_7",
+        "8": "block/overlay_oven_brick_fuel_8"
+      }
+    },
+    "lit=true": {
+      "model": "block/oven_brick",
+      "textures": {
+        "particle": "block/oven_brick",
+        "0": "block/overlay_oven_brick_fuel_0",
+        "1": "block/overlay_oven_brick_fuel_1",
+        "2": "block/overlay_oven_brick_fuel_2",
+        "3": "block/overlay_oven_brick_fuel_3",
+        "4": "block/overlay_oven_brick_fuel_4",
+        "5": "block/overlay_oven_brick_fuel_5",
+        "6": "block/overlay_oven_brick_fuel_6",
+        "7": "block/overlay_oven_brick_fuel_7",
+        "8": "block/overlay_oven_brick_fuel_8"
+      }
+    }
+  }
+}

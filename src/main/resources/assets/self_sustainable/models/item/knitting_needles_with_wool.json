@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "self_sustainable:item/knitting_needles",
+    "layer1": "self_sustainable:item/default_wool"
+  }
+}

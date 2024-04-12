@@ -1,0 +1,61 @@
+{
+  "schemaVersion":1,
+  "id":"self_sustainable",
+  "version":"${version}",
+  "name":"self_sustainable",
+  "description":"",
+  "authors":[],
+  "contact":{
+    "repo":"https://github.com/Ivan/self-sustainablew-remastered-private"
+  },
+  "license":"All-Rights-Reserved",
+  "icon":"assets/self-sustainable/icon.png",
+  "environment":"*",
+  "entrypoints":{
+    "client":[
+      "net.ivangeevo.self_sustainable.client.SelfSustainableClient"
+    ],
+    "main":[
+      "net.ivangeevo.self_sustainable.SelfSustainableMod"
+    ],
+    "fabric-datagen": [
+      "net.ivangeevo.self_sustainable.SelfSustainableDataGenerator"
+    ],
+    "modmenu": [
+      "net.ivangeevo.self_sustainable.config.SelfSustainableModMenu"
+    ]
+  },
+  "mixins":[
+    "self_sustainable.mixins.json"
+  ],
+  "depends":{
+    "fabricloader":">=${loader_version}",
+    "fabric":"*",
+    "minecraft":"${minecraft_version}"
+  },
+
+  "accessWidener": "self_sustainable.accesswidener",
+
+  "custom":
+  {
+    "loom:injected_interfaces":
+    {
+
+      "net/minecraft/class_1792": ["net/ivangeevo/self_sustainable/item/interfaces/ItemAdded"],
+      "net/minecraft/class_1799": ["net/ivangeevo/self_sustainable/item/interfaces/ItemStackAdded"],
+
+      "net/minecraft/class_2248": ["net/ivangeevo/self_sustainable/block/interfaces/BlockAdded"],
+      "net/minecraft/class_3924": ["net/ivangeevo/self_sustainable/block/interfaces/CampfireBlockEntityAdded"],
+      "net/minecraft/class_2527": ["net/ivangeevo/self_sustainable/block/interfaces/TorchBlockAdded"],
+
+
+      "net/minecraft/class_1657": ["net/ivangeevo/self_sustainable/entity/interfaces/PlayerEntityAdded"],
+      "net/minecraft/class_1429": ["net/ivangeevo/self_sustainable/entity/interfaces/AnimalEntityAdded"],
+
+
+      "net/minecraft/class_1267": ["net/ivangeevo/self_sustainable/world/interfaces/DifficultyAdded"]
+
+    }
+  }
+
+}

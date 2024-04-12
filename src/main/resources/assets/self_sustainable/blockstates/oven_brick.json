@@ -1,0 +1,422 @@
+{
+  "variants":
+  {
+    "lit=false,facing=north,fuel_level=0": [
+    {
+      "model": "self_sustainable:block/oven_old/oven_brick_unlit"
+    }
+  ],
+    "lit=false,facing=north,fuel_level=1": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_1"
+      }
+    ],
+    "lit=false,facing=north,fuel_level=2": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_2"
+      }
+    ],
+    "lit=false,facing=north,fuel_level=3": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_3"
+      }
+    ],
+    "lit=false,facing=north,fuel_level=4": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_4"
+      }
+    ],
+    "lit=false,facing=north,fuel_level=5": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_5"
+      }
+    ],
+    "lit=false,facing=north,fuel_level=6": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_6"
+      }
+    ],
+    "lit=false,facing=north,fuel_level=7": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_7"
+      }
+    ],
+    "lit=false,facing=north,fuel_level=8": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_8"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=0": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_0"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=1": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_1"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=2": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_2"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=3": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_3"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=4": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_4"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=5": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_5"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=6": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_6"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=7": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_7"
+      }
+    ],
+    "lit=true,facing=north,fuel_level=8": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_8"
+      }
+    ],
+    "lit=false,facing=south,fuel_level=0": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=south,fuel_level=1": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_1",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=south,fuel_level=2": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_2",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=south,fuel_level=3": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_3",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=south,fuel_level=4": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_4",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=south,fuel_level=5": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_5",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=south,fuel_level=6": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_6",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=south,fuel_level=7": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_7",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=south,fuel_level=8": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_8",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=0": [
+
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_0",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=1": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_1",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=2": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_2",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=3": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_3",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=4": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_4",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=5": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_5",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=6": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_6",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=7": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_7",
+        "y": 180
+      }
+    ],
+    "lit=true,facing=south,fuel_level=8": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_8",
+        "y": 180
+      }
+    ],
+    "lit=false,facing=east,fuel_level=0": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=east,fuel_level=1": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_1",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=east,fuel_level=2": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_2",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=east,fuel_level=3": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_3",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=east,fuel_level=4": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_4",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=east,fuel_level=5": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_5",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=east,fuel_level=6": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_6",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=east,fuel_level=7": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_7",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=east,fuel_level=8": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_8",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=0": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_0",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=1": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_1",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=2": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_2",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=3": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_3",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=4": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_4",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=5": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_5",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=6": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_6",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=7": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_7",
+        "y": 90
+      }
+    ],
+    "lit=true,facing=east,fuel_level=8": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_8",
+        "y": 90
+      }
+    ],
+    "lit=false,facing=west,fuel_level=0": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit",
+        "y": 270
+      }
+    ],
+    "lit=false,facing=west,fuel_level=1": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_1",
+        "y": 270
+      }
+    ],
+    "lit=false,facing=west,fuel_level=2": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_2",
+        "y": 270
+      }
+    ],
+    "lit=false,facing=west,fuel_level=3": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_3",
+        "y": 270
+      }
+    ],
+    "lit=false,facing=west,fuel_level=4": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_4",
+        "y": 270
+      }
+    ],
+    "lit=false,facing=west,fuel_level=5": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_5",
+        "y": 270
+      }
+    ],
+    "lit=false,facing=west,fuel_level=6": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_6",
+        "y": 270
+      }
+    ],
+    "lit=false,facing=west,fuel_level=7": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_7",
+        "y": 270
+      }
+    ],
+    "lit=false,facing=west,fuel_level=8": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_unlit_fuel_8",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=0": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_0",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=1": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_1",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=2": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_2",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=3": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_3",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=4": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_4",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=5": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_5",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=6": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_6",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=7": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_7",
+        "y": 270
+      }
+    ],
+    "lit=true,facing=west,fuel_level=8": [
+      {
+        "model": "self_sustainable:block/oven_old/oven_brick_lit_fuel_8",
+        "y": 270
+      }
+    ]
+
+  }
+
+}

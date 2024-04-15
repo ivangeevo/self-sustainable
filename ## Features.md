@@ -5,7 +5,7 @@
 
 
 * Minimises the saturation that the player spawns with.
-* Removes the logic for saturation based healing, & difficulty based healing.
+* Removes full saturation healing, & difficulty based healing.
 * Healing every 30 seconds, instead of when the hunger bar is full.
 * Periodic exhaustion regardless of action(to prevent infinite afk-ing).
 * Increased exhaustion from jumping & even more from sprinting/sprint jumping.

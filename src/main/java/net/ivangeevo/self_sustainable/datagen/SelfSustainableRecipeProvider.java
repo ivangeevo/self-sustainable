@@ -54,7 +54,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
 
         /** Oven Recipes **/
-        addOvenCookingRecipes(exporter);
+        this.addOvenCookingRecipes(exporter);
 
         /** Shapeless Recipes **/
         this.addShapelessRecipes(exporter);
@@ -85,18 +85,18 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     private void addOvenCookingRecipes(Consumer<RecipeJsonProvider> exporter)
     {
         // Food
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(Items.BAKED_POTATO), RecipeCategory.FOOD, Items.POTATO, 0.25f, 100);
+        ModCookingRecipeJsonBuilder.createOvenSmelting(Ingredient.ofItems(Items.BAKED_POTATO), RecipeCategory.FOOD, Items.POTATO, 0.25f, 100);
 
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(Items.COOKED_CHICKEN), RecipeCategory.FOOD, Items.CHICKEN, 0.15f, 1800);
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(Items.COOKED_BEEF), RecipeCategory.FOOD, Items.BEEF, 0.15f, 1800);
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(Items.COOKED_PORKCHOP), RecipeCategory.FOOD, Items.PORKCHOP, 0.15f, 1800);
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(Items.COOKED_MUTTON), RecipeCategory.FOOD, Items.MUTTON, 0.15f, 1800);
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(Items.COOKED_RABBIT), RecipeCategory.FOOD, Items.RABBIT, 0.10f, 1200);
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(Items.COOKED_COD), RecipeCategory.FOOD, Items.COD, 0.10f, 1200);
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(Items.COOKED_SALMON), RecipeCategory.FOOD, Items.SALMON, 0.10f, 1200);
+        ModCookingRecipeJsonBuilder.createOvenSmelting(Ingredient.ofItems(Items.COOKED_CHICKEN), RecipeCategory.FOOD, Items.CHICKEN, 0.15f, 1800);
+        ModCookingRecipeJsonBuilder.createOvenSmelting(Ingredient.ofItems(Items.COOKED_BEEF), RecipeCategory.FOOD, Items.BEEF, 0.15f, 1800);
+        ModCookingRecipeJsonBuilder.createOvenSmelting(Ingredient.ofItems(Items.COOKED_PORKCHOP), RecipeCategory.FOOD, Items.PORKCHOP, 0.15f, 1800);
+        ModCookingRecipeJsonBuilder.createOvenSmelting(Ingredient.ofItems(Items.COOKED_MUTTON), RecipeCategory.FOOD, Items.MUTTON, 0.15f, 1800);
+        ModCookingRecipeJsonBuilder.createOvenSmelting(Ingredient.ofItems(Items.COOKED_RABBIT), RecipeCategory.FOOD, Items.RABBIT, 0.10f, 1600);
+        ModCookingRecipeJsonBuilder.createOvenSmelting(Ingredient.ofItems(Items.COOKED_COD), RecipeCategory.FOOD, Items.COD, 0.10f, 1600);
+        ModCookingRecipeJsonBuilder.createOvenSmelting(Ingredient.ofItems(Items.COOKED_SALMON), RecipeCategory.FOOD, Items.SALMON, 0.10f, 1600);
 
         // Ores
-        ModCookingRecipeJsonBuilder.create(Ingredient.ofItems(Items.IRON_NUGGET), RecipeCategory.MISC, Items.RAW_IRON, 0.25f, 120, OvenCookingRecipe.Serializer.INSTANCE);
+        ModCookingRecipeJsonBuilder.create(Ingredient.ofItems(Items.IRON_NUGGET), RecipeCategory.MISC, Items.RAW_IRON, 0.25f, 12000, OvenCookingRecipe.Serializer.INSTANCE);
 
     }
 

@@ -12,6 +12,7 @@ import net.minecraft.advancement.AdvancementRewards;
 import net.minecraft.advancement.CriterionMerger;
 import net.minecraft.advancement.criterion.CriterionConditions;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
+import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.BlockItem;
@@ -53,21 +54,13 @@ public class ModCookingRecipeJsonBuilder
         return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getCookingRecipeCategory(serializer, output), output, input, experience, cookingTime, serializer);
     }
 
-    public static ModCookingRecipeJsonBuilder createCampfireCooking(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
-        return new ModCookingRecipeJsonBuilder(category, CookingRecipeCategory.FOOD, output, input, experience, cookingTime, RecipeSerializer.CAMPFIRE_COOKING);
-    }
 
-    public static ModCookingRecipeJsonBuilder createBlasting(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
-        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getBlastingRecipeCategory(output), output, input, experience, cookingTime, RecipeSerializer.BLASTING);
-    }
 
     public static ModCookingRecipeJsonBuilder createOvenSmelting(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
-        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getSmeltingRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe.Serializer.INSTANCE);
+        return new ModCookingRecipeJsonBuilder(category, getSmeltingRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe.Serializer.INSTANCE);
     }
 
-    public static ModCookingRecipeJsonBuilder createSmoking(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
-        return new ModCookingRecipeJsonBuilder(category, CookingRecipeCategory.FOOD, output, input, experience, cookingTime, RecipeSerializer.SMOKING);
-    }
+
 
     @Override
     public ModCookingRecipeJsonBuilder criterion(String string, CriterionConditions criterionConditions) {

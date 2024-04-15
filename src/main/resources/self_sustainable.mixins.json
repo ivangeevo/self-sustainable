@@ -14,8 +14,7 @@
     "ItemMixin",
     "ItemStackMixin",
     "PlayerEntityMixin",
-    "SpawnHelperMixin",
-    "TorchBlockMixin"
+    "SpawnHelperMixin"
   ],
   "client": [
   ],

@@ -20,7 +20,7 @@ public class ModItemGroup {
                         entries.add(ModItems.KNITTING_NEEDLES);
                         entries.add(ModItems.FIRESTARTER_STICKS);
                         entries.add(ModItems.FIRESTARTER_BOW);
-                        entries.add(ModItems.CRUDE_TORCH);
+                        //entries.add(ModItems.CRUDE_TORCH);
 
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);

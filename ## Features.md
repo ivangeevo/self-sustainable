@@ -11,6 +11,8 @@
 * Increased exhaustion from jumping & even more from sprinting/sprint jumping.
 * Removed the random respawning of passive mobs in the world.
 
+* Makes picking up Chest require Iron axe or above (gold not working)
+
 
 
 ## Partially working:

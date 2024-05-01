@@ -4,6 +4,7 @@
   "package": "net.ivangeevo.self_sustainable.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractFurnaceBlockEntityMixin",
     "BlockEntityMixin",
     "BlockMixin",
     "CampfireBlockEntityMixin",
@@ -13,6 +14,7 @@
     "HungerManagerMixin",
     "ItemMixin",
     "ItemStackMixin",
+    "MobEntityMixin",
     "PlayerEntityMixin",
     "SpawnHelperMixin"
   ],

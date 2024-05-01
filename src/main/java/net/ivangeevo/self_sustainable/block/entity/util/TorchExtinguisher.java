@@ -1,8 +1,23 @@
 package net.ivangeevo.self_sustainable.block.entity.util;
 
-public abstract class TorchExtinguisher {
+import net.ivangeevo.self_sustainable.ModItems;
+import net.ivangeevo.self_sustainable.block.ModBlocks;
+import net.ivangeevo.self_sustainable.block.TorchBlockExtinguisher;
+import net.ivangeevo.self_sustainable.block.entity.TorchBlockEntity;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 
-    /**
+public abstract class TorchExtinguisher
+{
+
+
     public static class Item {
         public static void onLitServerTick(World world, BlockPos pos, BlockState state, TorchBlockEntity torch) {
             final int tickBurningFor = torch.getLitTime() + 1;
@@ -11,7 +26,7 @@ public abstract class TorchExtinguisher {
     }
 
     public static class Block {
-        public static void serverTick(World world, BlockPos pos, BlockState state, TorchBlockEntity torch)
+        public static void onServerTick(World world, BlockPos pos, BlockState state, TorchBlockEntity torch)
         {
             final int tickBurningFor = torch.getLitTime() + 1;
             // Add common logic here
@@ -33,6 +48,7 @@ public abstract class TorchExtinguisher {
                 {
                     unlitTorch = new ItemStack(ModItems.CRUDE_TORCH);
                 }
+
                 world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), unlitTorch));
             }
 
@@ -41,10 +57,10 @@ public abstract class TorchExtinguisher {
                     && world.hasRain(pos) && world.random.nextFloat() < 0.05f)
             {
                 torch.setLitTime(0);
-                world.setBlockState(pos, state.with(TorchBlock.LIT, false));
+                world.setBlockState(pos, state.with(TorchBlockExtinguisher.LIT, false));
             }
             int burnTime = 24; // 20 minutes
-            if (tickBurningFor > burnTime && world.setBlockState(pos, state.with(TorchBlock.LIT, false)))
+            if (tickBurningFor > burnTime && world.setBlockState(pos, state.with(TorchBlockExtinguisher.LIT, false)))
             {
                 torch.setLitTime(0);
                 world.emitGameEvent(null, GameEvent.BLOCK_CHANGE, pos);
@@ -55,8 +71,13 @@ public abstract class TorchExtinguisher {
                 torch.markDirty();
             }
         }
+
+        public static void onClientTick(World world, BlockPos pos, BlockState state, TorchBlockEntity torch)
+        {
+
+        }
     }
-     **/
+
 
 
 }

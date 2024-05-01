@@ -24,17 +24,9 @@ public class ModBlocks {
                     .luminance((state) -> state.get(LIT) ? 10 : 0)
                     .sounds(BlockSoundGroup.STONE)));
 
-/**
+
     public static final Block CRUDE_TORCH = registerBlockWithoutItem("crude_torch",
             new CrudeTorchBlock(FabricBlockSettings.create()
-                    .noCollision()
-                    .breakInstantly()
-                    .luminance(state -> 14)
-                    .sounds(BlockSoundGroup.WOOD)
-                    .pistonBehavior(PistonBehavior.DESTROY), ParticleTypes.FLAME));
-
-    public static final Block TORCH = registerBlockWithoutItem("torch",
-            new ModTorchBlock(FabricBlockSettings.create()
                     .noCollision()
                     .breakInstantly()
                     .luminance(state -> 14)
@@ -49,15 +41,7 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.WOOD)
                     .dropsLike(CRUDE_TORCH)
                     .pistonBehavior(PistonBehavior.DESTROY), ParticleTypes.FLAME));
-    public static final Block WALL_TORCH = registerBlockWithoutItem("wall_torch",
-            new ModWallTorchBlock(FabricBlockSettings.create()
-                    .noCollision()
-                    .breakInstantly()
-                    .luminance(state -> 14)
-                    .sounds(BlockSoundGroup.WOOD)
-                    .dropsLike(TORCH)
-                    .pistonBehavior(PistonBehavior.DESTROY), ParticleTypes.FLAME));
- **/
+
 
 
 

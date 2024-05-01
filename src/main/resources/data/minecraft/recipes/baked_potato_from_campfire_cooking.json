@@ -1,7 +1,7 @@
 {
-  "type": "self_sustainable:oven_cooking",
+  "type": "minecraft:campfire_cooking",
   "category": "food",
-  "cookingtime": 600,
+  "cookingtime": 6000,
   "experience": 0.35,
   "ingredient": {
     "item": "minecraft:potato"

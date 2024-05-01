@@ -46,7 +46,6 @@
 
       "net/minecraft/class_2248": ["net/ivangeevo/self_sustainable/block/interfaces/BlockAdded"],
       "net/minecraft/class_3924": ["net/ivangeevo/self_sustainable/block/interfaces/CampfireBlockEntityAdded"],
-      "net/minecraft/class_2527": ["net/ivangeevo/self_sustainable/block/interfaces/TorchBlockAdded"],
 
 
       "net/minecraft/class_1657": ["net/ivangeevo/self_sustainable/entity/interfaces/PlayerEntityAdded"],

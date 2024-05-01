@@ -3,6 +3,9 @@
 
 ## Working:
 
++ Re-balances loot for all worldgen chests to be more fair (no easy loot).
+
++ Modified burn time for most items. Logs are the primary fuel source.
 
 * Minimises the saturation that the player spawns with.
 * Removes full saturation healing, & difficulty based healing.
@@ -12,7 +15,6 @@
 * Removed the random respawning of passive mobs in the world.
 
 * Makes picking up Chest require Iron axe or above (gold not working)
-
 
 
 ## Partially working:

@@ -41,11 +41,10 @@ public class ModItems {
     public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
             new FlintAndSteelItem(new FabricItemSettings().maxDamage(8)));
 
-    /**
+
     public static final Item CRUDE_TORCH = registerItem("crude_torch",
             new CrudeTorchItem(ModBlocks.CRUDE_TORCH, ModBlocks.WALL_CRUDE_TORCH,
                     new FabricItemSettings(), Direction.DOWN));
-     **/
 
 
 

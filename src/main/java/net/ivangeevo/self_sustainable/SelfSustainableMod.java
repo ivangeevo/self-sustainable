@@ -19,7 +19,6 @@ import java.io.IOException;
 
 public class SelfSustainableMod implements ModInitializer
 {
-
     public static final String MOD_ID = "self_sustainable";
     public static final Logger LOGGER = LoggerFactory.getLogger("self_sustainable");
 

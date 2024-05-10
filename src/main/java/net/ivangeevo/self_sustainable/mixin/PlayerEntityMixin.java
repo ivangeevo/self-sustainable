@@ -55,15 +55,16 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
     private void injectedTickMovement(CallbackInfo ci)
     {
         PlayerEntity player = (PlayerEntity) (Object) this;
+        HungerManager hungerManager = player.getHungerManager();
 
         if (!player.isCreative())
         {
             if (player.age % 1000 == 0)
             {
-                // Modify the exhaustion using the HungerManager's exhaustion field
-                HungerManager hungerManager = player.getHungerManager();
+                // Periodic exhaustion
                 hungerManager.addExhaustion(1.25f);
             }
+
         }
 
 

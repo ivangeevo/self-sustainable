@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.mixin;
 
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.ivangeevo.self_sustainable.tag.ModTags;
+import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.CampfireBlock;
@@ -19,8 +20,12 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.NetherPortal;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,6 +37,7 @@ import java.util.Optional;
 @Mixin(CampfireBlock.class)
 public abstract class CampfireBlockMixin extends BlockWithEntity
 {
+    @Shadow @Final public static BooleanProperty LIT;
     @Unique private static final BooleanProperty HAS_SPIT = ModProperties.HAS_SPIT;
 
 
@@ -61,6 +67,28 @@ public abstract class CampfireBlockMixin extends BlockWithEntity
 
             cir.setReturnValue(ActionResult.SUCCESS);
         }
+    }
+
+    @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
+    {
+        Optional<NetherPortal> optional;
+        if (oldState.isOf(state.getBlock())) {
+            return;
+        }
+        if (CampfireBlockMixin.isOverworldOrNether(world) && (optional = NetherPortal.getNewPortal(world, pos, Direction.Axis.X)).isPresent() && state.get(LIT)) {
+            optional.get().createPortal();
+            return;
+        }
+        if (!state.canPlaceAt(world, pos)) {
+            world.removeBlock(pos, false);
+        }
+
+    }
+
+    @Unique
+    private static boolean isOverworldOrNether(World world) {
+        return world.getRegistryKey() == World.OVERWORLD || world.getRegistryKey() == World.NETHER;
     }
 
     @Unique

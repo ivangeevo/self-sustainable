@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.ivangeevo.self_sustainable.ModItems;
 import net.ivangeevo.self_sustainable.tag.ModTags;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 
@@ -29,7 +30,7 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
 
                 .add(Items.FLINT_AND_STEEL)
 
-                .add(Items.TORCH)
+                .add((BlockItem)Items.TORCH)
                 .add(Items.SOUL_TORCH);
 
 

@@ -26,12 +26,7 @@ public class ModTags {
         public static final TagKey<Item> OVEN_COOKABLE = createTag("oven_cookable");
         public static final TagKey<Item> CAMPFIRE_IGNITER_ITEMS = createTag("campfire_igniter_items");
 
-        public static final TagKey<Item> LOW_VALUE_FUELS = createTag("low_value_fuels");
-        public static final TagKey<Item> MID_VALUE_FUELS = createTag("mid_value_fuels");
-        public static final TagKey<Item> HIGH_VALUE_FUELS = createTag("high_value_fuels");
-        public static final TagKey<Item> VERY_HIGH_VALUE_FUELS = createTag("very_high_value_fuels");
         public static final TagKey<Item> PRIMITIVE_FIRESTARTERS = createTag("primitive_firestarters");
-
         public static final TagKey<Item> SPIT_CAMPFIRE_ITEMS = createTag("spit_campfire_items");
         public static final TagKey<Item> WOOL_ITEMS = createTag("wool_items");
         public static final TagKey<Item> WOOL_KNIT_ITEMS = createTag("wool_knit_items");

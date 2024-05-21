@@ -17,6 +17,7 @@ public class ModBlockEntities {
     public static BlockEntityType<BrickOvenBlockEntity> OVEN_BRICK;
 
     public static BlockEntityType<TorchBlockEntity> TORCH;
+
     public static BlockEntityType<CrudeTorchBlockEntity> CRUDE_TORCH;
 
 
@@ -28,13 +29,14 @@ public class ModBlockEntities {
 
             TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "torch"), FabricBlockEntityTypeBuilder.create(TorchBlockEntity::new,
-                    Blocks.TORCH).build(null));
+                    ModBlocks.TORCH, ModBlocks.WALL_TORCH).build(null));
 
-            /**
+
             CRUDE_TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "crude_torch"), FabricBlockEntityTypeBuilder.create(CrudeTorchBlockEntity::new,
-                    ModBlocks.CRUDE_TORCH).build(null));
-             **/
+                    ModBlocks.CRUDE_TORCH, ModBlocks.WALL_CRUDE_TORCH).build(null));
+
+
 
         }
 

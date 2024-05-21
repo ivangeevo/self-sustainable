@@ -223,7 +223,7 @@ public class ItemUtils {
         if ( player.getInventory().insertStack( stack ) )
         {
             float pitchChance = (((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            player.getWorld().playSoundFromEntity( player,null, SoundEvents.BLOCK_LAVA_POP,SoundCategory.PLAYERS, 0.2F, pitchChance);
+            player.getWorld().playSoundFromEntity( player,null, SoundEvents.BLOCK_LAVA_POP, SoundCategory.PLAYERS, 0.2F, pitchChance);
         }
         else if ( !player.getWorld().isClient)
         {

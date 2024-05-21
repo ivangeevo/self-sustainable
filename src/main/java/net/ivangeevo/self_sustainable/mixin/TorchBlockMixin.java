@@ -3,10 +3,7 @@ package net.ivangeevo.self_sustainable.mixin;
 import net.ivangeevo.self_sustainable.block.entity.TorchBlockEntity;
 import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.TorchBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -22,7 +19,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -36,10 +32,43 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
     public TorchBlockMixin(Settings settings)
     {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false));
-
     }
 
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void setDefaultState(Settings settings, ParticleEffect particle, CallbackInfo ci)
+    {
+        this.setDefaultState(this.stateManager.getDefaultState().with(TorchBlockAdded.LIT, false));
+    }
+
+    @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
+    private void cancelParticles(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci)
+    {
+        if (!state.get(TorchBlockAdded.LIT))
+        {
+            ci.cancel();
+        }
+    }
+
+    @Override
+    public void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        builder.add(TorchBlockAdded.LIT);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+
+        if (!world.isClient() && !state.get(TorchBlockAdded.LIT))
+        {
+            world.setBlockState(pos, state.with(TorchBlockAdded.LIT, true));
+            this.playLitFX(world, pos);
+            return ActionResult.SUCCESS;
+        }
+
+        return super.onUse(state, world, pos, player, hand, hit);
+
+    }
 
     @Nullable
     @Override
@@ -49,52 +78,16 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
     }
 
 
-
-    @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
-    private void injectedDisplayTick(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci)
-    {
-        // Cancel the displaying of particles if the state is not LIT.
-        if (!state.get(LIT))
-        {
-            ci.cancel();
-        }
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
-    {
-        builder.add(LIT);
-    }
-
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-    {
-        // Add the ticker methods for each case of the block entity's logical side. I think lol...
-        if (world.isClient)
-        { return checkType(type, ModBlockEntities.TORCH, TorchBlockEntity::clientTick); }
-        else
-        { return checkType(type, ModBlockEntities.TORCH, TorchBlockEntity::serverTick); }
-
-    }
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
-
-        if (!world.isClient() && !state.get(LIT))
-        {
-            world.setBlockState(pos, state.with(LIT, true));
-            this.playLitFX(world, pos);
-            return ActionResult.SUCCESS;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        if (world.isClient) {
+            return state.get(TorchBlockAdded.LIT) ? checkType(type, ModBlockEntities.TORCH, TorchBlockEntity::clientTick) : null;
+        } else {
+            return checkType(type, ModBlockEntities.TORCH, TorchBlockEntity::serverTick);
         }
-
-        return super.onUse(state, world, pos, player, hand, hit);
-
     }
 
-
-    @Unique
     private void playLitFX(World world, BlockPos pos)
     {
         BlockPos soundPos = new BlockPos(
@@ -107,16 +100,9 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
 
     }
 
-    @Unique
     @Nullable
     private static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<? super E> ticker) {
         return expectedType == givenType ? (BlockEntityTicker<A>) ticker : null;
     }
 
-    @Override
-    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) { return true; }
-    @Override
-    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) { return true; }
-    @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos) { return true; }
 }

@@ -1,6 +1,8 @@
 package net.ivangeevo.self_sustainable.mixin;
 
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.Difficulty;
@@ -28,11 +30,11 @@ public abstract class HungerManagerMixin
             @ModifyConstant(method = "<init>",
             constant = @Constant(floatValue = 5.0f),
             slice = @Slice(
-                    from = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "net/minecraft/entity/player/HungerManager.prevFoodLevel : I"),
+                    from = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "net/minecraft/entity/player/HungerManager.foodLevel : I"),
                     to = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "net/minecraft/entity/player/HungerManager.saturationLevel : F"))
     )
     private float modifySaturationLevel(float original) {
-        return 0.1f;
+        return 0.001f;
     }
 
     /**
@@ -60,7 +62,9 @@ public abstract class HungerManagerMixin
             ++this.foodTickTimer;
             if (this.foodTickTimer >= 80) {
                 if (player.getHealth() > 10.0F || difficulty == Difficulty.HARD || player.getHealth() > 1.0F && difficulty == Difficulty.NORMAL) {
+                    player.setStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA,40,4,true,true), player);
                     player.damage(player.getDamageSources().starve(), 1.0F);
+
                 }
                 this.foodTickTimer = 0;
             }

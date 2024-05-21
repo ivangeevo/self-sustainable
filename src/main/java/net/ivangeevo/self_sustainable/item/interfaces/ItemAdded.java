@@ -9,15 +9,31 @@ import net.minecraft.world.World;
 public interface ItemAdded {
 
     int defaultFurnaceBurnTime = 0;
-    int getOvenBurnTime(int ticks);
+
+    default int getOvenBurnTime(int ticks) {
+        return 0;
+    }
 
 
-    boolean getCanItemBeSetOnFireOnUse(int fuelTicks);
-    boolean getCanItemStartFireOnUse(int fuelTicks);
-    boolean getCanBeFedDirectlyIntoBrickOven(int fuelTicks);
-    boolean getCanBeFedDirectlyIntoCampfire(int fuelTicks);
+    default boolean getCanItemBeSetOnFireOnUse(int fuelTicks) {
+        return false;
+    }
 
-    int getCampfireBurnTime(int fuelTicks);
+    default boolean getCanItemStartFireOnUse(int fuelTicks) {
+        return false;
+    }
+
+    default boolean getCanBeFedDirectlyIntoBrickOven(int fuelTicks) {
+        return false;
+    }
+
+    default boolean getCanBeFedDirectlyIntoCampfire(int fuelTicks) {
+        return false;
+    }
+
+    default int getCampfireBurnTime(int fuelTicks) {
+        return 0;
+    }
 
     default boolean canHarvestBlock(ItemStack stack, World world, BlockState state) {
         return false;
@@ -25,17 +41,31 @@ public interface ItemAdded {
     default float getStrVsBlock(ItemStack stack, World world, BlockState state) {
         return 1F;
     }
-    boolean isEfficientVsBlock(ItemStack stack, World world, BlockState state);
 
-    int getHerbivoreFoodValue(int iItemDamage);
-    Item setHerbivoreFoodValue(int iFoodValue);
+    default boolean isEfficientVsBlock(ItemStack stack, World world, BlockState state) {
+        return false;
+    }
 
-    Item setAsBasicHerbivoreFood();
+    default int getHerbivoreFoodValue(int iItemDamage) {
+        return 0;
+    }
+
+    default Item setHerbivoreFoodValue(int iFoodValue) {
+        return null;
+    }
+
+    default Item setAsBasicHerbivoreFood() {
+        return null;
+    }
 
 
-    void updateUsingItem(ItemStack stack, World world, PlayerEntity player);
+    default void updateUsingItem(ItemStack stack, World world, PlayerEntity player) {
 
-    int getItemUseWarmupDuration();
+    }
+
+    default int getItemUseWarmupDuration() {
+        return 0;
+    }
 
 
 }

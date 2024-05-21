@@ -2,7 +2,7 @@
   "type": "minecraft:smelting",
   "category": "misc",
   "cookingtime": 12000,
-  "experience": 0.7,
+  "experience": 0.1,
   "group": "gold_nugget",
   "ingredient": {
     "item": "minecraft:raw_gold"

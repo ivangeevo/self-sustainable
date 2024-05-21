@@ -3,84 +3,49 @@
  */
 package net.ivangeevo.self_sustainable.block.entity;
 
+import net.ivangeevo.self_sustainable.block.entity.util.TorchExtinguisher;
+import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.TorchBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Unique;
 
 
-public class TorchBlockEntity extends BlockEntity  {
-
-
-    @Unique public boolean lit;
+public class TorchBlockEntity extends BlockEntity implements Ignitable
+{
+    @Unique private boolean lit;
     @Unique protected int litTime = 0;
     public int getLitTime() {
         return litTime;
     }
-
     public void setLitTime(int value) {
         this.litTime = value;
     }
 
-
     public TorchBlockEntity(BlockPos pos, BlockState state)
     {
         super(ModBlockEntities.TORCH, pos, state);
-        lit = state.get(TorchBlock.LIT);
-    }
-
-
-
-    public static boolean isLit(ItemStack stack)
-    {
-        NbtCompound nbtCompound = stack.getNbt();
-        return nbtCompound != null && nbtCompound.getBoolean("Lit");
-    }
-
-
-    private TorchBlockEntity getTorch()
-    {
-
-        if (world == null || pos == null)
-        {
-            return null;
-        }
-
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (!(blockEntity instanceof TorchBlockEntity))
-        {
-            return null;
-        }
-
-        return (TorchBlockEntity) blockEntity;
+        lit = state.get(LIT);
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, TorchBlockEntity oven)
     {
-
-        //TorchExtinguisher.Block.serverTick(world, pos, state, oven);
-
-
+        TorchExtinguisher.Block.onServerTick(world, pos, state, oven);
     }
 
     public static void clientTick(World world, BlockPos pos, BlockState state, TorchBlockEntity oven)
     {
-
+        TorchExtinguisher.Block.onClientTick(world, pos, state, oven);
     }
 
-
-
-
-
+    @Override
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
@@ -89,6 +54,7 @@ public class TorchBlockEntity extends BlockEntity  {
 
     }
 
+    @Override
     protected void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
@@ -103,6 +69,7 @@ public class TorchBlockEntity extends BlockEntity  {
     public ItemEntity asItem(Item entity) {
         return asItemEntity();
     }
+
 
 
 }

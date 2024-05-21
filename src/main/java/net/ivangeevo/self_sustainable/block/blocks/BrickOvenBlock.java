@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.block.blocks;
 
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
+import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
@@ -38,7 +39,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class BrickOvenBlock extends BlockWithEntity {
+public class BrickOvenBlock extends BlockWithEntity implements Ignitable
+{
     public static final BooleanProperty LIT = Properties.LIT;
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
@@ -185,7 +187,7 @@ public class BrickOvenBlock extends BlockWithEntity {
                 world.setBlockState(blockPos, state.with(Properties.LIT, true),
                         Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
 
-                this.playLitFX(world, blockPos);
+                playLitFX(world, blockPos);
 
             }
 
@@ -193,16 +195,7 @@ public class BrickOvenBlock extends BlockWithEntity {
         }
     }
 
-    private void playLitFX(World world, BlockPos pos) {
-        BlockPos soundPos = new BlockPos(
-                (int) ((double) pos.getX() + 0.5D),
-                (int) ((double) pos.getY() + 0.5D),
-                (int) ((double) pos.getZ() + 0.5D));
 
-        world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS,
-                0.2F + world.random.nextFloat() * 0.1F, world.random.nextFloat() * 0.25F + 1.25F);
-
-    }
 
     private void playPopSound(World world, BlockPos pos) {
         BlockPos soundPos = new BlockPos(

@@ -29,7 +29,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TorchBlock.class)
 public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, BlockEntityProvider
 {
-
     public TorchBlockMixin(Settings settings)
     {
         super(settings);
@@ -44,7 +43,7 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
     @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
     private void cancelParticles(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci)
     {
-        if (!state.get(LIT))
+        if (!state.get(TorchBlockAdded.LIT))
         {
             ci.cancel();
         }
@@ -53,16 +52,16 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
     @Override
     public void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
-        builder.add(LIT);
+        builder.add(TorchBlockAdded.LIT);
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
 
-        if (!world.isClient() && !state.get(LIT))
+        if (!world.isClient() && !state.get(TorchBlockAdded.LIT))
         {
-            world.setBlockState(pos, state.with(LIT, true));
+            world.setBlockState(pos, state.with(TorchBlockAdded.LIT, true));
             this.playLitFX(world, pos);
             return ActionResult.SUCCESS;
         }
@@ -83,7 +82,7 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         if (world.isClient) {
-            return state.get(LIT) ? checkType(type, ModBlockEntities.TORCH, TorchBlockEntity::clientTick) : null;
+            return state.get(TorchBlockAdded.LIT) ? checkType(type, ModBlockEntities.TORCH, TorchBlockEntity::clientTick) : null;
         } else {
             return checkType(type, ModBlockEntities.TORCH, TorchBlockEntity::serverTick);
         }

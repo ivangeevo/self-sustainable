@@ -10,5 +10,4 @@ public interface TorchBlockAdded
 {
     BooleanProperty LIT = Properties.LIT;
 
-    void appendProperties(StateManager.Builder<Block, BlockState> builder);
 }

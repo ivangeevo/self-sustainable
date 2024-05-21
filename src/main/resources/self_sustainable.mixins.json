@@ -4,8 +4,8 @@
   "package": "net.ivangeevo.self_sustainable.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-
     "BlockEntityMixin",
+    "BlockItemMixin",
     "BlockMixin",
     "CampfireBlockEntityMixin",
     "CampfireBlockMixin",
@@ -16,7 +16,8 @@
     "ItemStackMixin",
     "MobEntityMixin",
     "PlayerEntityMixin",
-    "SpawnHelperMixin"
+    "SpawnHelperMixin",
+    "ZombieVillagerEntityMixin"
   ],
   "client": [
   ],

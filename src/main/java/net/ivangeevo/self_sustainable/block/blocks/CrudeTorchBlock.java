@@ -21,6 +21,7 @@ public class CrudeTorchBlock extends ModTorchBlock
         super(settings, particle);
     }
 
+    /**
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
@@ -41,5 +42,6 @@ public class CrudeTorchBlock extends ModTorchBlock
             return CrudeTorchBlock.checkType(type, ModBlockEntities.CRUDE_TORCH, CrudeTorchBlockEntity::serverTick);
         }
     }
+    **/
 }
 

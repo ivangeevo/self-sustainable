@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public class AbstractFurnaceBlockEntityMixin
+public abstract class AbstractFurnaceBlockEntityMixin
 {
     // Method is also invoke modified by Fabric, so keep that in mind for incompatibilities later on.
     @Inject(method = "getFuelTime", at = @At("HEAD"), cancellable = true)

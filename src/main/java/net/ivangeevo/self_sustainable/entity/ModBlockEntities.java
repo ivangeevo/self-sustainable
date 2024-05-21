@@ -29,12 +29,13 @@ public class ModBlockEntities {
 
             TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "torch"), FabricBlockEntityTypeBuilder.create(TorchBlockEntity::new,
-                    Blocks.TORCH, Blocks.WALL_TORCH).build(null));
+                    ModBlocks.TORCH, ModBlocks.WALL_TORCH).build(null));
 
 
             CRUDE_TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "crude_torch"), FabricBlockEntityTypeBuilder.create(CrudeTorchBlockEntity::new,
                     ModBlocks.CRUDE_TORCH, ModBlocks.WALL_CRUDE_TORCH).build(null));
+
 
 
         }

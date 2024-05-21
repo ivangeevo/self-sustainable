@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
+import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.ivangeevo.self_sustainable.item.items.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,7 +16,10 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class ModItems {
+import static net.minecraft.state.property.Properties.LIT;
+
+public class ModItems
+{
 
     public static final Item SS_GROUP = registerItem( "ss_group", new Item(new FabricItemSettings()));
 
@@ -41,10 +45,23 @@ public class ModItems {
     public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
             new FlintAndSteelItem(new FabricItemSettings().maxDamage(8)));
 
-
-    public static final Item CRUDE_TORCH = registerItem("crude_torch",
-            new CrudeTorchItem(ModBlocks.CRUDE_TORCH, ModBlocks.WALL_CRUDE_TORCH,
+    public static final Item TORCH_UNLIT = registerItem("torch_unlit",
+            new TorchItem(
+                    ModBlocks.TORCH.getDefaultState().with(LIT, false).getBlock(),
+                    ModBlocks.WALL_TORCH.getDefaultState().with(LIT, false).getBlock(),
                     new FabricItemSettings(), Direction.DOWN));
+    public static final Item CRUDE_TORCH = registerItem("crude_torch",
+            new CrudeTorchItem
+                    (ModBlocks.CRUDE_TORCH.getDefaultState().with(LIT, true).getBlock(),
+                    ModBlocks.WALL_CRUDE_TORCH.getDefaultState().with(LIT, true).getBlock(),
+                    new FabricItemSettings(), Direction.DOWN));
+
+    public static final Item CRUDE_TORCH_UNLIT = registerItem("crude_torch_unlit",
+            new CrudeTorchItem(
+                    ModBlocks.CRUDE_TORCH.getDefaultState().with(LIT, false).getBlock(),
+                    ModBlocks.WALL_CRUDE_TORCH.getDefaultState().with(LIT, false).getBlock(),
+                    new FabricItemSettings(), Direction.DOWN));
+
 
 
 

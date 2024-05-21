@@ -1,0 +1,7 @@
+{
+  "variants":
+  {
+    "lit=false": { "model": "self_sustainable:block/torch_unlit" },
+    "lit=true": { "model": "minecraft:block/torch" }
+  }
+}

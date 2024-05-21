@@ -12,8 +12,9 @@
 * Healing every 30 seconds, instead of when the hunger bar is full.
 * Periodic exhaustion regardless of action(to prevent infinite afk-ing).
 * Increased exhaustion from jumping & even more from sprinting/sprint jumping.
+* Changed Sweet Berry bush plant patches to be smaller.
 * Removed the random respawning of passive mobs in the world.
-
+* Removed Melon patches from generating in the world and Melon piles in villages.
 * Makes picking up Chest require Iron axe or above (gold not working)
 
 

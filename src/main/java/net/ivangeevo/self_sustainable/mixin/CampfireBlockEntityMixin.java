@@ -150,7 +150,8 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     }
 
     @Inject(method = "clientTick", at = @At("HEAD"), cancellable = true)
-    private static void injectedClientTick(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
+    private static void injectedClientTick(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci)
+    {
         Random random = world.random;
 
         // Check for smoke particle spawn chance
@@ -158,12 +159,14 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
             // Determine the number of particles to spawn
             int particleCount = random.nextInt(2) + 2;
 
-            for (int i = 0; i < particleCount; ++i) {
-                // Spawn the smoke particle at the specific location
+            for (int i = 0; i < particleCount; ++i)
+            {
+                // define position of the particles
                 double x = pos.getX() + 0.5;
                 double y = pos.getY() + 0.9; // 0.1 below the ceiling
                 double z = pos.getZ() + 0.5;
 
+                // Spawn the smoke particle
                 world.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0, 5.0E-4, 0.0);
             }
         }

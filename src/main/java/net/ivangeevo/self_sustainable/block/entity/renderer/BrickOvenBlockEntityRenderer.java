@@ -33,12 +33,12 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
        // this.renderFuelLevelOverlay(entity, matrices, vertexConsumers, light, overlay);
 
         // Render the item being in the oven
-        this.renderCookItem(entity, matrices, vertexConsumers, light, overlay);
+        this.renderCookItem(entity, matrices, vertexConsumers);
 
     }
 
 
-    private void renderCookItem(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    private void renderCookItem(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         // Get the itemsBeingCooked from the entity
         DefaultedList<ItemStack> itemsBeingCooked = entity.getCookStack();
         Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);

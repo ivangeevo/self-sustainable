@@ -39,11 +39,8 @@ public class ModBlocks
 
     private static FabricBlockSettings setTorchSettings()
     {
-        return FabricBlockSettings.create()
-                .noCollision()
-                .breakInstantly()
-                .luminance((state) -> state.get(LIT) ? 14 : 0)
-                .sounds(BlockSoundGroup.WOOD)
+        return FabricBlockSettings.create().noCollision().breakInstantly()
+                .luminance((state) -> state.get(LIT) ? 14 : 0).sounds(BlockSoundGroup.WOOD)
                 .pistonBehavior(PistonBehavior.DESTROY);
     }
 

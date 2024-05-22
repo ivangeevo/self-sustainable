@@ -1,5 +1,5 @@
 {
-  "parent": "self_sustainable:block/template_campfire_off",
+  "parent": "self_sustainable:block/template_campfire_spit",
   "textures": {
     "fire": "minecraft:block/campfire_fire",
     "lit_log": "minecraft:block/campfire_log_lit",

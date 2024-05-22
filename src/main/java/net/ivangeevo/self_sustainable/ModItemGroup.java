@@ -22,6 +22,7 @@ public class ModItemGroup {
                         entries.add(ModItems.FIRESTARTER_BOW);
 
                         entries.add(ModItems.CRUDE_TORCH);
+                        entries.add(ModItems.CRUDE_TORCH_UNLIT);
                         entries.add(ModItems.TORCH_UNLIT);
 
 

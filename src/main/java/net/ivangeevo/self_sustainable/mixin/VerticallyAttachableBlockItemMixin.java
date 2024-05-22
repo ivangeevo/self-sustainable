@@ -1,13 +1,11 @@
 package net.ivangeevo.self_sustainable.mixin;
 
+import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.TorchBlockEntity;
 import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.tag.ModTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -20,12 +18,14 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(VerticallyAttachableBlockItem.class)
 public abstract class VerticallyAttachableBlockItemMixin extends BlockItem implements TorchBlockAdded, BlockEntityProvider
@@ -52,15 +52,21 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem imple
     @Unique
     private boolean isVanillaTorch(BlockState state)
     {
-        return state.isOf(Blocks.TORCH) || state.isOf(Blocks.SOUL_TORCH);
+        return ( state.isOf(Blocks.TORCH) || state.isOf(Blocks.SOUL_TORCH));
     }
+
+
+
+
+
+
 
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        if (state.isOf(Blocks.WALL_TORCH))
+        if (state.isOf(Blocks.WALL_TORCH) || state.isOf(Blocks.TORCH))
         {
             return new TorchBlockEntity(pos, state);
         }

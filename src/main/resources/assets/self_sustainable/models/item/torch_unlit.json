@@ -1,3 +1,6 @@
 {
-  "parent": "self_sustainable:block/torch_unlit"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "self_sustainable:block/torch_unlit"
+  }
 }

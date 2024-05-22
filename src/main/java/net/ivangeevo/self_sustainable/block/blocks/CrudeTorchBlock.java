@@ -4,6 +4,7 @@ import net.ivangeevo.self_sustainable.block.entity.CrudeTorchBlockEntity;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.TorchBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -14,12 +15,13 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 
-public class CrudeTorchBlock extends ModTorchBlock
+public class CrudeTorchBlock extends TorchBlock
 {
 
     public CrudeTorchBlock(Settings settings, ParticleEffect particle) {
         super(settings, particle);
     }
+
 
     /**
     @Nullable

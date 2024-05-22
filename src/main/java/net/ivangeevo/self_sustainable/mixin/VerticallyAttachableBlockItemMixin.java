@@ -3,6 +3,7 @@ package net.ivangeevo.self_sustainable.mixin;
 import net.ivangeevo.self_sustainable.block.entity.TorchBlockEntity;
 import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
+import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -11,7 +12,10 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.VerticallyAttachableBlockItem;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -35,9 +39,21 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem imple
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectedSetState(Block standingBlock, Block wallBlock, Settings settings, Direction verticalAttachmentDirection, CallbackInfo ci)
     {
-        wallBlock.getStateManager().getDefaultState().with(LIT, false);
+        if (isVanillaTorch(standingBlock.getDefaultState()))
+        {
+            standingBlock.getStateManager().getDefaultState().with(LIT, false);
+        }
+        else if (isVanillaTorch(wallBlock.getDefaultState()))
+        {
+            wallBlock.getStateManager().getDefaultState().with(LIT, false);
+        }
     }
 
+    @Unique
+    private boolean isVanillaTorch(BlockState state)
+    {
+        return state.isOf(Blocks.TORCH) || state.isOf(Blocks.SOUL_TORCH);
+    }
 
 
     @Nullable

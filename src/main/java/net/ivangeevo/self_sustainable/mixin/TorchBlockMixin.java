@@ -74,7 +74,7 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new TorchBlockEntity(pos, state);
+        return new TorchBlockEntity( pos, state);
     }
 
 

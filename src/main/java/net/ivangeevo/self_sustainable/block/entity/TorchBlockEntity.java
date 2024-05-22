@@ -9,6 +9,7 @@ import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;

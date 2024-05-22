@@ -25,8 +25,6 @@ public class ModItemGroup {
                         entries.add(ModItems.CRUDE_TORCH_UNLIT);
                         entries.add(ModItems.TORCH_UNLIT);
 
-
-
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);
 

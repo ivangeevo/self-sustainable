@@ -94,10 +94,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         if (!world.isClient)
         {
             this.igniteCampfire(world, player, hand, state, pos);
-            this.setOrRemoveSpit(world, player, state, pos);
+            this.setOrRemoveItems(world, player, state, pos);
             this.addOrRetrieveItem(world, player, pos);
             cir.setReturnValue(ActionResult.SUCCESS);
         }
+        cir.setReturnValue(ActionResult.FAIL);
 
     }
 
@@ -115,12 +116,23 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         }
     }
 
+    // Method to handle adding/removing of food items or the spit item.
     @Unique
-    private void setOrRemoveSpit(World world, PlayerEntity player, BlockState state, BlockPos pos)
+    private void setOrRemoveItems(World world, PlayerEntity player, BlockState state, BlockPos pos)
     {
         ItemStack heldStack = player.getMainHandStack();
 
-        if ( !state.get(HAS_SPIT) )
+        BlockEntity be = world.getBlockEntity(pos);
+        CampfireBlockEntityAdded entity;
+        entity = (CampfireBlockEntityAdded) be;
+
+
+        assert entity != null;
+        if ( entity.getItemBeingCooked() != null && state.get(HAS_SPIT) )
+        {
+            entity.retrieveItem(player);
+        }
+        else if ( !state.get(HAS_SPIT) )
         {
             if ( heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) )
             {

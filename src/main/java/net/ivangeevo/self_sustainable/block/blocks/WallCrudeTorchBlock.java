@@ -29,9 +29,13 @@ public class WallCrudeTorchBlock extends CrudeTorchBlock {
 
     private static final Map<Direction, VoxelShape> BOUNDING_SHAPES;
 
-    public WallCrudeTorchBlock(Settings settings, ParticleEffect particleEffect) {
-        super(settings, particleEffect);
+
+
+    public WallCrudeTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle)
+    {
+        super(settings, particle);
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
+
     }
 
     @Override

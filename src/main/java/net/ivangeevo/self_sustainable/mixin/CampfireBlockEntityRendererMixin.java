@@ -47,7 +47,6 @@ public abstract class CampfireBlockEntityRendererMixin
     @Inject(method = "render(Lnet/minecraft/block/entity/CampfireBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V", at = @At("HEAD"), cancellable = true)
     private void injectedCustomRender(CampfireBlockEntity campfireBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci)
     {
-
         this.renderCookItem(campfireBlockEntity,matrixStack, vertexConsumerProvider, i, j);
         ci.cancel();
     }

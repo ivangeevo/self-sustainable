@@ -1,24 +1,9 @@
 package net.ivangeevo.self_sustainable.item.items;
 
-import com.terraformersmc.modmenu.util.mod.Mod;
-import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
-import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.VerticallyAttachableBlockItem;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-
-import java.util.Objects;
-
-import static net.minecraft.state.property.Properties.LIT;
 
 /** A regular torch item. Gets put out only if submerged in water. **/
 public class TorchItem extends VerticallyAttachableBlockItem implements Ignitable

@@ -155,7 +155,8 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
         Random random = world.random;
 
         // Check for smoke particle spawn chance
-        if (random.nextFloat() < 0.11F) {
+        if (random.nextFloat() < 0.11F)
+        {
             // Determine the number of particles to spawn
             int particleCount = random.nextInt(2) + 2;
 

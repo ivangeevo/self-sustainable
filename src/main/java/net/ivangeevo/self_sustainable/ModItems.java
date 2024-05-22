@@ -2,19 +2,16 @@ package net.ivangeevo.self_sustainable;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
-import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.ivangeevo.self_sustainable.item.items.*;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.FlintAndSteelItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ToolMaterials;
+import net.minecraft.item.VerticallyAttachableBlockItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-
-import java.util.Random;
 
 import static net.minecraft.state.property.Properties.LIT;
 
@@ -45,11 +42,15 @@ public class ModItems
     public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
             new FlintAndSteelItem(new FabricItemSettings().maxDamage(8)));
 
+    // There is only unlit torch item in here, the other is the vanilla one.
+    // The blocks are vanilla torch and wall torch.
     public static final Item TORCH_UNLIT = registerItem("torch_unlit",
-            new TorchItem(
-                    ModBlocks.TORCH.getDefaultState().with(LIT, false).getBlock(),
-                    ModBlocks.WALL_TORCH.getDefaultState().with(LIT, false).getBlock(),
+            new VerticallyAttachableBlockItem(
+                    Blocks.TORCH.getDefaultState().with(LIT, false).getBlock(),
+                    Blocks.WALL_TORCH.getDefaultState().with(LIT, false).getBlock(),
                     new FabricItemSettings(), Direction.DOWN));
+
+    // The crude and crude unlit items get assigned to the modded torch blocks.
     public static final Item CRUDE_TORCH = registerItem("crude_torch",
             new CrudeTorchItem
                     (ModBlocks.CRUDE_TORCH.getDefaultState().with(LIT, true).getBlock(),

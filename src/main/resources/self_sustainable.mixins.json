@@ -7,6 +7,7 @@
     "BlockEntityMixin",
     "BlockItemMixin",
     "BlockMixin",
+    "BlocksMixin",
     "CampfireBlockEntityMixin",
     "CampfireBlockMixin",
     "DifficultyMixin",
@@ -17,9 +18,13 @@
     "MobEntityMixin",
     "PlayerEntityMixin",
     "SpawnHelperMixin",
+    "TorchBlockMixin",
+    "VerticallyAttachableBlockItemMixin",
+    "WallTorchBlockMixin",
     "ZombieVillagerEntityMixin"
   ],
   "client": [
+    "CampfireBlockEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

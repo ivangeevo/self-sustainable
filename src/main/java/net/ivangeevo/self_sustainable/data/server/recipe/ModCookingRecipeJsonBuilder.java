@@ -12,7 +12,6 @@ import net.minecraft.advancement.AdvancementRewards;
 import net.minecraft.advancement.CriterionMerger;
 import net.minecraft.advancement.criterion.CriterionConditions;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
-import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.BlockItem;
@@ -40,7 +39,7 @@ public class ModCookingRecipeJsonBuilder
     private String group;
     private final RecipeSerializer<? extends AbstractCookingRecipe> serializer;
 
-    private ModCookingRecipeJsonBuilder(RecipeCategory category, CookingRecipeCategory cookingCategory, ItemConvertible output, Ingredient input, float experience, int cookingTime, RecipeSerializer<? extends AbstractCookingRecipe> serializer) {
+    public ModCookingRecipeJsonBuilder(RecipeCategory category, CookingRecipeCategory cookingCategory, ItemConvertible output, Ingredient input, float experience, int cookingTime, RecipeSerializer<? extends AbstractCookingRecipe> serializer) {
         this.category = category;
         this.cookingCategory = cookingCategory;
         this.output = output.asItem();
@@ -56,7 +55,7 @@ public class ModCookingRecipeJsonBuilder
 
 
 
-    public static ModCookingRecipeJsonBuilder createOvenSmelting(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
+    public static ModCookingRecipeJsonBuilder createOvenCooking(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
         return new ModCookingRecipeJsonBuilder(category, getSmeltingRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe.Serializer.INSTANCE);
     }
 
@@ -86,7 +85,7 @@ public class ModCookingRecipeJsonBuilder
         exporter.accept(new CookingRecipeJsonProvider(recipeId, this.group == null ? "" : this.group, this.cookingCategory, this.input, this.output, this.experience, this.cookingTime, this.advancementBuilder, recipeId.withPrefixedPath("recipes/" + this.category.getName() + "/"), this.serializer));
     }
 
-    private static CookingRecipeCategory getSmeltingRecipeCategory(ItemConvertible output) {
+    public static CookingRecipeCategory getSmeltingRecipeCategory(ItemConvertible output) {
         if (output.asItem().isFood()) {
             return CookingRecipeCategory.FOOD;
         }

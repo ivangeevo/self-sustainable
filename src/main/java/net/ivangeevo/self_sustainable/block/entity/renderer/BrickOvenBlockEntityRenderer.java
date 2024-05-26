@@ -40,7 +40,7 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
 
     private void renderCookItem(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         // Get the itemsBeingCooked from the entity
-        DefaultedList<ItemStack> itemsBeingCooked = entity.getCookStack();
+        ItemStack cookStack = BrickOvenBlockEntity.getCookStack0(entity);
         Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
 
         matrices.push();
@@ -59,7 +59,7 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
         matrices.scale(0.35f, 0.35f, 0.35f);
 
         // Use the itemRenderer to render the item
-        this.itemRenderer.renderItem(itemsBeingCooked.get(0), ModelTransformationMode.GUI,
+        this.itemRenderer.renderItem(cookStack, ModelTransformationMode.GUI,
                 LightmapTextureManager.pack(8, 15), OverlayTexture.DEFAULT_UV,
                 matrices, vertexConsumers, entity.getWorld(), 1);
 

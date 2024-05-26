@@ -1,6 +1,5 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
@@ -11,17 +10,14 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
@@ -38,6 +34,8 @@ import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+
+import static net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity.*;
 
 public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 {
@@ -94,33 +92,44 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
     private void addOrRetrieveItem(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        ItemStack heldStack = player.getMainHandStack();
-        BrickOvenBlockEntity brickOvenBlockEntity;
-        Optional<OvenCookingRecipe> optional;
+
+        ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof BrickOvenBlockEntity)
+        if (blockEntity instanceof BrickOvenBlockEntity ovenBE)
         {
-            brickOvenBlockEntity = (BrickOvenBlockEntity) blockEntity;
+            Optional<OvenCookingRecipe> optional;
+
 
             // Check for cooking
-            if (!heldStack.isEmpty() && (optional = brickOvenBlockEntity.getRecipeFor(heldStack)).isPresent())
+            if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent())
             {
                 if (!world.isClient)
                 {
-                    brickOvenBlockEntity.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() :
+                    ovenBE.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() :
                             heldStack, optional.get().getCookTime());
                 }
             }
             else
             {
-                // Check for retrieving
-                ItemStack retrievedItem = brickOvenBlockEntity.retrieveItem(player);
-                if (retrievedItem != null && !player.isCreative())
+                if (!getCookStack0(ovenBE).isEmpty())
                 {
-                    if (!player.giveItemStack(retrievedItem))
+                    if (!world.isClient()) { // Only execute on the server
+                        retrieveItem(ovenBE, player);
+                    }
+                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
+                }
+
+                if ((optional = ovenBE.getRecipeFor(heldStack)).isPresent())
+                {
+                    if (getCookStack0(ovenBE).isEmpty())
                     {
-                        player.dropItem(retrievedItem, false);
+                        if (!world.isClient())
+                        { // Only execute on the server
+                            ovenBE.addItem(player,
+                                    player.getAbilities().creativeMode
+                                            ? heldStack.copy() : heldStack, optional.get().getCookTime());
+                        }
                     }
                 }
             }
@@ -145,10 +154,10 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof BrickOvenBlockEntity)
+        if (blockEntity instanceof BrickOvenBlockEntity ovenBE)
         {
             // Drops the contents inside when the block is destroyed
-             ItemScatterer.spawn(world, pos, ((BrickOvenBlockEntity)blockEntity).getCookStack());
+             ItemScatterer.spawn(world, pos, getCookStackList(ovenBE));
         }
 
         super.onStateReplaced(state, world, pos, newState, moved);

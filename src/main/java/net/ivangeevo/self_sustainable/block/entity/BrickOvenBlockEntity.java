@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -35,6 +36,7 @@ import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock.FUEL_LEVEL;
@@ -452,11 +454,14 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
     }
 
 
-
-    public DefaultedList<ItemStack> getCookStack() {
-        return this.cookStack;
+    public static DefaultedList<ItemStack> getCookStackList(BrickOvenBlockEntity ovenBE)
+    {
+        return ovenBE.cookStack;
     }
-
+    public static ItemStack getCookStack0(BrickOvenBlockEntity ovenBE)
+    {
+        return ovenBE.cookStack.get(0);
+    }
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
@@ -546,26 +551,20 @@ public class BrickOvenBlockEntity extends BlockEntity implements Clearable {
         return false;
     }
 
-    @Nullable
-    public ItemStack retrieveItem(@Nullable Entity user)
-    {
-        for (int i = 0; i < this.cookStack.size(); ++i) {
-            ItemStack stack = this.cookStack.get(i);
-            if (!stack.isEmpty()) {
-                // Optionally handle different retrieval logic here
-                this.cookingTimes[i] = 0;
-                this.cookStack.set(i, ItemStack.EMPTY); // Clear the slot
-                assert this.world != null;
-                this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(user, this.getCachedState()));
-                this.updateListeners();
-
-                // Return a copy of the retrieved item
-                return stack.copy();
+    public static void retrieveItem(BrickOvenBlockEntity ovenBE, PlayerEntity player) {
+        DefaultedList<ItemStack> itemsBeingCooked = ovenBE.cookStack;
+        if (!itemsBeingCooked.isEmpty()) {
+            ItemStack itemStack = itemsBeingCooked.get(0);
+            if (!itemStack.isEmpty())
+            {
+                player.giveItemStack(itemStack);
+                itemsBeingCooked.set(0, ItemStack.EMPTY);
+                ovenBE.markDirty();
+                Objects.requireNonNull(ovenBE.getWorld()).updateListeners(ovenBE.getPos(), ovenBE.getCachedState(), ovenBE.getCachedState(), Block.NOTIFY_ALL);
             }
         }
-
-        return ItemStack.EMPTY; // Return an empty stack if no item was retrieved
     }
+
 
 
     public int attemptToAddFuel(ItemStack stack)

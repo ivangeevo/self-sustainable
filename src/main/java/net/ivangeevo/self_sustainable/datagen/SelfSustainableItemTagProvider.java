@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.datagen;
 
+import com.terraformersmc.modmenu.util.mod.Mod;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.ivangeevo.self_sustainable.item.ModItems;
@@ -33,9 +34,6 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
 
                 // TODO: Remove primitive firestarter from here later on, as they shouldn't insta-light
                 .addTag(ModTags.Items.PRIMITIVE_FIRESTARTERS)
-
-                .add(Items.FLINT_AND_STEEL)
-
                 .add((BlockItem)Items.TORCH)
                 .add(Items.SOUL_TORCH);
 

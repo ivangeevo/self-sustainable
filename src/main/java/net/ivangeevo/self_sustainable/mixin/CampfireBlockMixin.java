@@ -80,7 +80,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     private void injectedCustomOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir)
     {
         cir.setReturnValue(CampfireBlockManager.setCustomShapes(state));
-
     }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)

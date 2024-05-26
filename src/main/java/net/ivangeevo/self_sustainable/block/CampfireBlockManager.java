@@ -15,6 +15,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.CampfireCookingRecipe;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
@@ -41,15 +43,34 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         CampfireBlockEntityAdded addedVars;
         addedVars = (CampfireBlockEntityAdded) blockEntity;
 
-        if (blockEntity instanceof CampfireBlockEntity campfireBE) {
+        if (blockEntity instanceof CampfireBlockEntity campfireBE)
+        {
             Optional<CampfireCookingRecipe> optional;
 
+            if (heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
+            {
+                if (!world.isClient())
+                { // Only execute on the server
+                    world.setBlockState(pos, state.with(LIT, true));
+                    heldStack.damage(1, player, (p) -> {
+                        p.sendToolBreakStatus(hand);
+                    });
+                }
+                Ignitable.playLitFX(world, pos);
+
+                return ActionResult.SUCCESS;
+            }
+
+            // Handle stick input
             if (!getHasSpit(world, pos))
             {
                 if (heldStack.isOf(Items.STICK))
                 { // Check if the item in hand is a stick
-                    setHasSpit(world, pos, true);
-                    heldStack.decrement(1); // Decrease the heldStack count
+                    if (!world.isClient())
+                    { // Only execute on the server
+                        setHasSpit(world, pos, true);
+                        heldStack.decrement(1); // Decrease the heldStack count
+                    }
                     return ActionResult.SUCCESS;
                 }
             }
@@ -57,39 +78,44 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
             {
                 if (!campfireBE.getItemsBeingCooked().get(0).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
                 {
-                    // If an item is being cooked, retrieve it
-                    retrieveItem(campfireBE, player);
+                    if (!world.isClient()) { // Only execute on the server
+                        retrieveItem(campfireBE, player);
+                    }
+                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
                     return ActionResult.SUCCESS;
                 }
 
                 if (heldStack.isEmpty() && getCookStack(campfireBE).isEmpty())
                 {
-                    setHasSpit(world, pos, false);
-                    player.giveItemStack(new ItemStack(Items.STICK));
+                    if (!world.isClient())
+                    {
+                        setHasSpit(world, pos, false);
+                        player.giveItemStack(new ItemStack(Items.STICK));
+                    }
+                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
+
                     return ActionResult.SUCCESS;
                 }
                 else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent())
                 {
-                    if ( getCookStack(campfireBE).isEmpty() )
+                    if (getCookStack(campfireBE).isEmpty())
                     {
-                        // If no items are being cooked, add the item
-                        campfireBE.addItem(player,
-                                player.getAbilities().creativeMode
-                                        ? heldStack.copy() : heldStack, optional.get().getCookTime());
+                        if (!world.isClient())
+                        { // Only execute on the server
+                            campfireBE.addItem(player,
+                                    player.getAbilities().creativeMode
+                                            ? heldStack.copy() : heldStack, optional.get().getCookTime());
+                        }
+                        return ActionResult.SUCCESS;
                     }
-                    return ActionResult.SUCCESS;
                 }
-
             }
 
-            if (heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
-            {
-                world.setBlockState(pos, state.with(LIT, true));
-                return ActionResult.SUCCESS;
-            }
+
         }
         return ActionResult.PASS;
     }
+
 
     private static ItemStack getCookStack(CampfireBlockEntity campfireBE)
     {

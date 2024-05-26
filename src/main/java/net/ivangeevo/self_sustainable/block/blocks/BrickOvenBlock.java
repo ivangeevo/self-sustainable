@@ -77,10 +77,10 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         else if (relativeClickY < clickYBottomPortion && heldStack != null)
         {
             if ( !state.get(LIT) && (heldStack.getItem() instanceof FlintAndSteelItem)
-                    || player.getStackInHand(hand).isIn(ModTags.Items.CAMPFIRE_IGNITER_ITEMS) )
+                    || player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) )
             {
                 world.setBlockState(pos, state.with(LIT, true));
-                this.playLitFX(world, pos);
+                Ignitable.playLitFX(world, pos);
                 heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
                 return ActionResult.SUCCESS;
 
@@ -187,7 +187,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
                 world.setBlockState(blockPos, state.with(Properties.LIT, true),
                         Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
 
-                playLitFX(world, blockPos);
+                Ignitable.playLitFX(world, blockPos);
 
             }
 

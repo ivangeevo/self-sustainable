@@ -36,16 +36,13 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem imple
         super(block, settings);
     }
 
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectedSetState(Block standingBlock, Block wallBlock, Settings settings, Direction verticalAttachmentDirection, CallbackInfo ci)
+
+    @Inject(method = "canPlaceAt", at = @At("HEAD"), cancellable = true)
+    private void injectedCanPlaceAt(WorldView world, BlockState state, BlockPos pos, CallbackInfoReturnable<Boolean> cir)
     {
-        if (isVanillaTorch(standingBlock.getDefaultState()))
+        if (world.getBlockState(pos).getBlock() instanceof TorchBlock)
         {
-            standingBlock.getStateManager().getDefaultState().with(LIT, false);
-        }
-        else if (isVanillaTorch(wallBlock.getDefaultState()))
-        {
-            wallBlock.getStateManager().getDefaultState().with(LIT, false);
+            cir.setReturnValue(false);
         }
     }
 

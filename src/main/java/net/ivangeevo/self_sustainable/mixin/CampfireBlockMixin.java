@@ -1,9 +1,10 @@
 package net.ivangeevo.self_sustainable.mixin;
 
-import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
+import net.ivangeevo.self_sustainable.block.CampfireBlockManager;
 import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockEntityAdded;
+import net.ivangeevo.self_sustainable.block.utils.CampfireState;
+import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockAdded;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
-import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.ivangeevo.self_sustainable.tag.ModTags;
@@ -17,17 +18,16 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.dimension.NetherPortal;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,33 +40,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
+import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.HAS_SPIT;
+
 
 @Mixin(CampfireBlock.class)
-public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable
+public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded
 {
-    @Shadow @Final public static BooleanProperty LIT;
-    @Shadow @Final public static BooleanProperty SIGNAL_FIRE;
-    @Shadow @Final public static BooleanProperty WATERLOGGED;
-    @Shadow @Final public static DirectionProperty FACING;
-    @Shadow @Final protected static VoxelShape SHAPE;
-
-    // Added variables
-    @Unique private static final BooleanProperty HAS_SPIT = ModProperties.HAS_SPIT;
-
-    @Unique private static final VoxelShape SHAPE_WITH_SPIT = VoxelShapes.union(
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0));
 
 
+    // BTW added variables (modernized probably)
 
 
     protected CampfireBlockMixin(Settings settings) {
         super(settings);
     }
 
+
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectedConstructor(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
     {
-        this.setDefaultState(this.getStateManager().getDefaultState().with(CampfireBlock.LIT, false).with(HAS_SPIT, false));
+        this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false).with(HAS_SPIT, false));
     }
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
@@ -75,129 +68,162 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         cir.setReturnValue(cir.getReturnValue().with(CampfireBlock.LIT, false));
     }
 
+    @Inject(method = "appendProperties", at = @At("HEAD"), cancellable = true)
+    private void addedCustomProperties(StateManager.Builder<Block, BlockState> builder, CallbackInfo ci)
+    {
+        CampfireBlockManager.appendCustomProperties(builder);
+        ci.cancel();
+    }
+
+
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void injectedCustomOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir)
     {
-        if (!state.get(HAS_SPIT))
-        {
-            cir.setReturnValue(SHAPE);
-        }
-        else
-        {
-            cir.setReturnValue(SHAPE_WITH_SPIT);
-        }
+        cir.setReturnValue(CampfireBlockManager.setCustomShapes(state));
+
     }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir)
     {
-        if (!world.isClient)
+        if (state.getBlock() == Blocks.CAMPFIRE)
         {
-            this.igniteCampfire(world, player, hand, state, pos);
-            this.setOrRemoveItems(world, player, state, pos);
-            this.addOrRetrieveItem(world, player, pos);
-            cir.setReturnValue(ActionResult.SUCCESS);
+            cir.setReturnValue(CampfireBlockManager.onUse(state, world, pos, player, hand, hit));
         }
-        cir.setReturnValue(ActionResult.FAIL);
+
 
     }
 
-    @Unique
-    private void igniteCampfire(World world, PlayerEntity player, Hand hand, BlockState state, BlockPos pos)
-    {
-        if (player.getStackInHand(hand).isIn(ModTags.Items.CAMPFIRE_IGNITER_ITEMS) && CampfireBlock.canBeLit(state)
-                && world.setBlockState(pos, state.with(CampfireBlock.LIT, true)))
-        {
-            player.incrementStat(Stats.INTERACT_WITH_CAMPFIRE);
-            ItemStack heldStack = player.getMainHandStack();
-            heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
-            this.playLitFX(world, pos);
 
-        }
+
+
+
+
+
+
+
+
+
+    @Override
+    public CampfireState getFuelState(BlockState state) {
+        return state.get(FUEL_STATE);
     }
 
-    // Method to handle adding/removing of food items or the spit item.
-    @Unique
-    private void setOrRemoveItems(World world, PlayerEntity player, BlockState state, BlockPos pos)
+    @Override
+    public int getFireLevel(BlockState state) {
+        return state.get(FIRE_LEVEL);
+    }
+
+    @Override
+    public BlockState setFireLevel (BlockState state, int newLevel)
     {
-        ItemStack heldStack = player.getMainHandStack();
+        return state.with(FIRE_LEVEL, newLevel);
+    }
 
-        BlockEntity be = world.getBlockEntity(pos);
-        CampfireBlockEntityAdded entity;
-        entity = (CampfireBlockEntityAdded) be;
+    public boolean isValidCookItem(World world, BlockPos pos, PlayerEntity player) {
+        ItemStack itemStack;
+        CampfireBlockEntity campfireBlockEntity;
+        Optional<CampfireCookingRecipe> optional;
+        Hand hand = player.getActiveHand();
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        return blockEntity instanceof CampfireBlockEntity
+                && (optional = (campfireBlockEntity = (CampfireBlockEntity) blockEntity).getRecipeFor(itemStack = player.getStackInHand(hand))).isPresent();
+    }
 
 
-        assert entity != null;
-        if ( entity.getItemBeingCooked() != null && state.get(HAS_SPIT) )
+
+    @Override
+    public void extinguishFire(World world, BlockState state, BlockPos pos, boolean bSmoulder)
+    {
+
+        if ( bSmoulder )
         {
-            entity.retrieveItem(player);
-        }
-        else if ( !state.get(HAS_SPIT) )
-        {
-            if ( heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) )
-            {
-                heldStack.decrement(1);
-                world.setBlockState(pos, state.with(HAS_SPIT, true));
-            }
+            setFuelState(state, CampfireState.SMOULDERING.ordinal());
         }
         else
         {
-            if ( heldStack.isEmpty() )
-            {
-                player.giveItemStack(new ItemStack(Items.STICK));
-                world.setBlockState(pos, state.with(HAS_SPIT, false));
-            }
+            setFuelState(state, CampfireState.BURNED_OUT.ordinal());
         }
 
+        changeFireLevel(state, 0);
+
+        if ( !world.isClient() )
+        {
+            playExtinguishSound(world, pos, true);
+        }
     }
 
     @Unique
-    private void addOrRetrieveItem(World world, PlayerEntity player, BlockPos pos)
+    public BlockState setFuelState(BlockState currentState, int fireState)
     {
-        ItemStack heldStack = player.getMainHandStack();
-        CampfireBlockEntity campfireBlockEntity;
-        Optional<CampfireCookingRecipe> optional;
+        return currentState.with(FUEL_STATE, CampfireState.convertToEnumState(fireState));
+    }
+
+    public void relightFire(BlockState state)
+    {
+        changeFireLevel(state, 1);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+    @Unique
+    private void setOrRemoveItems(World world, PlayerEntity player, Hand hand, BlockState state, BlockPos pos) {
+        ItemStack itemStack = player.getStackInHand(hand);
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof CampfireBlockEntity)
-        {
-            campfireBlockEntity = (CampfireBlockEntity) blockEntity;
+        if (blockEntity instanceof CampfireBlockEntity campfireBlockEntity) {
+            Optional<CampfireCookingRecipe> optional = campfireBlockEntity.getRecipeFor(itemStack);
 
-            // Check for cooking
-            if (!heldStack.isEmpty() && (optional = campfireBlockEntity.getRecipeFor(heldStack)).isPresent())
+            // Condition 1: Handling the addition or removal of the spit
+            if (state.get(HAS_SPIT))
             {
-                if (!world.isClient)
-                {
-                    campfireBlockEntity.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() :
-                            heldStack, optional.get().getCookTime());
-                }
+                world.setBlockState(pos, state.with(HAS_SPIT, false));
+                player.giveItemStack(new ItemStack(Items.STICK));
+
             }
             else
             {
-                // Check for retrieving
-                ItemStack retrievedItem = ((CampfireBlockEntityAdded)campfireBlockEntity).retrieveItem(player);
-                if (retrievedItem != null && !player.isCreative())
+                if (itemStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS))
                 {
-                    if (!player.giveItemStack(retrievedItem))
-                    {
-                        player.dropItem(retrievedItem, false);
-                    }
+                    world.setBlockState(pos, state.with(HAS_SPIT, true));
+                    itemStack.decrement(1);
                 }
             }
+
+
+            /**
+            if (state.get(HAS_SPIT) && optional.isPresent()) {
+                if (((CampfireBlockEntityAdded) campfireBlockEntity).getItemBeingCooked() == null) {
+                    CampfireCookingRecipe recipe = optional.get();
+                    campfireBlockEntity.addItem(player, player.getAbilities().creativeMode ? itemStack.copy() : itemStack, recipe.getCookTime());
+                } else {
+                    ItemStack retrievedItem = ((CampfireBlockEntityAdded) campfireBlockEntity).retrieveItem(player);
+                    if (retrievedItem != null && !player.isCreative()) {
+                        if (!player.giveItemStack(retrievedItem)) {
+                            player.dropItem(retrievedItem, false);
+                        }
+                    }
+                }
+
+            }
+
         }
-
-
     }
-
-
-    @Inject(method = "appendProperties", at = @At("HEAD"), cancellable = true)
-    private void injectedProperties(StateManager.Builder<Block, BlockState> builder, CallbackInfo ci)
-    {
-        builder.add(LIT, SIGNAL_FIRE, WATERLOGGED, FACING, HAS_SPIT);
-        ci.cancel();
-    }
-
-
+     **/
 
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
@@ -207,12 +233,14 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         {
             return;
         }
+        /**
         if (isOverworldOrNether(world)
                 && (optional = NetherPortal.getNewPortal(world, pos, Direction.Axis.X)).isPresent() && state.get(LIT))
         {
             optional.get().createPortal();
             return;
         }
+         **/
         if (!state.canPlaceAt(world, pos))
         {
             world.removeBlock(pos, false);

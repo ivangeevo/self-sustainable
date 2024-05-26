@@ -3,13 +3,16 @@ package net.ivangeevo.self_sustainable.mixin;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.blocks.CrudeTorchBlock;
 import net.ivangeevo.self_sustainable.block.entity.TorchBlockEntity;
+import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.interfaces.TorchBlockAdded;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
+import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -21,6 +24,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
@@ -31,9 +35,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-// TODO : Fix torches placing twice on use
+// TODO : Fix campfire onUse logic.
 @Mixin(TorchBlock.class)
-public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, BlockEntityProvider
+public abstract class TorchBlockMixin extends Block implements Ignitable, BlockEntityProvider
 {
     public TorchBlockMixin(Settings settings)
     {
@@ -43,7 +47,12 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void setDefaultState(Settings settings, ParticleEffect particle, CallbackInfo ci)
     {
-        this.setDefaultState(this.stateManager.getDefaultState().with(TorchBlockAdded.LIT, false));
+        this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false));
+    }
+
+    @Override
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
+        return super.getPickStack(world, pos, state.with(LIT, true));
     }
 
     @Inject(method = "canPlaceAt", at = @At("HEAD"), cancellable = true)
@@ -58,21 +67,11 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
 
     }
 
-    @Unique
-    private boolean isTorchBlockAtPos(WorldView world, BlockPos pos)
-    {
-
-        BlockState stateAtPos = world.getBlockState(pos);
-        boolean vanillaTorch = stateAtPos.isOf(Blocks.TORCH) || stateAtPos.isOf(Blocks.WALL_TORCH);
-        boolean modTorch = stateAtPos.isOf(ModBlocks.CRUDE_TORCH) || stateAtPos.isOf(ModBlocks.WALL_CRUDE_TORCH);
-
-        return vanillaTorch || modTorch;
-    }
 
     @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
     private void cancelParticles(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci)
     {
-        if (!state.get(TorchBlockAdded.LIT))
+        if (!state.get(LIT))
         {
             ci.cancel();
         }
@@ -81,15 +80,18 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
     @Override
     public void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
-        builder.add(TorchBlockAdded.LIT);
+        builder.add(LIT);
     }
 
+    // TODO: Fix torches being able to be lit by literally anything... :D
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        ItemStack heldStack = player.getStackInHand(hand);
 
-        if (!world.isClient() && !state.get(TorchBlockAdded.LIT)) {
-            world.setBlockState(pos, state.with(TorchBlockAdded.LIT, true));
+        if (!world.isClient() && !state.get(LIT) && heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
+        {
+            world.setBlockState(pos, state.with(LIT, true));
             this.playLitFX(world, pos);
             return ActionResult.SUCCESS;
         }
@@ -102,6 +104,8 @@ public abstract class TorchBlockMixin extends Block implements TorchBlockAdded, 
         return super.onUse(state, world, pos, player, hand, hit);
 
     }
+
+
 
 
 

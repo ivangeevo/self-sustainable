@@ -5,19 +5,15 @@ import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock;
 import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.ivangeevo.self_sustainable.tag.ModTags;
-import net.ivangeevo.self_sustainable.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.CampfireCookingRecipe;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
@@ -68,14 +64,13 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
                 else if ((optional = campfireBlockEntity.getRecipeFor(heldStack)).isPresent())
                 {
                     campfireBlockEntity.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime());
-                    addedVars.setCookStack(heldStack);
+                    //addedVars.setCookStack(heldStack);
                     return ActionResult.SUCCESS;
                 }
             }
         }
         return ActionResult.PASS;
     }
-
     public static VoxelShape setCustomShapes(BlockState state)
     {
         if (!state.get(HAS_SPIT))

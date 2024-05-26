@@ -73,6 +73,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         if (relativeClickY > clickYTopPortion)
         {
             this.addOrRetrieveItem(state, world, pos, player, hand, hit);
+            return ActionResult.SUCCESS;
+
         }
         else if (relativeClickY < clickYBottomPortion && heldStack != null)
         {

@@ -53,6 +53,9 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     @Shadow @Final private DefaultedList<ItemStack> itemsBeingCooked;
     @Shadow @Final private int[] cookingTotalTimes;
     @Shadow @Final private int[] cookingTimes;
+
+    @Shadow public abstract DefaultedList<ItemStack> getItemsBeingCooked();
+
     @Unique
     private int litTime = 0;
 
@@ -77,7 +80,6 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     private static final float CHANCE_OF_FIRE_SPREAD = 0.05F;
     private static final float CHANCE_OF_GOING_OUT_FROM_RAIN = 0.01F;
 
-    @Unique private static ItemStack cookStack = ItemStack.EMPTY;
     @Unique private static int cookingTime = 0;
     @Unique private static int cookingTotalTime = 0;
 
@@ -122,10 +124,7 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     public void setTotalCookTime(int value) {
         cookingTotalTime = value;
     }
-    @Override
-    public ItemStack getCookStack() {
-        return cookStack;
-    }
+
 
 
     @Unique private static final RecipeManager.MatchGetter<Inventory, CampfireCookingRecipe> recipeMatchGetter =
@@ -164,8 +163,8 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     {
         // Adding extinguishing logic.
         CampfireExtinguisher.onLitServerTick(world, pos, state, campfire);
-
-        // Use this cast bto get access to the new variables.
+        /**
+        // Use this cast to get access to the new variables.
         CampfireBlockEntityAdded entity;
         entity = (CampfireBlockEntityAdded) campfire;
 
@@ -192,12 +191,14 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
             CampfireBlockEntity.markDirty(world, pos, state);
         }
         ci.cancel();
+         **/
 
     }
 
     @Inject(method = "unlitServerTick", at = @At("HEAD"), cancellable = true)
     private static void injectedUnlitServerTick(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci)
     {
+        /**
         boolean bl = false;
 
         // Use this cast because it has all new variables in its scope.
@@ -216,6 +217,7 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
             markDirty(world, pos, state);
         }
         ci.cancel();
+     **/
     }
 
     @Inject(method = "clientTick", at = @At("HEAD"), cancellable = true)
@@ -242,7 +244,7 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
         }
 
         // Particles when items are being cooked
-        if (!((CampfireBlockEntityAdded) campfire).getCookStack().isEmpty() && random.nextFloat() < 0.2F) {
+        if (!(campfire.getItemsBeingCooked().isEmpty() && random.nextFloat() < 0.2F)) {
 
             Direction direction = state.get(CampfireBlock.FACING);
             // Adjust particle spawn location based on the direction
@@ -276,19 +278,20 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     @Nullable @Override
     public ItemStack retrieveItem(@Nullable Entity user)
     {
-        ItemStack stack = this.getCookStack();
-        if (!stack.isEmpty())
-        {
-            // Optionally handle different retrieval logic here
-            setCookTime(0);
-            this.setCookStack(ItemStack.EMPTY); // Clear the slot
-            assert this.world != null;
-            this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(user, this.getCachedState()));
-            this.updateListeners();
 
-            // Return a copy of the retrieved item
-            return stack.copy();
-        }
+            ItemStack stack = this.itemsBeingCooked.get(0);
+            if (!stack.isEmpty()) {
+                // Optionally handle different retrieval logic here
+                this.cookingTimes[0] = 0;
+                this.itemsBeingCooked.set(0, ItemStack.EMPTY); // Clear the slot
+                assert this.world != null;
+                this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(user, this.getCachedState()));
+                this.updateListeners();
+
+                // Return a copy of the retrieved item
+                return stack.copy();
+            }
+
         return ItemStack.EMPTY; // Return an empty stack if no item was retrieved
     }
 
@@ -313,25 +316,7 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
         return spitStack;
     }
 
-    public void setCookStack(ItemStack stack)
-    {
-        if ( stack != null )
-        {
-            cookStack = stack.copy();
 
-            cookStack.setCount(1);
-        }
-        else
-        {
-            cookStack = null;
-
-            cookBurningCounter = 0;
-        }
-
-        cookCounter = 0;
-
-        markDirty();
-    }
 
     @Override
     public void addBurnTime(BlockState state, int iBurnTime) {

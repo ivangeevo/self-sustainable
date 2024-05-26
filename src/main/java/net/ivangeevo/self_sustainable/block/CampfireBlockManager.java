@@ -18,36 +18,35 @@ import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static net.minecraft.block.CampfireBlock.*;
 
 public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
 {
-    public static ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
+    public static ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        // Use this cast bto get access to the new variables.
+        // Use this cast to get access to the new variables.
         CampfireBlockEntityAdded addedVars;
         addedVars = (CampfireBlockEntityAdded) blockEntity;
 
-
-        if (blockEntity instanceof CampfireBlockEntity campfireBlockEntity)
-        {
+        if (blockEntity instanceof CampfireBlockEntity campfireBlockEntity) {
             Optional<CampfireCookingRecipe> optional;
 
             if (!getHasSpit(world, pos))
             {
-                if (heldStack.isOf(Items.STICK)) // Check if the item in hand is a stick
-                {
+                if (heldStack.isOf(Items.STICK))
+                { // Check if the item in hand is a stick
                     setHasSpit(world, pos, true);
                     heldStack.decrement(1); // Decrease the heldStack count
                     return ActionResult.SUCCESS;
@@ -55,7 +54,7 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
             }
             else
             {
-                if (heldStack.isEmpty()) // Check if the player's hand is empty
+                if (heldStack.isEmpty())
                 {
                     setHasSpit(world, pos, false);
                     player.giveItemStack(new ItemStack(Items.STICK));
@@ -63,14 +62,37 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
                 }
                 else if ((optional = campfireBlockEntity.getRecipeFor(heldStack)).isPresent())
                 {
-                    campfireBlockEntity.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime());
-                    //addedVars.setCookStack(heldStack);
+                    if (campfireBlockEntity.getItemsBeingCooked().isEmpty() || campfireBlockEntity.getItemsBeingCooked().get(0).isEmpty())
+                    {
+                        // If no items are being cooked, add the item
+                        campfireBlockEntity.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime());
+                    }
+                    else
+                    {
+                        // If an item is being cooked, retrieve it
+                        retrieveItem(campfireBlockEntity, player);
+                    }
                     return ActionResult.SUCCESS;
                 }
             }
         }
         return ActionResult.PASS;
     }
+
+    private static void retrieveItem(CampfireBlockEntity campfireBlockEntity, PlayerEntity player) {
+        DefaultedList<ItemStack> itemsBeingCooked = campfireBlockEntity.getItemsBeingCooked();
+        if (!itemsBeingCooked.isEmpty()) {
+            ItemStack itemStack = itemsBeingCooked.get(0);
+            if (!itemStack.isEmpty()) {
+                player.giveItemStack(itemStack);
+                itemsBeingCooked.set(0, ItemStack.EMPTY);
+                campfireBlockEntity.markDirty();
+                Objects.requireNonNull(campfireBlockEntity.getWorld()).updateListeners(campfireBlockEntity.getPos(), campfireBlockEntity.getCachedState(), campfireBlockEntity.getCachedState(), Block.NOTIFY_ALL);
+            }
+        }
+    }
+
+
     public static VoxelShape setCustomShapes(BlockState state)
     {
         if (!state.get(HAS_SPIT))

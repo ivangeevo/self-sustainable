@@ -317,7 +317,6 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     }
 
 
-
     @Override
     public void addBurnTime(BlockState state, int iBurnTime) {
         burnTimeCountdown += iBurnTime * CAMPFIRE_BURN_TIME_MULTIPLIER * BASE_BURN_TIME_MULTIPLIER;

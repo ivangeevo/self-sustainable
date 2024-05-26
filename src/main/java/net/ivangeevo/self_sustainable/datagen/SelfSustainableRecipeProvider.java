@@ -2,7 +2,7 @@ package net.ivangeevo.self_sustainable.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.ivangeevo.self_sustainable.ModItems;
+import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipeJsonBuilder;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;

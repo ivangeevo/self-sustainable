@@ -2,7 +2,7 @@ package net.ivangeevo.self_sustainable.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.ivangeevo.self_sustainable.ModItems;
+import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.item.BlockItem;

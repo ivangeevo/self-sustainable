@@ -13,9 +13,10 @@ import net.minecraft.util.Identifier;
 public class ModBlockEntities {
 
     public static BlockEntityType<BrickOvenBlockEntity> OVEN_BRICK;
-
+    /**
     public static BlockEntityType<TorchBlockEntity> TORCH;
     public static BlockEntityType<CrudeTorchBlockEntity> CRUDE_TORCH;
+     **/
 
 
     public static void registerBlockEntities()
@@ -24,6 +25,7 @@ public class ModBlockEntities {
                             "oven_brick"), FabricBlockEntityTypeBuilder.create(BrickOvenBlockEntity::new,
                             ModBlocks.OVEN_BRICK).build(null));
 
+            /**
             TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "torch"), FabricBlockEntityTypeBuilder.create(TorchBlockEntity::new,
                     Blocks.TORCH, Blocks.WALL_TORCH).build(null));
@@ -31,6 +33,7 @@ public class ModBlockEntities {
             CRUDE_TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "crude_torch"), FabricBlockEntityTypeBuilder.create(CrudeTorchBlockEntity::new,
                     ModBlocks.CRUDE_TORCH, ModBlocks.WALL_CRUDE_TORCH).build(null));
+             **/
 
         }
 

@@ -1,6 +1,6 @@
 {
   "parent": "block/torch",
   "textures": {
-    "torch": "self_sustainable:block/torch_unlit"
+    "torch": "self_sustainable:block/torch_lit"
   }
 }

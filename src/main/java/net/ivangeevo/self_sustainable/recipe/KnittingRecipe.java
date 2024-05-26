@@ -5,11 +5,10 @@ package net.ivangeevo.self_sustainable.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.ivangeevo.self_sustainable.ModItems;
+import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.items.KnittingItem;
 import net.ivangeevo.self_sustainable.item.items.WoolItem;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;

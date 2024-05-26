@@ -30,10 +30,12 @@ public class FuelRegistryManager
 
     private static void removeFuelItems()
     {
+        // Tags
         FuelRegistry.INSTANCE.remove(ItemTags.LOGS);
         FuelRegistry.INSTANCE.remove(ItemTags.PLANKS);
         FuelRegistry.INSTANCE.remove(ItemTags.WOODEN_STAIRS);
 
+        // Items
         FuelRegistry.INSTANCE.remove(Items.COAL);
 
     }
@@ -49,7 +51,7 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.add(Items.SPRUCE_LOG, 9600);
         FuelRegistry.INSTANCE.add(Items.MANGROVE_LOG, 8400);
         FuelRegistry.INSTANCE.add(Items.JUNGLE_LOG, 6400);
-        FuelRegistry.INSTANCE.add(ItemTags.BAMBOO_BLOCKS, 300);
+        FuelRegistry.INSTANCE.add(ItemTags.BAMBOO_BLOCKS, 500);
 
         // Planks
         FuelRegistry.INSTANCE.add(Items.BIRCH_PLANKS, 500);
@@ -59,7 +61,7 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.add(Items.CHERRY_PLANKS, 400);
         FuelRegistry.INSTANCE.add(Items.SPRUCE_PLANKS, 300);
         FuelRegistry.INSTANCE.add(Items.MANGROVE_PLANKS, 300);
-        FuelRegistry.INSTANCE.add(Items.JUNGLE_PLANKS, 200);
+        FuelRegistry.INSTANCE.add(Items.JUNGLE_PLANKS, 100);
         
         // Wooden Stairs
         FuelRegistry.INSTANCE.add(Items.BIRCH_STAIRS, 400);
@@ -69,7 +71,7 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.add(Items.CHERRY_STAIRS, 300);
         FuelRegistry.INSTANCE.add(Items.SPRUCE_STAIRS, 200);
         FuelRegistry.INSTANCE.add(Items.MANGROVE_STAIRS, 200);
-        FuelRegistry.INSTANCE.add(Items.JUNGLE_STAIRS, 100);
+        FuelRegistry.INSTANCE.add(Items.JUNGLE_STAIRS, 70);
 
 
 

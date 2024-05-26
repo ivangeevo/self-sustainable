@@ -36,11 +36,15 @@ public class ModBlocks
      new ModWallTorchBlock(setTorchSettings().dropsLike(Blocks.TORCH), ParticleTypes.FLAME));
      **/
 
-    // The crude torch blocks. Vanilla uses its own wall and torch blocks.
-    public static final Block CRUDE_TORCH = registerBlockWithoutItem("crude_torch",
-            new CrudeTorchBlock(setTorchSettings(), ParticleTypes.FLAME));
-    public static final Block WALL_CRUDE_TORCH = registerBlockWithoutItem("wall_crude_torch",
-            new WallCrudeTorchBlock(setTorchSettings().dropsLike(CRUDE_TORCH), ParticleTypes.FLAME));
+
+    /**
+    public static final Block TORCH = registerBlockWithoutItem("torch", new ModTorchBlock());
+
+    public static final Block TORCH_WALL = registerBlockWithoutItem("torch_wall", new ModWallTorchBlock());
+
+    public static final Block CRUDE_TORCH = registerBlockWithoutItem("crude_torch", new CrudeTorchBlock());
+    public static final Block WALL_CRUDE_TORCH = registerBlockWithoutItem("wall_crude_torch", new WallCrudeTorchBlock());
+     **/
 
 
     private static FabricBlockSettings setTorchSettings()

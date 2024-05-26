@@ -62,7 +62,7 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
                     return ActionResult.SUCCESS;
                 }
 
-                if (heldStack.isEmpty() && campfireBE.getItemsBeingCooked().get(0).isEmpty())
+                if (heldStack.isEmpty() && getCookStack(campfireBE).isEmpty())
                 {
                     setHasSpit(world, pos, false);
                     player.giveItemStack(new ItemStack(Items.STICK));

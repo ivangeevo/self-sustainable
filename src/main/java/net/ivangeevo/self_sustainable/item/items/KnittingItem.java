@@ -1,6 +1,6 @@
 package net.ivangeevo.self_sustainable.item.items;
 
-import net.ivangeevo.self_sustainable.ModItems;
+import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.util.ItemUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,9 +9,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class KnittingItem extends ProgressiveCraftingItem

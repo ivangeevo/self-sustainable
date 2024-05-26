@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
+import net.ivangeevo.self_sustainable.item.ModItems;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -21,9 +22,13 @@ public class ModItemGroup {
                         entries.add(ModItems.FIRESTARTER_STICKS);
                         entries.add(ModItems.FIRESTARTER_BOW);
 
+                        /**
                         entries.add(ModItems.CRUDE_TORCH);
                         entries.add(ModItems.CRUDE_TORCH_UNLIT);
-                        entries.add(ModItems.TORCH_UNLIT);
+                        entries.add(ModItems.LIT_TORCH);
+                        entries.add(ModItems.UNLIT_TORCH);
+                         **/
+
 
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);

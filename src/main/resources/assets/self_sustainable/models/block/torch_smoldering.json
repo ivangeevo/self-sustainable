@@ -1,0 +1,6 @@
+{
+  "parent": "block/torch",
+  "textures": {
+    "torch": "self_sustainable:block/torch_smoldering"
+  }
+}

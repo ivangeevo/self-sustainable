@@ -22,6 +22,7 @@ import static net.minecraft.state.property.Properties.LIT;
 @Mixin(Blocks.class)
 public abstract class BlocksMixin {
 
+    /**
     // TorchBlock's luminance lambda
     @Inject(method = "method_26136", at = @At("HEAD"), cancellable = true)
     private static void customTorchLuminance(BlockState state, CallbackInfoReturnable<Integer> cir)
@@ -35,5 +36,6 @@ public abstract class BlocksMixin {
     {
         cir.setReturnValue(state.get(LIT) ? 14 : 0);
     }
+    **/
 
 }

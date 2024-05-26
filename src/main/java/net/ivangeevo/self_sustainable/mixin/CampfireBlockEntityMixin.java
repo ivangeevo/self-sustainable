@@ -163,35 +163,39 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     {
         // Adding extinguishing logic.
         CampfireExtinguisher.onLitServerTick(world, pos, state, campfire);
-        /**
+
         // Use this cast to get access to the new variables.
         CampfireBlockEntityAdded entity;
         entity = (CampfireBlockEntityAdded) campfire;
 
         boolean bl = false;
-        if (!entity.getCookStack().isEmpty()) {
-            bl = true;
-            entity.setCookTime(cookingTime += 1);
-            if (entity.getCookTime() >= entity.getTotalCookTime()) {
-                SimpleInventory inventory = new SimpleInventory(entity.getCookStack());
-                ItemStack resultStack = recipeMatchGetter.getFirstMatch(inventory, world)
-                        .map(recipe -> recipe.craft(inventory, world.getRegistryManager()))
-                        .orElse(entity.getCookStack());
 
-                if (resultStack.isItemEnabled(world.getEnabledFeatures())) {
-                    entity.setCookStack(resultStack);  // Set the cooked item in place of the raw item
-                    entity.setCookTime(0);
-                    entity.setTotalCookTime(0);
-                    world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-                    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
+        for (int i = 0; i < campfire.getItemsBeingCooked().size(); ++i)
+        {
+            ItemStack itemStack = campfire.getItemsBeingCooked().get(i);
+            if (!itemStack.isEmpty()) {
+                bl = true;
+                int var10002 = campfire.cookingTimes[i]++;
+                if (campfire.cookingTimes[i] >= campfire.cookingTotalTimes[i]) {
+                    Inventory inventory = new SimpleInventory(itemStack);
+                    ItemStack itemStack2 = campfire.matchGetter.getFirstMatch(inventory, world).map((recipe) ->
+                            recipe.craft(inventory, world.getRegistryManager())).orElse(itemStack);
+
+                    if (itemStack2.isItemEnabled(world.getEnabledFeatures())) {
+                        campfire.getItemsBeingCooked().set(i, itemStack2);
+                        world.updateListeners(pos, state, state, 3);
+                        world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
+                    }
+
                 }
             }
         }
+
         if (bl) {
             CampfireBlockEntity.markDirty(world, pos, state);
         }
         ci.cancel();
-         **/
+
 
     }
 
@@ -225,39 +229,28 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     {
         Random random = world.random;
 
-        // Check for smoke particle spawn chance
-        if (random.nextFloat() < 0.11F)
+        // Random Smoke Particle Generation
+        if (random.nextFloat() < 0.11f)
         {
-            // Determine the number of particles to spawn
-            int particleCount = random.nextInt(2) + 2;
-
-            for (int i = 0; i < particleCount; ++i)
-            {
-                // define position of the particles
-                double x = pos.getX() + 0.5;
-                double y = pos.getY() + 0.9; // 0.1 below the ceiling
-                double z = pos.getZ() + 0.5;
-
-                // Spawn the smoke particle
-                world.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0, 5.0E-4, 0.0);
-            }
+            CampfireBlock.spawnSmokeParticle(world, pos, state.get(CampfireBlock.SIGNAL_FIRE), false);
         }
 
-        // Particles when items are being cooked
-        if (!(campfire.getItemsBeingCooked().isEmpty() && random.nextFloat() < 0.2F)) {
-
+        // Smoke Particles for Cooking Items
+        if (!campfire.getItemsBeingCooked().get(0).isEmpty() && random.nextFloat() < 0.2f)
+        {
             Direction direction = state.get(CampfireBlock.FACING);
-            // Adjust particle spawn location based on the direction
-            float offset = 0.3125F;
-            double d = pos.getX() + 0.5 - direction.getOffsetX() * offset + direction.rotateYClockwise().getOffsetX() * offset;
-            double e = pos.getY() + 0.9; // 0.1 below the ceiling
-            double g = pos.getZ() + 0.5 - direction.getOffsetZ() * offset + direction.rotateYClockwise().getOffsetZ() * offset;
+            float offset = 0.3125f;
+            double d = pos.getX() + 0.5;
+            double e = pos.getY() + 1.0; // Centered on Y axis at 1.0
+            double g = pos.getZ() + 0.5;
 
             world.addParticle(ParticleTypes.SMOKE, d, e, g, 0.0, 5.0E-4, 0.0);
         }
 
         ci.cancel();
     }
+
+
 
 
     @Inject(method = "readNbt", at = @At("RETURN"))

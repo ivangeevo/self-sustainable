@@ -40,7 +40,7 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem imple
     @Inject(method = "canPlaceAt", at = @At("HEAD"), cancellable = true)
     private void injectedCanPlaceAt(WorldView world, BlockState state, BlockPos pos, CallbackInfoReturnable<Boolean> cir)
     {
-        if (world.getBlockState(pos).getBlock() instanceof TorchBlock)
+        if ( world.getBlockState(pos).getBlock() instanceof TorchBlock || world.getBlockState(pos).getBlock() instanceof CampfireBlock)
         {
             cir.setReturnValue(false);
         }

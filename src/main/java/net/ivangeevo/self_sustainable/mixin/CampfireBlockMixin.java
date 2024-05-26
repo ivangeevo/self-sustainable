@@ -94,16 +94,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     }
 
-
-
-
-
-
-
-
-
-
-
     @Override
     public CampfireState getFuelState(BlockState state) {
         return state.get(FUEL_STATE);

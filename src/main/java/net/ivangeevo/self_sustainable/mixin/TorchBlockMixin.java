@@ -50,24 +50,6 @@ public abstract class TorchBlockMixin extends Block implements Ignitable, BlockE
         this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false));
     }
 
-    @Override
-    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
-        return super.getPickStack(world, pos, state.with(LIT, true));
-    }
-
-    @Inject(method = "canPlaceAt", at = @At("HEAD"), cancellable = true)
-    private void injectedCanPlaceAt(BlockState state, WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir)
-    {
-        if ( world.getBlockState(pos).getBlock() instanceof TorchBlock)
-        {
-            cir.setReturnValue(false);
-        }
-
-
-
-    }
-
-
     @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
     private void cancelParticles(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci)
     {

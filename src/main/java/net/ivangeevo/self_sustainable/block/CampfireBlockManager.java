@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.block;
 
+import com.terraformersmc.modmenu.util.mod.Mod;
 import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockEntityAdded;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock;
@@ -54,7 +55,14 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
             }
             else
             {
-                if (heldStack.isEmpty())
+                if (!campfireBlockEntity.getItemsBeingCooked().get(0).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
+                {
+                    // If an item is being cooked, retrieve it
+                    retrieveItem(campfireBlockEntity, player);
+                    return ActionResult.SUCCESS;
+                }
+
+                if (heldStack.isEmpty() && campfireBlockEntity.getItemsBeingCooked().get(0).isEmpty())
                 {
                     setHasSpit(world, pos, false);
                     player.giveItemStack(new ItemStack(Items.STICK));
@@ -62,21 +70,28 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
                 }
                 else if ((optional = campfireBlockEntity.getRecipeFor(heldStack)).isPresent())
                 {
-                    if (campfireBlockEntity.getItemsBeingCooked().isEmpty() || campfireBlockEntity.getItemsBeingCooked().get(0).isEmpty())
+                    if ( campfireBlockEntity.getItemsBeingCooked().get(0).isEmpty() )
                     {
                         // If no items are being cooked, add the item
                         campfireBlockEntity.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime());
                     }
-                    else
-                    {
-                        // If an item is being cooked, retrieve it
-                        retrieveItem(campfireBlockEntity, player);
-                    }
                     return ActionResult.SUCCESS;
                 }
+
+            }
+
+            if (heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
+            {
+                world.setBlockState(pos, state.with(LIT, true));
+                return ActionResult.SUCCESS;
             }
         }
         return ActionResult.PASS;
+    }
+
+    private static boolean getCookStack(CampfireBlockEntity campfireBE)
+    {
+        return campfireBE.getItemsBeingCooked().isEmpty() || campfireBE.getItemsBeingCooked().get(0).isEmpty();
     }
 
     private static void retrieveItem(CampfireBlockEntity campfireBlockEntity, PlayerEntity player) {

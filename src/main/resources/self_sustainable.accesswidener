@@ -3,3 +3,5 @@ accessWidener v1 named
 accessible method net/minecraft/client/render/block/entity/BlockEntityRendererFactories register (Lnet/minecraft/block/entity/BlockEntityType;Lnet/minecraft/client/render/block/entity/BlockEntityRendererFactory;)V
 accessible class net/minecraft/entity/mob/ZombieEntity$DestroyEggGoal
 accessible field net/minecraft/block/entity/CampfireBlockEntity matchGetter Lnet/minecraft/recipe/RecipeManager$MatchGetter;
+accessible field net/minecraft/block/entity/CampfireBlockEntity cookingTimes [I
+accessible field net/minecraft/block/entity/CampfireBlockEntity cookingTotalTimes [I

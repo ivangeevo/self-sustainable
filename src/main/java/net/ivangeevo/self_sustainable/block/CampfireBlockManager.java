@@ -41,7 +41,7 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         CampfireBlockEntityAdded addedVars;
         addedVars = (CampfireBlockEntityAdded) blockEntity;
 
-        if (blockEntity instanceof CampfireBlockEntity campfireBlockEntity) {
+        if (blockEntity instanceof CampfireBlockEntity campfireBE) {
             Optional<CampfireCookingRecipe> optional;
 
             if (!getHasSpit(world, pos))
@@ -55,25 +55,27 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
             }
             else
             {
-                if (!campfireBlockEntity.getItemsBeingCooked().get(0).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
+                if (!campfireBE.getItemsBeingCooked().get(0).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
                 {
                     // If an item is being cooked, retrieve it
-                    retrieveItem(campfireBlockEntity, player);
+                    retrieveItem(campfireBE, player);
                     return ActionResult.SUCCESS;
                 }
 
-                if (heldStack.isEmpty() && campfireBlockEntity.getItemsBeingCooked().get(0).isEmpty())
+                if (heldStack.isEmpty() && campfireBE.getItemsBeingCooked().get(0).isEmpty())
                 {
                     setHasSpit(world, pos, false);
                     player.giveItemStack(new ItemStack(Items.STICK));
                     return ActionResult.SUCCESS;
                 }
-                else if ((optional = campfireBlockEntity.getRecipeFor(heldStack)).isPresent())
+                else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent())
                 {
-                    if ( campfireBlockEntity.getItemsBeingCooked().get(0).isEmpty() )
+                    if ( getCookStack(campfireBE).isEmpty() )
                     {
                         // If no items are being cooked, add the item
-                        campfireBlockEntity.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime());
+                        campfireBE.addItem(player,
+                                player.getAbilities().creativeMode
+                                        ? heldStack.copy() : heldStack, optional.get().getCookTime());
                     }
                     return ActionResult.SUCCESS;
                 }
@@ -89,9 +91,9 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         return ActionResult.PASS;
     }
 
-    private static boolean getCookStack(CampfireBlockEntity campfireBE)
+    private static ItemStack getCookStack(CampfireBlockEntity campfireBE)
     {
-        return campfireBE.getItemsBeingCooked().isEmpty() || campfireBE.getItemsBeingCooked().get(0).isEmpty();
+        return campfireBE.getItemsBeingCooked().get(0);
     }
 
     private static void retrieveItem(CampfireBlockEntity campfireBlockEntity, PlayerEntity player) {

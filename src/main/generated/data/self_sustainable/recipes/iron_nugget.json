@@ -1,0 +1,10 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "misc",
+  "cookingtime": 120,
+  "experience": 0.25,
+  "ingredient": {
+    "item": "minecraft:raw_iron"
+  },
+  "result": "minecraft:iron_nugget"
+}

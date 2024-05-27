@@ -1,7 +1,7 @@
 package net.ivangeevo.self_sustainable.block.entity.renderer;
 
 import net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock;
-import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
+import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -9,11 +9,10 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 
-public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOvenBlockEntity> {
+public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOvenBE> {
 
     private final ItemRenderer itemRenderer;
 
@@ -26,7 +25,7 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
     // TODO: Fix the item model orientation.
     // It displays with a wrong orientation for different directions.
     @Override
-    public void render(BrickOvenBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(BrickOvenBE entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
         // Render the fuel level overlay as a whole block
         /** Done as Blockstates currently **/
@@ -38,10 +37,10 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
     }
 
 
-    private void renderCookItem(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void renderCookItem(BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         // Get the itemsBeingCooked from the entity
-        ItemStack cookStack = BrickOvenBlockEntity.getCookStack0(entity);
-        Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
+        ItemStack cookStack = ovenBE.getCookStack();
+        Direction facing = ovenBE.getCachedState().get(BrickOvenBlock.FACING);
 
         matrices.push();
 
@@ -61,7 +60,7 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
         // Use the itemRenderer to render the item
         this.itemRenderer.renderItem(cookStack, ModelTransformationMode.GUI,
                 LightmapTextureManager.pack(8, 15), OverlayTexture.DEFAULT_UV,
-                matrices, vertexConsumers, entity.getWorld(), 1);
+                matrices, vertexConsumers, ovenBE.getWorld(), 1);
 
         matrices.pop();
     }

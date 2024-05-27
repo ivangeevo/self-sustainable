@@ -1,11 +1,13 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
+import com.google.common.collect.Maps;
+import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.ivangeevo.self_sustainable.tag.ModTags;
+import net.minecraft.SharedConstants;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -13,9 +15,8 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.FlintAndSteelItem;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -33,16 +34,17 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 
-import static net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity.*;
+import static net.ivangeevo.self_sustainable.block.entity.BrickOvenBE.*;
 
 public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 {
-    public static final BooleanProperty LIT = Properties.LIT;
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
-
+    public static final Map<Item, Integer> FUEL_TIME_MAP = createFuelTimeMap();
     protected final float clickYTopPortion = (6F / 16F);
     protected final float clickYBottomPortion = (6F / 16F);
 
@@ -50,10 +52,65 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
     public BrickOvenBlock(AbstractBlock.Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false).with(FACING, Direction.NORTH));
+        this.setDefaultState(this.stateManager.getDefaultState().with(FUEL_LEVEL, 0).with(FACING, Direction.NORTH));
     }
 
 
+
+
+
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+
+        ItemStack heldStack = player.getMainHandStack();
+        double relativeClickY = hit.getPos().getY() - pos.getY();
+
+        if (hit.getSide() != state.get(FACING))
+        {
+            return ActionResult.FAIL;
+        }
+
+        if (relativeClickY > clickYTopPortion)
+        {
+            this.addOrRetrieveItem(state, world, pos, player, hand, hit);
+            return ActionResult.SUCCESS;
+        }
+        else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
+        {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof BrickOvenBE ovenBE)
+            {
+                if (!world.isClient)
+                {
+                    // Use the attemptToAddFuel method to try and add fuel
+                    int numItemsBurned = ovenBE.attemptToAddFuel(heldStack);
+
+                    if (numItemsBurned > 0)
+                    {
+                        // Successfully added fuel
+                        if (!player.getAbilities().creativeMode)
+                        {
+                            heldStack.decrement(numItemsBurned);
+                        }
+                        playPopSound(world, pos);
+                        return ActionResult.SUCCESS;
+                    }
+                }
+            }
+
+            if (!state.get(LIT) && (heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))) {
+                world.setBlockState(pos, state.with(LIT, true));
+                Ignitable.playLitFX(world, pos);
+                heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
+                return ActionResult.SUCCESS;
+            }
+        }
+        return ActionResult.FAIL;
+    }
+
+
+    /**
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 
@@ -89,6 +146,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         }
         return ActionResult.FAIL;
     }
+    **/
 
     private void addOrRetrieveItem(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
@@ -96,7 +154,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof BrickOvenBlockEntity ovenBE)
+
+        if (blockEntity instanceof BrickOvenBE ovenBE)
         {
             Optional<OvenCookingRecipe> optional;
 
@@ -112,17 +171,20 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
             }
             else
             {
-                if (!getCookStack0(ovenBE).isEmpty())
+                ItemStack cookStack = ovenBE.getCookStack();
+
+
+                if (!cookStack.isEmpty())
                 {
                     if (!world.isClient()) { // Only execute on the server
-                        retrieveItem(ovenBE, player);
+                        ovenBE.retrieveItem(ovenBE, player);
                     }
-                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
+
                 }
 
                 if ((optional = ovenBE.getRecipeFor(heldStack)).isPresent())
                 {
-                    if (getCookStack0(ovenBE).isEmpty())
+                    if (cookStack.isEmpty())
                     {
                         if (!world.isClient())
                         { // Only execute on the server
@@ -150,14 +212,16 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
 
         if (state.isOf(newState.getBlock()))
-        {return;}
+        {
+            return;
+        }
 
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof BrickOvenBlockEntity ovenBE)
+        if (blockEntity instanceof BrickOvenBE ovenBE)
         {
             // Drops the contents inside when the block is destroyed
-             ItemScatterer.spawn(world, pos, getCookStackList(ovenBE));
+             ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getCookStack());
         }
 
         super.onStateReplaced(state, world, pos, newState, moved);
@@ -242,13 +306,13 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new BrickOvenBlockEntity(pos, state);
+        return new BrickOvenBE(pos, state);
     }
 
 
     public boolean canLightUp(BlockState state)
     {
-        return /** state.get(FUEL_LEVEL) > 0 && **/ !(state.get(LIT));
+        return  state.get(FUEL_LEVEL) > 0;
     }
 
     @Override
@@ -257,12 +321,39 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     {
         if (world.isClient)
         {
-            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::clientTick);
+            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::clientTick);
         }
         else
         {
-            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBlockEntity::serverTick);
+            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::serverTick);
         }
+    }
+
+    private static void addFuel(Map<Item, Integer> fuelTimes, ItemConvertible item, int fuelTime) {
+        Item item2 = item.asItem();
+        if (isNonFlammableWood(item2)) {
+            if (SharedConstants.isDevelopment) {
+                throw Util.throwOrPause(new IllegalStateException("A developer tried to explicitly make fire resistant item " + item2.getName(null).getString() + " a furnace fuel. That will not work!"));
+            }
+            return;
+        }
+        fuelTimes.put(item2, fuelTime);
+    }
+
+    /**
+     * {@return whether the provided {@code item} is in the {@link
+     * net.minecraft.registry.tag.ItemTags#NON_FLAMMABLE_WOOD non_flammable_wood} tag}
+     */
+    private static boolean isNonFlammableWood(Item item) {
+        return item.getRegistryEntry().isIn(ItemTags.NON_FLAMMABLE_WOOD);
+    }
+
+    public static Map<Item, Integer> createFuelTimeMap() {
+        LinkedHashMap<Item, Integer> map = Maps.newLinkedHashMap();
+        addFuel(map, Items.LAVA_BUCKET, 20000);
+        addFuel(map, Blocks.COAL_BLOCK, 16000);
+        // Add more fuel items as needed
+        return map;
     }
 
 

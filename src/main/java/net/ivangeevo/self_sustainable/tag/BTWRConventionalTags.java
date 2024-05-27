@@ -65,6 +65,9 @@ public class BTWRConventionalTags
 
         public static final TagKey<Item> CHICKEN_TEMPT_ITEMS = createTag("chicken_tempt_items");
 
+        public static final TagKey<Item> STRING_TOOL_MATERIALS = createTag("string_tool_materials");
+
+
         /** Tag for items that should do knockback if the config for
          *  knockback restriction is turned on.
          */

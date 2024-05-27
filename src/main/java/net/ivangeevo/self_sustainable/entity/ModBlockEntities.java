@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.*;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -12,7 +11,7 @@ import net.minecraft.util.Identifier;
 
 public class ModBlockEntities {
 
-    public static BlockEntityType<BrickOvenBlockEntity> OVEN_BRICK;
+    public static BlockEntityType<BrickOvenBE> OVEN_BRICK;
     /**
     public static BlockEntityType<TorchBlockEntity> TORCH;
     public static BlockEntityType<CrudeTorchBlockEntity> CRUDE_TORCH;
@@ -22,7 +21,7 @@ public class ModBlockEntities {
     public static void registerBlockEntities()
         {
             OVEN_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
-                            "oven_brick"), FabricBlockEntityTypeBuilder.create(BrickOvenBlockEntity::new,
+                            "oven_brick"), FabricBlockEntityTypeBuilder.create(BrickOvenBE::new,
                             ModBlocks.OVEN_BRICK).build(null));
 
             /**

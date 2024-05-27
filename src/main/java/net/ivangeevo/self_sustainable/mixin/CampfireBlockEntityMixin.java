@@ -1,12 +1,10 @@
 package net.ivangeevo.self_sustainable.mixin;
 
-import net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity;
 import net.ivangeevo.self_sustainable.block.entity.util.CampfireExtinguisher;
 import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockAdded;
 import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockEntityAdded;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
 import net.ivangeevo.self_sustainable.util.MiscUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,7 +24,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -40,7 +37,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.ivangeevo.self_sustainable.block.entity.BrickOvenBlockEntity.BASE_BURN_TIME_MULTIPLIER;
+import static net.ivangeevo.self_sustainable.block.entity.BrickOvenBE.BASE_BURN_TIME_MULTIPLIER;
 import static net.minecraft.block.entity.AbstractFurnaceBlockEntity.DEFAULT_COOK_TIME;
 
 

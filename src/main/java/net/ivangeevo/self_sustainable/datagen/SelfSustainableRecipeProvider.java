@@ -6,10 +6,12 @@ import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipeJsonBuilder;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
+import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.minecraft.data.server.recipe.*;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.RecipeCategory;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,12 +82,29 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
     private void addShapelessRecipes(Consumer<RecipeJsonProvider> exporter)
     {
-        offerThreeInputShapelessRecipe(exporter, ModItems.FIRESTARTER_BOW, Items.STICK, Items.STICK, Items.STRING,"group_btwr",1);
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.FIRESTARTER_BOW).input(Items.STICK).input(Items.STICK).input(BTWRConventionalTags.Items.STRING_TOOL_MATERIALS).criterion("has_string", RecipeProvider.conditionsFromItem(Items.STRING)).offerTo(exporter);
+
+    }
+
+    private void addCookingRecipes()
+    {
+
+    }
+
+    private void addSmokingRecipes()
+    {
+
+    }
+
+    private void addBlastingRecipes()
+    {
+
     }
 
     private void addOvenCookingRecipes(Consumer<RecipeJsonProvider> exporter)
     {
         // Food
+        /**
         createOvenCooking(Ingredient.ofItems(Items.BAKED_POTATO), RecipeCategory.FOOD, Items.POTATO, 0.25f, 100).offerTo(exporter);
 
         createOvenCooking(Ingredient.ofItems(Items.COOKED_CHICKEN), RecipeCategory.FOOD, Items.CHICKEN, 0.15f, 1800).offerTo(exporter);
@@ -95,18 +114,12 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
         createOvenCooking(Ingredient.ofItems(Items.COOKED_RABBIT), RecipeCategory.FOOD, Items.RABBIT, 0.10f, 1600).offerTo(exporter);
         createOvenCooking(Ingredient.ofItems(Items.COOKED_COD), RecipeCategory.FOOD, Items.COD, 0.10f, 1600).offerTo(exporter);
         createOvenCooking(Ingredient.ofItems(Items.COOKED_SALMON), RecipeCategory.FOOD, Items.SALMON, 0.10f, 1600).offerTo(exporter);
+         **/
 
         // Ores
-        createOvenCooking(Ingredient.ofItems(Items.IRON_NUGGET), RecipeCategory.MISC, Items.RAW_IRON, 0.25f, 12000).offerTo(exporter);
-
+        ModCookingRecipeJsonBuilder.createSmelting(Items.IRON_NUGGET, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_IRON), 0.25f, 12000).criterion("has_raw_iron", RecipeProvider.conditionsFromItem(Items.RAW_IRON)).offerTo(exporter);
         
     }
-
-    private CookingRecipeJsonBuilder createOvenCooking(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime)
-    {
-        return CookingRecipeJsonBuilder.create(input, category, output, experience, cookingTime, OvenCookingRecipe.Serializer.INSTANCE);
-    }
-
 
 
     private void addFurnaceCookingRecipes(Consumer<RecipeJsonProvider> exporter)

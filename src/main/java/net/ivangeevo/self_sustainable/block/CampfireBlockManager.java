@@ -15,6 +15,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.CampfireCookingRecipe;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
@@ -47,7 +49,9 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         {
             Optional<CampfireCookingRecipe> optional;
 
-            if (heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
+
+
+            if (heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) && !state.get(LIT))
             {
                 if (!world.isClient())
                 { // Only execute on the server

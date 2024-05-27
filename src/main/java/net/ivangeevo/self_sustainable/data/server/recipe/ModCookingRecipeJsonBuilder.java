@@ -50,13 +50,23 @@ public class ModCookingRecipeJsonBuilder
     }
 
     public static ModCookingRecipeJsonBuilder create(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, RecipeSerializer<? extends AbstractCookingRecipe> serializer) {
-        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getCookingRecipeCategory(serializer, output), output, input, experience, cookingTime, serializer);
+        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getGeneralCookingRecipeCategory(serializer, output), output, input, experience, cookingTime, serializer);
     }
 
+    public static ModCookingRecipeJsonBuilder createCampfireCooking(ItemConvertible output, RecipeCategory category, Ingredient input, float experience, int cookingTime) {
+        return new ModCookingRecipeJsonBuilder(category, CookingRecipeCategory.FOOD, output, input, experience, cookingTime, RecipeSerializer.CAMPFIRE_COOKING);
+    }
 
+    public static ModCookingRecipeJsonBuilder createBlasting(ItemConvertible output, RecipeCategory category, Ingredient input, float experience, int cookingTime) {
+        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getBlastingRecipeCategory(output), output, input, experience, cookingTime, RecipeSerializer.BLASTING);
+    }
 
-    public static ModCookingRecipeJsonBuilder createOvenCooking(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
-        return new ModCookingRecipeJsonBuilder(category, getSmeltingRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe.Serializer.INSTANCE);
+    public static ModCookingRecipeJsonBuilder createSmelting(ItemConvertible output, RecipeCategory category,Ingredient input , float experience, int cookingTime) {
+        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getSmeltingRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe.Serializer.INSTANCE);
+    }
+
+    public static ModCookingRecipeJsonBuilder createSmoking(ItemConvertible output, RecipeCategory category, Ingredient input, float experience, int cookingTime) {
+        return new ModCookingRecipeJsonBuilder(category, CookingRecipeCategory.FOOD, output, input, experience, cookingTime, RecipeSerializer.SMOKING);
     }
 
 
@@ -86,9 +96,6 @@ public class ModCookingRecipeJsonBuilder
     }
 
     public static CookingRecipeCategory getSmeltingRecipeCategory(ItemConvertible output) {
-        if (output.asItem().isFood()) {
-            return CookingRecipeCategory.FOOD;
-        }
         if (output.asItem() instanceof BlockItem) {
             return CookingRecipeCategory.BLOCKS;
         }
@@ -102,8 +109,8 @@ public class ModCookingRecipeJsonBuilder
         return CookingRecipeCategory.MISC;
     }
 
-    private static CookingRecipeCategory getCookingRecipeCategory(RecipeSerializer<? extends AbstractCookingRecipe> serializer, ItemConvertible output) {
-        if (serializer == RecipeSerializer.SMELTING || serializer == OvenCookingRecipe.Serializer.INSTANCE) {
+    private static CookingRecipeCategory getGeneralCookingRecipeCategory(RecipeSerializer<? extends AbstractCookingRecipe> serializer, ItemConvertible output) {
+        if (serializer == OvenCookingRecipe.Serializer.INSTANCE) {
             return ModCookingRecipeJsonBuilder.getSmeltingRecipeCategory(output);
         }
         if (serializer == RecipeSerializer.BLASTING) {

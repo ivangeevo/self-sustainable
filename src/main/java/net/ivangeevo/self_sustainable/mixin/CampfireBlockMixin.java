@@ -44,6 +44,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectedConstructor(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
     {
+        settings.noCollision();
         this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false).with(HAS_SPIT, false));
     }
 

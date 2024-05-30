@@ -117,32 +117,38 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
             }
             else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
             {
-                if (!world.isClient)
+                // Try to ignite
+                if ( heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) )
                 {
-                    if (!state.get(LIT) && (heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS)))
+                    if (state.get(FUEL_LEVEL) > 0 && !state.get(LIT))
                     {
                         world.setBlockState(pos, state.with(LIT, true));
                         Ignitable.playLitFX(world, pos);
                         heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
                         return ActionResult.SUCCESS;
                     }
-
+                }
+                // try to add fuel
+                else
+                {
 
                     // Use the attemptToAddFuel method to try and add fuel
-                    int numItemsBurned = ovenBE.attemptToAddFuel(heldStack);
+                    int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
 
-                    if (numItemsBurned > 0)
-                    {
-                        // Successfully added fuel
-                        if (!player.getAbilities().creativeMode)
-                        {
-                            heldStack.decrement(numItemsBurned);
+                    if (numItemsConsumed > 0) {
+                        if (state.get(LIT)) {
+                            Ignitable.playLitFX(world, pos);
+                        } else {
+                            this.playPopSound(world, pos);
                         }
-                        this.playPopSound(world, pos);
-                        return ActionResult.SUCCESS;
+
+                        heldStack.split(numItemsConsumed);
+
+
                     }
                 }
 
+                return ActionResult.SUCCESS;
             }
 
         }

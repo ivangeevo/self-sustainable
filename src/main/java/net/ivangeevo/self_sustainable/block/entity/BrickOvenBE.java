@@ -28,6 +28,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -54,6 +55,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
     public static final int DEFAULT_COOK_TIME = 400;
     private final int cookTimeMultiplier = 4;
     protected ItemStack cookStack = ItemStack.EMPTY;
+    protected ItemStack finishedStack = ItemStack.EMPTY;
 
     private final Object2IntOpenHashMap<Identifier> recipesUsed = new Object2IntOpenHashMap<>();
 
@@ -70,9 +72,10 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
     private final int visualSputterFuelLevel = (visualFuelLevelIncrement / 4);
     private int visualFuelLevel;
 
+
+
     public BrickOvenBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.OVEN_BRICK, pos, state);
-        this.visualFuelLevel = state.get(BrickOvenBlock.FUEL_LEVEL) * 9;
     }
 
     public Optional<OvenCookingRecipe> getRecipeFor(ItemStack stack) {
@@ -87,12 +90,22 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
     public static void serverTick(World world, BlockPos pos, BlockState state, @NotNull BrickOvenBE ovenBE)
     {
         ItemStack cookStack = ovenBE.getStack();
+
+        boolean bWasBurning = ovenBE.fuelBurnTime > 0;
         boolean bInvChanged = false;
 
         // Decrease furnace burn time if it's still burning
         if (ovenBE.fuelBurnTime > 0)
         {
             --ovenBE.fuelBurnTime;
+        }
+
+        if (bWasBurning || ovenBE.lightOnNextUpdate)
+        {
+            ovenBE.fuelBurnTime += ovenBE.unlitFuelBurnTime;
+            ovenBE.unlitFuelBurnTime = 0;
+
+            ovenBE.lightOnNextUpdate = false;
         }
 
         if (!cookStack.isEmpty())
@@ -107,21 +120,27 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
                     .map(recipe -> recipe.craft(inventory, world.getRegistryManager()))
                     .orElse(cookStack);
 
-            if (ovenBE.cookTime >= ovenBE.cookTimeTotal && cookedStack.isItemEnabled(world.getEnabledFeatures())) {
+            if (ovenBE.cookTime >= ovenBE.cookTimeTotal && cookedStack.isItemEnabled(world.getEnabledFeatures()))
+            {
                 ovenBE.setStack(cookedStack);
                 world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
                 world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
             }
         }
 
+        ovenBE.updateVisualFuelLevel();
+
+
         if (bInvChanged) {
             markDirty(world, pos, state);
         }
     }
 
-    public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE oven) {
-        setLargeSmokeParticles(world, pos, state, oven);
+    public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE) {
+        setLargeSmokeParticles(world, pos, state);
         setFlameParticles(world, pos, state);
+
+
     }
 
     protected static void markDirty(World world, BlockPos pos, BlockState state) {
@@ -131,9 +150,14 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         }
     }
 
+    public int attemptToAddFuel(ItemStack stack)
+    {
+        // Check if the item is present in the FUEL_TIME_MAP
+        if (!FUEL_TIME_MAP.containsKey(stack.getItem()))
+        {
+            return 0; // Return 0 to indicate that no items were burned
+        }
 
-
-    public int attemptToAddFuel(ItemStack stack) {
         int totalBurnTime = unlitFuelBurnTime + fuelBurnTime;
         int deltaBurnTime = maxFuelBurnTime - totalBurnTime;
         int numItemsBurned = 0;
@@ -141,28 +165,65 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         // Get the burn time for the item from the fuel map
         int itemBurnTime = FUEL_TIME_MAP.get(stack.getItem());
 
-        if (deltaBurnTime > 0) {
+        if (deltaBurnTime > 0)
+        {
             // Calculate the maximum number of items that can be burned based on fuel ticks
             numItemsBurned = deltaBurnTime / itemBurnTime;
 
-            if (numItemsBurned == 0 && this.getVisualFuelLevel() <= 2) {
+            if (numItemsBurned == 0 && this.getVisualFuelLevel() <= 2)
+            {
                 // Once the fuel level hits the bottom visual stage, you can jam anything in
                 numItemsBurned = 1;
             }
 
-            if (numItemsBurned > 0) {
-                if (numItemsBurned > stack.getCount()) {
+            if (numItemsBurned > 0)
+            {
+                if (numItemsBurned > stack.getCount())
+                {
                     numItemsBurned = stack.getCount();
                 }
 
                 // Add the item to the furnace
                 unlitFuelBurnTime += itemBurnTime * numItemsBurned;
-
                 markDirty();
             }
         }
 
         return numItemsBurned;
+    }
+
+    public boolean attemptToLight()
+    {
+        if (unlitFuelBurnTime > 0 )
+        {
+            // lighting has to be done on update to prevent funkiness with tile entity removal on block being set
+            lightOnNextUpdate = true;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void updateVisualFuelLevel()
+    {
+        int iTotalBurnTime = unlitFuelBurnTime + this.fuelBurnTime;
+        int iNewFuelLevel = 0;
+
+        if ( iTotalBurnTime > 0 )
+        {
+            if (iTotalBurnTime < visualSputterFuelLevel)
+            {
+                iNewFuelLevel = 1;
+            }
+            else
+            {
+                int increments = (iTotalBurnTime - visualSputterFuelLevel) / visualFuelLevelIncrement;
+                iNewFuelLevel = Math.min(increments + 2, 8);
+            }
+        }
+
+        setVisualFuelLevel(iNewFuelLevel);
     }
 
     private static void addFuel(Map<Item, Integer> fuelTimes, TagKey<Item> tag, int fuelTime) {
@@ -261,7 +322,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         addFuel(map, ItemTags.BOATS, 1200);
         addFuel(map, ItemTags.WOOL, 100);
         addFuel(map, ItemTags.WOODEN_BUTTONS, 100);
-        addFuel(map, Items.STICK, 100);
+        addFuel(map, Items.STICK, 50);
         addFuel(map, ItemTags.SAPLINGS, 100);
         addFuel(map, Items.BOWL, 100);
         addFuel(map, ItemTags.WOOL_CARPETS, 67);
@@ -282,7 +343,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         return map;
     }
 
-    private static void setLargeSmokeParticles(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE)
+    private static void setLargeSmokeParticles(World world, BlockPos pos, BlockState state)
     {
         Random random = world.random;
 
@@ -291,7 +352,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         for (Direction direction : Direction.Type.HORIZONTAL)
         {
 
-            if (state.get(LIT) && !hasItemToCook && !ovenBE.cookStack.isEmpty() && random.nextFloat() < 0.2f)
+            if (state.get(LIT) && !hasItemToCook && random.nextFloat() < 0.2f)
             {
                 double d = (double) pos.getX() + 0.5 - (double) ((float) direction.getOffsetX() * 0.25f)
                         + (double) ((float) direction.rotateYClockwise().getOffsetX() * 0.3125f);
@@ -396,6 +457,8 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
     }
 
     public void setVisualFuelLevel(int visualFuelLevel) {
+        assert this.world != null;
+        this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(BrickOvenBlock.FUEL_LEVEL, visualFuelLevel), Block.NOTIFY_ALL);
         this.visualFuelLevel = visualFuelLevel;
         markDirty();  // Mark the block entity as changed
     }

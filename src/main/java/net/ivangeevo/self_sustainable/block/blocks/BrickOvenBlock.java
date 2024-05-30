@@ -248,6 +248,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+
         if ( state.get(LIT) )
         {
             BrickOvenBE ovenBE = (BrickOvenBE) world.getBlockEntity( pos );

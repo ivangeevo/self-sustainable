@@ -11,10 +11,13 @@ import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.SharedConstants;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.*;
+import net.minecraft.command.argument.ParticleEffectArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -149,12 +152,20 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
                 // Try to ignite
                 if ( heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) )
                 {
-                    if ( !state.get(LIT) && state.get(FUEL_LEVEL) > 0 )
+                    if ( state.get(FUEL_LEVEL) > 0 )
                     {
-                        world.setBlockState(pos, state.with(LIT, true));
-                        Ignitable.playLitFX(world, pos);
-                        heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
+                        if (!state.get(LIT))
+                        {
+                            world.setBlockState(pos, state.with(LIT, true));
+                            Ignitable.playLitFX(world, pos);
+                            heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
+                        }
+
                         return ActionResult.SUCCESS;
+                    }
+                    else
+                    {
+                        Ignitable.playExtinguishSound(world, pos, false);
                     }
                 }
                 // try to add fuel
@@ -237,7 +248,63 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (!state.get(LIT)) {
+        if ( state.get(LIT) )
+        {
+            BrickOvenBE ovenBE = (BrickOvenBE) world.getBlockEntity( pos );
+            int iFuelLevel = ovenBE.getVisualFuelLevel();
+
+            if ( iFuelLevel == 1 )
+            {
+                Direction iFacing = world.getBlockState( pos ).get(FACING);
+
+                float fX = (float)iFacing.getId() + 0.5F;
+                float fY = (float)iFacing.getId() + 0.0F + random.nextFloat() * 6.0F / 16.0F;
+                float fZ = (float)iFacing.getId() + 0.5F;
+
+                float fFacingOffset = 0.52F;
+                float fRandOffset = random.nextFloat() * 0.6F - 0.3F;
+
+                if ( iFacing.getId() == 4 )
+                {
+                    world.addParticle(ParticleTypes.LARGE_SMOKE, fX - fFacingOffset, fY, fZ + fRandOffset, 0.0D, 0.0D, 0.0D );
+                }
+                else if ( iFacing.getId() == 5 )
+                {
+                    world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fFacingOffset, fY, fZ + fRandOffset, 0.0D, 0.0D, 0.0D );
+                }
+                else if ( iFacing.getId() == 2 )
+                {
+                    world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fRandOffset, fY, fZ - fFacingOffset, 0.0D, 0.0D, 0.0D );
+                }
+                else if ( iFacing.getId() == 3 )
+                {
+                    world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fRandOffset, fY, fZ + fFacingOffset, 0.0D, 0.0D, 0.0D );
+                }
+            }
+
+            ItemStack cookStack = ovenBE.getStack();
+
+            if ( cookStack != null && ovenBE.getRecipeFor(cookStack).isPresent() )
+            {
+                for ( int iTempCount = 0; iTempCount < 1; ++iTempCount )
+                {
+                    float fX = pos.getX() + 0.375F + random.nextFloat() * 0.25F;
+                    float fY = pos.getY() + 0.45F + random.nextFloat() * 0.1F;
+                    float fZ = pos.getZ() + 0.375F + random.nextFloat() * 0.25F;
+
+                    world.addParticle( ParticleTypes.CLOUD, fX, fY, fZ, 0D, 0D, 0D );
+                }
+            }
+        }
+
+        super.randomDisplayTick( state, world, pos, random );
+
+    }
+
+    /** the old one that "worked"
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        if ( !state.get(LIT) ) {
             return;
         }
 
@@ -248,6 +315,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         }
 
     }
+     **/
 
     @Override
     public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile)

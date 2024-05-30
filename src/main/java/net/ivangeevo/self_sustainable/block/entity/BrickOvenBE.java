@@ -46,12 +46,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock.FUEL_LEVEL;
-
 public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackInventory
 {
-    int unlitFuelBurnTime;
-    int fuelBurnTime;
+    public int unlitFuelBurnTime;
+    public int fuelBurnTime;
     int cookTime = 0;
     int cookTimeTotal = 0;
     private boolean lightOnNextUpdate = false;
@@ -99,8 +97,6 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         return 0;
     }
 
-
-
     public static void serverTick(World world, BlockPos pos, BlockState state, @NotNull BrickOvenBE ovenBE)
     {
         ItemStack cookStack = ovenBE.getStack();
@@ -146,9 +142,8 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         }
         else
         {
-            world.setBlockState(pos, state.with(LIT, true).with(FUEL_LEVEL, 0));
+            world.setBlockState(pos, state.with(LIT, false));
             ovenBE.cookTime = 0;
-            Ignitable.playExtinguishSound(world, pos, false);
 
         }
 
@@ -164,7 +159,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
 
 
     public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE) {
-        setLargeSmokeParticles(world, pos, state);
+        //setLargeSmokeParticles(world, pos, state);
         setFlameParticles(world, pos, state);
 
 
@@ -408,8 +403,9 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
 
         if (world.getRandom().nextDouble() < 0.05)
         {
-            world.playSound(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE,
-                    SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+            world.playSound(d, e, f, SoundEvents.BLOCK_FIRE_AMBIENT,
+                    SoundCategory.BLOCKS, 0.25F + world.random.nextFloat() * 0.25F,
+                    0.5F + world.random.nextFloat() * 0.25F, false );
             Direction direction = state.get(BrickOvenBlock.FACING);
             Direction.Axis axis = direction.getAxis();
             double g = 0.52;
@@ -485,7 +481,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
 
     public void setVisualFuelLevel(int visualFuelLevel) {
         assert this.world != null;
-        this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(FUEL_LEVEL, visualFuelLevel), Block.NOTIFY_ALL);
+        this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(BrickOvenBlock.FUEL_LEVEL, visualFuelLevel), Block.NOTIFY_ALL);
         this.visualFuelLevel = visualFuelLevel;
         markDirty();  // Mark the block entity as changed
     }

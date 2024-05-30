@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 
 public abstract class CampfireExtinguisher
 {
-    public static void onLitServerTick(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfireBlockEntity) {
-        CampfireBlockEntityAdded fire = (CampfireBlockEntityAdded) campfireBlockEntity;
+    public static void handleExtinguishing(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfireBlockEntity) {
+        CampfireBlockEntityAdded fire = campfireBlockEntity;
 
         final int tickBurningFor = fire.getLitTime() + 1;
         fire.setLitTime(tickBurningFor);

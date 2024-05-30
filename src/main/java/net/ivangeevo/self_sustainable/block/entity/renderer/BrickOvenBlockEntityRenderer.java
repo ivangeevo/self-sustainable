@@ -39,13 +39,13 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
 
     private void renderCookItem(BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         // Get the itemsBeingCooked from the entity
-        ItemStack cookStack = ovenBE.getCookStack();
+        ItemStack cookStack = ovenBE.getStack();
         Direction facing = ovenBE.getCachedState().get(BrickOvenBlock.FACING);
 
         matrices.push();
 
         // Move to the center of the block
-        matrices.translate(0.5f, 0.6f, 0.5f);
+        matrices.translate(0.5f, 0.58f, 0.5f);
 
         // Integrate the visual offset logic
         applyVisualOffset(matrices, facing);
@@ -94,44 +94,5 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
             default -> RotationAxis.POSITIVE_Y; // Default to Y-axis if facing direction is not recognized
         };
     }
-
-
-    // TODO: FIX THE RENDERING OF THE FUEL OVERLAY OR DO IT IN BLOCKSTATES WITH DIFFERENT MODELS
-/**
-    private void renderFuelLevelOverlay(BrickOvenBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-
-        boolean shouldDisplay = entity.getCachedState().get(ModProperties.HAS_FUEL)
-                && entity.getCachedState().get(Properties.LIT);
-
-        if (shouldDisplay) {
-            matrices.push();
-
-
-            Direction facing = entity.getCachedState().get(BrickOvenBlock.FACING);
-
-            int fuelLevel = entity.getVisualFuelLevel();
-
-            BlockRenderManager blockRenderManager = MinecraftClient.getInstance().getBlockRenderManager();
-            BlockModelRenderer blockModelRenderer = blockRenderManager.getModelRenderer();
-
-            // Use your custom block entry instead of block state
-            BlockState blockState = entity.getCachedState().with(ModProperties.FUEL_LEVEL, fuelLevel);
-
-
-            int blockLight = WorldRenderer.getLightmapCoordinates(Objects.requireNonNull(entity.getWorld()), entity.getPos().offset(facing));
-            int blockOverlay = OverlayTexture.DEFAULT_UV;
-
-            // Get the baked model for your custom block entry
-            BakedModel bakedModel = blockRenderManager.getModel(blockState);
-
-            // Render the baked model using BlockModelRenderer
-            blockModelRenderer.render(matrices.peek(), vertexConsumers.getBuffer(RenderLayer.getCutout()), blockState,
-                    bakedModel, 1.0f, 1.0f, 1.0f, blockLight, blockOverlay);
-
-            matrices.pop();
-        }
-    }
- **/
-
 
 }

@@ -1,9 +1,10 @@
 package net.ivangeevo.self_sustainable.block.interfaces;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.entity.CampfireBlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.World;
 
 public interface CampfireBlockEntityAdded
 {
@@ -21,7 +22,7 @@ public interface CampfireBlockEntityAdded
     ItemStack getCookStack();
     void setCookStack(ItemStack newStack);
 
-    ItemStack retrieveItem(@Nullable Entity user);
+    void retrieveItem(World world, CampfireBlockEntity campfireBE, PlayerEntity player);
 
     void setSpitStack(ItemStack stack);
 

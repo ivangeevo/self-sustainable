@@ -41,7 +41,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
     private int itemInUseCount;
     protected float speedOnGround = 0.1F;
     protected float speedInAir = 0.02F;
-    private int field_82249_h = 0;
+    private final int field_82249_h = 0;
 
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {

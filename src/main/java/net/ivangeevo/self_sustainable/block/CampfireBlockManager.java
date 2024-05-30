@@ -42,8 +42,8 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
         // Use this cast to get access to the new variables.
-        CampfireBlockEntityAdded addedVars;
-        addedVars = (CampfireBlockEntityAdded) blockEntity;
+        CampfireBlockEntityAdded campfireAdded;
+        campfireAdded = (CampfireBlockEntityAdded) blockEntity;
 
         if (blockEntity instanceof CampfireBlockEntity campfireBE)
         {
@@ -69,33 +69,27 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
             if (!getHasSpit(world, pos))
             {
                 if (heldStack.isOf(Items.STICK))
-                { // Check if the item in hand is a stick
-                    if (!world.isClient())
-                    { // Only execute on the server
-                        setHasSpit(world, pos, true);
-                        heldStack.decrement(1); // Decrease the heldStack count
-                    }
+                {
+                    setHasSpit(world, state, pos, true);
+                    heldStack.decrement(1); // Decrease the heldStack count
+
                     return ActionResult.SUCCESS;
                 }
             }
             else
             {
-                if (!campfireBE.getItemsBeingCooked().get(0).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
+                if (!getCookStack(campfireBE).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS))
                 {
-                    if (!world.isClient()) { // Only execute on the server
-                        retrieveItem(campfireBE, player);
-                    }
+                    campfireAdded.retrieveItem(world, campfireBE, player);
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
+
                     return ActionResult.SUCCESS;
                 }
 
                 if (heldStack.isEmpty() && getCookStack(campfireBE).isEmpty())
                 {
-                    if (!world.isClient())
-                    {
-                        setHasSpit(world, pos, false);
-                        player.giveItemStack(new ItemStack(Items.STICK));
-                    }
+                    setHasSpit(world, state, pos, false);
+                    player.giveItemStack(new ItemStack(Items.STICK));
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
 
                     return ActionResult.SUCCESS;
@@ -104,12 +98,12 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
                 {
                     if (getCookStack(campfireBE).isEmpty())
                     {
-                        if (!world.isClient())
-                        { // Only execute on the server
-                            campfireBE.addItem(player,
-                                    player.getAbilities().creativeMode
-                                            ? heldStack.copy() : heldStack, optional.get().getCookTime());
-                        }
+
+                        campfireBE.addItem(player,
+                                player.getAbilities().creativeMode
+                                        ? heldStack.copy()
+                                        : heldStack, optional.get().getCookTime());
+
                         return ActionResult.SUCCESS;
                     }
                 }
@@ -124,19 +118,6 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
     private static ItemStack getCookStack(CampfireBlockEntity campfireBE)
     {
         return campfireBE.getItemsBeingCooked().get(0);
-    }
-
-    private static void retrieveItem(CampfireBlockEntity campfireBlockEntity, PlayerEntity player) {
-        DefaultedList<ItemStack> itemsBeingCooked = campfireBlockEntity.getItemsBeingCooked();
-        if (!itemsBeingCooked.isEmpty()) {
-            ItemStack itemStack = itemsBeingCooked.get(0);
-            if (!itemStack.isEmpty()) {
-                player.giveItemStack(itemStack);
-                itemsBeingCooked.set(0, ItemStack.EMPTY);
-                campfireBlockEntity.markDirty();
-                Objects.requireNonNull(campfireBlockEntity.getWorld()).updateListeners(campfireBlockEntity.getPos(), campfireBlockEntity.getCachedState(), campfireBlockEntity.getCachedState(), Block.NOTIFY_ALL);
-            }
-        }
     }
 
 
@@ -179,14 +160,14 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         if (!(blockEntity instanceof CampfireBlockEntity))
             return false;
 
-        if (!getHasSpit(state) && itemStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS))
+        if (!getHasSpit(world, pos) && itemStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS))
         {
-            setHasSpit(world, pos, true);
+            setHasSpit(world, state, pos, true);
             itemStack.decrement(1);
         }
-        else if (getHasSpit(state))
+        else if (getHasSpit(world, pos))
         {
-            setHasSpit(world, pos, false);
+            setHasSpit(world, state, pos, false);
             player.giveItemStack(new ItemStack(Items.STICK));
         }
         return true;
@@ -194,22 +175,14 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
 
     public static boolean getHasSpit(WorldAccess blockAccess, BlockPos pos)
     {
-        return getHasSpit(blockAccess.getBlockState(pos));
+        return blockAccess.getBlockState(pos).get(HAS_SPIT);
     }
 
-    public static boolean getHasSpit(BlockState state)
+
+    public static boolean setHasSpit(World world, BlockState state, BlockPos pos, boolean bHasSpit)
     {
-        return state.get(HAS_SPIT);
+       return !world.isClient() && world.setBlockState(pos, state.with(HAS_SPIT, bHasSpit));
+
     }
 
-    public static void setHasSpit(World world, BlockPos pos, boolean bHasSpit)
-    {
-        BlockState newState = setHasSpit(world.getBlockState(pos), bHasSpit);
-        world.setBlockState(pos, newState);
-    }
-
-    public static BlockState setHasSpit(BlockState state, boolean bHasSpit)
-    {
-        return state.with(HAS_SPIT, bHasSpit);
-    }
 }

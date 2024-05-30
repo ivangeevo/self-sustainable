@@ -80,9 +80,9 @@ public abstract class FireStarterItem extends Item
     {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if ( targetBlock != null && ((BlockAdded)targetBlock).getCanBeSetOnFireDirectlyByItem(world, pos) )
+        if ( targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos) )
         {
-            return ((BlockAdded)targetBlock).setOnFireDirectly(world, pos);
+            return targetBlock.setOnFireDirectly(world, pos);
         }
 
         return false;

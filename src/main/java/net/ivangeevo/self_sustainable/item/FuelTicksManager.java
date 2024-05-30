@@ -3,6 +3,8 @@ package net.ivangeevo.self_sustainable.item;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
 import java.io.IOException;
@@ -43,7 +45,7 @@ public class FuelTicksManager
     }
 
     // Helper method to get the fuel amount for a specific item in the Json map file.
-    public static int getFuelTicks(Identifier itemId) {
-        return fuelTicksMap.getOrDefault(itemId, 0);
+    public static int getFuelTicks(Item item) {
+        return AbstractFurnaceBlockEntity.createFuelTimeMap().getOrDefault(item, 0);
     }
 }

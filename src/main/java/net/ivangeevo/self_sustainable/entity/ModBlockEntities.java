@@ -12,6 +12,7 @@ import net.minecraft.util.Identifier;
 public class ModBlockEntities {
 
     public static BlockEntityType<BrickOvenBE> OVEN_BRICK;
+
     /**
     public static BlockEntityType<TorchBlockEntity> TORCH;
     public static BlockEntityType<CrudeTorchBlockEntity> CRUDE_TORCH;

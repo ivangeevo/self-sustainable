@@ -19,9 +19,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
-
+/**
 public class FireStarterItemPrimitive extends FireStarterItem
 {
+
     private final float baseChance;
     private final float maxChance;
     private final float chanceIncreasePerUse;
@@ -45,9 +46,9 @@ public class FireStarterItemPrimitive extends FireStarterItem
     protected boolean checkChanceOfStart(ItemStack stack, net.minecraft.util.math.random.Random random) {
         boolean bReturnValue = false;
 
-        float fChance = ((ItemStackAdded)stack).getAccumulatedChance(baseChance);
+        float fChance = stack.getAccumulatedChance(baseChance);
         long lCurrentTime = WorldUtils.getOverworldTimeServerOnly();
-        long lLastTime = ((ItemStackAdded)stack).getTimeOfLastUse();
+        long lLastTime = stack.getTimeOfLastUse();
 
         if ( lLastTime > 0 )
         {
@@ -86,8 +87,8 @@ public class FireStarterItemPrimitive extends FireStarterItem
             fChance = maxChance;
         }
 
-        ((ItemStackAdded)stack).setAccumulatedChance(fChance);
-        ((ItemStackAdded)stack).setTimeOfLastUse(lCurrentTime);
+        stack.setAccumulatedChance(fChance);
+        stack.setTimeOfLastUse(lCurrentTime);
 
         return bReturnValue;    }
 
@@ -119,7 +120,7 @@ public class FireStarterItemPrimitive extends FireStarterItem
     {
         if ( super.attemptToLightBlock(stack, world, pos, facing) )
         {
-            ((ItemStackAdded)stack).setAccumulatedChance(baseChance);
+            stack.setAccumulatedChance(baseChance);
 
             return true;
         }
@@ -185,4 +186,6 @@ public class FireStarterItemPrimitive extends FireStarterItem
     //------------- Class Specific Methods ------------//
 
     //----------- Client Side Functionality -----------//
+
 }
+ **/

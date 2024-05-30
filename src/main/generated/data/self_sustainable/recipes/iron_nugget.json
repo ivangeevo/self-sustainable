@@ -1,7 +1,7 @@
 {
   "type": "self_sustainable:oven_cooking",
   "category": "misc",
-  "cookingtime": 12,
+  "cookingtime": 12000,
   "experience": 0.25,
   "ingredient": {
     "item": "minecraft:raw_iron"

@@ -9,16 +9,16 @@ import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.SharedConstants;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.CampfireBlockEntity;
+import net.minecraft.block.entity.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.recipe.CampfireCookingRecipe;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -47,7 +47,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
-    public static final Map<Item, Integer> FUEL_TIME_MAP = createFuelTimeMap();
     protected final float clickYTopPortion = (6F / 16F);
     protected final float clickYBottomPortion = (6F / 16F);
 
@@ -116,22 +115,50 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
                 return ActionResult.SUCCESS;
             }
-
-            if (heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) && !state.get(LIT))
+            else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
             {
-                if (!world.isClient())
-                { // Only execute on the server
-                    world.setBlockState(pos, state.with(LIT, true));
-                    heldStack.damage(1, player, (p) -> {
-                        p.sendToolBreakStatus(hand);
-                    });
+                if (!world.isClient)
+                {
+                    if (!state.get(LIT) && (heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS)))
+                    {
+                        world.setBlockState(pos, state.with(LIT, true));
+                        Ignitable.playLitFX(world, pos);
+                        heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
+                        return ActionResult.SUCCESS;
+                    }
+
+
+                    // Use the attemptToAddFuel method to try and add fuel
+                    int numItemsBurned = ovenBE.attemptToAddFuel(heldStack);
+
+                    if (numItemsBurned > 0)
+                    {
+                        // Successfully added fuel
+                        if (!player.getAbilities().creativeMode)
+                        {
+                            heldStack.decrement(numItemsBurned);
+                        }
+                        this.playPopSound(world, pos);
+                        return ActionResult.SUCCESS;
+                    }
                 }
-                Ignitable.playLitFX(world, pos);
+
             }
 
         }
 
         return ActionResult.PASS;
+    }
+
+    private void playPopSound(World world, BlockPos pos) {
+        BlockPos soundPos = new BlockPos(
+                (int) ((double) pos.getX() + 0.5D),
+                (int) ((double) pos.getY() + 0.5D),
+                (int) ((double) pos.getZ() + 0.5D));
+
+        world.playSound(null, soundPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS,
+                0.25F, (world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F);
+
     }
 
     @Override
@@ -214,42 +241,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     {
         return  state.get(FUEL_LEVEL) > 0;
     }
-
-
-
-
-
-
-    private static void addFuel(Map<Item, Integer> fuelTimes, ItemConvertible item, int fuelTime) {
-        Item item2 = item.asItem();
-        if (isNonFlammableWood(item2)) {
-            if (SharedConstants.isDevelopment) {
-                throw Util.throwOrPause(new IllegalStateException("A developer tried to explicitly make fire resistant item " + item2.getName(null).getString() + " a furnace fuel. That will not work!"));
-            }
-            return;
-        }
-        fuelTimes.put(item2, fuelTime);
-    }
-
-    /**
-     * {@return whether the provided {@code item} is in the {@link
-     * ItemTags#NON_FLAMMABLE_WOOD non_flammable_wood} tag}
-     */
-    private static boolean isNonFlammableWood(Item item) {
-        return item.getRegistryEntry().isIn(ItemTags.NON_FLAMMABLE_WOOD);
-    }
-
-    public static Map<Item, Integer> createFuelTimeMap() {
-        LinkedHashMap<Item, Integer> map = Maps.newLinkedHashMap();
-        addFuel(map, Items.LAVA_BUCKET, 20000);
-        addFuel(map, Blocks.COAL_BLOCK, 16000);
-        // Add more fuel items as needed
-        return map;
-    }
-
-
-
-
 
 
 }

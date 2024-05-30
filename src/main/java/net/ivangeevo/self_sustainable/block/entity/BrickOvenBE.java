@@ -1,26 +1,37 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
+import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.entity.util.SingleStackInventory;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
+import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.RecipeManager;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -28,6 +39,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -45,6 +58,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
     private final Object2IntOpenHashMap<Identifier> recipesUsed = new Object2IntOpenHashMap<>();
 
     public final RecipeManager.MatchGetter<Inventory, OvenCookingRecipe> matchGetter = RecipeManager.createCachedMatchGetter(OvenCookingRecipe.Type.INSTANCE);
+    public static final Map<Item, Integer> FUEL_TIME_MAP = createFuelTimeMap();
 
     static private final float CHANCE_OF_FIRE_SPREAD = 0.01F;
     public static final int BASE_BURN_TIME_MULTIPLIER = 2;
@@ -58,7 +72,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
 
     public BrickOvenBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.OVEN_BRICK, pos, state);
-        this.visualFuelLevel = state.get(BrickOvenBlock.FUEL_LEVEL);
+        this.visualFuelLevel = state.get(BrickOvenBlock.FUEL_LEVEL) * 9;
     }
 
     public Optional<OvenCookingRecipe> getRecipeFor(ItemStack stack) {
@@ -105,6 +119,11 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         }
     }
 
+    public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE oven) {
+        setLargeSmokeParticles(world, pos, state, oven);
+        setFlameParticles(world, pos, state);
+    }
+
     protected static void markDirty(World world, BlockPos pos, BlockState state) {
         world.markDirty(pos);
         if (!state.isAir()) {
@@ -112,9 +131,155 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         }
     }
 
-    public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE oven) {
-        setLargeSmokeParticles(world, pos, state, oven);
-        setFlameParticles(world, pos, state);
+
+
+    public int attemptToAddFuel(ItemStack stack) {
+        int totalBurnTime = unlitFuelBurnTime + fuelBurnTime;
+        int deltaBurnTime = maxFuelBurnTime - totalBurnTime;
+        int numItemsBurned = 0;
+
+        // Get the burn time for the item from the fuel map
+        int itemBurnTime = FUEL_TIME_MAP.get(stack.getItem());
+
+        if (deltaBurnTime > 0) {
+            // Calculate the maximum number of items that can be burned based on fuel ticks
+            numItemsBurned = deltaBurnTime / itemBurnTime;
+
+            if (numItemsBurned == 0 && this.getVisualFuelLevel() <= 2) {
+                // Once the fuel level hits the bottom visual stage, you can jam anything in
+                numItemsBurned = 1;
+            }
+
+            if (numItemsBurned > 0) {
+                if (numItemsBurned > stack.getCount()) {
+                    numItemsBurned = stack.getCount();
+                }
+
+                // Add the item to the furnace
+                unlitFuelBurnTime += itemBurnTime * numItemsBurned;
+
+                markDirty();
+            }
+        }
+
+        return numItemsBurned;
+    }
+
+    private static void addFuel(Map<Item, Integer> fuelTimes, TagKey<Item> tag, int fuelTime) {
+        for (RegistryEntry<Item> registryEntry : Registries.ITEM.iterateEntries(tag)) {
+            if (isNonFlammableWood(registryEntry.value())) continue;
+            fuelTimes.put(registryEntry.value(), fuelTime);
+        }
+    }
+    private static void addFuel(Map<Item, Integer> fuelTimes, ItemConvertible item, int fuelTime) {
+        Item item2 = item.asItem();
+        if (isNonFlammableWood(item2)) {
+            if (SharedConstants.isDevelopment) {
+                throw Util.throwOrPause(new IllegalStateException("A developer tried to explicitly make fire resistant item " + item2.getName(null).getString() + " a furnace fuel. That will not work!"));
+            }
+            return;
+        }
+        fuelTimes.put(item2, fuelTime);
+    }
+
+    /**
+     * {@return whether the provided {@code item} is in the {@link
+     * ItemTags#NON_FLAMMABLE_WOOD non_flammable_wood} tag}
+     */
+    private static boolean isNonFlammableWood(Item item) {
+        return item.getRegistryEntry().isIn(ItemTags.NON_FLAMMABLE_WOOD);
+    }
+
+    public static Map<Item, Integer> createFuelTimeMap() {
+        LinkedHashMap<Item, Integer> map = Maps.newLinkedHashMap();
+        addFuel(map, Blocks.COAL_BLOCK, 14400);
+        addFuel(map, Items.BLAZE_ROD, 12800);
+        
+        // Logs
+        addFuel(map, Items.BIRCH_LOG, 16000);
+        addFuel(map, Items.ACACIA_LOG, 16000);
+        addFuel(map, Items.OAK_LOG, 12800);
+        addFuel(map, Items.DARK_OAK_LOG, 12800);
+        addFuel(map, Items.CHERRY_LOG, 12800);
+        addFuel(map, Items.SPRUCE_LOG, 9600);
+        addFuel(map, Items.MANGROVE_LOG, 8400);
+        addFuel(map, Items.JUNGLE_LOG, 6400);
+        addFuel(map, ItemTags.BAMBOO_BLOCKS, 500);
+
+        // Planks
+        addFuel(map, Items.BIRCH_PLANKS, 16000);
+        addFuel(map, Items.ACACIA_PLANKS, 16000);
+        addFuel(map, Items.OAK_PLANKS, 12800);
+        addFuel(map, Items.DARK_OAK_PLANKS, 12800);
+        addFuel(map, Items.CHERRY_PLANKS, 12800);
+        addFuel(map, Items.SPRUCE_PLANKS, 9600);
+        addFuel(map, Items.MANGROVE_PLANKS, 8400);
+        addFuel(map, Items.JUNGLE_PLANKS, 6400);
+        addFuel(map, Items.BAMBOO_PLANKS, 40);
+
+        // Wooden Stairs
+        addFuel(map, Items.BIRCH_STAIRS, 400);
+        addFuel(map, Items.ACACIA_STAIRS, 400);
+        addFuel(map, Items.OAK_STAIRS, 300);
+        addFuel(map, Items.DARK_OAK_STAIRS, 300);
+        addFuel(map, Items.CHERRY_STAIRS, 300);
+        addFuel(map, Items.SPRUCE_STAIRS, 200);
+        addFuel(map, Items.MANGROVE_STAIRS, 200);
+        addFuel(map, Items.JUNGLE_STAIRS, 70);
+        addFuel(map, Items.BAMBOO_STAIRS, 30);
+
+
+        addFuel(map, Blocks.BAMBOO_MOSAIC, 40);
+        addFuel(map, Blocks.BAMBOO_MOSAIC_STAIRS, 30);
+        addFuel(map, ItemTags.WOODEN_SLABS, 150);
+        addFuel(map, Blocks.BAMBOO_MOSAIC_SLAB, 20);
+        addFuel(map, ItemTags.WOODEN_TRAPDOORS, 300);
+        addFuel(map, ItemTags.WOODEN_PRESSURE_PLATES, 300);
+        addFuel(map, ItemTags.WOODEN_FENCES, 300);
+        addFuel(map, ItemTags.FENCE_GATES, 300);
+        addFuel(map, Blocks.NOTE_BLOCK, 300);
+        addFuel(map, Blocks.BOOKSHELF, 300);
+        addFuel(map, Blocks.CHISELED_BOOKSHELF, 300);
+        addFuel(map, Blocks.LECTERN, 300);
+        addFuel(map, Blocks.JUKEBOX, 300);
+        addFuel(map, Blocks.CHEST, 300);
+        addFuel(map, Blocks.TRAPPED_CHEST, 300);
+        addFuel(map, Blocks.CRAFTING_TABLE, 300);
+        addFuel(map, Blocks.DAYLIGHT_DETECTOR, 300);
+        addFuel(map, ItemTags.BANNERS, 300);
+        addFuel(map, Items.BOW, 300);
+        addFuel(map, Items.FISHING_ROD, 300);
+        addFuel(map, Blocks.LADDER, 300);
+        addFuel(map, ItemTags.SIGNS, 200);
+        addFuel(map, ItemTags.HANGING_SIGNS, 800);
+        addFuel(map, Items.WOODEN_SHOVEL, 200);
+        addFuel(map, Items.WOODEN_SWORD, 200);
+        addFuel(map, Items.WOODEN_HOE, 200);
+        addFuel(map, Items.WOODEN_AXE, 200);
+        addFuel(map, Items.WOODEN_PICKAXE, 200);
+        addFuel(map, ItemTags.WOODEN_DOORS, 200);
+        addFuel(map, ItemTags.BOATS, 1200);
+        addFuel(map, ItemTags.WOOL, 100);
+        addFuel(map, ItemTags.WOODEN_BUTTONS, 100);
+        addFuel(map, Items.STICK, 100);
+        addFuel(map, ItemTags.SAPLINGS, 100);
+        addFuel(map, Items.BOWL, 100);
+        addFuel(map, ItemTags.WOOL_CARPETS, 67);
+        addFuel(map, Blocks.DRIED_KELP_BLOCK, 4001);
+        addFuel(map, Items.CROSSBOW, 300);
+        addFuel(map, Blocks.BAMBOO, 50);
+        addFuel(map, Blocks.DEAD_BUSH, 100);
+        addFuel(map, Blocks.SCAFFOLDING, 50);
+        addFuel(map, Blocks.LOOM, 300);
+        addFuel(map, Blocks.BARREL, 300);
+        addFuel(map, Blocks.CARTOGRAPHY_TABLE, 300);
+        addFuel(map, Blocks.FLETCHING_TABLE, 300);
+        addFuel(map, Blocks.SMITHING_TABLE, 300);
+        addFuel(map, Blocks.COMPOSTER, 300);
+        addFuel(map, Blocks.AZALEA, 100);
+        addFuel(map, Blocks.FLOWERING_AZALEA, 100);
+        addFuel(map, Blocks.MANGROVE_ROOTS, 300);
+        return map;
     }
 
     private static void setLargeSmokeParticles(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE)

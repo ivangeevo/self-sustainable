@@ -37,6 +37,8 @@ public class FuelRegistryManager
 
         // Items
         FuelRegistry.INSTANCE.remove(Items.COAL);
+        FuelRegistry.INSTANCE.remove(Items.CHARCOAL);
+
 
     }
 
@@ -72,9 +74,6 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.add(Items.SPRUCE_STAIRS, 200);
         FuelRegistry.INSTANCE.add(Items.MANGROVE_STAIRS, 200);
         FuelRegistry.INSTANCE.add(Items.JUNGLE_STAIRS, 70);
-
-
-
 
     }
 

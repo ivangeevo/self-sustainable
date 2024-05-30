@@ -4,10 +4,12 @@ package net.ivangeevo.self_sustainable.item.items;
 
 
 import net.ivangeevo.self_sustainable.block.interfaces.BlockAdded;
+import net.ivangeevo.self_sustainable.item.util.DirectlyIgnitingItem;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -18,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public abstract class FireStarterItem extends Item
+public abstract class FireStarterItem extends FlintAndSteelItem implements DirectlyIgnitingItem
 {
     private final float exhaustionPerUse;
 
@@ -29,22 +31,27 @@ public abstract class FireStarterItem extends Item
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
+    {
         ItemStack useStack = user.getActiveItem();
         MinecraftClient client = MinecraftClient.getInstance();
         BlockHitResult hitResult = (BlockHitResult) client.crosshairTarget;
 
-        if (hitResult != null) {
+        if (hitResult != null)
+        {
             BlockPos hitPos = hitResult.getBlockPos();
             Direction hitSide = hitResult.getSide();
-        if ( user.canModifyAt(world,hitPos) )
-        {
-            performUseEffects(user);
 
-            if (!world.isClient) {
+        if ( user.canModifyAt( world,hitPos ) )
+        {
+            //user.
+
+            if (!world.isClient)
+            {
                 //notifyNearbyAnimalsOfAttempt(user);
 
-                if (checkChanceOfStart(useStack, world.getRandom())) {
+                if (checkChanceOfStart(useStack, world.getRandom()))
+                {
                     attemptToLightBlock(useStack, world, hitPos, hitSide);
                 }
             }
@@ -52,9 +59,7 @@ public abstract class FireStarterItem extends Item
 
             user.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
 
-            useStack.damage(1, user, (e) -> {
-                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
-            });
+            useStack.damage(1, user, (e) -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
 
             return TypedActionResult.success(useStack);
         }
@@ -76,7 +81,8 @@ public abstract class FireStarterItem extends Item
     {
     }
 
-    protected boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing)
+    @Override
+    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing)
     {
         Block targetBlock = world.getBlockState(pos).getBlock();
 

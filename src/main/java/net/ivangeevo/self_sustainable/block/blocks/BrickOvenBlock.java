@@ -1,6 +1,7 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
 import com.google.common.collect.Maps;
+import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
@@ -35,6 +36,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,6 +77,34 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     }
 
     @Override
+    public boolean setOnFireDirectly(World world, BlockPos pos) {
+
+        if (world.getBlockState(pos) == this.getDefaultState().with(LIT, true))
+        {
+            if (world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE)
+            {
+                if ( ovenBE.attemptToLight() )
+                {
+                    BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
+                    world.playSound(null, soundPos , SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS ,1F, world.random.nextFloat() * 0.4F + 0.8F);
+                    return true;
+                }
+
+            }
+
+
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
+        return true;
+    }
+
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
@@ -97,6 +127,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
                 if (!ovenBE.getStack().isEmpty())
                 {
+
 
                     ovenBE.retrieveItem(world, player);
 

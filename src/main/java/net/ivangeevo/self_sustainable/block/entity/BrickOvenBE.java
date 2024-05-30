@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -86,6 +87,17 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         return this.matchGetter.getFirstMatch(new SimpleInventory(stack), this.world);
     }
 
+    private int getCookTimeForCurrentItem(ItemStack stack)
+    {
+        if (this.getRecipeFor(stack).isPresent())
+        {
+            return this.getRecipeFor(stack).get().getCookTime();
+
+        }
+        return 0;
+    }
+
+
 
     public static void serverTick(World world, BlockPos pos, BlockState state, @NotNull BrickOvenBE ovenBE)
     {
@@ -94,39 +106,63 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         boolean bWasBurning = ovenBE.fuelBurnTime > 0;
         boolean bInvChanged = false;
 
+        SimpleInventory inventory = new SimpleInventory(cookStack);
+        ItemStack cookedStack = ovenBE.matchGetter.getFirstMatch(inventory, world)
+                .map(recipe -> recipe.craft(inventory, world.getRegistryManager()))
+                .orElse(cookStack);
+
         // Decrease furnace burn time if it's still burning
         if (ovenBE.fuelBurnTime > 0)
         {
             --ovenBE.fuelBurnTime;
         }
 
-        if (bWasBurning || ovenBE.lightOnNextUpdate)
+        if ( (state.get(LIT) && ovenBE.unlitFuelBurnTime > 0) || ovenBE.lightOnNextUpdate)
         {
+
             ovenBE.fuelBurnTime += ovenBE.unlitFuelBurnTime;
             ovenBE.unlitFuelBurnTime = 0;
 
             ovenBE.lightOnNextUpdate = false;
+
         }
 
-        if (!cookStack.isEmpty())
+        if ( ovenBE.isBurning() )
         {
-            bInvChanged = true;
-
-            // Increment the cooking time for the first item
-            ovenBE.cookTime = ovenBE.cookTime + 1;
-
-            SimpleInventory inventory = new SimpleInventory(cookStack);
-            ItemStack cookedStack = ovenBE.matchGetter.getFirstMatch(inventory, world)
-                    .map(recipe -> recipe.craft(inventory, world.getRegistryManager()))
-                    .orElse(cookStack);
+            // Increment the cooking time
+            ++ovenBE.cookTime;
 
             if (ovenBE.cookTime >= ovenBE.cookTimeTotal && cookedStack.isItemEnabled(world.getEnabledFeatures()))
             {
                 ovenBE.setStack(cookedStack);
+                bInvChanged = true;
+                ovenBE.cookTime = 0;
+                world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
+                world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
+
+            }
+        }
+        else
+        {
+            world.setBlockState(pos, state.with(LIT, false));
+            ovenBE.cookTime = 0;
+
+        }
+
+        /**
+            // Increment the cooking time
+            ++ovenBE.cookTime;
+
+            if (ovenBE.cookTime >= ovenBE.cookTimeTotal && cookedStack.isItemEnabled(world.getEnabledFeatures()))
+            {
+
+                ovenBE.setStack(cookedStack);
+                bInvChanged = true;
+                ovenBE.cookTime = 0;
                 world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
                 world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
             }
-        }
+        **/
 
         ovenBE.updateVisualFuelLevel();
 
@@ -134,7 +170,9 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         if (bInvChanged) {
             markDirty(world, pos, state);
         }
+
     }
+
 
     public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE) {
         setLargeSmokeParticles(world, pos, state);

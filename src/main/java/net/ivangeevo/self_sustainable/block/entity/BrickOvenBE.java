@@ -158,11 +158,9 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
     }
 
 
-    public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE) {
-        //setLargeSmokeParticles(world, pos, state);
+    public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE)
+    {
         setFlameParticles(world, pos, state);
-
-
     }
 
     protected static void markDirty(World world, BlockPos pos, BlockState state) {

@@ -127,8 +127,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
                 if (!ovenBE.getStack().isEmpty())
                 {
-
-
                     ovenBE.retrieveItem(world, player);
 
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
@@ -151,7 +149,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
                 // Try to ignite
                 if ( heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) )
                 {
-                    if (state.get(FUEL_LEVEL) > 0 && !state.get(LIT))
+                    if ( !state.get(LIT) && state.get(FUEL_LEVEL) > 0 )
                     {
                         world.setBlockState(pos, state.with(LIT, true));
                         Ignitable.playLitFX(world, pos);

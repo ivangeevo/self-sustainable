@@ -24,7 +24,7 @@ public interface Ignitable
 
     }
 
-    default void playExtinguishSound(World world, BlockPos pos, boolean isQuiet)
+    static void playExtinguishSound(World world, BlockPos pos, boolean isQuiet)
     {
         float fizzVolume = 0.5F;
         float fizzPitch = 2.6F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.8F;

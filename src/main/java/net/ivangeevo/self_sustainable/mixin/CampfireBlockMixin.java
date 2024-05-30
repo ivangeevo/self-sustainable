@@ -113,7 +113,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
         if ( !world.isClient() )
         {
-            playExtinguishSound(world, pos, true);
+            Ignitable.playExtinguishSound(world, pos, true);
         }
     }
 

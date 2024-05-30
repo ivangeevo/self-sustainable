@@ -46,6 +46,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock.FUEL_LEVEL;
+
 public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackInventory
 {
     int unlitFuelBurnTime;
@@ -117,7 +119,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
             --ovenBE.fuelBurnTime;
         }
 
-        if ( (state.get(LIT) && ovenBE.unlitFuelBurnTime > 0) || ovenBE.lightOnNextUpdate)
+        if ( (state.get(LIT) && ovenBE.unlitFuelBurnTime > 0) || ovenBE.lightOnNextUpdate )
         {
 
             ovenBE.fuelBurnTime += ovenBE.unlitFuelBurnTime;
@@ -144,30 +146,17 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         }
         else
         {
-            world.setBlockState(pos, state.with(LIT, false));
+            world.setBlockState(pos, state.with(LIT, true).with(FUEL_LEVEL, 0));
             ovenBE.cookTime = 0;
+            Ignitable.playExtinguishSound(world, pos, false);
 
         }
-
-        /**
-            // Increment the cooking time
-            ++ovenBE.cookTime;
-
-            if (ovenBE.cookTime >= ovenBE.cookTimeTotal && cookedStack.isItemEnabled(world.getEnabledFeatures()))
-            {
-
-                ovenBE.setStack(cookedStack);
-                bInvChanged = true;
-                ovenBE.cookTime = 0;
-                world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-                world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
-            }
-        **/
 
         ovenBE.updateVisualFuelLevel();
 
 
-        if (bInvChanged) {
+        if (bInvChanged)
+        {
             markDirty(world, pos, state);
         }
 
@@ -496,7 +485,7 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
 
     public void setVisualFuelLevel(int visualFuelLevel) {
         assert this.world != null;
-        this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(BrickOvenBlock.FUEL_LEVEL, visualFuelLevel), Block.NOTIFY_ALL);
+        this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(FUEL_LEVEL, visualFuelLevel), Block.NOTIFY_ALL);
         this.visualFuelLevel = visualFuelLevel;
         markDirty();  // Mark the block entity as changed
     }

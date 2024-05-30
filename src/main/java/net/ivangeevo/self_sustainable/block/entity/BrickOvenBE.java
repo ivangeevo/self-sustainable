@@ -69,11 +69,11 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
         return this.matchGetter.getFirstMatch(new SimpleInventory(stack), this.world);
     }
 
+
     public static void serverTick(World world, BlockPos pos, BlockState state, @NotNull BrickOvenBE ovenBE)
     {
-        // Check if the furnace was burning in the previous tick
-        boolean bWasBurning = ovenBE.fuelBurnTime > 0;
-        boolean bInventoryChanged = false;
+        ItemStack cookStack = ovenBE.getStack();
+        boolean bInvChanged = false;
 
         // Decrease furnace burn time if it's still burning
         if (ovenBE.fuelBurnTime > 0)
@@ -81,32 +81,35 @@ public class BrickOvenBE extends BlockEntity implements Ignitable, SingleStackIn
             --ovenBE.fuelBurnTime;
         }
 
-        ItemStack cookStack = ovenBE.cookStack;
-
         if (!cookStack.isEmpty())
         {
-            bInventoryChanged = true;
+            bInvChanged = true;
 
-            if (ovenBE.cookTime >= ovenBE.cookTimeTotal)
-            {
-                Inventory inventory = new SimpleInventory(cookStack);
-                ItemStack tempStack = ovenBE.matchGetter.getFirstMatch(inventory, world).map((recipe) ->
-                        recipe.craft(inventory, world.getRegistryManager())).orElse(cookStack);
+            // Increment the cooking time for the first item
+            ovenBE.cookTime = ovenBE.cookTime + 1;
 
-                if (tempStack.isItemEnabled(world.getEnabledFeatures()))
-                {
-                    ovenBE.cookStack = tempStack;
-                    world.updateListeners(pos, state, state, 3);
-                    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
-                }
+            SimpleInventory inventory = new SimpleInventory(cookStack);
+            ItemStack cookedStack = ovenBE.matchGetter.getFirstMatch(inventory, world)
+                    .map(recipe -> recipe.craft(inventory, world.getRegistryManager()))
+                    .orElse(cookStack);
 
+            if (ovenBE.cookTime >= ovenBE.cookTimeTotal && cookedStack.isItemEnabled(world.getEnabledFeatures())) {
+                ovenBE.setStack(cookedStack);
+                world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
+                world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
             }
         }
 
-        if (bInventoryChanged) {
-            ovenBE.markDirty();
+        if (bInvChanged) {
+            markDirty(world, pos, state);
         }
+    }
 
+    protected static void markDirty(World world, BlockPos pos, BlockState state) {
+        world.markDirty(pos);
+        if (!state.isAir()) {
+            world.updateComparators(pos, state.getBlock());
+        }
     }
 
     public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE oven) {

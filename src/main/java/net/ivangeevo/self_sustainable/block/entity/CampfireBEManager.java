@@ -31,7 +31,8 @@ public abstract class CampfireBEManager
 
         boolean bInvChanged = false;
 
-        for (int i = 0; i < campfireBE.getItemsBeingCooked().size(); ++i) {
+        for (int i = 0; i < campfireBE.getItemsBeingCooked().size(); ++i)
+        {
             SimpleInventory inventory;
             ItemStack itemStack2;
             ItemStack itemStack = campfireBE.getItemsBeingCooked().get(i);
@@ -44,7 +45,9 @@ public abstract class CampfireBEManager
             world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
             world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
         }
-        if (bInvChanged) {
+
+        if (bInvChanged)
+        {
             markDirty(world, pos, state);
         }
     }

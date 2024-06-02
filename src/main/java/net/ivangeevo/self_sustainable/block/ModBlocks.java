@@ -28,6 +28,10 @@ public class ModBlocks
             new BrickOvenBlock(FabricBlockSettings.create().strength(1.5F,2.0F)
                     .luminance((state) -> state.get(LIT) ? 10 : 0)
                     .sounds(BlockSoundGroup.STONE)));
+    public static final Block SMOKER_BRICK = registerBlock("smoker_brick",
+            new SmokerOvenBlock(FabricBlockSettings.create().strength(1.5F,2.0F)
+                    .luminance((state) -> state.get(LIT) ? 10 : 0)
+                    .sounds(BlockSoundGroup.STONE)));
     /**
      public static final Block TORCH = registerBlockWithoutItem("torch",
      new ModTorchBlock(setTorchSettings(), ParticleTypes.FLAME));

@@ -1,28 +1,24 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-import com.google.common.collect.Maps;
-import net.ivangeevo.self_sustainable.block.ModBlocks;
-import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;
+import net.ivangeevo.self_sustainable.block.entity.SmokerOvenBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.ivangeevo.self_sustainable.tag.ModTags;
-import net.minecraft.SharedConstants;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.*;
-import net.minecraft.command.argument.ParticleEffectArgumentType;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.*;
-import net.minecraft.particle.ParticleEffect;
+import net.minecraft.item.FlintAndSteelItem;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.CampfireCookingRecipe;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -32,30 +28,24 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.Util;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
-public class BrickOvenBlock extends BlockWithEntity implements Ignitable
+public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
     protected final float clickYTopPortion = (6F / 16F);
     protected final float clickYBottomPortion = (6F / 16F);
 
-    public BrickOvenBlock(Settings settings) {
+    public SmokerOvenBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(LIT,false)
@@ -70,7 +60,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
     @Override @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new BrickOvenBE( pos, state );
+        return new SmokerOvenBE( pos, state );
     }
 
     @Override
@@ -85,7 +75,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
         if (world.getBlockState(pos) == this.getDefaultState().with(LIT, true))
         {
-            if (world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE)
+            if (world.getBlockEntity(pos) instanceof SmokerOvenBE ovenBE)
             {
                 if ( ovenBE.attemptToLight() )
                 {
@@ -121,7 +111,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         }
 
 
-        if (blockEntity instanceof BrickOvenBE ovenBE)
+        if (blockEntity instanceof SmokerOvenBE ovenBE)
         {
             Optional<OvenCookingRecipe> optional;
 
@@ -213,11 +203,11 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     {
         if (world.isClient)
         {
-            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::clientTick);
+            return SmokerOvenBlock.checkType(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::clientTick);
         }
         else
         {
-            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::serverTick);
+            return SmokerOvenBlock.checkType(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::serverTick);
         }
     }
 
@@ -237,7 +227,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof BrickOvenBE ovenBE)
+        if (blockEntity instanceof SmokerOvenBE ovenBE)
         {
             // Drops the contents inside when the block is destroyed
             ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getStack());
@@ -251,7 +241,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
         if ( state.get(LIT) )
         {
-            BrickOvenBE ovenBE = (BrickOvenBE) world.getBlockEntity( pos );
+            SmokerOvenBE ovenBE = (SmokerOvenBE) world.getBlockEntity( pos );
             int iFuelLevel = ovenBE.getVisualFuelLevel();
 
             if ( iFuelLevel == 1 )

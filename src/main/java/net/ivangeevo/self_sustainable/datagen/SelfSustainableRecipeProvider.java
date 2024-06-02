@@ -91,12 +91,12 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
     }
 
-    private void addSmokingRecipes()
+    private void addOvenSmokingRecipes()
     {
 
     }
 
-    private void addBlastingRecipes()
+    private void addOvenBlastingRecipes()
     {
 
     }
@@ -122,13 +122,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     }
 
 
-    private void addFurnaceCookingRecipes(Consumer<RecipeJsonProvider> exporter)
-    {
 
-        // Ores
-        VanillaRecipeProvider.offerSmelting(exporter, List.of(Items.RAW_IRON), RecipeCategory.MISC, Items.IRON_NUGGET, 0.25f, 120, "group_btwr");
-
-    }
 
 
 

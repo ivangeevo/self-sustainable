@@ -3,6 +3,7 @@
 package net.ivangeevo.self_sustainable.item.items;
 
 
+import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockEntityAdded;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemStackAdded;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
 import net.minecraft.block.BlockState;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
-/**
+
 public class FireStarterItemPrimitive extends FireStarterItem
 {
 
@@ -46,9 +47,13 @@ public class FireStarterItemPrimitive extends FireStarterItem
     protected boolean checkChanceOfStart(ItemStack stack, net.minecraft.util.math.random.Random random) {
         boolean bReturnValue = false;
 
-        float fChance = stack.getAccumulatedChance(baseChance);
+        // Use this cast to get access to the new variables.
+        ItemStackAdded stackAdded;
+        stackAdded = stack;
+
+        float fChance = stackAdded.getAccumulatedChance(baseChance);
         long lCurrentTime = WorldUtils.getOverworldTimeServerOnly();
-        long lLastTime = stack.getTimeOfLastUse();
+        long lLastTime = stackAdded.getTimeOfLastUse();
 
         if ( lLastTime > 0 )
         {
@@ -87,10 +92,11 @@ public class FireStarterItemPrimitive extends FireStarterItem
             fChance = maxChance;
         }
 
-        stack.setAccumulatedChance(fChance);
-        stack.setTimeOfLastUse(lCurrentTime);
+        stackAdded.setAccumulatedChance(fChance);
+        stackAdded.setTimeOfLastUse(lCurrentTime);
 
-        return bReturnValue;    }
+        return bReturnValue;
+    }
 
     @Override
     protected void performUseEffects(PlayerEntity player) {
@@ -116,11 +122,11 @@ public class FireStarterItemPrimitive extends FireStarterItem
     }
 
     @Override
-    protected boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing)
+    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing)
     {
         if ( super.attemptToLightBlock(stack, world, pos, facing) )
         {
-            stack.setAccumulatedChance(baseChance);
+            ((ItemStackAdded)stack).setAccumulatedChance(baseChance);
 
             return true;
         }
@@ -129,7 +135,8 @@ public class FireStarterItemPrimitive extends FireStarterItem
     }
 
     @Override
-    public int getOvenBurnTime(int ticks) {
+    public int getOvenBurnTime(int ticks)
+    {
         return 0;
     }
 
@@ -188,4 +195,3 @@ public class FireStarterItemPrimitive extends FireStarterItem
     //----------- Client Side Functionality -----------//
 
 }
- **/

@@ -32,6 +32,8 @@ public class ModItemGroup {
 
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);
+                        entries.add(ModBlocks.SMOKER_BRICK);
+
 
                     }).build());
 

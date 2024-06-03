@@ -16,11 +16,12 @@ public class FuelRegistryManager
 {
 
     // Register all entries here.
-    public static void init()
+    public static void initEntries()
     {
         modifyEntry(Items.COAL_BLOCK, 14400);
         modifyEntry(Items.BLAZE_ROD, 12800);
         modifyEntry(ItemTags.BAMBOO_BLOCKS, 100);
+        modifyEntry(Items.STICK, 50);
 
 
         removeFuelItems();

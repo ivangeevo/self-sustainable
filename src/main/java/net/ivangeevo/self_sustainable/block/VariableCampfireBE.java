@@ -132,25 +132,7 @@ public class VariableCampfireBE
         boolean bInvChanged = false;
 
 
-        for (int i = 0; i < campfireBE.getItemsBeingCooked().size(); ++i)
-        {
-            SimpleInventory inventory;
-            ItemStack itemStack2;
-            ItemStack itemStack = campfireBE.getItemsBeingCooked().get(i);
-            if (itemStack.isEmpty()) continue;
-            bInvChanged = true;
-            cookingTime = cookingTime + 1;
-            if (cookingTime < cookingTotalTime || !(itemStack2 = campfireBE.matchGetter.getFirstMatch(inventory = new SimpleInventory(itemStack), world).map(recipe -> recipe.craft(inventory, world.getRegistryManager())).orElse(itemStack)).isItemEnabled(world.getEnabledFeatures())) continue;
-            campfireBE.getItemsBeingCooked().set(i, itemStack2);
-            world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
-        }
 
-
-        if (bInvChanged)
-        {
-            markDirty(world, pos, state);
-        }
 
 
 
@@ -167,7 +149,7 @@ public class VariableCampfireBE
              }
              **/
 
-            campfireBE.setBurnTime(campfireBE.getBurnTime() + 1);
+            campfireBE.burnTimeSinceLit++;
 
 
             if (campfireBE.burnTimeCountdown > 0 )
@@ -186,7 +168,24 @@ public class VariableCampfireBE
 
             if ( iCurrentFireLevel > 0 )
             {
-                //updateCookState(world, pos ,state, campfireBE);
+                for (int i = 0; i < campfireBE.getItemsBeingCooked().size(); ++i)
+                {
+                SimpleInventory inventory;
+                ItemStack itemStack2;
+                ItemStack itemStack = campfireBE.getItemsBeingCooked().get(i);
+                if (itemStack.isEmpty()) continue;
+                bInvChanged = true;
+                cookingTime = cookingTime + 1;
+                if (cookingTime < cookingTotalTime || !(itemStack2 = campfireBE.matchGetter.getFirstMatch(inventory = new SimpleInventory(itemStack), world).map(recipe -> recipe.craft(inventory, world.getRegistryManager())).orElse(itemStack)).isItemEnabled(world.getEnabledFeatures())) continue;
+                campfireBE.getItemsBeingCooked().set(i, itemStack2);
+                world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
+                world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
+                }
+
+                if (bInvChanged)
+                {
+                    markDirty(world, pos, state);
+                }
 
                 if (world.random.nextFloat() <= CHANCE_OF_GOING_OUT_FROM_RAIN && campfireBE.isRainingOnCampfire(world, pos) )
                 {

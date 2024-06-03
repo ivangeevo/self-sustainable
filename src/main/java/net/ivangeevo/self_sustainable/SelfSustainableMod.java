@@ -53,7 +53,7 @@ public class SelfSustainableMod implements ModInitializer
         FuelTicksManager.loadFuelTicks();
 
         // Removing and adding new fuel items.
-        FuelRegistryManager.init();
+        FuelRegistryManager.initEntries();
 
         // Predicates
         //ModelPredicateProviderRegistry.register(ModItems.TORCH, new Identifier("Lit"), (stack, world, entity, seed) -> TorchBlockEntity.isLit(stack) ? 1.0f : 0.0f);

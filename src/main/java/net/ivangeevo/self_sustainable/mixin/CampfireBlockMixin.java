@@ -184,6 +184,23 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                 world.addParticle(ParticleTypes.LAVA, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, random.nextFloat() / 2.0f, 5.0E-5, random.nextFloat() / 2.0f);
             }
         }
+
+        if (state.get(FIRE_LEVEL) > 0 )
+        {
+            if ( random.nextInt(24) == 0 )
+            {
+                float fVolume = (state.get(FIRE_LEVEL) * 0.25F ) + random.nextFloat();
+
+                double d = (double) pos.getX() + 0.5;
+                double e = pos.getY();
+                double f = (double) pos.getZ() + 0.5;
+
+                world.playSound(d, e, f, SoundEvents.BLOCK_FIRE_AMBIENT,
+                        SoundCategory.BLOCKS, fVolume,
+                        random.nextFloat() * 0.7F + 0.3F, false  );
+
+            }
+        }
         ci.cancel();
     }
 
@@ -216,7 +233,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "canBeLit", at = @At("HEAD"), cancellable = true)
     private static void injectedCanBeLit(BlockState state, CallbackInfoReturnable<Boolean> cir)
     {
-        cir.setReturnValue( state.isIn(BlockTags.CAMPFIRES, statex -> statex.contains(WATERLOGGED) && statex.contains(FIRE_LEVEL)) && !state.get(WATERLOGGED) && state.get(FIRE_LEVEL) <= 0 );
+        cir.setReturnValue( state.isIn(BlockTags.CAMPFIRES, statex -> statex.contains(WATERLOGGED) && statex.contains(FIRE_LEVEL) && statex.contains(FUEL_STATE)) && !state.get(WATERLOGGED) && state.get(FIRE_LEVEL) <= 0 && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT));
 
     }
     @Override

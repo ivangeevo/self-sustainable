@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static net.minecraft.block.CampfireBlock.*;
+import static net.minecraft.block.entity.AbstractFurnaceBlockEntity.createFuelTimeMap;
 
 public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
 {
@@ -72,7 +73,7 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
             // Handle stick input
             if (!getHasSpit(world, pos))
             {
-                if (heldStack.isOf(Items.STICK))
+                if (heldStack.isOf(Items.STICK) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT))
                 {
                     setHasSpit(world, state, pos, true);
                     heldStack.decrement(1); // Decrease the heldStack count
@@ -84,11 +85,11 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
             {
                 //TODO: Make it not retrieve the item if the heldStack is of the fuel items ( campfireFuelMap() )
                 // Check if the heldStack is in the campfireFuelMap
-                Map<Item, Integer> fuelMap = campfireFuelMap();
-                if (!getCookStack(campfireBE).isEmpty() &&
-                        !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) &&
-                        !heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS) &&
-                        !fuelMap.containsKey(heldStack.getItem())) {
+                Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
+
+                if (!getCookStack(campfireBE).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS)
+                        && !heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS) && !fuelMap.containsKey(heldStack.getItem()))
+                {
                     campfireAdded.retrieveItem(world, campfireBE, player);
                     playGetItemSound(world, pos, player);
                     return ActionResult.SUCCESS;

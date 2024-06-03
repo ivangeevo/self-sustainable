@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.client;
 
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.renderer.BrickOvenBlockEntityRenderer;
+import net.ivangeevo.self_sustainable.block.entity.renderer.CampfireBERenderer;
 import net.ivangeevo.self_sustainable.block.entity.renderer.SmokerOvenBlockEntityRenderer;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.fabricmc.api.ClientModInitializer;
@@ -20,6 +21,8 @@ public class SelfSustainableClient implements ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMOKER_BRICK, RenderLayer.getCutout());
         BlockEntityRendererFactories.register(ModBlockEntities.SMOKER_BRICK, SmokerOvenBlockEntityRenderer::new);
+
+        BlockEntityRendererFactories.register(ModBlockEntities.CAMPFIRE, CampfireBERenderer::new);
 
 
         /**

@@ -25,7 +25,7 @@ import net.minecraft.world.event.GameEvent;
 import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FUEL_STATE;
 
-public abstract class CampfireBEManager
+public class CampfireBEManager
 {
 
     private static final int BASE_BURN_TIME_MULTIPLIER = 2;
@@ -56,6 +56,29 @@ public abstract class CampfireBEManager
         // Use this cast to get access to the new variables.
         CampfireBlockEntityAdded entity;
         entity = campfireBE;
+
+
+        boolean bInvChanged = false;
+
+        for (int i = 0; i < campfireBE.getItemsBeingCooked().size(); ++i)
+        {
+            SimpleInventory inventory;
+            ItemStack itemStack2;
+            ItemStack itemStack = campfireBE.getItemsBeingCooked().get(i);
+            if (itemStack.isEmpty()) continue;
+            bInvChanged = true;
+            campfireBE.cookingTimes[i] = campfireBE.cookingTimes[i] + 1;
+            if (campfireBE.cookingTimes[i] < campfireBE.cookingTotalTimes[i] || !(itemStack2 = campfireBE.matchGetter.getFirstMatch(inventory = new SimpleInventory(itemStack), world).map(recipe -> recipe.craft(inventory, world.getRegistryManager())).orElse(itemStack)).isItemEnabled(world.getEnabledFeatures())) continue;
+            campfireBE.getItemsBeingCooked().set(i, itemStack2);
+            world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
+            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
+        }
+
+        if (bInvChanged)
+        {
+            markDirty(world, pos, state);
+        }
+
 
 
         int iCurrentFireLevel = getCurrentFireLevel(state);
@@ -110,27 +133,7 @@ public abstract class CampfireBEManager
 
 
 
-        boolean bInvChanged = false;
 
-        for (int i = 0; i < campfireBE.getItemsBeingCooked().size(); ++i)
-        {
-            SimpleInventory inventory;
-            ItemStack itemStack2;
-            ItemStack itemStack = campfireBE.getItemsBeingCooked().get(i);
-            if (itemStack.isEmpty()) continue;
-            bInvChanged = true;
-            int n = i;
-            campfireBE.cookingTimes[n] = campfireBE.cookingTimes[n] + 1;
-            if (campfireBE.cookingTimes[i] < campfireBE.cookingTotalTimes[i] || !(itemStack2 = campfireBE.matchGetter.getFirstMatch(inventory = new SimpleInventory(itemStack), world).map(recipe -> recipe.craft(inventory, world.getRegistryManager())).orElse(itemStack)).isItemEnabled(world.getEnabledFeatures())) continue;
-            campfireBE.getItemsBeingCooked().set(i, itemStack2);
-            world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
-        }
-
-        if (bInvChanged)
-        {
-            markDirty(world, pos, state);
-        }
     }
 
     private static void updateCookState(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfireBE)
@@ -245,7 +248,7 @@ public abstract class CampfireBEManager
         {
             if (burnTimeCountdown > 0 && state.get(FUEL_STATE) == CampfireState.SMOULDERING)
             {
-                relightSmouldering(state);
+                relightSmouldering(world, pos);
                 return 1;
             }
         }
@@ -253,20 +256,21 @@ public abstract class CampfireBEManager
         return iCurrentFireLevel;
     }
 
-    public static void changeFireLevel(World world, BlockPos pos, BlockState state, int iFireLevel)
+    public static void changeFireLevel(World world, BlockPos pos, BlockState state, int fireLevel)
     {
         CampfireBlock block = (CampfireBlock) state.getBlock();
 
-        ((CampfireBlockAdded)block).changeFireLevel(world, pos, state, iFireLevel);
+        ((CampfireBlockAdded)block).changeFireLevel( world, pos, fireLevel );
     }
 
-    private static void relightSmouldering(BlockState state)
+    private static void relightSmouldering(World world, BlockPos pos)
     {
         burnTimeSinceLit = 0;
 
+        BlockState state = world.getBlockState(pos);
         CampfireBlock block = (CampfireBlock) state.getBlock();
 
-        ((CampfireBlockAdded)block).relightFire(state);
+        ((CampfireBlockAdded)block).relightFire(world, pos);
     }
 
     private static void extinguishFire(World world, BlockState state, BlockPos pos, boolean bSmoulder)

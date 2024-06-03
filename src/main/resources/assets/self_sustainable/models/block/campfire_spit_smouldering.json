@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"2": "self_sustainable:block/campfire_burned",
+		"2": "self_sustainable:block/campfire_embers",
 		"particle": "block/campfire_log",
 		"log": "block/campfire_log",
 		"spit": "self_sustainable:block/campfire_spit"

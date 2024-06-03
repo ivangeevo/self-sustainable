@@ -1,13 +1,14 @@
 package net.ivangeevo.self_sustainable.mixin;
 
 import net.ivangeevo.self_sustainable.block.CampfireBlockManager;
+import net.ivangeevo.self_sustainable.block.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.interfaces.*;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
+import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -37,10 +38,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.dimension.NetherPortal;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -74,6 +72,12 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         //this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false).with(FIRE_LEVEL, 0).with(FUEL_STATE, CampfireState.NORMAL).with(HAS_SPIT, false));
         this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false).with(FIRE_LEVEL, 0).with(FUEL_STATE, CampfireState.NORMAL).with(HAS_SPIT, false));
 
+    }
+
+    @Inject(method = "createBlockEntity", at = @At("HEAD"), cancellable = true)
+    private void injectedBE(BlockPos pos, BlockState state, CallbackInfoReturnable<BlockEntity> cir)
+    {
+        cir.setReturnValue(new VariableCampfireBE(pos, state));
     }
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
@@ -183,27 +187,29 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         ci.cancel();
     }
 
-    @Inject(method = "getTicker", at = @At("HEAD"), cancellable = true)
-    private void injectGetTicker(World world, BlockState state, BlockEntityType<?> type, CallbackInfoReturnable<BlockEntityTicker<?>> cir) {
-        if (world.isClient) {
+    /**
+     * @author
+     * @reason couldn't get it to work otherwise than overwrite. maybe its possible though.
+     */
+    @Overwrite
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        if (world.isClient)
+        {
             if (state.get(FIRE_LEVEL) > 0)
             {
-
-                cir.setReturnValue( checkType(type, BlockEntityType.CAMPFIRE, CampfireBlockEntity::clientTick) );
+                return checkType(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::clientTick);
             }
         }
         else
         {
             if (state.get(FIRE_LEVEL) > 0)
             {
-
-                cir.setReturnValue( checkType(type, BlockEntityType.CAMPFIRE, CampfireBlockEntity::litServerTick) );
+                return checkType(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::litServerTick);
             }
-
-            cir.setReturnValue( checkType(type, BlockEntityType.CAMPFIRE, CampfireBlockEntity::unlitServerTick) );
+            return checkType(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::unlitServerTick);
         }
-
-        cir.setReturnValue(null); // Set the default return value if none of the conditions are met
+        return null;
     }
 
 
@@ -231,10 +237,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
             if (!isRainingOnCampfire(world, pos))
             {
-                changeFireLevel(world, pos, world.getBlockState(pos), 1);
+                changeFireLevel(world, pos, 1);
 
-                CampfireBlockEntity campfireBE = (CampfireBlockEntity) world.getBlockEntity(pos);
+                VariableCampfireBE campfireBE = (VariableCampfireBE) world.getBlockEntity(pos);
 
+                assert campfireBE != null;
                 ((CampfireBlockEntityAdded)campfireBE).onFirstLit();
 
                 BlockPos soundPos =
@@ -273,11 +280,12 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
-    public void changeFireLevel(World world, BlockPos pos, BlockState state, int newFireLevel)
+    public void changeFireLevel(World world, BlockPos pos, int fireLevel)
     {
         //CampfireBlock.campfireChangingState = true;
 
-        world.setBlockState( pos, state.with(FIRE_LEVEL, newFireLevel), Block.NOTIFY_ALL);
+        BlockState tempState = world.getBlockState(pos);
+        world.setBlockState( pos, tempState.with(FIRE_LEVEL, fireLevel), Block.NOTIFY_ALL);
 
         //CampfireBlock.campfireChangingState = false;
     }
@@ -287,7 +295,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
-    public void relightFire(BlockState state) {
+    public void relightFire(World world, BlockPos pos) {
+        changeFireLevel(world, pos, setFuelState(world, pos, CampfireState.NORMAL));
 
     }
 
@@ -308,14 +317,14 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
         if ( bSmoulder )
         {
-            setFuelState(world, pos, CampfireState.SMOULDERING.ordinal());
+            setFuelState(world, pos, CampfireState.SMOULDERING);
         }
         else
         {
-            setFuelState(world, pos, CampfireState.BURNED_OUT.ordinal());
+            setFuelState(world, pos, CampfireState.BURNED_OUT);
         }
 
-        changeFireLevel(world, pos, state, 0);
+        changeFireLevel(world, pos, 0);
 
         if ( !world.isClient() )
         {
@@ -326,19 +335,25 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Override
     public void stopSmouldering(World world, BlockPos pos)
     {
-        setFuelState(world, pos, CampfireState.SMOULDERING.ordinal());
+        setFuelState(world,pos, CampfireState.BURNED_OUT);
     }
 
-    @Unique
-    public BlockState setFuelState(World world, BlockPos pos, int fireState)
+    // Method to set the fuel state
+
+    public int setFuelState(World world, BlockPos pos, CampfireState fuelState)
     {
-        BlockState tempState = world.getBlockState(pos);
-        return tempState.with(FUEL_STATE, CampfireState.convertToEnumState(fireState));
+        BlockState state = world.getBlockState(pos);
+        return setCampfireState(state, setCampfireState(state, fuelState)).ordinal();
+    }
+
+    public CampfireState setCampfireState(BlockState state, CampfireState fuelState)
+    {
+      return state.get(FUEL_STATE);
     }
 
     public void relightFire(World world, BlockPos pos, BlockState state)
     {
-        changeFireLevel(world, pos, state, 1);
+        changeFireLevel(world, pos, 1);
     }
 
 

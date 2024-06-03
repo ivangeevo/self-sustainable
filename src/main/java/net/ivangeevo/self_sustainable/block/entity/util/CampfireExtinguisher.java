@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 
 public abstract class CampfireExtinguisher
 {
+    /**
     public static void handleExtinguishing(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfireBlockEntity) {
         CampfireBlockEntityAdded fire = campfireBlockEntity;
 
@@ -30,4 +31,5 @@ public abstract class CampfireExtinguisher
             campfireBlockEntity.markDirty();
         }
     }
+     **/
 }

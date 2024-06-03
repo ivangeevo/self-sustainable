@@ -5,7 +5,6 @@ import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockEntityAdded;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
-import net.ivangeevo.self_sustainable.item.items.FireStarterItemPrimitive;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
@@ -53,14 +52,14 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
         CampfireBlockEntityAdded campfireAdded;
         campfireAdded = (CampfireBlockEntityAdded) blockEntity;
 
-        if (blockEntity instanceof CampfireBlockEntity campfireBE)
+        if (blockEntity instanceof VariableCampfireBE campfireBE)
         {
             Optional<CampfireCookingRecipe> optional;
 
             // Logic for insta-lighting items
             if (player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) && state.get(FIRE_LEVEL) == 0)
             {
-                if (!world.isClient())
+                if (!world.isClient)
                 { // Only execute on the server
                     world.setBlockState(pos, state.with(FIRE_LEVEL, 1));
                 }
@@ -83,12 +82,15 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
             }
             else
             {
+                //TODO: Make it not retrieve the item if the heldStack is of the fuel items ( campfireFuelMap() )
+                // Check if the heldStack is in the campfireFuelMap
+                Map<Item, Integer> fuelMap = campfireFuelMap();
                 if (!getCookStack(campfireBE).isEmpty() &&
-                        ( !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) && !heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS) ))
-                {
+                        !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) &&
+                        !heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS) &&
+                        !fuelMap.containsKey(heldStack.getItem())) {
                     campfireAdded.retrieveItem(world, campfireBE, player);
                     playGetItemSound(world, pos, player);
-
                     return ActionResult.SUCCESS;
                 }
 
@@ -124,7 +126,6 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
                     if ( !world.isClient )
                     {
                         Ignitable.playLitFX(world, pos);
-
                         campfireAdded.addBurnTime(state, itemBurnTime);
                     }
 
@@ -277,7 +278,7 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
 
 
 
-    private static ItemStack getCookStack(CampfireBlockEntity campfireBE)
+    private static ItemStack getCookStack(VariableCampfireBE campfireBE)
     {
         return campfireBE.getItemsBeingCooked().get(0);
     }

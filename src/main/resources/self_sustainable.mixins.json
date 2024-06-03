@@ -7,7 +7,7 @@
     "BlockEntityMixin",
     "BlockMixin",
     "BlocksMixin",
-    "CampfireBlockEntityMixin",
+    "CampfireBlockMixin",
     "DifficultyMixin",
     "FlintAndSteelItemMixin",
     "HungerManagerMixin",

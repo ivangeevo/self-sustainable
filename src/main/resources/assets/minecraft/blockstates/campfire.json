@@ -1,65 +1,66 @@
 {
   "variants":
   {
-    "facing=east,lit=false,has_spit=false": {
-      "model": "minecraft:block/campfire_off",
-      "y": 270
-    },
-    "facing=east,lit=true,has_spit=false": {
-      "model": "minecraft:block/campfire",
-      "y": 270
-    },
-    "facing=north,lit=false,has_spit=false": {
-      "model": "minecraft:block/campfire_off",
-      "y": 180
-    },
-    "facing=north,lit=true,has_spit=false": {
-      "model": "minecraft:block/campfire",
-      "y": 180
-    },
-    "facing=south,lit=false,has_spit=false": {
-      "model": "minecraft:block/campfire_off"
-    },
-    "facing=south,lit=true,has_spit=false": {
-      "model": "minecraft:block/campfire"
-    },
-    "facing=west,lit=false,has_spit=false": {
-      "model": "minecraft:block/campfire_off",
-      "y": 90
-    },
-    "facing=west,lit=true,has_spit=false": {
-      "model": "minecraft:block/campfire",
-      "y": 90
-    },
-    "facing=east,lit=false,has_spit=true": {
-      "model": "self_sustainable:block/campfire_off_spit",
-      "y": 270
-    },
-    "facing=east,lit=true,has_spit=true": {
-      "model": "self_sustainable:block/campfire_spit",
-      "y": 270
-    },
-    "facing=north,lit=false,has_spit=true": {
-      "model": "self_sustainable:block/campfire_off_spit",
-      "y": 180
-    },
-    "facing=north,lit=true,has_spit=true": {
-      "model": "self_sustainable:block/campfire_spit",
-      "y": 180
-    },
-    "facing=south,lit=false,has_spit=true": {
-      "model": "self_sustainable:block/campfire_off_spit"
-    },
-    "facing=south,lit=true,has_spit=true": {
-      "model": "self_sustainable:block/campfire_spit"
-    },
-    "facing=west,lit=false,has_spit=true": {
-      "model": "self_sustainable:block/campfire_off_spit",
-      "y": 90
-    },
-    "facing=west,lit=true,has_spit=true": {
-      "model": "self_sustainable:block/campfire_spit",
-      "y": 90
-    }
+    "facing=east,has_spit=false,fuel_state=normal,fire_level=0": { "model": "minecraft:block/campfire_off", "y": 270 },
+    "facing=north,has_spit=false,fuel_state=normal,fire_level=0": { "model": "minecraft:block/campfire_off", "y": 180 },
+    "facing=south,has_spit=false,fuel_state=normal,fire_level=0": { "model": "minecraft:block/campfire_off" },
+    "facing=west,has_spit=false,fuel_state=normal,fire_level=0": { "model": "minecraft:block/campfire_off", "y": 90 },
+    "facing=east,has_spit=true,fuel_state=normal,fire_level=0": { "model": "self_sustainable:block/campfire_spit_off", "y": 270 },
+    "facing=north,has_spit=true,fuel_state=normal,fire_level=0": { "model": "self_sustainable:block/campfire_spit_off", "y": 180 },
+    "facing=south,has_spit=true,fuel_state=normal,fire_level=0": { "model": "self_sustainable:block/campfire_spit_off" },
+    "facing=west,has_spit=true,fuel_state=normal,fire_level=0": { "model": "self_sustainable:block/campfire_spit_off", "y": 90 },
+
+    "facing=east,has_spit=false,fuel_state=normal,fire_level=1": { "model": "self_sustainable:block/campfire_fire_1", "y": 270 },
+    "facing=north,has_spit=false,fuel_state=normal,fire_level=1": { "model": "self_sustainable:block/campfire_fire_1", "y": 180 },
+    "facing=south,has_spit=false,fuel_state=normal,fire_level=1": { "model": "self_sustainable:block/campfire_fire_1" },
+    "facing=west,has_spit=false,fuel_state=normal,fire_level=1": { "model": "self_sustainable:block/campfire_fire_1", "y": 90 },
+    "facing=east,has_spit=true,fuel_state=normal,fire_level=1": { "model": "self_sustainable:block/campfire_spit_fire_1", "y": 270 },
+    "facing=north,has_spit=true,fuel_state=normal,fire_level=1": { "model": "self_sustainable:block/campfire_spit_fire_1", "y": 180 },
+    "facing=south,has_spit=true,fuel_state=normal,fire_level=1": { "model": "self_sustainable:block/campfire_spit_fire_1" },
+    "facing=west,has_spit=true,fuel_state=normal,fire_level=1": { "model": "self_sustainable:block/campfire_spit_fire_1", "y": 90 },
+
+    "facing=east,has_spit=false,fuel_state=normal,fire_level=2": { "model": "self_sustainable:block/campfire_fire_2", "y": 270 },
+    "facing=north,has_spit=false,fuel_state=normal,fire_level=2": { "model": "self_sustainable:block/campfire_fire_2", "y": 180 },
+    "facing=south,has_spit=false,fuel_state=normal,fire_level=2": { "model": "self_sustainable:block/campfire_fire_2" },
+    "facing=west,has_spit=false,fuel_state=normal,fire_level=2": { "model": "self_sustainable:block/campfire_fire_2", "y": 90 },
+    "facing=east,has_spit=true,fuel_state=normal,fire_level=2": { "model": "self_sustainable:block/campfire_spit_fire_2", "y": 270 },
+    "facing=north,has_spit=true,fuel_state=normal,fire_level=2": { "model": "self_sustainable:block/campfire_spit_fire_2", "y": 180 },
+    "facing=south,has_spit=true,fuel_state=normal,fire_level=2": { "model": "self_sustainable:block/campfire_spit_fire_2" },
+    "facing=west,has_spit=true,fuel_state=normal,fire_level=2": { "model": "self_sustainable:block/campfire_spit_fire_2", "y": 90 },
+
+    "facing=east,has_spit=false,fuel_state=normal,fire_level=3": { "model": "self_sustainable:block/campfire_fire_3", "y": 270 },
+    "facing=north,has_spit=false,fuel_state=normal,fire_level=3": { "model": "self_sustainable:block/campfire_fire_3", "y": 180 },
+    "facing=south,has_spit=false,fuel_state=normal,fire_level=3": { "model": "self_sustainable:block/campfire_fire_3" },
+    "facing=west,has_spit=false,fuel_state=normal,fire_level=3": { "model": "self_sustainable:block/campfire_fire_3", "y": 90 },
+    "facing=east,has_spit=true,fuel_state=normal,fire_level=3": { "model": "self_sustainable:block/campfire_spit_fire_3", "y": 270 },
+    "facing=north,has_spit=true,fuel_state=normal,fire_level=3": { "model": "self_sustainable:block/campfire_spit_fire_3", "y": 180 },
+    "facing=south,has_spit=true,fuel_state=normal,fire_level=3": { "model": "self_sustainable:block/campfire_spit_fire_3" },
+    "facing=west,has_spit=true,fuel_state=normal,fire_level=3": { "model": "self_sustainable:block/campfire_spit_fire_3", "y": 90 },
+
+
+
+
+    "facing=east,has_spit=false,fuel_state=burned_out": { "model": "self_sustainable:block/campfire_burned_out", "y": 270 },
+    "facing=north,has_spit=false,fuel_state=burned_out": { "model": "self_sustainable:block/campfire_burned_out", "y": 180 },
+    "facing=south,has_spit=false,fuel_state=burned_out": { "model": "self_sustainable:block/campfire_burned_out" },
+    "facing=west,has_spit=false,fuel_state=burned_out": { "model": "self_sustainable:block/campfire_burned_out", "y": 90 },
+
+    "facing=east,has_spit=true,fuel_state=burned_out": { "model": "self_sustainable:block/campfire_spit_burned_out", "y": 270 },
+    "facing=north,has_spit=true,fuel_state=burned_out": { "model": "self_sustainable:block/campfire_spit_burned_out", "y": 180 },
+    "facing=south,has_spit=true,fuel_state=burned_out": { "model": "self_sustainable:block/campfire_spit_burned_out" },
+    "facing=west,has_spit=true,fuel_state=burned_out": { "model": "self_sustainable:block/campfire_spit_burned_out", "y": 90 },
+
+
+
+
+    "facing=east,has_spit=false,fuel_state=smouldering": { "model": "self_sustainable:block/campfire_smouldering", "y": 270 },
+    "facing=north,has_spit=false,fuel_state=smouldering": { "model": "self_sustainable:block/campfire_smouldering", "y": 180 },
+    "facing=south,has_spit=false,fuel_state=smouldering": { "model": "self_sustainable:block/campfire_smouldering" },
+    "facing=west,has_spit=false,fuel_state=smouldering": { "model": "self_sustainable:block/campfire_smouldering", "y": 90 },
+
+    "facing=east,has_spit=true,fuel_state=smouldering": { "model": "self_sustainable:block/campfire_spit_smouldering", "y": 270 },
+    "facing=north,has_spit=true,fuel_state=smouldering": { "model": "self_sustainable:block/campfire_spit_off", "y": 180 },
+    "facing=south,has_spit=true,fuel_state=smouldering": { "model": "self_sustainable:block/campfire_spit_off" },
+    "facing=west,has_spit=true,fuel_state=smouldering": { "model": "self_sustainable:block/campfire_spit_off", "y": 90 }
   }
 }

@@ -31,9 +31,6 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
             .add(ModItems.FIRESTARTER_BOW);
 
         getOrCreateTagBuilder(ModTags.Items.DIRECTLY_IGNITER_ITEMS)
-
-                // TODO: Remove primitive firestarter from here later on, as they shouldn't insta-light
-                .addTag(ModTags.Items.PRIMITIVE_FIRESTARTERS)
                 .add(Items.TORCH)
                 .add(Items.SOUL_TORCH);
 

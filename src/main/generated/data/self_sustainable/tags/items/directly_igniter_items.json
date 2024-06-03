@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "#self_sustainable:primitive_firestarters",
     "minecraft:torch",
     "minecraft:soul_torch"
   ]

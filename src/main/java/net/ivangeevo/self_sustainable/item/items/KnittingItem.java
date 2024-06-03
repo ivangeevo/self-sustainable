@@ -51,13 +51,13 @@ public class KnittingItem extends ProgressiveCraftingItem
     }
 
     @Override
-    public boolean getCanBeFedDirectlyIntoCampfire(int iItemDamage)
+    public boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack)
     {
         return false;
     }
 
     @Override
-    public boolean getCanBeFedDirectlyIntoBrickOven(int iItemDamage)
+    public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack)
     {
         return false;
     }

@@ -30,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
+import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 
 
 @Mixin(CampfireBlockEntity.class)
@@ -91,6 +92,7 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     }
 
 
+
     public CampfireBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
@@ -108,8 +110,6 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
         CampfireExtinguisher.handleExtinguishing(world, pos, state, blockEntity);
         CampfireBEManager.onLitServerTick(world, pos, state, blockEntity);
         ci.cancel();
-
-
     }
 
     @Inject(method = "clientTick", at = @At("HEAD"), cancellable = true)
@@ -122,13 +122,25 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     @Inject(method = "readNbt", at = @At("RETURN"))
     private void readNbt(NbtCompound nbt, CallbackInfo ci)
     {
-        if (nbt.contains("LitTime")) { litTime = nbt.getInt("LitTime"); }
+        //if (nbt.contains("LitTime")) { litTime = nbt.getInt("LitTime"); }
+
+        if (nbt.contains("BurnCounter" )) { burnTimeCountdown = nbt.getInt("BurnCounter"); }
+        if (nbt.contains("BurnTime" )) { burnTimeSinceLit = nbt.getInt("BurnTime"); }
+        if (nbt.contains("SmoulderCounter" )) { smoulderCounter = nbt.getInt("SmoulderCounter"); }
+        if (nbt.contains("CookBurning")) { cookBurningCounter = nbt.getInt("CookBurning"); }
+
     }
 
     @Inject(method = "writeNbt", at = @At("RETURN"))
     private void writeNbt(NbtCompound nbt, CallbackInfo ci)
     {
-        nbt.putInt("LitTime", litTime);
+        //nbt.putInt("LitTime", litTime);
+
+        nbt.putInt("BurnCounter", burnTimeCountdown);
+        nbt.putInt("BurnTime", burnTimeSinceLit);
+        nbt.putInt("SmoulderCounter", smoulderCounter);
+        nbt.putInt("CookBurning", cookBurningCounter);
+
     }
 
     @Override
@@ -189,13 +201,17 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
 
 
     public int validateFireLevel(World world, BlockState state, BlockPos pos) {
-        int iCurrentFireLevel = getCurrentFireLevel( world, state, pos);
+        int iCurrentFireLevel = getCurrentFireLevel( world, state, pos );
 
-        if (iCurrentFireLevel > 0) {
-            if (burnTimeCountdown <= 0) {
+        if (iCurrentFireLevel > 0)
+        {
+            if (burnTimeCountdown <= 0)
+            {
                 extinguishFire(state,true);
                 return 0;
-            } else {
+            }
+            else
+            {
                 int iDesiredFireLevel = 2;
 
                 if (burnTimeSinceLit < WARMUP_TIME || burnTimeCountdown < REVERT_TO_SMALL_TIME) {
@@ -229,9 +245,10 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
 
     private int getCurrentFireLevel(World world, BlockState state, BlockPos pos)
     {
-        CampfireBlock block = (CampfireBlock) world.getBlockState(pos).getBlock();
+        //CampfireBlock block = (CampfireBlock) world.getBlockState(pos).getBlock();
 
-        return ((CampfireBlockAdded)block).getFireLevel(state);
+        //return ((CampfireBlockAdded)block).getFireLevel(state);
+        return world.getBlockState(pos).get(FIRE_LEVEL);
     }
 
 
@@ -258,9 +275,8 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Ca
     @Override
     public void changeFireLevel(BlockState state, int iFireLevel)
     {
-        CampfireBlock block = (CampfireBlock) state.getBlock();
 
-        ((CampfireBlockAdded)block).changeFireLevel(state, iFireLevel);
+        ((CampfireBlockAdded)state.getBlock()).changeFireLevel(world, pos, state, iFireLevel);
     }
 
     private void relightSmouldering(BlockState state)

@@ -49,22 +49,22 @@ public class KnittingNeedlesItem extends Item
 
 
     @Override
-    public boolean getCanItemStartFireOnUse(int iItemDamage) {
+    public boolean getCanItemStartFireOnUse(ItemStack stack) {
         return true;
     }
 
     @Override
-    public boolean getCanItemBeSetOnFireOnUse(int iItemDamage) {
+    public boolean getCanItemBeSetOnFireOnUse(ItemStack stack) {
         return true;
     }
 
     @Override
-    public boolean getCanBeFedDirectlyIntoCampfire(int iItemDamage) {
+    public boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack) {
         return false;
     }
 
     @Override
-    public boolean getCanBeFedDirectlyIntoBrickOven(int iItemDamage) {
+    public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {
         return false;
     }
 

@@ -6,15 +6,12 @@ import net.minecraft.world.WorldAccess;
 
 public interface BlockAdded
 {
-
     default boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
         return false;
     }
-
     default boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
         return false;
     }
-
     default boolean setOnFireDirectly(World world, BlockPos pos) {
         return false;
     }

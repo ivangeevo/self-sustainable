@@ -1,44 +1,46 @@
 package net.ivangeevo.self_sustainable.mixin;
 
+import net.ivangeevo.self_sustainable.block.CampfireBlockManager;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Item.class)
 public abstract class ItemMixin implements ItemAdded
 {
     @Override
-    public boolean getCanBeFedDirectlyIntoBrickOven(int fuelTicks) {
-        return !getCanItemBeSetOnFireOnUse(fuelTicks) && !getCanItemStartFireOnUse(fuelTicks) &&
-                getOvenBurnTime(fuelTicks) > 0;
+    public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {
+        return !getCanItemBeSetOnFireOnUse(stack) && !getCanItemStartFireOnUse(stack) &&
+                getOvenBurnTime(stack) > 0;
     }
 
     @Override
-    public boolean getCanBeFedDirectlyIntoCampfire(int fuelTicks)
+    public boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack)
     {
-        return !getCanItemBeSetOnFireOnUse(fuelTicks) && !getCanItemStartFireOnUse(fuelTicks) &&
-                getCampfireBurnTime(fuelTicks) > 0;
+        return !getCanItemBeSetOnFireOnUse(stack) && !getCanItemStartFireOnUse(stack) &&
+                getCampfireBurnTime(stack) > 0;
     }
 
     @Override
-    public int getCampfireBurnTime(int iItemDamage)
+    public int getCampfireBurnTime(ItemStack stack)
     {
-        return getCampfireBurnTime(iItemDamage);
+        return CampfireBlockManager.getItemFuelTime(stack);
     }
 
     @Override
-    public boolean getCanItemBeSetOnFireOnUse(int fuelTicks) {
+    public boolean getCanItemBeSetOnFireOnUse(ItemStack stack) {
 
         return false;
     }
 
     @Override
-    public boolean getCanItemStartFireOnUse(int fuelTicks) {
+    public boolean getCanItemStartFireOnUse(ItemStack stack) {
         return false;
     }
 
     @Override
-    public int getOvenBurnTime(int fuelTicks) {
+    public int getOvenBurnTime(ItemStack stack) {
         return defaultFurnaceBurnTime;
     }
 

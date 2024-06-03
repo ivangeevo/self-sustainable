@@ -134,61 +134,6 @@ public class FireStarterItemPrimitive extends FireStarterItem
         return false;
     }
 
-    @Override
-    public int getOvenBurnTime(int ticks)
-    {
-        return 0;
-    }
-
-    @Override
-    public boolean getCanItemBeSetOnFireOnUse(int fuelTicks) {
-        return false;
-    }
-
-    @Override
-    public boolean getCanBeFedDirectlyIntoBrickOven(int fuelTicks) {
-        return false;
-    }
-
-    @Override
-    public boolean getCanBeFedDirectlyIntoCampfire(int fuelTicks) {
-        return false;
-    }
-
-    @Override
-    public int getCampfireBurnTime(int fuelTicks) {
-        return 0;
-    }
-
-    @Override
-    public boolean isEfficientVsBlock(ItemStack stack, World world, BlockState state) {
-        return false;
-    }
-
-    @Override
-    public int getHerbivoreFoodValue(int iItemDamage) {
-        return 0;
-    }
-
-    @Override
-    public Item setHerbivoreFoodValue(int iFoodValue) {
-        return null;
-    }
-
-    @Override
-    public Item setAsBasicHerbivoreFood() {
-        return null;
-    }
-
-    @Override
-    public void updateUsingItem(ItemStack stack, World world, PlayerEntity player) {
-
-    }
-
-    @Override
-    public int getItemUseWarmupDuration() {
-        return 0;
-    }
 
     //------------- Class Specific Methods ------------//
 

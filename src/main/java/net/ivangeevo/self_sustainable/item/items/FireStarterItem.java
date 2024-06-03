@@ -12,15 +12,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public abstract class FireStarterItem extends FlintAndSteelItem implements DirectlyIgnitingItem
+public abstract class FireStarterItem extends Item implements DirectlyIgnitingItem
 {
     private final float exhaustionPerUse;
 
@@ -31,44 +34,40 @@ public abstract class FireStarterItem extends FlintAndSteelItem implements Direc
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
+    public ActionResult useOnBlock(ItemUsageContext context)
     {
-        ItemStack useStack = user.getActiveItem();
-        MinecraftClient client = MinecraftClient.getInstance();
-        BlockHitResult hitResult = (BlockHitResult) client.crosshairTarget;
+        World world = context.getWorld();
+        PlayerEntity player = context.getPlayer();
+        BlockPos pos = context.getBlockPos();
 
-        if (hitResult != null)
+        if (world.canPlayerModifyAt(player, pos))
         {
-            BlockPos hitPos = hitResult.getBlockPos();
-            Direction hitSide = hitResult.getSide();
-
-        if ( user.canModifyAt( world,hitPos ) )
-        {
-            //user.
+            performUseEffects(player);
 
             if (!world.isClient)
             {
-                //notifyNearbyAnimalsOfAttempt(user);
+                //notifyNearbyAnimalsOfAttempt(player);
 
-                if (checkChanceOfStart(useStack, world.getRandom()))
+                if (checkChanceOfStart(context.getStack(), world.random))
                 {
-                    attemptToLightBlock(useStack, world, hitPos, hitSide);
+                    attemptToLightBlock(context.getStack(), world, pos, context.getSide());
                 }
             }
+
+            assert player != null;
+            player.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
+            context.getStack().damage(1, player, p -> p.sendToolBreakStatus(context.getHand()));
+            return ActionResult.SUCCESS;
         }
 
-            user.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
+        return ActionResult.FAIL;
 
-            useStack.damage(1, user, (e) -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
-
-            return TypedActionResult.success(useStack);
-        }
-
-        return TypedActionResult.fail(useStack);
     }
 
+
+
     @Override
-    public boolean getCanItemStartFireOnUse(int iItemDamage)
+    public boolean getCanItemStartFireOnUse(ItemStack stack)
     {
         return true;
     }

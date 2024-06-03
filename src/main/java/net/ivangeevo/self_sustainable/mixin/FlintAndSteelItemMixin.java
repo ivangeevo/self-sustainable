@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class FlintAndSteelItemMixin implements DirectlyIgnitingItem
 {
 
-    @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
+    //@Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     private void customUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
         PlayerEntity playerEntity = context.getPlayer();
         World world = context.getWorld();

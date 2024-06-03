@@ -10,28 +10,28 @@ public interface ItemAdded {
 
     int defaultFurnaceBurnTime = 0;
 
-    default int getOvenBurnTime(int ticks) {
+    default int getOvenBurnTime(ItemStack stack) {
         return 0;
     }
 
 
-    default boolean getCanItemBeSetOnFireOnUse(int fuelTicks) {
+    default boolean getCanItemBeSetOnFireOnUse(ItemStack stack) {
         return false;
     }
 
-    default boolean getCanItemStartFireOnUse(int fuelTicks) {
+    default boolean getCanItemStartFireOnUse(ItemStack stack) {
         return false;
     }
 
-    default boolean getCanBeFedDirectlyIntoBrickOven(int fuelTicks) {
+    default boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {
         return false;
     }
 
-    default boolean getCanBeFedDirectlyIntoCampfire(int fuelTicks) {
+    default boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack) {
         return false;
     }
 
-    default int getCampfireBurnTime(int fuelTicks) {
+    default int getCampfireBurnTime(ItemStack stack) {
         return 0;
     }
 

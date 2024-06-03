@@ -67,32 +67,32 @@ public class WoolKnitItem extends Item implements ItemColorProvider {
 
 
     @Override
-    public int getOvenBurnTime(int ticks) {
+    public int getOvenBurnTime(ItemStack stack) {
         return 0;
     }
 
     @Override
-    public boolean getCanItemBeSetOnFireOnUse(int fuelTicks) {
+    public boolean getCanItemBeSetOnFireOnUse(ItemStack stack) {
         return false;
     }
 
     @Override
-    public boolean getCanItemStartFireOnUse(int fuelTicks) {
+    public boolean getCanItemStartFireOnUse(ItemStack stack) {
         return false;
     }
 
     @Override
-    public boolean getCanBeFedDirectlyIntoBrickOven(int fuelTicks) {
+    public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {
         return false;
     }
 
     @Override
-    public boolean getCanBeFedDirectlyIntoCampfire(int fuelTicks) {
+    public boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack) {
         return false;
     }
 
     @Override
-    public int getCampfireBurnTime(int fuelTicks) {
+    public int getCampfireBurnTime(ItemStack stack) {
         return 0;
     }
 

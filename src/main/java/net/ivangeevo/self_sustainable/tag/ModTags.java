@@ -25,7 +25,6 @@ public class ModTags {
 
         public static final TagKey<Item> OVEN_COOKABLE = createTag("oven_cookable");
         public static final TagKey<Item> DIRECTLY_IGNITER_ITEMS = createTag("directly_igniter_items");
-
         public static final TagKey<Item> PRIMITIVE_FIRESTARTERS = createTag("primitive_firestarters");
         public static final TagKey<Item> WOOL_ITEMS = createTag("wool_items");
         public static final TagKey<Item> WOOL_KNIT_ITEMS = createTag("wool_knit_items");

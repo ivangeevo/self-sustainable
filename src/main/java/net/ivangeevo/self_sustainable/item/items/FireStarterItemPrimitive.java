@@ -3,7 +3,6 @@
 package net.ivangeevo.self_sustainable.item.items;
 
 
-import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockEntityAdded;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemStackAdded;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
 import net.minecraft.block.BlockState;

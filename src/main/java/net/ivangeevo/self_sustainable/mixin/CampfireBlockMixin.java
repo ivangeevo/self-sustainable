@@ -37,6 +37,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.dimension.NetherPortal;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -46,7 +47,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-import static net.ivangeevo.self_sustainable.block.entity.CampfireBEManager.isRainingOnCampfire;
 import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
 
 
@@ -204,6 +204,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         ci.cancel();
     }
 
+    private static boolean isRainingOnCampfire(World world, BlockPos pos)
+    {
+        return world.isRaining() && world.hasRain(pos);
+    }
+
     /**
      * @author
      * @reason couldn't get it to work otherwise than overwrite. maybe its possible though.
@@ -236,13 +241,24 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         cir.setReturnValue( state.isIn(BlockTags.CAMPFIRES, statex -> statex.contains(WATERLOGGED) && statex.contains(FIRE_LEVEL) && statex.contains(FUEL_STATE)) && !state.get(WATERLOGGED) && state.get(FIRE_LEVEL) <= 0 && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT));
 
     }
+
+    @Override
+    public int getChanceOfFireSpreadingDirectlyTo(WorldAccess blockAccess, BlockPos pos)
+    {
+        if (blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && getFuelState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL)
+        {
+            return 60; // same chance as leaves and other highly flammable objects
+        }
+
+        return 0;
+    }
     @Override
     public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
         return true;
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
+    public boolean getCanBeSetOnFireDirectly(@NotNull WorldAccess blockAccess, BlockPos pos) {
         return blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && getFuelState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL;
     }
 
@@ -259,7 +275,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                 VariableCampfireBE campfireBE = (VariableCampfireBE) world.getBlockEntity(pos);
 
                 assert campfireBE != null;
-                ((CampfireBlockEntityAdded)campfireBE).onFirstLit();
+                campfireBE.onFirstLit();
 
                 BlockPos soundPos =
                         new BlockPos(

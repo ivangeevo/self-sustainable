@@ -3,11 +3,7 @@
  */
 package net.ivangeevo.self_sustainable.block;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockAdded;
-import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockEntityAdded;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
@@ -15,8 +11,8 @@ import net.ivangeevo.self_sustainable.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
+import net.minecraft.block.FireBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -40,16 +36,17 @@ import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FUEL_STATE;
 
 
 public class VariableCampfireBE
         extends BlockEntity
-        implements Clearable,
-        CampfireBlockEntityAdded {
-    private static final int field_31330 = 2;
-    private static final int field_31331 = 4;
+        implements Clearable
+{
     private final DefaultedList<ItemStack> itemsBeingCooked = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private static int cookingTime = 0;
     private static int cookingTotalTime = 0;
@@ -81,55 +78,26 @@ public class VariableCampfireBE
     private int smoulderCounter = 0;
     private int cookBurningCounter = 0;
 
-    @Override public int getCookTime() {
+
+    public int getCookTime() {
         return cookingTime;
     }
-    @Override public int getBurnTime() {
-        return burnTimeSinceLit;
-    }
-    @Override public int getBurnTimeCountdown() {
-        return burnTimeCountdown;
-    }
-
-    @Override public int getTotalCookTime() {
-        return cookingTotalTime;
-    }
-    @Override public ItemStack getCookStack() {
-        return itemsBeingCooked.get(0);
-    }
-
-    @Override
     public void setCookTime(int value) {
         cookingTime = value;
     }
-    @Override public void setBurnTime(int value) {
-        burnTimeSinceLit = value;
-    }
-    @Override public void setBurnTimeCountdown(int value) {
-        burnTimeCountdown = value;
-    }
-
-    @Override public void setTotalCookTime(int value) {
+    public void setTotalCookTime(int value) {
         cookingTotalTime = value;
     }
-
-
-    @Override
-    public void setCookStack(ItemStack newStack) {
-        itemsBeingCooked.set(0, newStack);
+    public int getTotalCookTime() {
+        return cookingTotalTime;
     }
+
     public VariableCampfireBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CAMPFIRE, pos, state);
     }
 
     public static void litServerTick(World world, BlockPos pos, BlockState state, VariableCampfireBE campfireBE)
     {
-
-        // Use this cast to get access to the new variables.
-        CampfireBlockEntityAdded entity;
-        entity = campfireBE;
-
-        boolean bInvChanged = false;
 
 
 
@@ -142,12 +110,16 @@ public class VariableCampfireBE
         {
 
             //TODO : Fire spread for campfire
-            /**
+
              if ( iCurrentFireLevel > 1 && world.random.nextFloat() <= CHANCE_OF_FIRE_SPREAD)
              {
-             FireBlock.checkForFireSpreadFromLocation(worldObj, xCoord, yCoord, zCoord, worldObj.rand, 0);
+                 Block fireBlock = state.getBlock();
+                 if (fireBlock instanceof FireBlock fire) {
+                     fire.checkForFireSpreadFromLocation(world, pos, world.random, 0);
+                 }
              }
-             **/
+
+
 
             campfireBE.burnTimeSinceLit++;
 
@@ -168,22 +140,27 @@ public class VariableCampfireBE
 
             if ( iCurrentFireLevel > 0 )
             {
-                for (int i = 0; i < campfireBE.getItemsBeingCooked().size(); ++i)
+                // TODO: Fix cookTime not incrementing correctly.
+                boolean bl = false;
+
+                ItemStack itemStack = campfireBE.itemsBeingCooked.get(0);
+                if (!itemStack.isEmpty())
                 {
-                SimpleInventory inventory;
-                ItemStack itemStack2;
-                ItemStack itemStack = campfireBE.getItemsBeingCooked().get(i);
-                if (itemStack.isEmpty()) continue;
-                bInvChanged = true;
-                cookingTime = cookingTime + 1;
-                if (cookingTime < cookingTotalTime || !(itemStack2 = campfireBE.matchGetter.getFirstMatch(inventory = new SimpleInventory(itemStack), world).map(recipe -> recipe.craft(inventory, world.getRegistryManager())).orElse(itemStack)).isItemEnabled(world.getEnabledFeatures())) continue;
-                campfireBE.getItemsBeingCooked().set(i, itemStack2);
-                world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-                world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
+                    bl = true;
+                    campfireBE.setCookTime(campfireBE.getCookTime() + 1);
+                    if (campfireBE.getCookTime() >= campfireBE.getTotalCookTime()) {
+                        Inventory inventory = new SimpleInventory(itemStack);
+                        ItemStack itemStack2 = campfireBE.matchGetter.getFirstMatch(inventory, world).map((recipe) -> recipe.craft(inventory, world.getRegistryManager())).orElse(itemStack);
+                        if (itemStack2.isItemEnabled(world.getEnabledFeatures()))
+                        {
+                            campfireBE.itemsBeingCooked.set(0, itemStack2);
+                            world.updateListeners(pos, state, state, 3);
+                            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
+                        }
+                    }
                 }
 
-                if (bInvChanged)
-                {
+                if (bl) {
                     markDirty(world, pos, state);
                 }
 
@@ -314,7 +291,7 @@ public class VariableCampfireBE
             smoulderCounter = 0;
         }
 
-        cookCounter = 0; // reset cook counter in case fire is relit later
+        cookingTime = 0; // reset cook counter in case fire is relit later
         cookBurningCounter = 0;
 
         CampfireBlock block = (CampfireBlock) state.getBlock();
@@ -345,10 +322,10 @@ public class VariableCampfireBE
         return this.itemsBeingCooked;
     }
 
-    public static boolean addItem(Entity user, ItemStack stack, int cookTime, CampfireBlockEntity be)
+    public static boolean addItem(Entity user, ItemStack stack, int cookTime, VariableCampfireBE be)
     {
-        be.cookingTotalTimes[0] = cookTime;
-        be.cookingTimes[0] = 0;
+        cookingTotalTime = cookTime;
+        cookingTime = 0;
         be.getItemsBeingCooked().set(0, stack.split(1));
         be.getWorld().emitGameEvent(GameEvent.BLOCK_CHANGE, be.getPos(), GameEvent.Emitter.of(user, be.getCachedState()));
         be.getWorld().updateListeners(be.getPos(), be.getCachedState(), be.getCachedState() , Block.NOTIFY_ALL);
@@ -357,7 +334,7 @@ public class VariableCampfireBE
 
     }
 
-    @Override
+
     public void retrieveItem(World world, VariableCampfireBE campfireBE, PlayerEntity player)
     {
         DefaultedList<ItemStack> itemsBeingCooked = campfireBE.getItemsBeingCooked();
@@ -426,7 +403,7 @@ public class VariableCampfireBE
             if (!itemStack.isEmpty()) continue;
             setTotalCookTime(cookTime);
             this.setCookTime(0);
-            this.setCookStack(stack.split(1));
+            this.itemsBeingCooked.set(0, stack.split(1));
             assert this.world != null;
             this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(user, this.getCachedState()));
             this.updateListeners();
@@ -452,9 +429,6 @@ public class VariableCampfireBE
     }
 
 
-
-
-    @Override
     public void changeFireLevel(int iFireLevel) {
 
         assert world != null;
@@ -467,7 +441,6 @@ public class VariableCampfireBE
 
     }
 
-    @Override
     public void setSpitStack(ItemStack stack)
     {
         if ( stack != null )
@@ -484,12 +457,10 @@ public class VariableCampfireBE
         markDirty();
     }
 
-    @Override
     public ItemStack getSpitStack() {
         return spitStack;
     }
 
-    @Override
     public void addBurnTime(BlockState state, int iBurnTime) {
         burnTimeCountdown += iBurnTime * CAMPFIRE_BURN_TIME_MULTIPLIER * BASE_BURN_TIME_MULTIPLIER;
 
@@ -499,8 +470,6 @@ public class VariableCampfireBE
     }
 
 
-
-    @Override
     public void onFirstLit() {
         burnTimeCountdown = INITIAL_BURN_TIME;
         burnTimeSinceLit = 0;

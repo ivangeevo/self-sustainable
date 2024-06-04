@@ -16,6 +16,11 @@ public class ModTags {
         public static final TagKey<Block> LOOSE_BLOCKS = createTag("loose_blocks");
 
 
+        /** Blocks that can be instantly ignited on use(right click). **/
+        public static final TagKey<Block> DIRECTLY_IGNITABLE = createTag("directly_ignitable");
+
+
+
         private static TagKey<Block> createTag (String name) {
             return TagKey.of(RegistryKeys.BLOCK, new Identifier(SelfSustainableMod.MOD_ID, name));
         }
@@ -24,7 +29,10 @@ public class ModTags {
     public static class Items {
 
         public static final TagKey<Item> OVEN_COOKABLE = createTag("oven_cookable");
-        public static final TagKey<Item> DIRECTLY_IGNITER_ITEMS = createTag("directly_igniter_items");
+
+        /** Items that can instantly start a fire on use(right click). **/
+        public static final TagKey<Item> DIRECT_IGNITERS = createTag("direct_igniters");
+
         public static final TagKey<Item> PRIMITIVE_FIRESTARTERS = createTag("primitive_firestarters");
         public static final TagKey<Item> WOOL_ITEMS = createTag("wool_items");
         public static final TagKey<Item> WOOL_KNIT_ITEMS = createTag("wool_knit_items");

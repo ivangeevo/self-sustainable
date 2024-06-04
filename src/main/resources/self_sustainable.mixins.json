@@ -9,7 +9,6 @@
     "BlocksMixin",
     "CampfireBlockMixin",
     "DifficultyMixin",
-    "FireBlockMixin",
     "FlintAndSteelItemMixin",
     "HungerManagerMixin",
     "ItemMixin",
@@ -18,6 +17,7 @@
     "PlayerEntityMixin",
     "SpawnHelperMixin",
     "TorchBlockMixin",
+    "VerticallyAttachableBlockItemMixin",
     "ZombieVillagerEntityMixin"
   ],
   "client": [

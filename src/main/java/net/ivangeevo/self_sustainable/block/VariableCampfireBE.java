@@ -48,8 +48,8 @@ public class VariableCampfireBE
         implements Clearable
 {
     private final DefaultedList<ItemStack> itemsBeingCooked = DefaultedList.ofSize(1, ItemStack.EMPTY);
-    private static int cookingTime = 0;
-    private static int cookingTotalTime = 0;
+    private int cookingTime = 0;
+    private int cookingTotalTime = 0;
     public final RecipeManager.MatchGetter<Inventory, CampfireCookingRecipe> matchGetter = RecipeManager.createCachedMatchGetter(RecipeType.CAMPFIRE_COOKING);
 
     // BTW Added variables
@@ -109,8 +109,7 @@ public class VariableCampfireBE
         if ( iCurrentFireLevel > 0 )
         {
 
-            //TODO : Fire spread for campfire
-
+            //TODO : Fire spread for campfire. NOT WORKING ATM
              if ( iCurrentFireLevel > 1 && world.random.nextFloat() <= CHANCE_OF_FIRE_SPREAD)
              {
                  Block fireBlock = state.getBlock();
@@ -324,8 +323,8 @@ public class VariableCampfireBE
 
     public static boolean addItem(Entity user, ItemStack stack, int cookTime, VariableCampfireBE be)
     {
-        cookingTotalTime = cookTime;
-        cookingTime = 0;
+        be.cookingTotalTime = cookTime;
+        be.cookingTime = 0;
         be.getItemsBeingCooked().set(0, stack.split(1));
         be.getWorld().emitGameEvent(GameEvent.BLOCK_CHANGE, be.getPos(), GameEvent.Emitter.of(user, be.getCachedState()));
         be.getWorld().updateListeners(be.getPos(), be.getCachedState(), be.getCachedState() , Block.NOTIFY_ALL);
@@ -354,7 +353,6 @@ public class VariableCampfireBE
     @Override
     public void readNbt(NbtCompound nbt)
     {
-        int[] is;
         super.readNbt(nbt);
         this.itemsBeingCooked.clear();
         Inventories.readNbt(nbt, this.itemsBeingCooked);

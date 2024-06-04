@@ -150,7 +150,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
             else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
             {
                 // Try to ignite
-                if ( heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) )
+                if ( heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS) )
                 {
                     if ( state.get(FUEL_LEVEL) > 0 )
                     {

@@ -52,12 +52,17 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
         {
             Optional<CampfireCookingRecipe> optional;
 
+            // TODO: Fix unable to set fire level on server side. Probably needs a canBesetOnFire
             // Logic for insta-lighting items
-            if (heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS) && state.get(FIRE_LEVEL) == 0)
+            if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS) && state.get(FIRE_LEVEL) == 0)
             {
                 if (!world.isClient)
                 { // Only execute on the server
                     world.setBlockState(pos, state.with(FIRE_LEVEL, 1));
+                    // Ensure the block entity state is marked dirty
+                    campfireBE.markDirty();
+                    // Notify the clients of the state change
+                    world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
                 }
                 Ignitable.playLitFX(world, pos);
 
@@ -78,11 +83,10 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
             }
             else
             {
-                //TODO: Make it not retrieve the item if the heldStack is of the fuel items ( campfireFuelMap() )
-                // Check if the heldStack is in the campfireFuelMap
+
                 Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
 
-                if (!getCookStack(campfireBE).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECTLY_IGNITER_ITEMS)
+                if (!getCookStack(campfireBE).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)
                         && !heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS) && !fuelMap.containsKey(heldStack.getItem()))
                 {
                     campfireBE.retrieveItem(world, campfireBE, player);

@@ -30,7 +30,7 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
             .add(ModItems.FIRESTARTER_STICKS)
             .add(ModItems.FIRESTARTER_BOW);
 
-        getOrCreateTagBuilder(ModTags.Items.DIRECTLY_IGNITER_ITEMS)
+        getOrCreateTagBuilder(ModTags.Items.DIRECT_IGNITERS)
                 .add(Items.TORCH)
                 .add(Items.SOUL_TORCH);
 

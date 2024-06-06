@@ -16,8 +16,7 @@ public abstract class ZombieVillagerEntityMixin extends ZombieEntity
         super(entityType, world);
     }
 
-
-
+    // Make Zombie villagers not despawn.
     @Inject(method = "canImmediatelyDespawn", at = @At("HEAD"), cancellable = true)
     private void injectedCanImmediatelyDespawn(double distanceSquared, CallbackInfoReturnable<Boolean> cir)
     {

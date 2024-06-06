@@ -5,6 +5,7 @@ import net.ivangeevo.self_sustainable.block.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.interfaces.*;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
+import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -17,6 +18,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
@@ -50,7 +52,7 @@ import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
 
 
 @Mixin(CampfireBlock.class)
-public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, IVariableCampfireBlock
+public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, VariableCampfireBlock
 {
     @Shadow @Final private boolean emitsParticles;
     @Shadow @Final private int fireDamage;
@@ -85,11 +87,12 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         BlockPos blockPos;
         World worldAccess = context.getWorld();
         boolean bl = worldAccess.getFluidState(blockPos = context.getBlockPos()).getFluid() == Fluids.WATER;
-        cir.setReturnValue(
-                this.getDefaultState()
+
+        cir.setReturnValue(this.getDefaultState()
                         .with(WATERLOGGED, bl)
                         .with(SIGNAL_FIRE, this.isSignalFireBaseBlock(worldAccess.getBlockState(blockPos.down())))
-                        .with(FIRE_LEVEL, 0).with(FACING, context.getHorizontalPlayerFacing()) );
+                        .with(FIRE_LEVEL, 0)
+                        .with(FACING, context.getHorizontalPlayerFacing()));
     }
 
     @Inject(method = "appendProperties", at = @At("HEAD"), cancellable = true)
@@ -141,7 +144,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void injectedCustomOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir)
     {
-        cir.setReturnValue(CampfireBlockManager.setCustomShapes(state));
+        cir.setReturnValue( CampfireBlockManager.setCustomShapes(state) );
     }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
@@ -149,7 +152,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     {
         if (state.getBlock() == Blocks.CAMPFIRE)
         {
-            cir.setReturnValue(CampfireBlockManager.onUse(state, world, pos, player, hand, hit));
+            cir.setReturnValue( CampfireBlockManager.onUse(state, world, pos, player, hand, hit) );
         }
 
 
@@ -196,10 +199,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
                 world.playSound(d, e, f, SoundEvents.BLOCK_FIRE_AMBIENT,
                         SoundCategory.BLOCKS, fVolume,
-                        random.nextFloat() * 0.7F + 0.3F, false  );
+                        random.nextFloat() * 0.7F + 0.3F, false);
 
             }
         }
+
         ci.cancel();
     }
 
@@ -209,8 +213,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     /**
-     * @author
-     * @reason couldn't get it to work otherwise than overwrite. maybe its possible though.
+     * @author ivangeevo
+     * @reason Couldn't get it to work otherwise than overwrite. maybe its possible though.
      */
     @Overwrite
     @Nullable
@@ -244,7 +248,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Override
     public int getChanceOfFireSpreadingDirectlyTo(WorldAccess blockAccess, BlockPos pos)
     {
-        if (blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && getFuelState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL)
+        if (blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && getCampfireState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL)
         {
             return 60; // same chance as leaves and other highly flammable objects
         }
@@ -258,7 +262,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     @Override
     public boolean getCanBeSetOnFireDirectly(@NotNull WorldAccess blockAccess, BlockPos pos) {
-        return blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && getFuelState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL;
+        return blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && getCampfireState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL;
     }
 
     @Override
@@ -314,15 +318,13 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Override
     public void changeFireLevel(World world, BlockPos pos, int fireLevel)
     {
-        //CampfireBlock.campfireChangingState = true;
 
         BlockState tempState = world.getBlockState(pos);
         world.setBlockState( pos, tempState.with(FIRE_LEVEL, fireLevel), Block.NOTIFY_ALL);
 
-        //CampfireBlock.campfireChangingState = false;
     }
     @Override
-    public CampfireState getFuelState(BlockState state) {
+    public CampfireState getCampfireState(BlockState state) {
         return state.get(FUEL_STATE);
     }
 

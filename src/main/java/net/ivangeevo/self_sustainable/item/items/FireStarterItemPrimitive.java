@@ -5,7 +5,6 @@ package net.ivangeevo.self_sustainable.item.items;
 
 import net.ivangeevo.self_sustainable.item.interfaces.ItemStackAdded;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,9 +15,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class FireStarterItemPrimitive extends FireStarterItem
 {
@@ -26,9 +24,6 @@ public class FireStarterItemPrimitive extends FireStarterItem
     private final float baseChance;
     private final float maxChance;
     private final float chanceIncreasePerUse;
-
-    private static final float CHANCE_DECAY_PER_TICK = 0.00025F;
-    private static final long DELAY_BEFORE_DECAY = (2 * 20 ); // two seconds
 
     public FireStarterItemPrimitive(Item.Settings settings, float fExhaustionPerUse, float fBaseChance, float fMaxChance, float fChanceIncreasePerUse )
     {
@@ -43,7 +38,7 @@ public class FireStarterItemPrimitive extends FireStarterItem
 
 
     @Override
-    protected boolean checkChanceOfStart(ItemStack stack, net.minecraft.util.math.random.Random random) {
+    public boolean checkChanceOfStart(ItemStack stack, Random random) {
         boolean bReturnValue = false;
 
         // Use this cast to get access to the new variables.
@@ -98,11 +93,16 @@ public class FireStarterItemPrimitive extends FireStarterItem
     }
 
     @Override
-    protected void performUseEffects(PlayerEntity player) {
-        player.playSound(SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS, 0.5f + 0.5f * (float)player.getRandom().nextInt(2), (player.getRandom().nextFloat() * 0.25f) + 1.75f);
+    public void performUseEffects(PlayerEntity player)
+    {
+        player.playSound(SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS,
+                0.5f + 0.5f * (float)player.getRandom().nextInt(2),
+                (player.getRandom().nextFloat() * 0.25f) + 1.75f);
 
-        if (!player.getWorld().isClient()) {
-            for (int var3 = 0; var3 < 5; ++var3) {
+        if (!player.getWorld().isClient())
+        {
+            for (int var3 = 0; var3 < 5; ++var3)
+            {
                 Vec3d var4 = new Vec3d((player.getRandom().nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0);
 
                 var4 = var4.rotateX(-player.getPitch() * (float)Math.PI / 180.0f);

@@ -3,21 +3,13 @@
 package net.ivangeevo.self_sustainable.item.items;
 
 
-import net.ivangeevo.self_sustainable.block.interfaces.BlockAdded;
 import net.ivangeevo.self_sustainable.item.util.DirectlyIgnitingItem;
 import net.minecraft.block.Block;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -74,9 +66,11 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
 
     //------------- Class Specific Methods ------------//
 
-    protected abstract boolean checkChanceOfStart(ItemStack stack, Random random);
+    @Override
+    public abstract boolean checkChanceOfStart(ItemStack stack, Random random);
 
-    protected void performUseEffects(PlayerEntity player)
+    @Override
+    public void performUseEffects(PlayerEntity player)
     {
     }
 

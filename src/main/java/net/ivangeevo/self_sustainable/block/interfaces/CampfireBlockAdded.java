@@ -2,8 +2,6 @@ package net.ivangeevo.self_sustainable.block.interfaces;
 
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
 import net.minecraft.block.BlockState;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -16,7 +14,7 @@ public interface CampfireBlockAdded
 
     void extinguishFire(World world, BlockState state, BlockPos pos, boolean bSmoulder);
 
-    CampfireState getFuelState(BlockState state);
+    CampfireState getCampfireState(BlockState state);
     void relightFire(World world, BlockPos pos);
     void stopSmouldering(World world, BlockPos pos);
 

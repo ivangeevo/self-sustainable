@@ -1,9 +1,9 @@
-// 1.20.1	2024-06-03T08:46:24.3226732	self_sustainable/Recipes
-4c8ff2b85a0b6e4590dc15f93a2458611caa50f9 data\self_sustainable\advancements\recipes\misc\firestarter_sticks.json
+// 1.20.1	2024-06-05T00:29:50.7653888	self_sustainable/Recipes
 4759b09cf39a5b2baa3ef377d02d962ca44731ce data\self_sustainable\advancements\recipes\misc\iron_nugget.json
 42427189753468452038ef501d79846e30a639d4 data\self_sustainable\recipes\firestarter_sticks.json
-0fd03837e1dd4472bc8285b936e62550c347fec3 data\self_sustainable\advancements\recipes\misc\oven_brick.json
+4c8ff2b85a0b6e4590dc15f93a2458611caa50f9 data\self_sustainable\advancements\recipes\misc\firestarter_sticks.json
 9dc257d71600904415a697a55ae6930ad1957b91 data\self_sustainable\recipes\firestarter_bow.json
-bee99c4f8435dfd85e1777bc3ef79c8217c6cba3 data\self_sustainable\recipes\iron_nugget.json
 f3e3e614ba6ba2733853a700cfb69ed44ecb2214 data\self_sustainable\advancements\recipes\tools\firestarter_bow.json
+bee99c4f8435dfd85e1777bc3ef79c8217c6cba3 data\self_sustainable\recipes\iron_nugget.json
 80c70610cd95f400596671664d6003636ce0e468 data\self_sustainable\recipes\oven_brick.json
+0fd03837e1dd4472bc8285b936e62550c347fec3 data\self_sustainable\advancements\recipes\misc\oven_brick.json

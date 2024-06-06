@@ -1,49 +1,40 @@
 package net.ivangeevo.self_sustainable.block;
 
-import com.google.common.collect.Maps;
-import net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock;
+import net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
 import net.ivangeevo.self_sustainable.tag.ModTags;
-import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.CampfireCookingRecipe;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static net.minecraft.block.CampfireBlock.*;
 
-public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
+public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
 {
 
 
-    public static ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    public static ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
         BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -51,24 +42,6 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
         if (blockEntity instanceof VariableCampfireBE campfireBE)
         {
             Optional<CampfireCookingRecipe> optional;
-
-            // TODO: Fix unable to set fire level on server side. Probably needs a canBesetOnFire
-            // Logic for insta-lighting items
-            if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS) && state.get(FIRE_LEVEL) == 0)
-            {
-                if (!world.isClient)
-                { // Only execute on the server
-                    world.setBlockState(pos, state.with(FIRE_LEVEL, 1));
-                    // Ensure the block entity state is marked dirty
-                    campfireBE.markDirty();
-                    // Notify the clients of the state change
-                    world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-                }
-                Ignitable.playLitFX(world, pos);
-
-                return ActionResult.SUCCESS;
-            }
-
 
             // Handle stick input
             if (!getHasSpit(world, pos))
@@ -86,8 +59,7 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
 
                 Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
 
-                if (!getCookStack(campfireBE).isEmpty() && !heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)
-                        && !heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS) && !fuelMap.containsKey(heldStack.getItem()))
+                if (!getCookStack(campfireBE).isEmpty() && !isIgnitableItem(heldStack) && !fuelMap.containsKey(heldStack.getItem()))
                 {
                     campfireBE.retrieveItem(world, campfireBE, player);
                     playGetItemSound(world, pos, player);
@@ -138,6 +110,13 @@ public class CampfireBlockManager implements Ignitable, IVariableCampfireBlock
 
         }
         return ActionResult.PASS;
+    }
+
+    private static boolean isIgnitableItem(ItemStack stack)
+    {
+        return stack.isIn(ModTags.Items.DIRECT_IGNITERS)
+                || stack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)
+                || stack.getItem() == Items.FLINT_AND_STEEL;
     }
 
     public static int getItemFuelTime(ItemStack fuel) {

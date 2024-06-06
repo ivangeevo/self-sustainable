@@ -39,8 +39,8 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
-import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FUEL_STATE;
+import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.FIRE_LEVEL;
+import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.FUEL_STATE;
 
 
 public class VariableCampfireBE
@@ -92,6 +92,14 @@ public class VariableCampfireBE
         return cookingTotalTime;
     }
 
+    public int getBurnTimeSinceLit() {
+        return burnTimeSinceLit;
+    }
+    public int getBurnTimeCd() {
+        return burnTimeCountdown;
+    }
+
+
     public VariableCampfireBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CAMPFIRE, pos, state);
     }
@@ -99,16 +107,12 @@ public class VariableCampfireBE
     public static void litServerTick(World world, BlockPos pos, BlockState state, VariableCampfireBE campfireBE)
     {
 
-
-
-
-
-
         int iCurrentFireLevel = getCurrentFireLevel(state);
 
         if ( iCurrentFireLevel > 0 )
         {
 
+            /**
             //TODO : Fire spread for campfire. NOT WORKING ATM
              if ( iCurrentFireLevel > 1 && world.random.nextFloat() <= CHANCE_OF_FIRE_SPREAD)
              {
@@ -117,6 +121,23 @@ public class VariableCampfireBE
                      fire.checkForFireSpreadFromLocation(world, pos, world.random, 0);
                  }
              }
+
+            // New try //
+            // Fire spreading logic
+            if (world.random.nextFloat() <= CHANCE_OF_FIRE_SPREAD) {
+                for (Direction direction : Direction.values()) {
+                    BlockPos adjacentPos = pos.offset(direction);
+                    BlockState adjacentState = world.getBlockState(adjacentPos);
+                    Block adjacentBlock = adjacentState.getBlock();
+                    if (adjacentBlock instanceof CampfireBlock) {
+                        VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
+                        if (adjacentCampfireBE != null && getCurrentFireLevel(adjacentState) == 0) {
+                            adjacentCampfireBE.changeFireLevel(world,1); // Set fire level to 1
+                        }
+                    }
+                }
+            }
+             **/
 
 
 
@@ -139,7 +160,6 @@ public class VariableCampfireBE
 
             if ( iCurrentFireLevel > 0 )
             {
-                // TODO: Fix cookTime not incrementing correctly.
                 boolean bl = false;
 
                 ItemStack itemStack = campfireBE.itemsBeingCooked.get(0);
@@ -163,23 +183,25 @@ public class VariableCampfireBE
                     markDirty(world, pos, state);
                 }
 
-                if (world.random.nextFloat() <= CHANCE_OF_GOING_OUT_FROM_RAIN && campfireBE.isRainingOnCampfire(world, pos) )
+                if ( isGoOutFromRainChance(world, pos) )
                 {
                     campfireBE.extinguishFire(world, state, pos, false);
                 }
             }
         }
-        else if (campfireBE.smoulderCounter > 0 )
+        else if ( campfireBE.smoulderCounter > 0 )
         {
             campfireBE.smoulderCounter--;
 
-            if (campfireBE.smoulderCounter == 0 || world.random.nextFloat() <= CHANCE_OF_GOING_OUT_FROM_RAIN && campfireBE.isRainingOnCampfire(world, pos) )
+            if ( campfireBE.smoulderCounter == 0 || isGoOutFromRainChance(world, pos) )
             {
                 campfireBE.stopSmouldering(world, pos);
             }
         }
 
     }
+
+
 
     public static void unlitServerTick(World world, BlockPos pos, BlockState state, VariableCampfireBE campfireBE) {
         boolean bl = false;
@@ -215,6 +237,11 @@ public class VariableCampfireBE
         }
     }
 
+    private static boolean isGoOutFromRainChance(World world, BlockPos pos)
+    {
+        return world.random.nextFloat() <= CHANCE_OF_GOING_OUT_FROM_RAIN && isRainingOnCampfire(world, pos);
+    }
+
     public int validateFireLevel(World world, BlockState state, BlockPos pos)
     {
         int iCurrentFireLevel = getCurrentFireLevel(state);
@@ -244,7 +271,7 @@ public class VariableCampfireBE
 
                 if ( iDesiredFireLevel != iCurrentFireLevel )
                 {
-                    changeFireLevel(iDesiredFireLevel);
+                    changeFireLevel(world,iDesiredFireLevel);
 
                     if ( iDesiredFireLevel == 1 && iCurrentFireLevel == 2 )
                     {
@@ -307,7 +334,7 @@ public class VariableCampfireBE
         ((CampfireBlockAdded)block).stopSmouldering(world, pos);
     }
 
-    public boolean isRainingOnCampfire(World world, BlockPos pos)
+    public static boolean isRainingOnCampfire(World world, BlockPos pos)
     {
         return world.isRaining() && world.hasRain(pos);
     }
@@ -319,35 +346,6 @@ public class VariableCampfireBE
 
     public DefaultedList<ItemStack> getItemsBeingCooked() {
         return this.itemsBeingCooked;
-    }
-
-    public static boolean addItem(Entity user, ItemStack stack, int cookTime, VariableCampfireBE be)
-    {
-        be.cookingTotalTime = cookTime;
-        be.cookingTime = 0;
-        be.getItemsBeingCooked().set(0, stack.split(1));
-        be.getWorld().emitGameEvent(GameEvent.BLOCK_CHANGE, be.getPos(), GameEvent.Emitter.of(user, be.getCachedState()));
-        be.getWorld().updateListeners(be.getPos(), be.getCachedState(), be.getCachedState() , Block.NOTIFY_ALL);
-
-        return true;
-
-    }
-
-
-    public void retrieveItem(World world, VariableCampfireBE campfireBE, PlayerEntity player)
-    {
-        DefaultedList<ItemStack> itemsBeingCooked = campfireBE.getItemsBeingCooked();
-
-        if (!itemsBeingCooked.isEmpty() && !world.isClient())
-        {
-            ItemStack itemStack = itemsBeingCooked.get(0);
-            if (!itemStack.isEmpty()) {
-                player.giveItemStack(itemStack);
-                itemsBeingCooked.set(0, ItemStack.EMPTY);
-                campfireBE.markDirty();
-                Objects.requireNonNull(campfireBE.getWorld()).updateListeners(campfireBE.getPos(), campfireBE.getCachedState(), campfireBE.getCachedState(), Block.NOTIFY_ALL);
-            }
-        }
     }
 
     @Override
@@ -396,7 +394,7 @@ public class VariableCampfireBE
         return this.matchGetter.getFirstMatch(new SimpleInventory(stack), this.world);
     }
 
-    public boolean addItem(@Nullable Entity user, ItemStack stack, int cookTime) {
+    public void addItem(@Nullable Entity user, ItemStack stack, int cookTime) {
         for (ItemStack itemStack : this.itemsBeingCooked) {
             if (!itemStack.isEmpty()) continue;
             setTotalCookTime(cookTime);
@@ -405,9 +403,24 @@ public class VariableCampfireBE
             assert this.world != null;
             this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(user, this.getCachedState()));
             this.updateListeners();
-            return true;
+            return;
         }
-        return false;
+    }
+
+    public void retrieveItem(World world, VariableCampfireBE campfireBE, PlayerEntity player)
+    {
+        DefaultedList<ItemStack> itemsBeingCooked = campfireBE.getItemsBeingCooked();
+
+        if (!itemsBeingCooked.isEmpty() && !world.isClient())
+        {
+            ItemStack itemStack = itemsBeingCooked.get(0);
+            if (!itemStack.isEmpty()) {
+                player.giveItemStack(itemStack);
+                itemsBeingCooked.set(0, ItemStack.EMPTY);
+                campfireBE.markDirty();
+                Objects.requireNonNull(campfireBE.getWorld()).updateListeners(campfireBE.getPos(), campfireBE.getCachedState(), campfireBE.getCachedState(), Block.NOTIFY_ALL);
+            }
+        }
     }
 
     private void updateListeners() {
@@ -420,16 +433,11 @@ public class VariableCampfireBE
         this.itemsBeingCooked.clear();
     }
 
-    public void spawnItemsBeingCooked() {
-        if (this.world != null) {
-            this.updateListeners();
-        }
-    }
 
 
-    public void changeFireLevel(int iFireLevel) {
+    public void changeFireLevel(World world ,int iFireLevel)
+    {
 
-        assert world != null;
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof CampfireBlock block)
         {

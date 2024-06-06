@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.mixin;
 
 import net.ivangeevo.self_sustainable.block.interfaces.BlockAdded;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;

@@ -22,6 +22,7 @@ public class FuelRegistryManager
         modifyEntry(Items.BLAZE_ROD, 12800);
         modifyEntry(ItemTags.BAMBOO_BLOCKS, 100);
         modifyEntry(Items.STICK, 50);
+        modifyEntry(ItemTags.SAPLINGS, 15);
 
 
         removeFuelItems();
@@ -35,6 +36,7 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.remove(ItemTags.LOGS);
         FuelRegistry.INSTANCE.remove(ItemTags.PLANKS);
         FuelRegistry.INSTANCE.remove(ItemTags.WOODEN_STAIRS);
+        FuelRegistry.INSTANCE.remove(ItemTags.SAPLINGS);
 
         // Items
         FuelRegistry.INSTANCE.remove(Items.COAL);
@@ -76,15 +78,20 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.add(Items.MANGROVE_STAIRS, 200);
         FuelRegistry.INSTANCE.add(Items.JUNGLE_STAIRS, 70);
 
+        // New added fuel items
+        FuelRegistry.INSTANCE.add(Items.FEATHER, 15);
+        FuelRegistry.INSTANCE.add(ItemTags.SMALL_FLOWERS, 15);
+        FuelRegistry.INSTANCE.add(ItemTags.TALL_FLOWERS, 25);
+
+
     }
 
-    // Additional helper methods to modify items/tags.
+    // Helper methods to modify items/tags.
     private static void modifyEntry(Item item, int newValue)
     {
         FuelRegistry.INSTANCE.remove(item);
         FuelRegistry.INSTANCE.add(item, newValue);
     }
-
     private static void modifyEntry(TagKey<Item> tag, int newValue)
     {
         FuelRegistry.INSTANCE.remove(tag);

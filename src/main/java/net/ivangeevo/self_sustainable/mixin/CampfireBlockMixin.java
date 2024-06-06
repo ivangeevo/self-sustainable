@@ -181,8 +181,10 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         if (random.nextInt(10) == 0) {
             world.playSound((double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, SoundEvents.BLOCK_CAMPFIRE_CRACKLE, SoundCategory.BLOCKS, 0.5f + random.nextFloat(), random.nextFloat() * 0.7f + 0.6f, false);
         }
-        if (this.emitsParticles && random.nextInt(5) == 0) {
-            for (int i = 0; i < random.nextInt(1) + 1; ++i) {
+        if (this.emitsParticles && random.nextInt(5) == 0)
+        {
+            for (int i = 0; i < random.nextInt(1) + 1; ++i)
+            {
                 world.addParticle(ParticleTypes.LAVA, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, random.nextFloat() / 2.0f, 5.0E-5, random.nextFloat() / 2.0f);
             }
         }

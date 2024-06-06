@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockEntityMixin",
+    "BlockItemMixin",
     "BlockMixin",
     "BlocksMixin",
     "CampfireBlockMixin",
@@ -17,7 +18,6 @@
     "PlayerEntityMixin",
     "SpawnHelperMixin",
     "TorchBlockMixin",
-    "VerticallyAttachableBlockItemMixin",
     "ZombieVillagerEntityMixin"
   ],
   "client": [

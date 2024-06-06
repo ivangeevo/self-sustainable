@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -41,6 +42,20 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
 
         if (blockEntity instanceof VariableCampfireBE campfireBE)
         {
+
+            if (heldStack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0)
+            {
+                if (!world.isClient)
+                {
+                    campfireBE.changeFireLevel(world, 0);
+                }
+
+                Ignitable.playExtinguishSound(world, pos, false);
+
+                return ActionResult.SUCCESS;
+            }
+
+
             Optional<CampfireCookingRecipe> optional;
 
             // Handle stick input
@@ -63,6 +78,7 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
                 {
                     campfireBE.retrieveItem(world, campfireBE, player);
                     playGetItemSound(world, pos, player);
+
                     return ActionResult.SUCCESS;
                 }
 
@@ -109,6 +125,7 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
 
 
         }
+
         return ActionResult.PASS;
     }
 

@@ -216,26 +216,23 @@ public class VariableCampfireBE
     }
 
     public static void clientTick(World world, BlockPos pos, BlockState state, VariableCampfireBE campfireBE) {
-        int i;
         Random random = world.random;
+
         if (random.nextFloat() < 0.11f) {
-            for (i = 0; i < random.nextInt(2) + 2; ++i) {
+            int particleCount = random.nextInt(2) + 2;
+            for (int i = 0; i < particleCount; ++i) {
                 CampfireBlock.spawnSmokeParticle(world, pos, state.get(CampfireBlock.SIGNAL_FIRE), false);
             }
         }
-        i = state.get(CampfireBlock.FACING).getHorizontal();
-        for (int j = 0; j < campfireBE.itemsBeingCooked.size(); ++j) {
-            if (campfireBE.itemsBeingCooked.get(j).isEmpty() || !(random.nextFloat() < 0.2f)) continue;
-            Direction direction = Direction.fromHorizontal(Math.floorMod(j + i, 4));
-            float f = 0.3125f;
-            double d = (double)pos.getX() + 0.5 - (double)((float)direction.getOffsetX() * 0.3125f) + (double)((float)direction.rotateYClockwise().getOffsetX() * 0.3125f);
-            double e = (double)pos.getY() + 0.5;
-            double g = (double)pos.getZ() + 0.5 - (double)((float)direction.getOffsetZ() * 0.3125f) + (double)((float)direction.rotateYClockwise().getOffsetZ() * 0.3125f);
-            for (int k = 0; k < 4; ++k) {
-                world.addParticle(ParticleTypes.SMOKE, d, e, g, 0.0, 5.0E-4, 0.0);
-            }
+
+        if (!campfireBE.itemsBeingCooked.get(0).isEmpty() && random.nextFloat() < 0.2f) {
+            double d = pos.getX() + 0.5;
+            double e = pos.getY() + 0.9;
+            double g = pos.getZ() + 0.5;
+            world.addParticle(ParticleTypes.SMOKE, d, e, g, 0.0, 5.0E-4, 0.0);
         }
     }
+
 
     private static boolean isGoOutFromRainChance(World world, BlockPos pos)
     {

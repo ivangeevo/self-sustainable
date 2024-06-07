@@ -34,7 +34,7 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
 
         if (world.canPlayerModifyAt(player, pos))
         {
-            performUseEffects(player);
+            performUseEffects(context);
 
             if (!world.isClient)
             {
@@ -70,7 +70,7 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
     public abstract boolean checkChanceOfStart(ItemStack stack, Random random);
 
     @Override
-    public void performUseEffects(PlayerEntity player)
+    public void performUseEffects(ItemUsageContext context)
     {
     }
 

@@ -1,28 +1,16 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-import com.google.common.collect.Maps;
-import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
-import net.ivangeevo.self_sustainable.tag.ModTags;
-import net.minecraft.SharedConstants;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.*;
-import net.minecraft.command.argument.ParticleEffectArgumentType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.CampfireCookingRecipe;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -32,20 +20,14 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.Util;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 public class BrickOvenBlock extends BlockWithEntity implements Ignitable
@@ -140,7 +122,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
             if (relativeClickY > clickYTopPortion)
             {
 
-                if (!ovenBE.getStack().isEmpty())
+                if (!ovenBE.getCookStack().isEmpty())
                 {
                     ovenBE.retrieveItem(world, player);
 
@@ -149,39 +131,36 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
                 }
                 else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() )
                 {
-                    if ( !world.isClient() && ovenBE.getStack().isEmpty() && ovenBE.addItem(player,
+                    if ( !world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
                             player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime()))
                     {
 
                         return ActionResult.SUCCESS;
                     }
                 }
-
-                return ActionResult.SUCCESS;
             }
             else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
             {
 
-                if (!world.isClient)
+                if ( item.getCanBeFedDirectlyIntoBrickOven(heldStack) )
                 {
-                    int iItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
 
-                    if ( iItemsConsumed > 0 )
-                    {
-                        if ( state.get(LIT) )
-                        {
-                            Ignitable.playLitFX(world, pos);
-                        }
-                        else
-                        {
-                            this.playPopSound(world, pos);
-                        }
+                    if (!world.isClient) {
+                        int iItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
 
-                        heldStack.setCount(heldStack.getCount() - iItemsConsumed);
+                        if (iItemsConsumed > 0) {
+                            if (state.get(LIT)) {
+                                Ignitable.playLitFX(world, pos);
+                            } else {
+                                this.playPopSound(world, pos);
+                            }
+
+                            heldStack.setCount(heldStack.getCount() - iItemsConsumed);
+                        }
                     }
-                }
 
-                return ActionResult.SUCCESS;
+                    return ActionResult.SUCCESS;
+                }
 
 
 
@@ -277,7 +256,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         if (blockEntity instanceof BrickOvenBE ovenBE)
         {
             // Drops the contents inside when the block is destroyed
-            ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getStack());
+            ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getCookStack());
         }
 
         super.onStateReplaced(state, world, pos, newState, moved);
@@ -320,7 +299,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
                 }
             }
 
-            ItemStack cookStack = ovenBE.getStack();
+            ItemStack cookStack = ovenBE.getCookStack();
 
             if ( cookStack != null && ovenBE.getRecipeFor(cookStack).isPresent() )
             {

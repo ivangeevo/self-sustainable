@@ -8,6 +8,7 @@ import net.ivangeevo.self_sustainable.util.WorldUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
@@ -93,8 +94,11 @@ public class FireStarterItemPrimitive extends FireStarterItem
     }
 
     @Override
-    public void performUseEffects(PlayerEntity player)
+    public void performUseEffects(ItemUsageContext context)
     {
+        PlayerEntity player = context.getPlayer();;
+
+        assert player != null;
         player.playSound(SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS,
                 0.5f + 0.5f * (float)player.getRandom().nextInt(2),
                 (player.getRandom().nextFloat() * 0.25f) + 1.75f);

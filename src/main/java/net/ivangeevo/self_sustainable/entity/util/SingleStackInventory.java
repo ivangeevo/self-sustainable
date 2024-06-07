@@ -23,7 +23,7 @@ public interface SingleStackInventory
      * Fetches the stack currently stored at the given slot. If the slot is empty,
      * or is outside the bounds of this inventory, returns see {@link ItemStack#EMPTY}.
      */
-    ItemStack getStack();
+    ItemStack getCookStack();
 
     /**
      * Removes the item from the inventory.
@@ -65,7 +65,7 @@ public interface SingleStackInventory
     }
 
     default boolean containsAny(Predicate<ItemStack> predicate) {
-            ItemStack itemStack = this.getStack();
+            ItemStack itemStack = this.getCookStack();
 
         return !predicate.test(itemStack);
     }

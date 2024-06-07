@@ -19,7 +19,7 @@ public class SmokerOvenBE extends AbstractOvenBE
 
     public static void serverTick(World world, BlockPos pos, BlockState state, @NotNull SmokerOvenBE ovenBE)
     {
-        ItemStack cookStack = ovenBE.getStack();
+        ItemStack cookStack = ovenBE.getCookStack();
 
         boolean bWasBurning = ovenBE.fuelBurnTime > 0;
         boolean bInvChanged = false;

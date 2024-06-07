@@ -29,7 +29,9 @@ public class ModTags {
     public static class Items {
 
         public static final TagKey<Item> OVEN_COOKABLE = createTag("oven_cookable");
+        public static final TagKey<Item> CAN_START_FIRE_ON_USE = createTag("can_start_fire_on_use");
         public static final TagKey<Item> CAN_BE_SET_ON_FIRE_ON_USE = createTag("can_be_set_on_fire_on_use");
+
         public static final TagKey<Item> UNLIT_TORCHES = createTag("can_be_set_on_fire_on_use");
 
 

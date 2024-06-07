@@ -26,17 +26,34 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
         getOrCreateTagBuilder(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS)
                 .add(Items.STICK);
 
+        getOrCreateTagBuilder(BTWRConventionalTags.Items.TORCHES_CAN_IGNITE)
+                .add(Items.TORCH);
 
+        this.addToModTags();
+
+
+
+
+
+    }
+
+    private void addToModTags()
+    {
+        getOrCreateTagBuilder(ModTags.Items.CAN_START_FIRE_ON_USE)
+                .addTag(ModTags.Items.PRIMITIVE_FIRESTARTERS)
+                .addTag(BTWRConventionalTags.Items.TORCHES_CAN_IGNITE)
+                .add(Items.FLINT_AND_STEEL)
+                .add(Items.TORCH);
+
+        getOrCreateTagBuilder(ModTags.Items.CAN_BE_SET_ON_FIRE_ON_USE)
+                .add(ModItems.TORCH_UNLIT);
 
         getOrCreateTagBuilder(ModTags.Items.PRIMITIVE_FIRESTARTERS)
-            .add(ModItems.FIRESTARTER_STICKS)
-            .add(ModItems.FIRESTARTER_BOW);
+                .add(ModItems.FIRESTARTER_STICKS)
+                .add(ModItems.FIRESTARTER_BOW);
 
         getOrCreateTagBuilder(ModTags.Items.DIRECT_IGNITERS)
                 .add(Items.TORCH)
                 .add(Items.SOUL_TORCH);
-
-
-
     }
 }

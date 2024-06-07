@@ -47,7 +47,7 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
 
         if (world.canPlayerModifyAt(player, pos))
         {
-            performUseEffects(player);
+            performUseEffects(context);
 
             if (!world.isClient)
             {
@@ -70,11 +70,15 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
     }
 
     @Override
-    public void performUseEffects(PlayerEntity player)
+    public void performUseEffects(ItemUsageContext context)
     {
-        player.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS,
-                0.5f + 0.5f * (float)player.getRandom().nextInt(2),
-                (player.getRandom().nextFloat() * 0.25f) + 1.75f);
+        PlayerEntity player = context.getPlayer();
+        World world = context.getWorld();
+        BlockPos pos = context.getBlockPos();
+
+        assert player != null;
+        world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
+
 
         if (!player.getWorld().isClient())
         {

@@ -42,7 +42,7 @@ public class SmokerOvenBlockEntityRenderer implements BlockEntityRenderer<Smoker
 
     private void renderCookItem(SmokerOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         // Get the itemsBeingCooked from the entity
-        ItemStack cookStack = ovenBE.getStack();
+        ItemStack cookStack = ovenBE.getCookStack();
         Direction facing = ovenBE.getCachedState().get(SmokerOvenBlock.FACING);
 
         matrices.push();

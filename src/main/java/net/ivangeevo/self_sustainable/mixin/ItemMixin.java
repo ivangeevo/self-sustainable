@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.mixin;
 
+import com.terraformersmc.modmenu.util.mod.Mod;
 import net.ivangeevo.self_sustainable.block.CampfireBlockManager;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.ivangeevo.self_sustainable.tag.ModTags;
@@ -21,8 +22,7 @@ public abstract class ItemMixin implements ItemAdded
 
     @Override
     public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {
-        return !getCanItemBeSetOnFireOnUse(stack) && !getCanItemStartFireOnUse(stack) &&
-                getOvenBurnTime(stack) > 0;
+        return !getCanItemBeSetOnFireOnUse(stack) && !getCanItemStartFireOnUse(stack);
     }
 
     @Override
@@ -41,12 +41,12 @@ public abstract class ItemMixin implements ItemAdded
     @Override
     public boolean getCanItemBeSetOnFireOnUse(ItemStack stack) {
 
-        return false;
+        return stack.isIn(ModTags.Items.CAN_BE_SET_ON_FIRE_ON_USE);
     }
 
     @Override
     public boolean getCanItemStartFireOnUse(ItemStack stack) {
-        return false;
+        return stack.isIn(ModTags.Items.CAN_START_FIRE_ON_USE);
     }
 
     @Override

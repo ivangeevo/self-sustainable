@@ -39,7 +39,7 @@ public class BrickOvenBlockEntityRenderer implements BlockEntityRenderer<BrickOv
 
     private void renderCookItem(BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         // Get the itemsBeingCooked from the entity
-        ItemStack cookStack = ovenBE.getStack();
+        ItemStack cookStack = ovenBE.getCookStack();
         Direction facing = ovenBE.getCachedState().get(BrickOvenBlock.FACING);
 
         matrices.push();

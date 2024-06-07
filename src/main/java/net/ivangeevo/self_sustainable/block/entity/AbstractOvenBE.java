@@ -1,15 +1,12 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
-import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.ivangeevo.self_sustainable.block.blocks.SmokerOvenBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.util.SingleStackInventory;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
-import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -18,28 +15,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.RecipeManager;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -135,6 +123,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
         {
             // lighting has to be done on update to prevent funkiness with tile entity removal on block being set
             lightOnNextUpdate = true;
+
 
             return true;
         }
@@ -278,13 +267,13 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
 
     public void retrieveItem(World world, PlayerEntity player)
     {
-        ItemStack cookStack = getStack();
+        ItemStack cookStack = getCookStack();
 
         if (!cookStack.isEmpty() && !world.isClient())
         {
-            if (!getStack().isEmpty())
+            if (!getCookStack().isEmpty())
             {
-                player.giveItemStack(getStack());
+                player.giveItemStack(getCookStack());
                 setStack(ItemStack.EMPTY);
                 markDirty();
                 Objects.requireNonNull(this.getWorld()).updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
@@ -297,7 +286,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
         return cookStack.isEmpty();
     }
     @Override
-    public ItemStack getStack() {
+    public ItemStack getCookStack() {
         return cookStack;
     }
     @Override

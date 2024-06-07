@@ -116,16 +116,7 @@ public abstract class BlockItemMixin extends Item implements Ignitable
         return stack.isOf(ModItems.TORCH_UNLIT);
     }
 
-    @Override
-    public boolean getCanItemBeSetOnFireOnUse(ItemStack stack)
-    {
-        if  (isUnlitTorch(stack))
-        {
-            return true;
-        }
-
-        return super.getCanItemBeSetOnFireOnUse(stack);
-    }
+    
 
 
 }

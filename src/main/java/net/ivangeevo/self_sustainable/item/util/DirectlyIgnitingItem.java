@@ -4,6 +4,7 @@ import net.ivangeevo.self_sustainable.item.interfaces.ItemStackAdded;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
@@ -23,7 +24,7 @@ public interface DirectlyIgnitingItem
 
      boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing);
 
-     void performUseEffects(PlayerEntity player);
+     void performUseEffects(ItemUsageContext context);
 
      boolean checkChanceOfStart(ItemStack stack, Random random);
 }

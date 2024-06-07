@@ -118,7 +118,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
             if (relativeClickY > clickYTopPortion)
             {
 
-                if (!ovenBE.getStack().isEmpty())
+                if (!ovenBE.getCookStack().isEmpty())
                 {
                     ovenBE.retrieveItem(world, player);
 
@@ -127,7 +127,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                 }
                 else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() )
                 {
-                    if ( !world.isClient() && ovenBE.getStack().isEmpty() && ovenBE.addItem(player,
+                    if ( !world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
                             player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime()))
                     {
 
@@ -230,7 +230,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
         if (blockEntity instanceof SmokerOvenBE ovenBE)
         {
             // Drops the contents inside when the block is destroyed
-            ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getStack());
+            ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getCookStack());
         }
 
         super.onStateReplaced(state, world, pos, newState, moved);
@@ -273,7 +273,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                 }
             }
 
-            ItemStack cookStack = ovenBE.getStack();
+            ItemStack cookStack = ovenBE.getCookStack();
 
             if ( cookStack != null && ovenBE.getRecipeFor(cookStack).isPresent() )
             {

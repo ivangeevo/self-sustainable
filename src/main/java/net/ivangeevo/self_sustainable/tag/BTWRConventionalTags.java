@@ -67,6 +67,9 @@ public class BTWRConventionalTags
 
         public static final TagKey<Item> STRING_TOOL_MATERIALS = createTag("string_tool_materials");
 
+        public static final TagKey<Item> TORCHES_CAN_IGNITE = createTag("torches_can_ignite");
+
+
 
         /** Tag for items that should do knockback if the config for
          *  knockback restriction is turned on.

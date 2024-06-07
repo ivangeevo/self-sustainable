@@ -1,0 +1,10 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "misc",
+  "cookingtime": 1600,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "animageddon:egg_raw"
+  },
+  "result": "minecraft:egg"
+}

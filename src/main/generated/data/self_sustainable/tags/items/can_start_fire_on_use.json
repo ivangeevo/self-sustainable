@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#self_sustainable:primitive_firestarters",
+    "#c:torches_can_ignite",
+    "minecraft:flint_and_steel",
+    "minecraft:torch"
+  ]
+}

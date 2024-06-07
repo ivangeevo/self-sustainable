@@ -1,0 +1,10 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "misc",
+  "cookingtime": 1800,
+  "experience": 0.15,
+  "ingredient": {
+    "item": "minecraft:mutton"
+  },
+  "result": "minecraft:cooked_mutton"
+}

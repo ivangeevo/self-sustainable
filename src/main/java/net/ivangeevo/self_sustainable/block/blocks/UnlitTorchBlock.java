@@ -14,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
@@ -44,6 +45,7 @@ public class UnlitTorchBlock extends TorchBlock implements Ignitable
         return ActionResult.FAIL;
     }
 
+
     // overriding to remove particles
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
@@ -54,4 +56,6 @@ public class UnlitTorchBlock extends TorchBlock implements Ignitable
     public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
         return true;
     }
+
+
 }

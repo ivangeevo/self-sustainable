@@ -83,7 +83,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     public boolean setOnFireDirectly(World world, BlockPos pos)
     {
 
-        if (world.getBlockState(pos) == this.getDefaultState().with(LIT, true))
+        if ( !world.getBlockState(pos).get(LIT) && world.getBlockState(pos).get(FUEL_LEVEL) > 0)
         {
             if (world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE)
             {
@@ -101,12 +101,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
         return false;
     }
-
-    @Override
-    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
-        return true;
-    }
-
 
     @Override
     public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos)

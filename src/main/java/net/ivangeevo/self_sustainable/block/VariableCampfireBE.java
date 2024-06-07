@@ -139,8 +139,6 @@ public class VariableCampfireBE
             }
              **/
 
-
-
             campfireBE.burnTimeSinceLit++;
 
 

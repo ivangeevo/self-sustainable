@@ -30,7 +30,7 @@ public class ModItems
             new KnittingItem(new FabricItemSettings().maxDamage(0)));
 
     public static final Item TORCH_UNLIT = registerItem("torch_unlit",
-            new VerticallyAttachableBlockItem(ModBlocks.TORCH_UNLIT, ModBlocks.WALL_TORCH_UNLIT,
+            new CrudeTorchItem(ModBlocks.TORCH_UNLIT, ModBlocks.WALL_TORCH_UNLIT,
                     new FabricItemSettings(), Direction.DOWN));
 
 

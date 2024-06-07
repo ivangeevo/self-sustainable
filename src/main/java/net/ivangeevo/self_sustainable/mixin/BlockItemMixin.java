@@ -24,6 +24,8 @@ public abstract class BlockItemMixin extends Item implements Ignitable
 {
     @Shadow public abstract ActionResult place(ItemPlacementContext context);
 
+    @Shadow public abstract ActionResult useOnBlock(ItemUsageContext context);
+
     public BlockItemMixin(Settings settings) {
         super(settings);
     }

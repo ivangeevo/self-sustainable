@@ -257,10 +257,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
         return 0;
     }
-    @Override
-    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
-        return true;
-    }
+
 
     @Override
     public boolean getCanBeSetOnFireDirectly(@NotNull WorldAccess blockAccess, BlockPos pos) {

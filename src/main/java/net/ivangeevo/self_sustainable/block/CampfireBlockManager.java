@@ -3,6 +3,7 @@ package net.ivangeevo.self_sustainable.block;
 import net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
+import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -61,7 +62,7 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
             // Handle stick input
             if (!getHasSpit(world, pos))
             {
-                if (heldStack.isOf(Items.STICK) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT))
+                if (heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT))
                 {
                     setHasSpit(world, state, pos, true);
                     heldStack.decrement(1); // Decrease the heldStack count

@@ -104,21 +104,26 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     private void addOvenCookingRecipes(Consumer<RecipeJsonProvider> exporter)
     {
         // Food
-        /**
-        createOvenCooking(Ingredient.ofItems(Items.BAKED_POTATO), RecipeCategory.FOOD, Items.POTATO, 0.25f, 100).offerTo(exporter);
-
-        createOvenCooking(Ingredient.ofItems(Items.COOKED_CHICKEN), RecipeCategory.FOOD, Items.CHICKEN, 0.15f, 1800).offerTo(exporter);
-        createOvenCooking(Ingredient.ofItems(Items.COOKED_BEEF), RecipeCategory.FOOD, Items.BEEF, 0.15f, 1800).offerTo(exporter);
-        createOvenCooking(Ingredient.ofItems(Items.COOKED_PORKCHOP), RecipeCategory.FOOD, Items.PORKCHOP, 0.15f, 1800).offerTo(exporter);
-        createOvenCooking(Ingredient.ofItems(Items.COOKED_MUTTON), RecipeCategory.FOOD, Items.MUTTON, 0.15f, 1800).offerTo(exporter);
-        createOvenCooking(Ingredient.ofItems(Items.COOKED_RABBIT), RecipeCategory.FOOD, Items.RABBIT, 0.10f, 1600).offerTo(exporter);
-        createOvenCooking(Ingredient.ofItems(Items.COOKED_COD), RecipeCategory.FOOD, Items.COD, 0.10f, 1600).offerTo(exporter);
-        createOvenCooking(Ingredient.ofItems(Items.COOKED_SALMON), RecipeCategory.FOOD, Items.SALMON, 0.10f, 1600).offerTo(exporter);
-         **/
+        
+        createOvenCooking(Items.BAKED_POTATO, RecipeCategory.FOOD, Ingredient.ofItems(Items.POTATO), 0.25f, 100).criterion("has_potato", RecipeProvider.conditionsFromItem(Items.POTATO)).offerTo(exporter);
+        createOvenCooking(Items.COOKED_CHICKEN, RecipeCategory.FOOD, Ingredient.ofItems(Items.CHICKEN), 0.15f, 1800).criterion("has_chicken", RecipeProvider.conditionsFromItem(Items.CHICKEN)).offerTo(exporter);
+        createOvenCooking(Items.COOKED_BEEF, RecipeCategory.FOOD, Ingredient.ofItems(Items.BEEF), 0.15f, 1800).criterion("has_beef", RecipeProvider.conditionsFromItem(Items.BEEF)).offerTo(exporter);
+        createOvenCooking(Items.COOKED_PORKCHOP, RecipeCategory.FOOD, Ingredient.ofItems(Items.PORKCHOP), 0.15f, 1800).criterion("has_porkchop", RecipeProvider.conditionsFromItem(Items.PORKCHOP)).offerTo(exporter);
+        createOvenCooking(Items.COOKED_MUTTON, RecipeCategory.FOOD, Ingredient.ofItems(Items.MUTTON), 0.15f, 1800).criterion("has_mutton", RecipeProvider.conditionsFromItem(Items.MUTTON)).offerTo(exporter);
+        createOvenCooking(Items.COOKED_RABBIT, RecipeCategory.FOOD, Ingredient.ofItems(Items.RABBIT), 0.10f, 1600).criterion("has_rabbit", RecipeProvider.conditionsFromItem(Items.RABBIT)).offerTo(exporter);
+        createOvenCooking(Items.COOKED_COD, RecipeCategory.FOOD, Ingredient.ofItems(Items.COD), 0.10f, 1600).criterion("has_cod", RecipeProvider.conditionsFromItem(Items.COD)).offerTo(exporter);
+        createOvenCooking(Items.COOKED_SALMON, RecipeCategory.FOOD, Ingredient.ofItems(Items.SALMON), 0.10f, 1600).criterion("has_salmon", RecipeProvider.conditionsFromItem(Items.SALMON)).offerTo(exporter);
+        
 
         // Ores
         ModCookingRecipeJsonBuilder.createSmelting(Items.IRON_NUGGET, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_IRON), 0.25f, 12000).criterion("has_raw_iron", RecipeProvider.conditionsFromItem(Items.RAW_IRON)).offerTo(exporter);
-        
+        ModCookingRecipeJsonBuilder.createSmelting(Items.GOLD_NUGGET, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_GOLD), 0.35f, 12000).criterion("has_raw_gold", RecipeProvider.conditionsFromItem(Items.RAW_GOLD)).offerTo(exporter);
+        ModCookingRecipeJsonBuilder.createSmelting(Items.COPPER_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_COPPER), 0.20f, 10000).criterion("has_raw_copper", RecipeProvider.conditionsFromItem(Items.RAW_COPPER)).offerTo(exporter);
+
+    }
+
+    public static ModCookingRecipeJsonBuilder createOvenCooking(ItemConvertible output, RecipeCategory category,Ingredient input , float experience, int cookingTime) {
+        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getSmeltingRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe.Serializer.INSTANCE);
     }
 
 

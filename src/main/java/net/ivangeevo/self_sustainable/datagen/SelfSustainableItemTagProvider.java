@@ -26,7 +26,9 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
         getOrCreateTagBuilder(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS)
                 .add(Items.STICK);
 
-    getOrCreateTagBuilder(ModTags.Items.PRIMITIVE_FIRESTARTERS)
+
+
+        getOrCreateTagBuilder(ModTags.Items.PRIMITIVE_FIRESTARTERS)
             .add(ModItems.FIRESTARTER_STICKS)
             .add(ModItems.FIRESTARTER_BOW);
 

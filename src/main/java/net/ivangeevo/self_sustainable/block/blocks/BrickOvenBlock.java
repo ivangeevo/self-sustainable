@@ -107,11 +107,29 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         return true;
     }
 
+
+    @Override
+    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos)
+    {
+        if ( !blockAccess.getBlockState(pos).get(LIT) )
+        {
+            BrickOvenBE ovenBE = (BrickOvenBE) blockAccess.getBlockEntity( pos );
+
+            // uses the visual fuel level rather than the actualy fuel level so this will work on the client
+
+            assert ovenBE != null;
+
+            return ovenBE.getVisualFuelLevel() > 0;
+        }
+
+        return false;
+    }
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         ItemStack heldStack = player.getStackInHand(hand);
         BlockEntity blockEntity = world.getBlockEntity(pos);
+        Item item = heldStack.getItem();
 
         double relativeClickY = hit.getPos().getY() - pos.getY();
 
@@ -147,48 +165,72 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
                 return ActionResult.SUCCESS;
             }
-            else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
-            {
-                // Try to ignite
-                if ( heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS) )
+            else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
+
+                if (!world.isClient)
                 {
-                    if ( state.get(FUEL_LEVEL) > 0 )
+                    int iItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
+
+                    if ( iItemsConsumed > 0 )
                     {
-                        if (!state.get(LIT))
+                        if ( state.get(LIT) )
                         {
-                            world.setBlockState(pos, state.with(LIT, true));
                             Ignitable.playLitFX(world, pos);
-                            heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
                         }
-
-                        return ActionResult.SUCCESS;
-                    }
-                    else
-                    {
-                        Ignitable.playExtinguishSound(world, pos, false);
-                    }
-                }
-                // try to add fuel
-                else
-                {
-
-                    // Use the attemptToAddFuel method to try and add fuel
-                    int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
-
-                    if (numItemsConsumed > 0) {
-                        if (state.get(LIT)) {
-                            Ignitable.playLitFX(world, pos);
-                        } else {
+                        else
+                        {
                             this.playPopSound(world, pos);
                         }
 
-                        heldStack.split(numItemsConsumed);
-
-
+                        heldStack.setCount(heldStack.getCount() - iItemsConsumed);
                     }
                 }
 
                 return ActionResult.SUCCESS;
+
+
+
+
+                // keep just in case. for now...
+                /**
+                // Try to ignite
+                if (heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS)) {
+                    /**
+                    if (state.get(FUEL_LEVEL) > 0) {
+                        if (!state.get(LIT)) {
+                            world.setBlockState(pos, state.with(LIT, true));
+                            Ignitable.playLitFX(world, pos);
+                            heldStack.damage(1, player,
+                                    (p) -> p.sendToolBreakStatus(player.getActiveHand()));
+                        }
+
+                        return ActionResult.SUCCESS;
+                    } else {
+                        Ignitable.playExtinguishSound(world, pos, false);
+                    }
+
+                }
+                // try to add fuel
+                else
+                {
+                    if (!world.isClient)
+                    {
+                        // Use the attemptToAddFuel method to try and add fuel
+                        int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
+
+                        if (numItemsConsumed > 0) {
+                            if (state.get(LIT)) {
+                                Ignitable.playLitFX(world, pos);
+                            } else {
+                                this.playPopSound(world, pos);
+                            }
+
+                            heldStack.split(numItemsConsumed);
+                        }
+                    }
+                }
+                **/
+
             }
 
         }

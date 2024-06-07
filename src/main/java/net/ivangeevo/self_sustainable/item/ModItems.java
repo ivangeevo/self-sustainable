@@ -7,6 +7,7 @@ import net.ivangeevo.self_sustainable.item.items.*;
 import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
+import net.minecraft.item.VerticallyAttachableBlockItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -28,43 +29,18 @@ public class ModItems
     public static final Item KNITTING = registerItem("knitting",
             new KnittingItem(new FabricItemSettings().maxDamage(0)));
 
+    public static final Item TORCH_UNLIT = registerItem("torch_unlit",
+            new VerticallyAttachableBlockItem(ModBlocks.TORCH_UNLIT, ModBlocks.WALL_TORCH_UNLIT,
+                    new FabricItemSettings(), Direction.DOWN));
+
 
     public static final Item FIRESTARTER_STICKS = registerItem("firestarter_sticks",
             new FireStarterItemPrimitive(new FabricItemSettings().maxDamage(250), 0.05F, -0.1F, 0.1F, 0.001F));
     public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
             new FireStarterItemPrimitive(new FabricItemSettings().maxDamage(250),0.025F, -0.1F, 0.1F, 0.004F));
 
-/**
-    // Temporarily adding them as items only until I figure out Firestarter code.
-    public static final Item FIRESTARTER_STICKS = registerItem("firestarter_sticks",
-            new FlintAndSteelItem(new FabricItemSettings().maxDamage(1)));
-    public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
-            new FlintAndSteelItem(new FabricItemSettings().maxDamage(8)));
-     **/
-    /**
-    // There is only unlit torch item in here, the other is the vanilla one.
-    // The blocks are vanilla torch and wall torch.
-    public static final Item UNLIT_TORCH = registerItem("unlit_torch",
-            new UnlitTorchItem( new FabricItemSettings(), Direction.DOWN) );
 
-    public static final Item LIT_TORCH = registerItem("lit_torch", new LitTorchItem( new FabricItemSettings(), Direction.DOWN) );
-
-    // The crude and crude unlit items get assigned to the modded torch blocks.
-    public static final Item CRUDE_TORCH = registerItem("crude_torch",
-            new CrudeTorchItem
-                    (ModBlocks.CRUDE_TORCH.getDefaultState().with(LIT, true).getBlock(),
-                    ModBlocks.WALL_CRUDE_TORCH.getDefaultState().with(LIT, true).getBlock(),
-                    new FabricItemSettings(), Direction.DOWN));
-
-    public static final Item CRUDE_TORCH_UNLIT = registerItem("crude_torch_unlit",
-            new CrudeTorchItem(
-                    ModBlocks.CRUDE_TORCH.getDefaultState().with(LIT, false).getBlock(),
-                    ModBlocks.WALL_CRUDE_TORCH.getDefaultState().with(LIT, false).getBlock(),
-                    new FabricItemSettings(), Direction.DOWN));
-    **/
-
-
-
+    // ****************** //
 
     private static Item registerItem(String name, Item item)
     {

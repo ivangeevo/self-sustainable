@@ -9,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -64,7 +66,6 @@ public class WoolKnitItem extends Item implements ItemColorProvider {
         String name = String.format("%s Wool", woolType);
         stack.setCustomName(Text.of(name));
     }
-
 
     @Override
     public int getOvenBurnTime(ItemStack stack) {

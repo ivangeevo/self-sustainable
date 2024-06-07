@@ -4,10 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.blocks.*;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.WallTorchBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -23,6 +20,16 @@ import static net.minecraft.state.property.Properties.LIT;
 
 public class ModBlocks
 {
+
+    public static final Block TORCH_UNLIT = registerBlockWithoutItem("torch_unlit",
+            new UnlitTorchBlock(FabricBlockSettings.create().noCollision().breakInstantly()
+                    .pistonBehavior(PistonBehavior.DESTROY)
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME));
+
+    public static final Block WALL_TORCH_UNLIT = registerBlockWithoutItem("wall_torch_unlit",
+            new UnlitWallTorchBlock(FabricBlockSettings.create().noCollision().breakInstantly()
+                    .pistonBehavior(PistonBehavior.DESTROY)
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME));
 
     public static final Block OVEN_BRICK = registerBlock("oven_brick",
             new BrickOvenBlock(FabricBlockSettings.create().strength(1.5F,2.0F)

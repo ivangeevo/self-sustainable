@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=east": { "model": "self_sustainable:block/wall_torch_unlit"},
+    "facing=south": { "model": "self_sustainable:block/wall_torch_unlit", "y": 90 },
+    "facing=west": { "model": "self_sustainable:block/wall_torch_unlit", "y": 180 },
+    "facing=north": { "model": "self_sustainable:block/wall_torch_unlit", "y": 270 }
+  }
+}

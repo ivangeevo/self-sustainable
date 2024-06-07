@@ -21,6 +21,7 @@ public class ModItemGroup {
                         entries.add(ModItems.KNITTING_NEEDLES);
                         entries.add(ModItems.FIRESTARTER_STICKS);
                         entries.add(ModItems.FIRESTARTER_BOW);
+                        entries.add(ModItems.TORCH_UNLIT);
 
                         /**
                         entries.add(ModItems.CRUDE_TORCH);

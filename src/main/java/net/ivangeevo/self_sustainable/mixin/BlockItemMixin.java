@@ -1,6 +1,9 @@
 package net.ivangeevo.self_sustainable.mixin;
 
+import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
+import net.ivangeevo.self_sustainable.item.ModItems;
+import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -26,7 +29,6 @@ public abstract class BlockItemMixin extends Item implements Ignitable
     }
 
     // keep for reference on how to change what block is placed from an item
-
     /**
      // Injected logic for replacing vanilla's placed block torch with the modded one, so we can utilize all block entity capabilities.
      @Inject(method = "place(Lnet/minecraft/item/ItemPlacementContext;Lnet/minecraft/block/BlockState;)Z", at = @At("HEAD"), cancellable = true)
@@ -60,8 +62,11 @@ public abstract class BlockItemMixin extends Item implements Ignitable
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
-        // Check if the block at the position is a campfire and try lighting up.
-        if (block == Blocks.CAMPFIRE)
+        ItemStack heldStack = context.getStack();
+
+        // Check if the block at the position is a campfire or oven and try lighting up.
+        if (block == Blocks.CAMPFIRE
+                || ( block == ModBlocks.OVEN_BRICK && heldStack.getItem() != ModBlocks.OVEN_BRICK.asItem() ) )
         {
             if (world.canPlayerModifyAt(player, pos))
             {
@@ -69,6 +74,7 @@ public abstract class BlockItemMixin extends Item implements Ignitable
                 {
                     attemptToLightBlock(context.getStack(), world, pos, context.getSide());
                 }
+
                 cir.setReturnValue( ActionResult.SUCCESS );
             }
             else
@@ -94,7 +100,7 @@ public abstract class BlockItemMixin extends Item implements Ignitable
     {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if ( isTorch(stack) && targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos) )
+        if ( targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos) )
         {
             return targetBlock.setOnFireDirectly(world, pos);
         }
@@ -103,19 +109,21 @@ public abstract class BlockItemMixin extends Item implements Ignitable
     }
 
 
-    private boolean isTorch(ItemStack stack)
+    private boolean isUnlitTorch(ItemStack stack)
     {
-        return stack.isOf(Items.TORCH) || stack.isOf(Items.SOUL_TORCH);
+        return stack.isOf(ModItems.TORCH_UNLIT);
     }
 
+    @Override
+    public boolean getCanItemBeSetOnFireOnUse(ItemStack stack)
+    {
+        if  (isUnlitTorch(stack))
+        {
+            return true;
+        }
 
-
-
-
-
-
-
-
+        return super.getCanItemBeSetOnFireOnUse(stack);
+    }
 
 
 }

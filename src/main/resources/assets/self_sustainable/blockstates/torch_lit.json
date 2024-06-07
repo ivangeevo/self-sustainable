@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "self_sustainable:block/torch_lit"
+    }
+  }
+}

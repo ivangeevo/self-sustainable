@@ -5,6 +5,7 @@ import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.entity.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
@@ -16,12 +17,7 @@ public class ModBlockEntities {
     public static BlockEntityType<BrickOvenBE> OVEN_BRICK;
     public static BlockEntityType<SmokerOvenBE> SMOKER_BRICK;
     public static BlockEntityType<VariableCampfireBE> CAMPFIRE;
-
-    /**
-    public static BlockEntityType<TorchBlockEntity> TORCH;
-    public static BlockEntityType<CrudeTorchBlockEntity> CRUDE_TORCH;
-     **/
-
+    public static BlockEntityType<TorchBE> TORCH;
 
     public static void registerBlockEntities()
         {
@@ -37,10 +33,22 @@ public class ModBlockEntities {
                     "campfire"), FabricBlockEntityTypeBuilder.create(VariableCampfireBE::new,
                     Blocks.CAMPFIRE).build(null));
 
-            /**
+
+            Block[] arrTorches = new Block[] {
+                    ModBlocks.TORCH_LIT,
+                    ModBlocks.TORCH_UNLIT,
+                    ModBlocks.TORCH_SMOULDER,
+                    ModBlocks.TORCH_BURNED_OUT,
+                    ModBlocks.WALL_TORCH_LIT,
+                    ModBlocks.WALL_TORCH_UNLIT,
+                    ModBlocks.WALL_TORCH_SMOULDER,
+                    ModBlocks.WALL_TORCH_BURNED_OUT
+            };
+
             TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
-                    "torch"), FabricBlockEntityTypeBuilder.create(TorchBlockEntity::new,
-                    Blocks.TORCH, Blocks.WALL_TORCH).build(null));
+                    "torch"), FabricBlockEntityTypeBuilder.create(TorchBE::new, arrTorches).build(null));
+
+            /**
 
             CRUDE_TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "crude_torch"), FabricBlockEntityTypeBuilder.create(CrudeTorchBlockEntity::new,

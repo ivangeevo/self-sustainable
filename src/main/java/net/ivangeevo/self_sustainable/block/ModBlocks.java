@@ -4,11 +4,12 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.blocks.*;
+import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
+import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -22,14 +23,67 @@ public class ModBlocks
 {
 
     public static final Block TORCH_UNLIT = registerBlockWithoutItem("torch_unlit",
-            new UnlitTorchBlock(FabricBlockSettings.create().noCollision().breakInstantly()
+            new ModTorchBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .breakInstantly()
                     .pistonBehavior(PistonBehavior.DESTROY)
-                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME));
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME, TorchFireState.UNLIT, () -> 48000));
+
+    public static final Block TORCH_LIT = registerBlockWithoutItem("torch_lit",
+            new ModTorchBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .breakInstantly()
+                    .luminance(state -> 14)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME, TorchFireState.LIT, () -> 48000));
+
+    public static final Block TORCH_SMOULDER = registerBlockWithoutItem("torch_smoulder",
+            new ModTorchBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .breakInstantly()
+                    .luminance(state -> 3)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME, TorchFireState.SMOULDER, () -> 48000));
+
+    public static final Block TORCH_BURNED_OUT = registerBlockWithoutItem("torch_burned_out",
+            new ModTorchBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .breakInstantly()
+                    .pistonBehavior(PistonBehavior.DESTROY)
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME, TorchFireState.BURNED_OUT, () -> 48000));
+
+
 
     public static final Block WALL_TORCH_UNLIT = registerBlockWithoutItem("wall_torch_unlit",
-            new UnlitWallTorchBlock(FabricBlockSettings.create().noCollision().breakInstantly()
+            new ModWallTorchBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .breakInstantly()
                     .pistonBehavior(PistonBehavior.DESTROY)
-                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME));
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME, TorchFireState.UNLIT, () -> 48000));
+
+    public static final Block WALL_TORCH_LIT = registerBlockWithoutItem("wall_torch_lit",
+            new ModWallTorchBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .breakInstantly()
+                    .luminance(state -> 14)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME, TorchFireState.LIT, () -> 48000));
+
+    public static final Block WALL_TORCH_SMOULDER = registerBlockWithoutItem("wall_torch_smoulder",
+            new ModWallTorchBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .breakInstantly()
+                    .luminance(state -> 3)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.SMOKE, TorchFireState.SMOULDER, () -> 48000));
+
+    public static final Block WALL_TORCH_BURNED_OUT =  registerBlockWithoutItem("wall_torch_burned_out",
+            new ModWallTorchBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .breakInstantly()
+                    .pistonBehavior(PistonBehavior.DESTROY)
+                    .sounds(BlockSoundGroup.WOOD), ParticleTypes.FLAME, TorchFireState.BURNED_OUT, () -> 48000));
+
 
     public static final Block OVEN_BRICK = registerBlock("oven_brick",
             new BrickOvenBlock(FabricBlockSettings.create().strength(1.5F,2.0F)
@@ -39,31 +93,27 @@ public class ModBlocks
             new SmokerOvenBlock(FabricBlockSettings.create().strength(1.5F,2.0F)
                     .luminance((state) -> state.get(LIT) ? 10 : 0)
                     .sounds(BlockSoundGroup.STONE)));
-    /**
-     public static final Block TORCH = registerBlockWithoutItem("torch",
-     new ModTorchBlock(setTorchSettings(), ParticleTypes.FLAME));
-
-     public static final Block WALL_TORCH = registerBlockWithoutItem("wall_torch",
-     new ModWallTorchBlock(setTorchSettings().dropsLike(Blocks.TORCH), ParticleTypes.FLAME));
-     **/
 
 
-    /**
-    public static final Block TORCH = registerBlockWithoutItem("torch", new ModTorchBlock());
-
-    public static final Block TORCH_WALL = registerBlockWithoutItem("torch_wall", new ModWallTorchBlock());
-
-    public static final Block CRUDE_TORCH = registerBlockWithoutItem("crude_torch", new CrudeTorchBlock());
-    public static final Block WALL_CRUDE_TORCH = registerBlockWithoutItem("wall_crude_torch", new WallCrudeTorchBlock());
-     **/
 
 
-    private static FabricBlockSettings setTorchSettings()
+   public static ModTorchHandler torches = new ModTorchHandler("basic");
+
+    public static void registerTorchHandler()
     {
-        return FabricBlockSettings.create().noCollision().breakInstantly()
-                .luminance((state) -> state.get(LIT) ? 14 : 0).sounds(BlockSoundGroup.WOOD)
-                .pistonBehavior(PistonBehavior.DESTROY);
+
+        torches.addTorch(ModBlocks.TORCH_LIT);
+        torches.addTorch(ModBlocks.TORCH_UNLIT);
+        torches.addTorch(ModBlocks.TORCH_SMOULDER);
+        torches.addTorch(ModBlocks.TORCH_BURNED_OUT);
+        torches.addTorch(ModBlocks.WALL_TORCH_LIT);
+        torches.addTorch(ModBlocks.WALL_TORCH_UNLIT);
+        torches.addTorch(ModBlocks.WALL_TORCH_SMOULDER);
+        torches.addTorch(ModBlocks.WALL_TORCH_BURNED_OUT);
+
+
     }
+
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);

@@ -17,7 +17,6 @@
     "MobEntityMixin",
     "PlayerEntityMixin",
     "SpawnHelperMixin",
-    "TorchBlockMixin",
     "ZombieVillagerEntityMixin"
   ],
   "client": [

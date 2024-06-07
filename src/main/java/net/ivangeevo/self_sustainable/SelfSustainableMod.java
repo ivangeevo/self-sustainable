@@ -6,11 +6,14 @@ import net.ivangeevo.self_sustainable.config.SSSettings;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.item.FuelTicksManager;
 import net.ivangeevo.self_sustainable.item.ModItems;
+import net.ivangeevo.self_sustainable.loot.LootFunctionTorch;
+import net.ivangeevo.self_sustainable.loot.TorchFuelFunction;
 import net.ivangeevo.self_sustainable.networking.NetworkMessagesRegistry;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import net.ivangeevo.self_sustainable.registry.FuelRegistryManager;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
+import net.minecraft.loot.function.LootFunctionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,18 +34,25 @@ public class SelfSustainableMod implements ModInitializer
         return instance;
     }
 
+    public static final LootFunctionType TORCH_LOOT_FUNCTION = new LootFunctionType(new LootFunctionTorch.Serializer());
+    public static final LootFunctionType TORCH_FUEL_FUNCTION = new LootFunctionType(new TorchFuelFunction.Serializer());
+
     @Override
     public void onInitialize()
     {
         LOGGER.info("Initializing Self Sustainable.");
         loadSettings();
         instance = this;
+        ModBlocks.registerTorchHandler();
 
         ModItems.registerModItems();
         ModItemGroup.registerItemGroups();
         ModBlocks.registerModBlocks();
         ModBlockEntities.registerBlockEntities();
         ModRecipes.registerRecipes();
+
+
+
 
         NetworkMessagesRegistry.registerS2CPackets();
         NetworkMessagesRegistry.registerC2SPackets();

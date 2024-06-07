@@ -32,13 +32,23 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
         this.addToModTags();
 
 
-
-
-
     }
 
     private void addToModTags()
     {
+
+        getOrCreateTagBuilder(ModTags.Items.TORCHES_CAN_LIGHT_UP)
+                .add(Items.TORCH)
+                .add(Items.SOUL_TORCH)
+                .add(Items.LAVA_BUCKET)
+                .add(ModItems.TORCH_LIT);
+
+        getOrCreateTagBuilder(ModTags.Items.SMOTHER_TORCHES_ON_USE)
+                .add(Items.WATER_BUCKET);
+
+        getOrCreateTagBuilder(ModTags.Items.EXTINGUISH_TORCHES_ON_USE)
+                .add(Items.WATER_BUCKET);
+
         getOrCreateTagBuilder(ModTags.Items.CAN_START_FIRE_ON_USE)
                 .addTag(ModTags.Items.PRIMITIVE_FIRESTARTERS)
                 .addTag(BTWRConventionalTags.Items.TORCHES_CAN_IGNITE)

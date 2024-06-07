@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:campfire",
+    "self_sustainable:oven_brick",
+    "minecraft:lava"
+  ]
+}

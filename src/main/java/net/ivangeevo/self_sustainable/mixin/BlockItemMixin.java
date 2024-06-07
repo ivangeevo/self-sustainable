@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.mixin;
 
+import com.terraformersmc.modmenu.util.mod.Mod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.item.ModItems;
@@ -66,34 +67,30 @@ public abstract class BlockItemMixin extends Item implements Ignitable
 
         ItemStack heldStack = context.getStack();
 
-        // Check if the block at the position is a campfire or oven and try lighting up.
-        if (block == Blocks.CAMPFIRE
-                || ( block == ModBlocks.OVEN_BRICK && heldStack.getItem() != ModBlocks.OVEN_BRICK.asItem() ) )
+        if (heldStack.isIn(ModTags.Items.CAN_START_FIRE_ON_USE))
         {
-            if (world.canPlayerModifyAt(player, pos))
-            {
-                if (!world.isClient)
-                {
-                    attemptToLightBlock(context.getStack(), world, pos, context.getSide());
-                }
 
-                cir.setReturnValue( ActionResult.SUCCESS );
+            // Check if the block at the position is a campfire or oven and try lighting up.
+            if (block == Blocks.CAMPFIRE
+                    || (block == ModBlocks.OVEN_BRICK && heldStack.getItem() != ModBlocks.OVEN_BRICK.asItem())) {
+                if (world.canPlayerModifyAt(player, pos)) {
+                    if (!world.isClient) {
+                        attemptToLightBlock(context.getStack(), world, pos, context.getSide());
+                    }
+
+                    cir.setReturnValue(ActionResult.SUCCESS);
+                } else {
+                    cir.setReturnValue(ActionResult.FAIL);
+                }
+            } else {
+                // Default logic for placing or using the item
+                ActionResult actionResult = this.place(new ItemPlacementContext(context));
+                if (!actionResult.isAccepted() && this.isFood()) {
+                    ActionResult actionResult2 = this.use(context.getWorld(), context.getPlayer(), context.getHand()).getResult();
+                    cir.setReturnValue(actionResult2 == ActionResult.CONSUME ? ActionResult.CONSUME_PARTIAL : actionResult2);
+                }
+                cir.setReturnValue(actionResult);
             }
-            else
-            {
-                cir.setReturnValue( ActionResult.FAIL );
-            }
-        }
-        else
-        {
-            // Default logic for placing or using the item
-            ActionResult actionResult = this.place(new ItemPlacementContext(context));
-            if (!actionResult.isAccepted() && this.isFood())
-            {
-                ActionResult actionResult2 = this.use(context.getWorld(), context.getPlayer(), context.getHand()).getResult();
-                cir.setReturnValue( actionResult2 == ActionResult.CONSUME ? ActionResult.CONSUME_PARTIAL : actionResult2 );
-            }
-            cir.setReturnValue( actionResult );
         }
     }
 

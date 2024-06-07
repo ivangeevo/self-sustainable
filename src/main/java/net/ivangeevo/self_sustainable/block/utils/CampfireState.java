@@ -24,7 +24,6 @@ public enum CampfireState implements StringIdentifiable
         return this.name;
     }
 
-    // Assuming FUEL_STATE is the block state property representing the campfire state
     public static CampfireState convertToEnumState(int iCampfireState) {
         return switch (iCampfireState) {
             case 0 -> CampfireState.NORMAL;

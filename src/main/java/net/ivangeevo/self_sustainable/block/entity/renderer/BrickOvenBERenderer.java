@@ -1,10 +1,8 @@
 package net.ivangeevo.self_sustainable.block.entity.renderer;
 
-import net.ivangeevo.self_sustainable.block.blocks.SmokerOvenBlock;
-import net.ivangeevo.self_sustainable.block.entity.SmokerOvenBE;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock;
+import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -14,13 +12,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 
-public class SmokerOvenBlockEntityRenderer implements BlockEntityRenderer<SmokerOvenBE>
-{
+public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
 
     private final ItemRenderer itemRenderer;
 
 
-    public SmokerOvenBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
+    public BrickOvenBERenderer(BlockEntityRendererFactory.Context ctx) {
         this.itemRenderer = ctx.getItemRenderer();
     }
 
@@ -28,7 +25,7 @@ public class SmokerOvenBlockEntityRenderer implements BlockEntityRenderer<Smoker
     // TODO: Fix the item model orientation.
     // It displays with a wrong orientation for different directions.
     @Override
-    public void render(SmokerOvenBE entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(BrickOvenBE entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
         // Render the fuel level overlay as a whole block
         /** Done as Blockstates currently **/
@@ -40,10 +37,10 @@ public class SmokerOvenBlockEntityRenderer implements BlockEntityRenderer<Smoker
     }
 
 
-    private void renderCookItem(SmokerOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void renderCookItem(BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         // Get the itemsBeingCooked from the entity
         ItemStack cookStack = ovenBE.getCookStack();
-        Direction facing = ovenBE.getCachedState().get(SmokerOvenBlock.FACING);
+        Direction facing = ovenBE.getCachedState().get(BrickOvenBlock.FACING);
 
         matrices.push();
 

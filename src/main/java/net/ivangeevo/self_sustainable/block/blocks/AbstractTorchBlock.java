@@ -1,8 +1,7 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-import com.terraformersmc.modmenu.util.mod.Mod;
 import net.ivangeevo.self_sustainable.block.entity.TorchBE;
-import net.ivangeevo.self_sustainable.block.entity.util.IFuelBlock;
+import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
@@ -23,7 +22,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -36,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.IntSupplier;
 
-public abstract class AbstractTorchBlock extends BlockWithEntity implements BlockEntityProvider, IFuelBlock
+public abstract class AbstractTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock
 {
 
     public ParticleEffect particle;
@@ -163,13 +161,13 @@ public abstract class AbstractTorchBlock extends BlockWithEntity implements Bloc
         boolean success = false;
 
         if (fireState == TorchFireState.LIT) {
-            if (attemptUse(stack, player, hand, ModTags.Items.EXTINGUISH_TORCHES_ON_USE)) {
+            if (tryUse(ModTags.Items.EXTINGUISH_TORCHES_ON_USE, stack, player, hand)) {
                 extinguish(world, pos, state);
                 player.swingHand(hand);
                 return ActionResult.SUCCESS;
             }
 
-            if (attemptUse(stack, player, hand, ModTags.Items.SMOTHER_TORCHES_ON_USE)) {
+            if (tryUse(ModTags.Items.EXTINGUISH_TORCHES_ON_USE, stack, player, hand)) {
                 smother(world, pos, state);
                 player.swingHand(hand);
                 return ActionResult.SUCCESS;
@@ -177,7 +175,7 @@ public abstract class AbstractTorchBlock extends BlockWithEntity implements Bloc
         }
 
         if (fireState == TorchFireState.SMOULDER || fireState == TorchFireState.UNLIT) {
-            if (attemptUse(stack, player, hand, ModTags.Items.TORCHES_CAN_LIGHT_UP)) {
+            if (tryUse(ModTags.Items.EXTINGUISH_TORCHES_ON_USE, stack, player, hand)) {
                 light(world, pos, state);
                 player.swingHand(hand);
                 return ActionResult.SUCCESS;
@@ -188,7 +186,8 @@ public abstract class AbstractTorchBlock extends BlockWithEntity implements Bloc
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
+    {
         super.onPlaced(world, pos, state, placer, itemStack);
 
         BlockEntity be = world.getBlockEntity(pos);

@@ -24,15 +24,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class TorchItem extends VerticallyAttachableBlockItem implements FabricItem {
-    TorchFireState firestate;
+    TorchFireState torchState;
     ModTorchHandler handler;
     int maxFuel;
-
-    public TorchItem(Block standingBlock, Block wallBlock, Item.Settings settings, TorchFireState fireState, int maxFuel, ModTorchHandler handler) {
+    private static final int FUEL_TIME = 48000;
+    public TorchItem(Block standingBlock, Block wallBlock, Item.Settings settings, TorchFireState torchState, int maxFuel, ModTorchHandler group) {
         super(standingBlock, wallBlock, settings, Direction.DOWN);
-        this.firestate = fireState;
+        this.torchState = torchState;
         this.maxFuel = maxFuel;
-        this.handler = handler;
+        this.handler = group;
     }
 
     @Override
@@ -74,10 +74,8 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
         }
 
         if (oldNbt == null && newNbt != null) return true;
-        if (oldNbt != null && newNbt == null) return true;
-        if (oldNbt == null && newNbt == null) return false;
 
-        return oldNbt.equals(null);
+        return oldNbt != null && newNbt == null;
     }
 
     @Override
@@ -88,13 +86,16 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
         BlockState state = world.getBlockState(pos);
 
         // Make sure it's a torch and get its type
-        if (stack.getItem() instanceof TorchItem) {
-            TorchFireState torchState = ((TorchItem) stack.getItem()).firestate;
+        if (stack.getItem() instanceof TorchItem)
+        {
+            TorchFireState torchState = ((TorchItem) stack.getItem()).torchState;
 
-            if (torchState == TorchFireState.UNLIT || torchState == TorchFireState.SMOULDER) {
+            if (torchState == TorchFireState.UNLIT || torchState == TorchFireState.SMOULDER)
+            {
 
                 // Unlit and Smoldering
-                if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE)) {
+                if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE))
+                {
                     // No lighting on unlit fires etc.
                     if (state.contains(Properties.LIT))
                         if (!state.get(Properties.LIT))
@@ -113,35 +114,45 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
     }
 
     @Override
-    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
+    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference)
+    {
         // If you are clicking on it with a non HCTorch item or with empty, use vanilla behavior
-        if (!slot.canTakePartial(player) || !(otherStack.getItem() instanceof TorchItem) || otherStack.isEmpty()) {
+        if (!slot.canTakePartial(player) || !(otherStack.getItem() instanceof TorchItem) || otherStack.isEmpty())
+        {
             return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference);
         }
 
         // Return left click if either is full
-        if (clickType != ClickType.RIGHT && (stack.getCount() >= stack.getMaxCount() || otherStack.getCount() >= otherStack.getMaxCount())) {
+        if (clickType != ClickType.RIGHT && (stack.getCount() >= stack.getMaxCount() || otherStack.getCount() >= otherStack.getMaxCount()))
+        {
             return false;
         }
 
         // Ensure torches are in same group
-        if (!sameTorchGroup((TorchItem) stack.getItem(), (TorchItem) otherStack.getItem())) {
+        if (!sameTorchGroup((TorchItem) stack.getItem(), (TorchItem) otherStack.getItem()))
+        {
             return false;
         }
 
-        if (((TorchItem) stack.getItem()).firestate == TorchFireState.LIT) {
+        if (((TorchItem) stack.getItem()).torchState == TorchFireState.LIT)
+        {
             // If clicked is lit, return if clicked with burnt
-            if (((TorchItem) otherStack.getItem()).firestate == TorchFireState.BURNED_OUT) {
+            if (((TorchItem) otherStack.getItem()).torchState == TorchFireState.BURNED_OUT)
+            {
                 return false;
             }
-        } else if (((TorchItem) stack.getItem()).firestate == TorchFireState.UNLIT) {
+        }
+        else if (((TorchItem) stack.getItem()).torchState == TorchFireState.UNLIT)
+        {
             // If clicked is unlit, return if clicked is not unlit
-            if (((TorchItem) otherStack.getItem()).firestate != TorchFireState.UNLIT) {
+            if (((TorchItem) otherStack.getItem()).torchState != TorchFireState.UNLIT)
+            {
                 return false;
             }
         }
 
-        if (!otherStack.isEmpty()) {
+        if (!otherStack.isEmpty())
+        {
             int max = stack.getMaxCount();
             int usedCount = clickType != ClickType.RIGHT ? otherStack.getCount() : 1;
             int otherMax = otherStack.getMaxCount();
@@ -158,40 +169,44 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
             NbtCompound nbt = new NbtCompound();
             nbt.putInt("Fuel", totalFuel / (stack.getCount() + addedNew));
 
-            if (addedNew > 0) {
+            if (addedNew > 0)
+            {
                 stack.increment(addedNew);
                 stack.setNbt(nbt);
                 otherStack.setCount(otherStack.getCount() - addedNew);
+
                 return true;
             }
         }
+
         return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference);
     }
 
-    public boolean sameTorchGroup(TorchItem item1, TorchItem item2) {
-        if (item1.handler == item2.handler) {
-            return true;
-        }
-        return false;
+    public boolean sameTorchGroup(TorchItem item1, TorchItem item2)
+    {
+        return item1.handler == item2.handler;
     }
 
-    public static Item stateItem(Item inputItem, TorchFireState newState) {
+    public static Item stateItem(Item inputItem, TorchFireState newState)
+    {
         Item outputItem = Items.AIR;
 
-        if (inputItem instanceof BlockItem && inputItem instanceof TorchItem) {
+        if (inputItem instanceof TorchItem)
+        {
             AbstractTorchBlock newBlock = (AbstractTorchBlock) ((BlockItem)inputItem).getBlock();
-            TorchItem newItem = (TorchItem) newBlock.handler.getStandingTorch(newState).asItem();
 
-            outputItem = newItem;
+            outputItem = newBlock.handler.getStandingTorch(newState).asItem();
         }
 
         return outputItem;
     }
 
-    public static ItemStack stateStack(ItemStack inputStack, TorchFireState newState) {
+    public static ItemStack stateStack(ItemStack inputStack, TorchFireState newState)
+    {
         ItemStack outputStack = ItemStack.EMPTY;
 
-        if (inputStack.getItem() instanceof BlockItem && inputStack.getItem() instanceof TorchItem) {
+        if (inputStack.getItem() instanceof BlockItem && inputStack.getItem() instanceof TorchItem)
+        {
             AbstractTorchBlock newBlock = (AbstractTorchBlock) ((BlockItem)inputStack.getItem()).getBlock();
             TorchItem newItem = (TorchItem) newBlock.handler.getStandingTorch(newState).asItem();
 
@@ -202,43 +217,53 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
         return outputStack;
     }
 
-    public static int getFuel(ItemStack stack) {
+    public static int getFuel(ItemStack stack)
+    {
         NbtCompound nbt = stack.getNbt();
-        int fuel;
 
-        if (nbt != null) {
+        if (nbt != null)
+        {
             return nbt.getInt("Fuel");
         }
 
-        return 48000;
+        return FUEL_TIME;
     }
 
-    public TorchFireState getTorchState() {
-        return firestate;
+    public TorchFireState getTorchState()
+    {
+        return torchState;
     }
 
-    public ModTorchHandler getHandler() {
+    public ModTorchHandler getHandler()
+    {
         return handler;
     }
 
-    public static ItemStack changedCopy(ItemStack stack, Item replacementItem) {
-        if (stack.isEmpty()) {
+    public static ItemStack changedCopy(ItemStack stack, Item replacementItem)
+    {
+        if (stack.isEmpty())
+        {
             return ItemStack.EMPTY;
         }
         ItemStack itemStack = new ItemStack(replacementItem, stack.getCount());
-        if (stack.getNbt() != null) {
+        if (stack.getNbt() != null)
+        {
             itemStack.setNbt(stack.getNbt().copy());
         }
+
         return itemStack;
     }
 
-    public static ItemStack addFuel(ItemStack stack, World world, int amount) {
+    public static ItemStack addFuel(ItemStack stack, World world, int amount)
+    {
 
-        if (stack.getItem() instanceof  TorchItem && !world.isClient) {
+        if (stack.getItem() instanceof  TorchItem && !world.isClient)
+        {
             NbtCompound nbt = stack.getNbt();
-            int fuel = 48000;
+            int fuel = FUEL_TIME;
 
-            if (nbt != null) {
+            if (nbt != null)
+            {
                 fuel = nbt.getInt("Fuel");
             }
             else
@@ -256,9 +281,9 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
             }
             else
             {
-                if (fuel > 48000)
+                if (fuel > FUEL_TIME)
                 {
-                    fuel = 48000;
+                    fuel = FUEL_TIME;
                 }
 
                 nbt.putInt("Fuel", fuel);

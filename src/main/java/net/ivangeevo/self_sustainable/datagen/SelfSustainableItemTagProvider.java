@@ -22,15 +22,21 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg)
     {
+        this.addToVanillaTags();
+        this.addToConventionalTags();
+        this.addToModTags();
+    }
+    private void addToVanillaTags()
+    {
 
+    }
+    private void addToConventionalTags()
+    {
         getOrCreateTagBuilder(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS)
                 .add(Items.STICK);
 
         getOrCreateTagBuilder(BTWRConventionalTags.Items.TORCHES_CAN_IGNITE)
                 .add(Items.TORCH);
-
-        this.addToModTags();
-
 
     }
 

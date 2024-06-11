@@ -82,7 +82,7 @@ public class BrickOvenBE extends AbstractOvenBE
 
     public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE)
     {
-        setFlameParticles(world, pos, state);
+        setParticles(world, pos, state);
     }
 
 

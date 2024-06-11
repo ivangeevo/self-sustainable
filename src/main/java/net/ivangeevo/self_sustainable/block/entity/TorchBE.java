@@ -1,7 +1,7 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
 import net.ivangeevo.self_sustainable.block.blocks.AbstractTorchBlock;
-import net.ivangeevo.self_sustainable.block.entity.util.IFuelBlock;
+import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
@@ -112,8 +112,8 @@ public class TorchBE extends BlockEntity
         if (fuel <= 0) {
             fuel = 0;
 
-            if (world.getBlockState(pos).getBlock() instanceof IFuelBlock) {
-                IFuelBlock block = (IFuelBlock) world.getBlockState(pos).getBlock();
+            if (world.getBlockState(pos).getBlock() instanceof FuelBurningBlock) {
+                FuelBurningBlock block = (FuelBurningBlock) world.getBlockState(pos).getBlock();
                 block.outOfFuel(world, pos, world.getBlockState(pos), false);
             }
         }

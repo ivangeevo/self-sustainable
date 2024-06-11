@@ -8,16 +8,19 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface IFuelBlock {
+public interface FuelBurningBlock
+{
 
     void outOfFuel(World world, BlockPos pos, BlockState state, boolean playSound);
 
-    default boolean itemValid(ItemStack stack, TagKey torches) {
+
+
+    default boolean tryUse(TagKey torches, ItemStack stack, PlayerEntity player, Hand hand) {
 
         return stack.isIn(torches);
     }
 
-    default boolean attemptUse(ItemStack stack, PlayerEntity player, Hand hand, TagKey torches ) {
+    default boolean isValidItem(ItemStack stack, TagKey torches) {
 
         return stack.isIn(torches);
     }

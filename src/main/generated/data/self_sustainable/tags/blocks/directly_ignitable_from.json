@@ -1,8 +1,15 @@
 {
   "replace": false,
   "values": [
+    "minecraft:torch",
+    "minecraft:soul_torch",
     "minecraft:campfire",
-    "self_sustainable:oven_brick",
-    "minecraft:lava"
+    "minecraft:soul_campfire",
+    "minecraft:lava",
+    "self_sustainable:torch_lit",
+    "self_sustainable:torch_smoulder",
+    "self_sustainable:wall_torch_lit",
+    "self_sustainable:wall_torch_smoulder",
+    "self_sustainable:oven_brick"
   ]
 }

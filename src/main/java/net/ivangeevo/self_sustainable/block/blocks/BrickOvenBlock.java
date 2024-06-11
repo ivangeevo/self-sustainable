@@ -138,6 +138,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
                         return ActionResult.SUCCESS;
                     }
                 }
+
+                return ActionResult.SUCCESS;
             }
             else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
             {

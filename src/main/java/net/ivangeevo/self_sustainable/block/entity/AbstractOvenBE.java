@@ -152,7 +152,8 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
         setVisualFuelLevel(iNewFuelLevel);
     }
 
-    static void setFlameParticles(World world, BlockPos pos, BlockState state) {
+    static void setParticles(World world, BlockPos pos, BlockState state)
+    {
         if (!state.get(LIT))
         {
             return;

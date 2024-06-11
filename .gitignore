@@ -1,6 +1,7 @@
 # User-specific stuff
 .idea/
 /src/main/generated/.cache
+/src/MINECR~1/
 
 *.iml
 *.ipr

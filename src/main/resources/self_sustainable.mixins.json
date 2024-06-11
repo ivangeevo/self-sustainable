@@ -16,6 +16,7 @@
     "ItemStackMixin",
     "MobEntityMixin",
     "PlayerEntityMixin",
+    "ServerPlayerEntityMixin",
     "SpawnHelperMixin",
     "ZombieVillagerEntityMixin"
   ],

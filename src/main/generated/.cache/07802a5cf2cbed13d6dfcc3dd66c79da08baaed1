@@ -1,2 +1,3 @@
-// 1.20.1	2024-06-07T17:44:21.9791242	self_sustainable/Tags for minecraft:block
-b6a495ebe0e923c043d02d928aaec9b7f3318992 data\self_sustainable\tags\blocks\directly_ignitable_from.json
+// 1.20.1	2024-06-10T03:49:38.063618	self_sustainable/Tags for minecraft:block
+a315e85b244830416cdae0d2ac3950a1c462c7df data\self_sustainable\tags\blocks\directly_ignitable_from.json
+07f38431c8f5867ccf0c403ce966198bbd6a4448 data\minecraft\tags\blocks\mineable\pickaxe.json

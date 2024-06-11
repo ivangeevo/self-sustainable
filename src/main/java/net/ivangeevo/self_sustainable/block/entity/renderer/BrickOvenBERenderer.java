@@ -65,6 +65,19 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
         matrices.pop();
     }
 
+
+
+    // Get RotationAxis based on facing direction
+    private RotationAxis getRotationAxis(Direction facing) {
+        return switch (facing) {
+            case NORTH -> RotationAxis.POSITIVE_Z;
+            case SOUTH -> RotationAxis.POSITIVE_Z;
+            case WEST -> RotationAxis.POSITIVE_Y;
+            case EAST -> RotationAxis.POSITIVE_Y;
+            default -> RotationAxis.POSITIVE_Y; // Default to Y-axis if facing direction is not recognized
+        };
+    }
+
     private void applyVisualOffset(MatrixStack matrices, Direction facing) {
         float visualOffset = 0.25f;
 
@@ -82,17 +95,6 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
                 matrices.translate(0.5f - visualOffset, 0.0f, 0.0f);
                 break;
         }
-    }
-
-    // Get RotationAxis based on facing direction
-    private RotationAxis getRotationAxis(Direction facing) {
-        return switch (facing) {
-            case NORTH -> RotationAxis.POSITIVE_Z;
-            case SOUTH -> RotationAxis.POSITIVE_Z;
-            case WEST -> RotationAxis.POSITIVE_Y;
-            case EAST -> RotationAxis.POSITIVE_Y;
-            default -> RotationAxis.POSITIVE_Y; // Default to Y-axis if facing direction is not recognized
-        };
     }
 
 }

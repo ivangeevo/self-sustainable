@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.item.items;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,10 +11,8 @@ import net.minecraft.world.World;
 
 public class ProgressiveCraftingItem extends Item
 {
-
     static public final int PROGRESS_TIME_INTERVAL = 4;
     static public final int DEFAULT_MAX_DAMAGE = (120 * 20 / PROGRESS_TIME_INTERVAL);
-
 
     public ProgressiveCraftingItem(Settings settings)
     {
@@ -22,57 +21,64 @@ public class ProgressiveCraftingItem extends Item
         settings.maxDamage(getProgressiveCraftingMaxDamage());
     }
 
+
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getMainHandStack();
-        user.setItemInUse(stack, getMaxUseTime(stack));
-        return TypedActionResult.success(stack);
+        user.setCurrentHand(hand); // Start using the item
+        return TypedActionResult.consume(user.getStackInHand(hand));
     }
 
+    /**
     @Override
-    public UseAction getUseAction(ItemStack stack) {return UseAction.DRINK;}
-
-    @Override
-    public int getMaxUseTime(ItemStack stack) {return 72000;}
-
-    protected int getProgressiveCraftingMaxDamage()
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
-        return DEFAULT_MAX_DAMAGE;
+        // Maybe try active hand stack instead of the main ?
+        ItemStack stack = user.getActiveItem();
+        stack.setDamage(getMaxUseTime(stack));
+        user.setStackInHand(hand, stack);
+        return TypedActionResult.success(stack,false);
     }
+     **/
+
 
     @Override
-    public void updateUsingItem(ItemStack stack, World world, PlayerEntity player)
-    {
-        int iUseCount = player.getItemUseTime();
-
-        if ( getMaxUseTime( stack ) - iUseCount > getItemUseWarmupDuration() )
-        {
-            if ( iUseCount % 4 == 0 )
-            {
-                playCraftingFX(stack, world, player);
+    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        int iUseCount = stack.getMaxUseTime() - remainingUseTicks;
+        if ( getMaxUseTime( stack ) - iUseCount > getItemUseWarmupDuration() ) {
+            if ( iUseCount % 4 == 0 ) {
+                playCraftingFX(stack, world, user);
             }
-
-            if ( !world.isClient && iUseCount % PROGRESS_TIME_INTERVAL == 0 )
-            {
+            if ( !world.isClient && iUseCount % PROGRESS_TIME_INTERVAL == 0 ) {
                 int iDamage = stack.getDamage();
-
                 iDamage -= 1;
-
-                if ( iDamage > 0 )
-                {
+                if ( iDamage > 0 ) {
                     stack.setDamage( iDamage );
-                }
-                else
-                {
-                    // set item usage to immediately complete
-
-                    player.getMainHandStack().setCount(1);
+                } else {
+                    user.clearActiveItem();
                 }
             }
         }
     }
 
-    protected void playCraftingFX(ItemStack stack, World world, PlayerEntity player)
+
+    @Override
+    public UseAction getUseAction(ItemStack stack) {return UseAction.NONE;}
+
+    @Override
+    public int getMaxUseTime(ItemStack stack) {return 72000;}
+
+    @Override
+    public void updateUsingItem(ItemStack stack, World world, PlayerEntity player)
     {
+
+    }
+
+    protected void playCraftingFX(ItemStack stack, World world, LivingEntity player)
+    {
+    }
+
+    protected int getProgressiveCraftingMaxDamage()
+    {
+        return DEFAULT_MAX_DAMAGE;
     }
 }

@@ -46,6 +46,10 @@ public class ModItems
     public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
             new FireStarterItemPrimitive(new FabricItemSettings().maxDamage(250),0.025F, -0.1F, 0.1F, 0.004F));
 
+    public static final Item WICKER_PANE = registerItem("wicker_pane", new Item(new FabricItemSettings()));
+    public static final Item WICKER_WEAVING = registerItem("wicker_weaving",
+            new WickerWeavingItem(new FabricItemSettings()));
+
 
 
     // ****************** //

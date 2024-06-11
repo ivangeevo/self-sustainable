@@ -5,8 +5,7 @@ import net.minecraft.item.ItemStack;
 public interface PlayerEntityAdded
 {
 
-    ItemStack itemInUse();
+    int timesCraftedThisTick = 0;
 
-    void setItemInUse(ItemStack stack, int par2);
 
 }

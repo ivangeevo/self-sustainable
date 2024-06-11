@@ -25,6 +25,7 @@ public class ModItemGroup {
                         entries.add(ModItems.TORCH_LIT);
                         entries.add(ModItems.TORCH_SMOULDER);
                         entries.add(ModItems.TORCH_BURNED_OUT);
+                        entries.add(ModItems.WICKER_PANE);
 
                         /**
                         entries.add(ModItems.CRUDE_TORCH);

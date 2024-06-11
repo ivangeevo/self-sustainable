@@ -18,13 +18,14 @@ public class FuelRegistryManager
     // Register all entries here.
     public static void initEntries()
     {
+        // First, we try to modify if possible
         modifyEntry(Items.COAL_BLOCK, 14400);
         modifyEntry(Items.BLAZE_ROD, 12800);
         modifyEntry(ItemTags.BAMBOO_BLOCKS, 100);
         modifyEntry(Items.STICK, 50);
         modifyEntry(ItemTags.SAPLINGS, 15);
 
-
+        // And then we manually remove and add what is not directly modifiable.
         removeFuelItems();
         registerFuelItems();
 
@@ -36,7 +37,6 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.remove(ItemTags.LOGS);
         FuelRegistry.INSTANCE.remove(ItemTags.PLANKS);
         FuelRegistry.INSTANCE.remove(ItemTags.WOODEN_STAIRS);
-        FuelRegistry.INSTANCE.remove(ItemTags.SAPLINGS);
 
         // Items
         FuelRegistry.INSTANCE.remove(Items.COAL);

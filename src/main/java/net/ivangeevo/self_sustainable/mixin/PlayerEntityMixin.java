@@ -29,9 +29,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 
     @Shadow public abstract PlayerAbilities getAbilities();
 
-    /**
-     * This is the item that is in use when the player is holding down the useItemButton (e.g., bow, food, sword)
-     */
+
+     //This is the item that is in use when the player is holding down the useItemButton (e.g., bow, food, sword)
     private ItemStack itemInUse;
 
 
@@ -86,16 +85,17 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
         }
     }
 
-    //@Inject(method = "tick", at = @At("HEAD"))
-    private void injectedTickTop(CallbackInfo ci) {
-
-        ItemStack stack = this.getInventory().getMainHandStack();
+    @Inject(method = "tick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;areItemsEqual(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z",
+            shift = At.Shift.AFTER))
+    private void injectedAfterItemsEqualCheck(CallbackInfo ci) {
+        ItemStack stack = ((PlayerEntity)(Object)this).getInventory().getMainHandStack();
         PlayerEntity player = (PlayerEntity)(Object)this;
+        World world = player.getWorld();
 
         // FCMOD: Added
-        //updateUsingItem(stack,world, player);
+        updateUsingItem(stack,world, player);
         // END FCMOD
-
     }
 
     /**

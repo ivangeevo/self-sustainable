@@ -20,7 +20,7 @@ public class KnittingItem extends ProgressiveCraftingItem
 
 
     @Override
-    protected void playCraftingFX(ItemStack stack, World world, PlayerEntity player)
+    protected void playCraftingFX(ItemStack stack, World world, LivingEntity player)
     {
         player.playSound(SoundEvents.BLOCK_WOOD_STEP,
                 0.25F + 0.25F * (float)world.random.nextInt( 2 ),

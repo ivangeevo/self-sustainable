@@ -284,7 +284,8 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
     }
      **/
 
-    public void retrieveItem(World world, PlayerEntity player) {
+    public void retrieveItem(World world, PlayerEntity player)
+    {
         ItemStack cookStack = getCookStack();
 
         if (!cookStack.isEmpty() && !world.isClient())

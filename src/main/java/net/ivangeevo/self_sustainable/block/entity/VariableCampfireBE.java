@@ -417,7 +417,8 @@ public class VariableCampfireBE
         }
     }
 
-    private void updateListeners() {
+    private void updateListeners()
+    {
         this.markDirty();
         this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
     }

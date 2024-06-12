@@ -1,6 +1,6 @@
 package net.ivangeevo.self_sustainable.mixin;
 
-import net.ivangeevo.self_sustainable.block.VariableCampfireBE;
+import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.client.render.LightmapTextureManager;

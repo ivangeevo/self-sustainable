@@ -1,7 +1,7 @@
 /*
  * Decompiled with CFR 0.2.1 (FabricMC 53fa44c9).
  */
-package net.ivangeevo.self_sustainable.block;
+package net.ivangeevo.self_sustainable.block.entity;
 
 import net.ivangeevo.self_sustainable.block.interfaces.CampfireBlockAdded;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
@@ -11,7 +11,6 @@ import net.ivangeevo.self_sustainable.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.FireBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +27,6 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Clearable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -404,17 +402,18 @@ public class VariableCampfireBE
 
     public void retrieveItem(World world, VariableCampfireBE campfireBE, PlayerEntity player)
     {
-        DefaultedList<ItemStack> itemsBeingCooked = campfireBE.getItemsBeingCooked();
+        ItemStack cookStack = campfireBE.getItemsBeingCooked().get(0);
 
-        if (!itemsBeingCooked.isEmpty() && !world.isClient())
+        if (!cookStack.isEmpty() && !world.isClient())
         {
-            ItemStack itemStack = itemsBeingCooked.get(0);
-            if (!itemStack.isEmpty()) {
-                player.giveItemStack(itemStack);
-                itemsBeingCooked.set(0, ItemStack.EMPTY);
-                campfireBE.markDirty();
-                Objects.requireNonNull(campfireBE.getWorld()).updateListeners(campfireBE.getPos(), campfireBE.getCachedState(), campfireBE.getCachedState(), Block.NOTIFY_ALL);
+            boolean addedToInventory = player.giveItemStack(cookStack);
+            if (!addedToInventory)
+            {
+                player.dropItem(cookStack, false);
             }
+            itemsBeingCooked.set(0, ItemStack.EMPTY);
+            campfireBE.markDirty();
+            Objects.requireNonNull(campfireBE.getWorld()).updateListeners(campfireBE.getPos(), campfireBE.getCachedState(), campfireBE.getCachedState(), Block.NOTIFY_ALL);
         }
     }
 

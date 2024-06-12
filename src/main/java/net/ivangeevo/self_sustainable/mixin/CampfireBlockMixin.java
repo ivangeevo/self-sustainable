@@ -1,11 +1,10 @@
 package net.ivangeevo.self_sustainable.mixin;
 
 import net.ivangeevo.self_sustainable.block.CampfireBlockManager;
-import net.ivangeevo.self_sustainable.block.VariableCampfireBE;
+import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.interfaces.*;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
-import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -18,7 +17,6 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;

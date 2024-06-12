@@ -5,7 +5,7 @@ package net.ivangeevo.self_sustainable.block.entity.renderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.ivangeevo.self_sustainable.block.VariableCampfireBE;
+import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;

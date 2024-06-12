@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.block;
 
+import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;

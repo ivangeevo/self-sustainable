@@ -266,6 +266,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
         this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
     }
 
+    /**
     public void retrieveItem(World world, PlayerEntity player)
     {
         ItemStack cookStack = getCookStack();
@@ -281,6 +282,24 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
             }
         }
     }
+     **/
+
+    public void retrieveItem(World world, PlayerEntity player) {
+        ItemStack cookStack = getCookStack();
+
+        if (!cookStack.isEmpty() && !world.isClient())
+        {
+                boolean addedToInventory = player.giveItemStack(cookStack);
+                if (!addedToInventory)
+                {
+                    player.dropItem(cookStack, false);
+                }
+                setStack(ItemStack.EMPTY);
+                markDirty();
+                Objects.requireNonNull(this.getWorld()).updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
+        }
+    }
+
 
     @Override
     public boolean isEmpty() {

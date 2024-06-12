@@ -3,7 +3,7 @@ package net.ivangeevo.self_sustainable.entity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
-import net.ivangeevo.self_sustainable.block.VariableCampfireBE;
+import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.entity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

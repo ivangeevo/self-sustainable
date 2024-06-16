@@ -17,15 +17,14 @@ public class ProgressiveCraftingItem extends Item
     public ProgressiveCraftingItem(Settings settings)
     {
         super(settings);
-        settings.maxCount(1);
-        settings.maxDamage(getProgressiveCraftingMaxDamage());
+        settings.maxDamageIfAbsent(getProgressiveCraftingMaxDamage());
     }
 
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         user.setCurrentHand(hand); // Start using the item
-        return TypedActionResult.consume(user.getStackInHand(hand));
+        return TypedActionResult.consume(user.getMainHandStack());
     }
 
     /**
@@ -42,19 +41,32 @@ public class ProgressiveCraftingItem extends Item
 
 
     @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        int iUseCount = stack.getMaxUseTime() - remainingUseTicks;
-        if ( getMaxUseTime( stack ) - iUseCount > getItemUseWarmupDuration() ) {
-            if ( iUseCount % 4 == 0 ) {
+    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks)
+    {
+        int iUseCount = user.getItemUseTimeLeft();
+
+        if ( getMaxUseTime( stack ) - iUseCount > getItemUseWarmupDuration() )
+        {
+            if ( iUseCount % 4 == 0 )
+            {
                 playCraftingFX(stack, world, user);
             }
-            if ( !world.isClient && iUseCount % PROGRESS_TIME_INTERVAL == 0 ) {
+
+            if ( !world.isClient && iUseCount % PROGRESS_TIME_INTERVAL == 0 )
+            {
                 int iDamage = stack.getDamage();
+
                 iDamage -= 1;
-                if ( iDamage > 0 ) {
+
+                if ( iDamage > 0 )
+                {
                     stack.setDamage( iDamage );
-                } else {
-                    user.clearActiveItem();
+                }
+                else
+                {
+                    // set item usage to immediately complete
+
+                    user.setItemUseTime(1);
                 }
             }
         }
@@ -72,6 +84,8 @@ public class ProgressiveCraftingItem extends Item
     {
 
     }
+
+    //------------- Class Specific Methods ------------//
 
     protected void playCraftingFX(ItemStack stack, World world, LivingEntity player)
     {

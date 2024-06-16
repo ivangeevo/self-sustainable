@@ -14,5 +14,13 @@ public class ModRecipes {
         Registry.register(Registries.RECIPE_TYPE, new Identifier(SelfSustainableMod.MOD_ID, OvenCookingRecipe.Type.ID),
                 OvenCookingRecipe.Type.INSTANCE);
 
+
+        Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(SelfSustainableMod.MOD_ID, WickerWeavingRecipe.Serializer.ID),
+                WickerWeavingRecipe.Serializer.INSTANCE);
+        Registry.register(Registries.RECIPE_TYPE, new Identifier(SelfSustainableMod.MOD_ID, WickerWeavingRecipe.Type.ID),
+                WickerWeavingRecipe.Type.INSTANCE);
+
+
+
     }
 }

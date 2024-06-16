@@ -18,26 +18,24 @@ public class ModItemGroup {
                     .icon(() -> new ItemStack(ModItems.SS_GROUP)).entries((displayContext, entries) ->
                     {
                         // Items
-                        entries.add(ModItems.KNITTING_NEEDLES);
                         entries.add(ModItems.FIRESTARTER_STICKS);
                         entries.add(ModItems.FIRESTARTER_BOW);
-                        entries.add(ModItems.TORCH_UNLIT);
-                        entries.add(ModItems.TORCH_LIT);
-                        entries.add(ModItems.TORCH_SMOULDER);
-                        entries.add(ModItems.TORCH_BURNED_OUT);
-                        entries.add(ModItems.WICKER_PANE);
-
-                        /**
-                        entries.add(ModItems.CRUDE_TORCH);
-                        entries.add(ModItems.CRUDE_TORCH_UNLIT);
-                        entries.add(ModItems.LIT_TORCH);
-                        entries.add(ModItems.UNLIT_TORCH);
-                         **/
 
 
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);
-                        entries.add(ModBlocks.SMOKER_BRICK);
+
+
+                        // TO ADD:
+
+                        //entries.add(ModBlocks.SMOKER_BRICK);
+
+                        //entries.add(ModItems.TORCH_UNLIT);
+                        //entries.add(ModItems.TORCH_LIT);
+                        //entries.add(ModItems.TORCH_SMOULDER);
+                        //entries.add(ModItems.TORCH_BURNED_OUT);
+                        //entries.add(ModItems.WICKER_PANE);
+                        //entries.add(ModItems.KNITTING_NEEDLES);
 
 
                     }).build());

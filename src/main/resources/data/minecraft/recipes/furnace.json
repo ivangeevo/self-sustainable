@@ -3,15 +3,16 @@
   "category": "misc",
   "key": {
     "#": {
-      "item": "minecraft:sugar_cane"
+      "tag": "minecraft:air"
     }
   },
   "pattern": [
-    "##",
-    "##"
+    "###",
+    "# #",
+    "###"
   ],
   "result": {
-    "item": "self_sustainable:wicker_weaving"
+    "item": "minecraft:furnace"
   },
   "show_notification": true
 }

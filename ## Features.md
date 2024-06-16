@@ -6,9 +6,8 @@
 + Re-balances loot for all worldgen chests to be more fair (no easy loot).
 
 + Modified burn time for most items. Logs are the primary fuel source.
-
-* Minimises the saturation that the player spawns with.
-* Removes full saturation healing, & difficulty based healing.
++ Removes Furnace, Smoker & Blast Furnace recipes 
+* Removes full hunger healing, difficulty-based healing & minimizes the saturation that the player spawns with.
 * Healing every 30 seconds, instead of when the hunger bar is full.
 * Periodic exhaustion regardless of action(to prevent infinite afk-ing).
 * Increased exhaustion from jumping & even more from sprinting/sprint jumping.
@@ -22,5 +21,29 @@
 ## ***Brick Oven -
 * Working:Adding and retrieving items, 
 *  TODO:Fuel Overlay(or blockstate?), Falling block logic for it,
+
+
+Functionality separated by modificiation type
+
+
+DATAPACK:
+
+Added:
+
+Changed:
+
+Removed:
+
+MIXIN:
+
+Added:
+
+Changed:
+
+Removed:
+
+
+
+
 
 

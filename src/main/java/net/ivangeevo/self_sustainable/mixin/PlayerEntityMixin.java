@@ -25,10 +25,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 
     @Shadow public abstract void jump();
 
-    @Shadow public abstract PlayerInventory getInventory();
-
-    @Shadow public abstract PlayerAbilities getAbilities();
-
 
      //This is the item that is in use when the player is holding down the useItemButton (e.g., bow, food, sword)
     private ItemStack itemInUse;
@@ -84,41 +80,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
             player.heal(1.0F);
         }
     }
-
-    @Inject(method = "tick", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;areItemsEqual(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z",
-            shift = At.Shift.AFTER))
-    private void injectedAfterItemsEqualCheck(CallbackInfo ci) {
-        ItemStack stack = ((PlayerEntity)(Object)this).getInventory().getMainHandStack();
-        PlayerEntity player = (PlayerEntity)(Object)this;
-        World world = player.getWorld();
-
-        // FCMOD: Added
-        updateUsingItem(stack,world, player);
-        // END FCMOD
-    }
-
-    /**
-     * sets the itemInUse when the use item button is clicked. Args: itemstack, int maxItemUseDuration
-     */
-    public void setItemInUse(ItemStack stack, int par2)
-    {
-        PlayerEntity user = (PlayerEntity) (Object) this;
-        World world = user.getWorld();
-        if (stack != this.itemInUse)
-        {
-            this.itemInUse = stack;
-            this.itemInUseCount = par2;
-
-            if (!this.getWorld().isClient)
-            {
-                user.eatFood(world, stack);
-            }
-        }
-    }
-
-
-
 
     /** Modify food exhaustion values for jumping and jump sprinting **/
 

@@ -1,21 +1,24 @@
 package net.ivangeevo.self_sustainable.datagen;
 
+import com.terraformersmc.modmenu.util.mod.Mod;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.ivangeevo.self_sustainable.data.server.recipe.ItemstackShapedRecipeJsonBuilder;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipeJsonBuilder;
+import net.ivangeevo.self_sustainable.item.items.WickerWeavingItem;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.minecraft.data.server.recipe.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.RecipeCategory;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 
@@ -57,12 +60,18 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .pattern("##")
                 .criterion("has_brick_slab", RecipeProvider.conditionsFromItem(Items.BRICK_SLAB)).offerTo(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.WICKER_WEAVING).input('#', Items.SUGAR_CANE)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.WICKER_WEAVING)
+                .input('#', Items.SUGAR_CANE)
                 .pattern("##")
                 .pattern("##")
                 .criterion("has_sugar_cane", RecipeProvider.conditionsFromItem(Items.SUGAR_CANE)).offerTo(exporter);
 
+
     }
+
+
+
+
 
     private void addShapelessRecipes(Consumer<RecipeJsonProvider> exporter)
     {

@@ -22,22 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdded, PlayerEntityAdded
 {
     @Shadow public abstract boolean isPlayer();
-
     @Shadow public abstract void jump();
-
-
-     //This is the item that is in use when the player is holding down the useItemButton (e.g., bow, food, sword)
-    private ItemStack itemInUse;
-
-
-    /**
-     * This field starts off equal to getMaxItemUseDuration and is decremented on each tick
-     */
-    private int itemInUseCount;
-    protected float speedOnGround = 0.1F;
-    protected float speedInAir = 0.02F;
-    private final int field_82249_h = 0;
-
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -56,17 +41,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
         {
             if (player.age % 1000 == 0)
             {
-                // Periodic exhaustion
                 hungerManager.addExhaustion(1.25f);
             }
-
         }
-
-
-
-
     }
-
 
     // Additional logic for slowly healing the player every "x" ticks
     @Inject(method = "tick", at = @At("TAIL"))

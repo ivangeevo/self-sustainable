@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.item.items;
 
+import net.ivangeevo.self_sustainable.util.CustomUseAction;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -17,7 +18,7 @@ public class ProgressiveCraftingItem extends Item
     public ProgressiveCraftingItem(Settings settings)
     {
         super(settings);
-        settings.maxDamageIfAbsent(getProgressiveCraftingMaxDamage());
+        settings.maxDamage(getProgressiveCraftingMaxDamage());
     }
 
 
@@ -74,10 +75,16 @@ public class ProgressiveCraftingItem extends Item
 
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {return UseAction.NONE;}
+    public UseAction getUseAction(ItemStack stack) { return UseAction.NONE; }
 
     @Override
-    public int getMaxUseTime(ItemStack stack) {return 72000;}
+    public CustomUseAction getCustomUseAction()
+    {
+        return CustomUseAction.PROGRESSIVE_CRAFT;
+    }
+
+    @Override
+    public int getMaxUseTime(ItemStack stack) { return 72000; }
 
     @Override
     public void updateUsingItem(ItemStack stack, World world, PlayerEntity player)

@@ -4,6 +4,7 @@ import com.terraformersmc.modmenu.util.mod.Mod;
 import net.ivangeevo.self_sustainable.block.CampfireBlockManager;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.ivangeevo.self_sustainable.tag.ModTags;
+import net.ivangeevo.self_sustainable.util.CustomUseAction;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +20,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Item.class)
 public abstract class ItemMixin implements ItemAdded
 {
+
+    @Override
+    public CustomUseAction getCustomUseAction() {
+        return CustomUseAction.NONE;
+    }
 
     @Override
     public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {

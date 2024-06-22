@@ -1,6 +1,7 @@
 package net.ivangeevo.self_sustainable.mixin;
 
 import net.ivangeevo.self_sustainable.item.interfaces.ItemStackAdded;
+import net.ivangeevo.self_sustainable.util.CustomUseAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,8 @@ public abstract class ItemStackMixin implements ItemStackAdded
 {
     @Shadow public abstract boolean hasNbt();
     @Shadow @Nullable private NbtCompound nbt;
+
+
 
     @Override
     public long getTimeOfLastUse()

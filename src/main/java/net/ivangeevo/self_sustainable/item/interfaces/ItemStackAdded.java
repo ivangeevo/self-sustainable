@@ -1,5 +1,7 @@
 package net.ivangeevo.self_sustainable.item.interfaces;
 
+import net.ivangeevo.self_sustainable.util.CustomUseAction;
+
 public interface ItemStackAdded
 {
 
@@ -13,4 +15,5 @@ public interface ItemStackAdded
 
 
      void setAccumulatedChance(float fChance);
+
 }

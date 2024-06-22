@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.item.interfaces;
 
+import net.ivangeevo.self_sustainable.util.CustomUseAction;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -73,6 +74,9 @@ public interface ItemAdded {
     default int getItemUseWarmupDuration() {
         return 0;
     }
+
+    CustomUseAction getCustomUseAction();
+
 
 
 }

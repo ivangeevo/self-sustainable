@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:gold_nugget"
+        "recipe": "minecraft:gold_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:gold_nugget"
+      "minecraft:gold_ingot"
     ]
   },
   "sends_telemetry_event": false

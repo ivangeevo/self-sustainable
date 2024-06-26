@@ -8,11 +8,11 @@ import net.ivangeevo.self_sustainable.item.FuelTicksManager;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.loot.LootFunctionTorch;
 import net.ivangeevo.self_sustainable.loot.TorchFuelFunction;
-import net.ivangeevo.self_sustainable.networking.NetworkMessagesRegistry;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import net.ivangeevo.self_sustainable.registry.FuelRegistryManager;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
+import net.ivangeevo.self_sustainable.world.gen.feature.ModConfiguredFeatures;
 import net.minecraft.loot.function.LootFunctionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,19 +43,18 @@ public class SelfSustainableMod implements ModInitializer
         LOGGER.info("Initializing Self Sustainable.");
         loadSettings();
         instance = this;
-        ModBlocks.registerTorchHandler();
-
+        ModBlocks.registerModBlocks();
         ModItems.registerModItems();
         ModItemGroup.registerItemGroups();
-        ModBlocks.registerModBlocks();
         ModBlockEntities.registerBlockEntities();
         ModRecipes.registerRecipes();
 
 
+        //ModConfiguredFeatures.bootstrap(fea);
+        //ModBlocks.registerTorchHandler();
 
-
-        NetworkMessagesRegistry.registerS2CPackets();
-        NetworkMessagesRegistry.registerC2SPackets();
+        //NetworkMessagesRegistry.registerS2CPackets();
+        //NetworkMessagesRegistry.registerC2SPackets();
 
         WorldUtils.init();
 

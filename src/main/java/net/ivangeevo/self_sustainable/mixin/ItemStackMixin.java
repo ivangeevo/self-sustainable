@@ -14,7 +14,11 @@ public abstract class ItemStackMixin implements ItemStackAdded
     @Shadow public abstract boolean hasNbt();
     @Shadow @Nullable private NbtCompound nbt;
 
-
+    @Override
+    public CustomUseAction getCustomUseAction()
+    {
+        return CustomUseAction.NONE;
+    }
 
     @Override
     public long getTimeOfLastUse()

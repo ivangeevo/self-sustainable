@@ -1,10 +1,10 @@
-// 1.20.1	2024-06-14T22:13:22.3082602	self_sustainable/Tags for minecraft:item
+// 1.20.1	2024-06-26T19:27:26.5669076	self_sustainable/Tags for minecraft:item
 373d68ee1ec8f9d31f281220e5fc19c0f32e6f56 data\self_sustainable\tags\items\extinguish_torches_on_use.json
 8479988d8fe890ebfc37f33e0ada8a61fec0d1c0 data\self_sustainable\tags\items\direct_igniters.json
 33e306ce928e90c69d2e8590b785261cb8d5d95a data\self_sustainable\tags\items\can_start_fire_on_use.json
-839f5ab4e4f575840a28354c4f41cf4568640f09 data\self_sustainable\tags\items\can_be_set_on_fire_on_use.json
+8a23702b05296c8af5014d6aa6e9265ded85c7d9 data\self_sustainable\tags\items\can_be_set_on_fire_on_use.json
 34bb9cc10a8159a33a3dfb07762bb48bf5bf70c1 data\self_sustainable\tags\items\primitive_firestarters.json
 9eba6ec40f4bd700139f80950e7178007bbefd9a data\c\tags\items\torches_can_ignite.json
+efc794ff9d1fbcdb21b090e3bcaed049292fb3b2 data\self_sustainable\tags\items\torches_can_light_up.json
 373d68ee1ec8f9d31f281220e5fc19c0f32e6f56 data\self_sustainable\tags\items\smother_torches_on_use.json
-ad43d0673e2ab60b5eb1e430ea39b208138714b8 data\self_sustainable\tags\items\torches_can_light_up.json
 7f38b782ef0289e7cf67edbd0ff54f8409646dc9 data\c\tags\items\spit_campfire_items.json

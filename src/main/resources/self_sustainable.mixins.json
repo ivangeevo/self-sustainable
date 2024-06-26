@@ -22,7 +22,8 @@
   ],
   "client": [
     "CampfireBlockEntityRendererMixin",
-    "HeldItemRendererMixin"
+    "HeldItemRendererMixin",
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

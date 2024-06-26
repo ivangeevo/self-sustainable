@@ -8,13 +8,16 @@ import net.minecraft.util.Identifier;
 public class ModRecipes {
 
 
-    public static void registerRecipes() {
+    public static void registerRecipes()
+    {
+        // Ovens
         Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(SelfSustainableMod.MOD_ID, OvenCookingRecipe.Serializer.ID),
                 OvenCookingRecipe.Serializer.INSTANCE);
         Registry.register(Registries.RECIPE_TYPE, new Identifier(SelfSustainableMod.MOD_ID, OvenCookingRecipe.Type.ID),
                 OvenCookingRecipe.Type.INSTANCE);
 
 
+        // Progressive crafting items
         Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(SelfSustainableMod.MOD_ID, WickerWeavingRecipe.Serializer.ID),
                 WickerWeavingRecipe.Serializer.INSTANCE);
         Registry.register(Registries.RECIPE_TYPE, new Identifier(SelfSustainableMod.MOD_ID, WickerWeavingRecipe.Type.ID),

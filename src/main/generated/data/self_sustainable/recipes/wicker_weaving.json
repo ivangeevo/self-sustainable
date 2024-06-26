@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "self_sustainable:wicker_weaving",
   "category": "misc",
   "key": {
     "#": {
@@ -11,6 +11,7 @@
     "##"
   ],
   "result": {
+    "damage": 599,
     "item": "self_sustainable:wicker_weaving"
   },
   "show_notification": true

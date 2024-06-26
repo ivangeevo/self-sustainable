@@ -64,13 +64,15 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         super(settings);
     }
 
-
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void injectedConstructor(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
+    private void injectedConstructorSettings(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
     {
-        //this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false).with(FIRE_LEVEL, 0).with(FUEL_STATE, CampfireState.NORMAL).with(HAS_SPIT, false));
+        settings.notSolid();
+    }
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void injectedDefaultState(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
+    {
         this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false).with(FIRE_LEVEL, 0).with(FUEL_STATE, CampfireState.NORMAL).with(HAS_SPIT, false));
-
     }
 
     @Inject(method = "createBlockEntity", at = @At("HEAD"), cancellable = true)

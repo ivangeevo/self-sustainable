@@ -2,9 +2,11 @@ package net.ivangeevo.self_sustainable.item.items;
 
 import net.ivangeevo.self_sustainable.util.CustomUseAction;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;

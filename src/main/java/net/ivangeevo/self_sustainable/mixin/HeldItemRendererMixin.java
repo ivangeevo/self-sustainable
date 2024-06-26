@@ -15,10 +15,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HeldItemRenderer.class)
-public class HeldItemRendererMixin
+public abstract class HeldItemRendererMixin
 {
 
-    @Inject(method = "renderFirstPersonItem", at = @At("TAIL"))
+    // For progressive crafting
+    @Inject(method = "renderFirstPersonItem", at = @At("HEAD"))
     private void injectRenderFirstPersonItem(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (item.getItem().getCustomUseAction() == CustomUseAction.PROGRESSIVE_CRAFT)
         {

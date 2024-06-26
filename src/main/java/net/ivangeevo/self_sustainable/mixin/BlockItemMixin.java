@@ -107,13 +107,4 @@ public abstract class BlockItemMixin extends Item implements Ignitable
         return false;
     }
 
-
-    private boolean isUnlitTorch(ItemStack stack)
-    {
-        return stack.isOf(ModItems.TORCH_UNLIT);
-    }
-
-    
-
-
 }

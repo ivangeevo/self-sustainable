@@ -21,6 +21,7 @@ public class ModTorchBlock extends AbstractTorchBlock {
     }
 
 
+
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return Blocks.TORCH.getOutlineShape(state, world, pos, context);

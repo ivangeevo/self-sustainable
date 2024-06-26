@@ -2,9 +2,9 @@
   "type": "self_sustainable:oven_cooking",
   "category": "misc",
   "cookingtime": 12000,
-  "experience": 0.35,
+  "experience": 0.25,
   "ingredient": {
-    "item": "minecraft:raw_gold"
+    "item": "minecraft:raw_iron"
   },
-  "result": "minecraft:gold_nugget"
+  "result": "minecraft:iron_ingot"
 }

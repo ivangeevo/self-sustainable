@@ -3,13 +3,17 @@
 package net.ivangeevo.self_sustainable.item.items;
 
 
+import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class WickerWeavingItem extends ProgressiveCraftingItem
@@ -33,27 +37,12 @@ public class WickerWeavingItem extends ProgressiveCraftingItem
     }
 
     @Override
-    public boolean hasRecipeRemainder() {
-        return true;
-    }
-
-    @Override
-    public ItemStack getRecipeRemainder(ItemStack stack)
-    {
-        ItemStack tempStack = stack.copy();
-        tempStack.setDamage(WICKER_WEAVING_MAX_DAMAGE - 1);
-        return tempStack;
-    }
-
-    @Override
     protected void playCraftingFX(ItemStack stack, World world, LivingEntity player)
     {
         player.playSound(SoundEvents.BLOCK_GRASS_STEP,
                 0.25F + 0.25F * (float)world.random.nextInt( 2 ),
                 ( world.random.nextFloat() - world.random.nextFloat() ) * 0.25F + 1.75F );
     }
-
-
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user)
@@ -76,6 +65,7 @@ public class WickerWeavingItem extends ProgressiveCraftingItem
         super.onCraft( stack, world, player );
     }
 
+
     /**
     @Override
     public boolean getCanBeFedDirectlyIntoCampfire(int iItemDamage)
@@ -89,6 +79,7 @@ public class WickerWeavingItem extends ProgressiveCraftingItem
         return false;
     }
      **/
+
 
     @Override
     protected int getProgressiveCraftingMaxDamage()

@@ -47,7 +47,8 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
                 .add(Items.TORCH)
                 .add(Items.SOUL_TORCH)
                 .add(Items.LAVA_BUCKET)
-                .add(ModItems.TORCH_LIT);
+                //.add(ModItems.TORCH_LIT)
+        ;
 
         getOrCreateTagBuilder(ModTags.Items.SMOTHER_TORCHES_ON_USE)
                 .add(Items.WATER_BUCKET);
@@ -62,7 +63,8 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
                 .add(Items.TORCH);
 
         getOrCreateTagBuilder(ModTags.Items.CAN_BE_SET_ON_FIRE_ON_USE)
-                .add(ModItems.TORCH_UNLIT);
+                //.add(ModItems.TORCH_UNLIT)
+        ;
 
         getOrCreateTagBuilder(ModTags.Items.PRIMITIVE_FIRESTARTERS)
                 .add(ModItems.FIRESTARTER_STICKS)

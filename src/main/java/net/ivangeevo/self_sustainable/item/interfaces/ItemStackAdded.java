@@ -16,4 +16,6 @@ public interface ItemStackAdded
 
      void setAccumulatedChance(float fChance);
 
+     CustomUseAction getCustomUseAction();
+
 }

@@ -21,9 +21,7 @@ public interface BlockAdded
         return 0;
     }
 
-    default void checkForFireSpreadFromLocation(World world, BlockPos pos, Random random, int iSourceFireAge) {
-
-    }
+    default void checkForFireSpreadFromLocation(World world, BlockPos pos, Random random, int iSourceFireAge) {}
 
 
 }

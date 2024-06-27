@@ -41,7 +41,7 @@ public abstract class ItemMixin implements ItemAdded
     @Override
     public int getCampfireBurnTime(ItemStack stack)
     {
-        return CampfireBlockManager.getItemFuelTime(stack);
+        return CampfireBlockManager.getInstance().getItemFuelTime(stack);
     }
 
     @Override

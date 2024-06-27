@@ -11,6 +11,7 @@ import net.ivangeevo.self_sustainable.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
+import net.minecraft.block.FireBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +28,7 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Clearable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -115,7 +117,7 @@ public class VariableCampfireBE
              if ( iCurrentFireLevel > 1 && world.random.nextFloat() <= CHANCE_OF_FIRE_SPREAD)
              {
                  Block fireBlock = state.getBlock();
-                 if (fireBlock instanceof FireBlock fire) {
+                 if (fireBlock instanceof CampfireBlock fire) {
                      fire.checkForFireSpreadFromLocation(world, pos, world.random, 0);
                  }
              }
@@ -131,11 +133,15 @@ public class VariableCampfireBE
                         VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
                         if (adjacentCampfireBE != null && getCurrentFireLevel(adjacentState) == 0) {
                             adjacentCampfireBE.changeFireLevel(world,1); // Set fire level to 1
+                            Ignitable.playExtinguishSound(world, pos, false);
+
                         }
                     }
                 }
             }
+
              **/
+
 
             campfireBE.burnTimeSinceLit++;
 

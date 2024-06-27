@@ -35,9 +35,15 @@ import static net.minecraft.block.CampfireBlock.*;
 
 public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
 {
+    private static final CampfireBlockManager instance = new CampfireBlockManager();
+    private CampfireBlockManager() {}
+    public static CampfireBlockManager getInstance()
+    {
+        return instance;
+    }
 
 
-    public static ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit)
+    public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
         BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -131,14 +137,14 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         return ActionResult.PASS;
     }
 
-    private static boolean isIgnitableItem(ItemStack stack)
+    private boolean isIgnitableItem(ItemStack stack)
     {
         return stack.isIn(ModTags.Items.DIRECT_IGNITERS)
                 || stack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)
                 || stack.getItem() == Items.FLINT_AND_STEEL;
     }
 
-    public static int getItemFuelTime(ItemStack fuel) {
+    public int getItemFuelTime(ItemStack fuel) {
         if (fuel.isEmpty()) {
             return 0;
         }
@@ -146,25 +152,25 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         return AbstractFurnaceBlockEntity.createFuelTimeMap().getOrDefault(item, 0);
     }
 
-    private static CampfireState getFuelState(WorldAccess blockAccess, BlockPos pos)
+    private CampfireState getFuelState(WorldAccess blockAccess, BlockPos pos)
     {
         return getFuelState(blockAccess.getBlockState(pos));
     }
 
-    private static CampfireState getFuelState(BlockState state)
+    private CampfireState getFuelState(BlockState state)
     {
         return state.get(FUEL_STATE);
     }
 
 
 
-    private static ItemStack getCookStack(VariableCampfireBE campfireBE)
+    private ItemStack getCookStack(VariableCampfireBE campfireBE)
     {
         return campfireBE.getItemsBeingCooked().get(0);
     }
 
 
-    public static VoxelShape setCustomShapes(BlockState state)
+    public VoxelShape setCustomShapes(BlockState state)
     {
         if (!state.get(HAS_SPIT))
         {
@@ -176,28 +182,28 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
         }
     }
 
-    public static void appendCustomProperties(StateManager.Builder<Block, BlockState> builder)
+    public void appendCustomProperties(StateManager.Builder<Block, BlockState> builder)
     {
         builder.add(LIT, FUEL_STATE, FIRE_LEVEL, HAS_SPIT, SIGNAL_FIRE, WATERLOGGED, FACING);
     }
 
-    public static void appendCustomPropertiesNoLIT(StateManager.Builder<Block, BlockState> builder)
+    public void appendCustomPropertiesNoLIT(StateManager.Builder<Block, BlockState> builder)
     {
         builder.add(FUEL_STATE, FIRE_LEVEL, HAS_SPIT, SIGNAL_FIRE, WATERLOGGED, FACING);
     }
 
-    public static boolean getHasSpit(WorldAccess blockAccess, BlockPos pos)
+    public boolean getHasSpit(WorldAccess blockAccess, BlockPos pos)
     {
         return blockAccess.getBlockState(pos).get(HAS_SPIT);
     }
 
 
-    public static boolean setHasSpit(World world, BlockState state, BlockPos pos, boolean bHasSpit)
+    public boolean setHasSpit(World world, BlockState state, BlockPos pos, boolean bHasSpit)
     {
        return !world.isClient() && world.setBlockState(pos, state.with(HAS_SPIT, bHasSpit));
     }
 
-    private static void playGetItemSound(World world, BlockPos pos, PlayerEntity player)
+    private void playGetItemSound(World world, BlockPos pos, PlayerEntity player)
     {
         world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.2F,
                 ( ( player.getRandom().nextFloat() - player.getRandom().nextFloat() ) * 0.7F + 1F ) * 2F);

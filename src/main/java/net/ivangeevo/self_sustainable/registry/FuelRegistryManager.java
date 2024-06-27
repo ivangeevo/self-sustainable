@@ -37,6 +37,9 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.remove(ItemTags.LOGS);
         FuelRegistry.INSTANCE.remove(ItemTags.PLANKS);
         FuelRegistry.INSTANCE.remove(ItemTags.WOODEN_STAIRS);
+        FuelRegistry.INSTANCE.remove(ItemTags.WOODEN_SLABS);
+        FuelRegistry.INSTANCE.remove(ItemTags.WOODEN_FENCES);
+        FuelRegistry.INSTANCE.remove(ItemTags.FENCE_GATES);
 
         // Items
         FuelRegistry.INSTANCE.remove(Items.COAL);
@@ -66,7 +69,8 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.add(Items.CHERRY_PLANKS, 400);
         FuelRegistry.INSTANCE.add(Items.SPRUCE_PLANKS, 300);
         FuelRegistry.INSTANCE.add(Items.MANGROVE_PLANKS, 300);
-        FuelRegistry.INSTANCE.add(Items.JUNGLE_PLANKS, 100);
+        FuelRegistry.INSTANCE.add(Items.JUNGLE_PLANKS, 200);
+        FuelRegistry.INSTANCE.add(Items.BAMBOO_PLANKS, 130);
         
         // Wooden Stairs
         FuelRegistry.INSTANCE.add(Items.BIRCH_STAIRS, 400);
@@ -76,7 +80,20 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.add(Items.CHERRY_STAIRS, 300);
         FuelRegistry.INSTANCE.add(Items.SPRUCE_STAIRS, 200);
         FuelRegistry.INSTANCE.add(Items.MANGROVE_STAIRS, 200);
-        FuelRegistry.INSTANCE.add(Items.JUNGLE_STAIRS, 70);
+        FuelRegistry.INSTANCE.add(Items.JUNGLE_STAIRS, 150);
+        FuelRegistry.INSTANCE.add(Items.BAMBOO_STAIRS, 100);
+
+        // Wooden Slabs
+        FuelRegistry.INSTANCE.add(Items.BIRCH_SLAB, 250);
+        FuelRegistry.INSTANCE.add(Items.ACACIA_SLAB, 250);
+        FuelRegistry.INSTANCE.add(Items.OAK_SLAB, 200);
+        FuelRegistry.INSTANCE.add(Items.DARK_OAK_SLAB, 200);
+        FuelRegistry.INSTANCE.add(Items.CHERRY_SLAB, 200);
+        FuelRegistry.INSTANCE.add(Items.SPRUCE_SLAB, 150);
+        FuelRegistry.INSTANCE.add(Items.MANGROVE_SLAB, 150);
+        FuelRegistry.INSTANCE.add(Items.JUNGLE_SLAB, 100);
+        FuelRegistry.INSTANCE.add(Items.BAMBOO_SLAB, 75);
+
 
         // New added fuel items
         FuelRegistry.INSTANCE.add(Items.FEATHER, 15);

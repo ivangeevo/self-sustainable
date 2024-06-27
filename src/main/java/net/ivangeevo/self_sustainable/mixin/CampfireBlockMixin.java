@@ -18,6 +18,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -32,10 +33,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockRenderView;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.*;
 import net.minecraft.world.dimension.NetherPortal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,7 +97,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "appendProperties", at = @At("HEAD"), cancellable = true)
     private void addedCustomProperties(StateManager.Builder<Block, BlockState> builder, CallbackInfo ci)
     {
-        CampfireBlockManager.appendCustomProperties(builder);
+        CampfireBlockManager.getInstance().appendCustomProperties(builder);
         ci.cancel();
     }
 
@@ -144,7 +143,12 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void injectedCustomOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir)
     {
-        cir.setReturnValue( CampfireBlockManager.setCustomShapes(state) );
+        cir.setReturnValue( CampfireBlockManager.getInstance().setCustomShapes(state) );
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return VoxelShapes.empty();
     }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
@@ -152,7 +156,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     {
         if (state.getBlock() == Blocks.CAMPFIRE)
         {
-            cir.setReturnValue( CampfireBlockManager.onUse(state, world, pos, player, hand, hit) );
+            cir.setReturnValue( CampfireBlockManager.getInstance().onUse(state, world, pos, player, hand, hit) );
         }
 
 

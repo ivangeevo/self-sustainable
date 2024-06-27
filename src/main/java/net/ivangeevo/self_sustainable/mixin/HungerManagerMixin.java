@@ -27,11 +27,13 @@ public abstract class HungerManagerMixin
 
 
 
-            @ModifyConstant(method = "<init>",
+    @ModifyConstant(method = "<init>",
             constant = @Constant(floatValue = 5.0f),
             slice = @Slice(
-                    from = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "net/minecraft/entity/player/HungerManager.foodLevel : I"),
-                    to = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "net/minecraft/entity/player/HungerManager.saturationLevel : F"))
+            from = @At(value = "FIELD", opcode = Opcodes.PUTFIELD,
+                    target = "net/minecraft/entity/player/HungerManager.foodLevel : I"),
+            to = @At(value = "FIELD", opcode = Opcodes.PUTFIELD,
+                    target = "net/minecraft/entity/player/HungerManager.saturationLevel : F"))
     )
     private float modifySaturationLevel(float original) {
         return 0.001f;

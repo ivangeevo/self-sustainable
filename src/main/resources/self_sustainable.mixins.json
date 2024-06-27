@@ -21,9 +21,7 @@
     "ZombieVillagerEntityMixin"
   ],
   "client": [
-    "CampfireBlockEntityRendererMixin",
-    "HeldItemRendererMixin",
-    "InGameHudMixin"
+    "HeldItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

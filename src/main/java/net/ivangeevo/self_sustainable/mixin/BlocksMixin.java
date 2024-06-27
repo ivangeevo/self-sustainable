@@ -32,9 +32,11 @@ public abstract class BlocksMixin {
     @Inject(method = "createLightLevelFromLitBlockState", at = @At("HEAD"), cancellable = true)
     private static void injectedLightLevelCampfire(int litLevel, CallbackInfoReturnable<ToIntFunction<BlockState>> cir)
     {
-        cir.setReturnValue(state -> {
+        cir.setReturnValue(state ->
+        {
             // Check if the block is CampfireBlock or its subclass
-            if (state.getBlock() instanceof CampfireBlock) {
+            if (state.getBlock() instanceof CampfireBlock)
+            {
                 // Modify the return value for CampfireBlock
                 return state.get(FIRE_LEVEL) != 0 ? litLevel : 0;
             }

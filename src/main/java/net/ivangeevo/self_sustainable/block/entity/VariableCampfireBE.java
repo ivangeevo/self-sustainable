@@ -112,7 +112,7 @@ public class VariableCampfireBE
         if ( iCurrentFireLevel > 0 )
         {
 
-            /**
+/**
             //TODO : Fire spread for campfire. NOT WORKING ATM
              if ( iCurrentFireLevel > 1 && world.random.nextFloat() <= CHANCE_OF_FIRE_SPREAD)
              {
@@ -121,6 +121,7 @@ public class VariableCampfireBE
                      fire.checkForFireSpreadFromLocation(world, pos, world.random, 0);
                  }
              }
+ **/
 
             // New try //
             // Fire spreading logic
@@ -140,7 +141,7 @@ public class VariableCampfireBE
                 }
             }
 
-             **/
+
 
 
             campfireBE.burnTimeSinceLit++;

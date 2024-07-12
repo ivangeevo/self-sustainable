@@ -243,7 +243,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         return null;
     }
 
-
     @Inject(method = "canBeLit", at = @At("HEAD"), cancellable = true)
     private static void injectedCanBeLit(BlockState state, CallbackInfoReturnable<Boolean> cir)
     {

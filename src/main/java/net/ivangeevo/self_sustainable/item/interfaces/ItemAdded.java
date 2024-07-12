@@ -75,8 +75,9 @@ public interface ItemAdded {
         return 0;
     }
 
-    CustomUseAction getCustomUseAction();
-
+    default CustomUseAction getCustomUseAction() {
+        return null;
+    }
 
 
 }

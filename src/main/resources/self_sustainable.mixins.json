@@ -16,7 +16,6 @@
     "LivingEntityMixin",
     "MobEntityMixin",
     "PlayerEntityMixin",
-    "ServerPlayerEntityMixin",
     "SpawnHelperMixin",
     "ZombieVillagerEntityMixin"
   ],

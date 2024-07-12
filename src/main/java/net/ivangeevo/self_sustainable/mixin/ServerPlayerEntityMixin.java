@@ -35,13 +35,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
     @Unique private static Random random = new Random();
 
 
-    @Inject(at = @At("TAIL"), method = "tick")
+    //@Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
         if ( !this.getWorld().isClient)
         {
             ServerPlayerEntity player = ((ServerPlayerEntity) (Object) this);
 
-            PlayerInventory inventory = player.getInventory(); //idek man, Commobile told me to do it
+            PlayerInventory inventory = player.getInventory();
 
             for (int i = 0; i < inventory.offHand.size(); i++)
             {
@@ -134,4 +134,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
             }
         }
     }
+
+
 }

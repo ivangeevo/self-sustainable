@@ -45,6 +45,8 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
     protected ItemStack cookStack = ItemStack.EMPTY;
     private final Object2IntOpenHashMap<Identifier> recipesUsed = new Object2IntOpenHashMap<>();
     public final RecipeManager.MatchGetter<Inventory, OvenCookingRecipe> matchGetter = RecipeManager.createCachedMatchGetter(OvenCookingRecipe.Type.INSTANCE);
+
+    // The fuel values are the same as vanilla's furnace map to maintain compatability with other mods.
     public static final Map<Item, Integer> FUEL_TIME_MAP = AbstractFurnaceBlockEntity.createFuelTimeMap();
     static private final float CHANCE_OF_FIRE_SPREAD = 0.01F;
     public static final int BASE_BURN_TIME_MULTIPLIER = 2;

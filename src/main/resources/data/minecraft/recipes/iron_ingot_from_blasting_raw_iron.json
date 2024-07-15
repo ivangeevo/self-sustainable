@@ -1,3 +1,5 @@
 {
-  "type": "minecraft:impossible"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [{ "item":  "minecraft:air"}],
+  "result": { "item":  "minecraft:barrier"}
 }

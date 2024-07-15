@@ -49,19 +49,14 @@ public class SelfSustainableMod implements ModInitializer
         ModBlockEntities.registerBlockEntities();
         ModRecipes.registerRecipes();
 
-
-        //ModConfiguredFeatures.bootstrap(fea);
         //ModBlocks.registerTorchHandler();
-
-        //NetworkMessagesRegistry.registerS2CPackets();
-        //NetworkMessagesRegistry.registerC2SPackets();
 
         WorldUtils.init();
 
         // Class registering item fuel values for the Brick oven.
-        FuelTicksManager.loadFuelTicks();
+        //FuelTicksManager.loadFuelTicks();
 
-        // Removing and adding new fuel items.
+        // Modifying fuel items.
         FuelRegistryManager.initEntries();
 
         // Predicates

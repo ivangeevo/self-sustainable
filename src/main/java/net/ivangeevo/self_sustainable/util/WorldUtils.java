@@ -10,13 +10,8 @@ public class WorldUtils {
 
     public static void init()
     {
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            serverInstance = server;
-        });
-
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            serverInstance = null;
-        });
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> serverInstance = server);
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> serverInstance = null);
     }
 
     public static long getOverworldTimeServerOnly()

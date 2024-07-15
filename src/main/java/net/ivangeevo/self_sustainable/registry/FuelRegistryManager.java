@@ -27,13 +27,14 @@ public class FuelRegistryManager
 
         // And then we manually remove and add what is not directly modifiable.
         removeFuelItems();
-        registerFuelItems();
+        addFuelItems();
 
     }
 
     private static void removeFuelItems()
     {
         // Tags
+        // we remove tags, because we set a different fuel value for certain wood types.
         FuelRegistry.INSTANCE.remove(ItemTags.LOGS);
         FuelRegistry.INSTANCE.remove(ItemTags.PLANKS);
         FuelRegistry.INSTANCE.remove(ItemTags.WOODEN_STAIRS);
@@ -48,7 +49,7 @@ public class FuelRegistryManager
 
     }
 
-    private static void registerFuelItems()
+    private static void addFuelItems()
     {
         // Logs
         FuelRegistry.INSTANCE.add(Items.BIRCH_LOG, 16000);

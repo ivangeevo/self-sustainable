@@ -9,6 +9,7 @@
 * Increased exhaustion for jumping/sprinting and even more for sprint jumping.
 
 * Total overhaul of normal campfire. Now it requires fuel and can only cook one food item at a time.
+* Changes normal campfire recipe to be 2x2 and easier to craft, but needs a firestarter to light up.
 * Re-balances loot for all worldgen chests to be more fair (no easy loot) (to be balanced further).
 * Modified burn time for most items. Logs are the primary fuel source.
 * Makes picking up Chest require Iron axe or above (gold not working)

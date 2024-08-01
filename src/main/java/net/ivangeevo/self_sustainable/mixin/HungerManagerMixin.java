@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.mixin;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -57,7 +58,6 @@ public abstract class HungerManagerMixin
         }
 
         /** Removed the logic for saturation based healing, & difficulty based healing **/
-
 
         // Custom logic for starvation when food level is 0
         if (this.foodLevel <= 0) {

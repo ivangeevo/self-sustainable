@@ -7,7 +7,6 @@ import net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipeJsonBui
 import net.ivangeevo.self_sustainable.data.server.recipe.WickerWeavingRecipeJsonBuilder;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.items.ProgressiveCraftingItem;
-import net.ivangeevo.self_sustainable.item.items.WickerWeavingItem;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
@@ -34,19 +33,30 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     @Override
     public void generate(Consumer<RecipeJsonProvider> exporter)
     {
-
-        // Oven Recipes
-        this.addOvenCookingRecipes(exporter);
-
-        // Shapeless Recipes
-        this.addShapelessRecipes(exporter);
-
-        // Shaped Recipes
-        this.addShapedRecipes(exporter);
+        this.generateModRecipes(exporter);
+        this.generateVanillaRecipesOverride(exporter);
 
     }
 
-    private void addShapedRecipes(Consumer<RecipeJsonProvider> exporter)
+    private void generateModRecipes(Consumer<RecipeJsonProvider> exporter)
+    {
+        // Oven Recipes
+        this.ovenCooking(exporter);
+
+        // Shapeless Recipes
+        this.moddedShapeless(exporter);
+
+        // Shaped Recipes
+        this.moddedShaped(exporter);
+
+    }
+
+    private void generateVanillaRecipesOverride(Consumer<RecipeJsonProvider> exporter)
+    {
+
+    }
+
+    private void moddedShaped(Consumer<RecipeJsonProvider> exporter)
     {
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.FIRESTARTER_STICKS)
                 .input('#', Items.STICK)
@@ -73,10 +83,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     }
 
 
-
-
-
-    private void addShapelessRecipes(Consumer<RecipeJsonProvider> exporter)
+    private void moddedShapeless(Consumer<RecipeJsonProvider> exporter)
     {
         ShapelessRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.FIRESTARTER_BOW).input(Items.STICK).input(Items.STICK).input(BTWRConventionalTags.Items.STRING_TOOL_MATERIALS).criterion("has_string", RecipeProvider.conditionsFromItem(Items.STRING)).offerTo(exporter);
 
@@ -97,7 +104,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
     }
 
-    private void addOvenCookingRecipes(Consumer<RecipeJsonProvider> exporter)
+    private void ovenCooking(Consumer<RecipeJsonProvider> exporter)
     {
         // Food
         createOvenCooking(Items.BAKED_POTATO, RecipeCategory.FOOD, Ingredient.ofItems(Items.POTATO), 0.25f, 100).criterion("has_potato", RecipeProvider.conditionsFromItem(Items.POTATO)).offerTo(exporter);

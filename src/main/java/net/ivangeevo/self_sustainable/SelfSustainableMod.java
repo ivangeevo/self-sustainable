@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.config.SSSettings;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
-import net.ivangeevo.self_sustainable.item.FuelTicksManager;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.loot.LootFunctionTorch;
 import net.ivangeevo.self_sustainable.loot.TorchFuelFunction;
@@ -12,7 +11,6 @@ import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import net.ivangeevo.self_sustainable.registry.FuelRegistryManager;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
-import net.ivangeevo.self_sustainable.world.gen.feature.ModConfiguredFeatures;
 import net.minecraft.loot.function.LootFunctionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +50,6 @@ public class SelfSustainableMod implements ModInitializer
         //ModBlocks.registerTorchHandler();
 
         WorldUtils.init();
-
-        // Class registering item fuel values for the Brick oven.
-        //FuelTicksManager.loadFuelTicks();
 
         // Modifying fuel items.
         FuelRegistryManager.initEntries();

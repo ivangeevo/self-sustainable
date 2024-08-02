@@ -28,7 +28,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-//TODO: FIX to work as
 @Mixin(FlintAndSteelItem.class)
 public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgnitingItem
 {

@@ -9,6 +9,7 @@ import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.items.ProgressiveCraftingItem;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.RecipeProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
@@ -66,9 +67,10 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK)
                 .input('#', Items.BRICK_SLAB)
-                .pattern("##")
-                .pattern("##")
-                .criterion("has_brick_slab", RecipeProvider.conditionsFromItem(Items.BRICK_SLAB))
+                .pattern("###")
+                .pattern("# #")
+                .pattern("###")
+                .criterion("has_bricks", RecipeProvider.conditionsFromItem(Blocks.BRICKS))
                 .offerTo(exporter);
 
         WickerWeavingRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.WICKER_WEAVING,1)

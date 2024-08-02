@@ -7,8 +7,9 @@
     }
   },
   "pattern": [
-    "##",
-    "##"
+    "###",
+    "# #",
+    "###"
   ],
   "result": {
     "item": "self_sustainable:oven_brick"

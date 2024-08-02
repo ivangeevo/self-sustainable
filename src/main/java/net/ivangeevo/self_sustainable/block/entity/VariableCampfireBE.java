@@ -121,7 +121,7 @@ public class VariableCampfireBE
                      fire.checkForFireSpreadFromLocation(world, pos, world.random, 0);
                  }
              }
- **/
+
 
             // New try //
             // Fire spreading logic
@@ -134,13 +134,13 @@ public class VariableCampfireBE
                         VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
                         if (adjacentCampfireBE != null && getCurrentFireLevel(adjacentState) == 0) {
                             adjacentCampfireBE.changeFireLevel(world,1); // Set fire level to 1
-                            Ignitable.playExtinguishSound(world, pos, false);
+                            Ignitable.playLitFX(world, pos);
 
                         }
                     }
                 }
             }
-
+ **/
 
 
 

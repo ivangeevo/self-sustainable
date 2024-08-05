@@ -6,6 +6,8 @@
 * Added Brick Oven.
 * Added Fire Plough and Bow Drill. (fire starting items)
 * Added periodic exhaustion regardless of action (to prevent infinite afk-ing).
+* Added passive healing 1/2 heart every 10 seconds if hunger is high enough
+(only when Im 'movens mod is not present, then it's 30 seconds)
 * Increased exhaustion for jumping/sprinting and even more for sprint jumping.
 
 * Total overhaul of normal campfire. Now it requires fuel and can only cook one food item at a time.

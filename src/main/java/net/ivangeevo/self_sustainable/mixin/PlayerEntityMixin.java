@@ -11,6 +11,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,6 +23,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 {
     @Shadow public abstract boolean isPlayer();
     @Shadow public abstract void jump();
+    @Unique private final boolean runningImMovens = FabricLoader.getInstance().isModLoaded("im-movens");
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -43,10 +45,35 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
         }
     }
 
+
+    /** Modify food exhaustion values for jumping and jump sprinting 1/3 of what i'm movens values are **/
+    // Sprint jumping
+    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.2f))
+    private float modifySprintJump(float constant)
+    {
+        if (!runningImMovens)
+        {
+            return 0.33f;
+        }
+
+        return constant;
+    }
+
+    // Regular jumping
+    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.05f))
+    private float modifyJump(float constant)
+    {
+        if (!runningImMovens)
+        {
+            return 0.12f;
+        }
+        return constant;
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)
     {
-        if (!FabricLoader.getInstance().isModLoaded("im-movens"))
+        if (!runningImMovens)
         {
             PlayerEntity player = (PlayerEntity) (Object) this;
 
@@ -56,7 +83,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
             {
                 player.heal(1.0F);
 
-                //TODO: Maybe add a minimal exhaustion on heal when the im-movens mod is no present
+                //TODO: Maybe add a minimal exhaustion on heal when the im-movens mod is not present
                 //  I was also tinkering with adding a satisfying sound on heal? dunno
                 //player.addExhaustion(0.2f);
 

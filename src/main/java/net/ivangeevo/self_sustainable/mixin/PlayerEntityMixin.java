@@ -67,6 +67,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
         {
             return 0.12f;
         }
+
         return constant;
     }
 

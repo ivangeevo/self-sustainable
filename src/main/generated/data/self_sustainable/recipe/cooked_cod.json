@@ -1,0 +1,13 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "food",
+  "cookingTime": 1600,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:cod"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:cooked_cod"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "food",
+  "cookingTime": 1800,
+  "experience": 0.15,
+  "ingredient": {
+    "item": "minecraft:chicken"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:cooked_chicken"
+  }
+}

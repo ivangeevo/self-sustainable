@@ -1,0 +1,13 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "food",
+  "cookingTime": 100,
+  "experience": 0.25,
+  "ingredient": {
+    "item": "minecraft:potato"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:baked_potato"
+  }
+}

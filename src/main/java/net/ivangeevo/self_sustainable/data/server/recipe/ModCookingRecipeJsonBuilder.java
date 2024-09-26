@@ -3,6 +3,8 @@ package net.ivangeevo.self_sustainable.data.server.recipe;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementCriterion;
 import net.minecraft.advancement.AdvancementRequirements;
@@ -18,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SmeltingRecipe;
 import net.minecraft.recipe.book.CookingRecipeCategory;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.util.Identifier;
@@ -67,10 +68,8 @@ public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder
         return new ModCookingRecipeJsonBuilder(category, getCookingRecipeCategory(serializer, output), output, input, experience, cookingTime, recipeFactory);
     }
 
-
-
     public static ModCookingRecipeJsonBuilder createOvenCooking(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
-        return new ModCookingRecipeJsonBuilder(category, getSmeltingRecipeCategory(output), output, input, experience, cookingTime, SmeltingRecipe::new);
+        return new ModCookingRecipeJsonBuilder(category, getRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe::new);
     }
 
 
@@ -102,7 +101,7 @@ public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder
         exporter.accept(recipeId, abstractCookingRecipe, builder.build(recipeId.withPrefixedPath("recipes/" + this.category.getName() + "/")));
     }
 
-    public static CookingRecipeCategory getSmeltingRecipeCategory(ItemConvertible output) {
+    public static CookingRecipeCategory getRecipeCategory(ItemConvertible output) {
         if (output.asItem().getComponents().contains(DataComponentTypes.FOOD)) {
             return CookingRecipeCategory.FOOD;
         } else {
@@ -110,17 +109,12 @@ public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder
         }
     }
 
-    private static CookingRecipeCategory getBlastingRecipeCategory(ItemConvertible output) {
-        return output.asItem() instanceof BlockItem ? CookingRecipeCategory.BLOCKS : CookingRecipeCategory.MISC;
-    }
+
 
     private static CookingRecipeCategory getCookingRecipeCategory(RecipeSerializer<? extends AbstractCookingRecipe> serializer, ItemConvertible output) {
-        if (serializer == RecipeSerializer.SMELTING) {
-            return getSmeltingRecipeCategory(output);
-        } else if (serializer == RecipeSerializer.BLASTING) {
-            return getBlastingRecipeCategory(output);
-        } else if (serializer != RecipeSerializer.SMOKING && serializer != RecipeSerializer.CAMPFIRE_COOKING) {
-            throw new IllegalStateException("Unknown cooking recipe type");
+        if (serializer == OvenCookingRecipe.Serializer.INSTANCE)
+        {
+            return getRecipeCategory(output);
         } else {
             return CookingRecipeCategory.FOOD;
         }

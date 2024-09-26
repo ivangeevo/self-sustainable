@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipeJsonBuilder;
 import net.ivangeevo.self_sustainable.item.ModItems;
-import net.ivangeevo.self_sustainable.item.items.ProgressiveCraftingItem;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.minecraft.block.Blocks;
@@ -167,7 +166,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .input(Items.BEDROCK).criterion("has_bedrock", RecipeProvider.conditionsFromItem(Items.BEDROCK));
     }
     public static ModCookingRecipeJsonBuilder createOvenCooking(ItemConvertible output, RecipeCategory category,Ingredient input , float experience, int cookingTime) {
-        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getSmeltingRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe::new);
+        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe::new);
     }
 
     /**

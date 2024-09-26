@@ -3,17 +3,16 @@ package net.ivangeevo.self_sustainable.loot;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
-import net.ivangeevo.self_sustainable.block.blocks.AbstractTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunctionType;
 
+/**
 public class LootFunctionTorch extends ConditionalLootFunction {
 
     protected LootFunctionTorch(LootCondition[] conditions) {
@@ -34,9 +33,9 @@ public class LootFunctionTorch extends ConditionalLootFunction {
         TorchFireState dropTorchState;
 
         // Torch dropping behavior modification
-        if (state.getBlock() instanceof AbstractTorchBlock)
+        if (state.getBlock() instanceof AbstractModTorchBlock)
         {
-            torchState = ((AbstractTorchBlock) state.getBlock()).fireState;
+            torchState = ((AbstractModTorchBlock) state.getBlock()).fireState;
             dropTorchState = torchState;
 
             // Check for smoldering drop
@@ -60,7 +59,7 @@ public class LootFunctionTorch extends ConditionalLootFunction {
     }
 
     private ItemStack getChangedStack(BlockState state, TorchFireState torchState) {
-        return new ItemStack(((AbstractTorchBlock) state.getBlock()).handler.getStandingTorch(torchState).asItem());
+        return new ItemStack(((AbstractModTorchBlock) state.getBlock()).handler.getStandingTorch(torchState).asItem());
     }
 
     public static class Serializer extends ConditionalLootFunction.Serializer<LootFunctionTorch> {
@@ -71,3 +70,4 @@ public class LootFunctionTorch extends ConditionalLootFunction {
         }
     }
 }
+ **/

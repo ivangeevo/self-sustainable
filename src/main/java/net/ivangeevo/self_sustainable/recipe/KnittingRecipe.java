@@ -5,21 +5,31 @@ package net.ivangeevo.self_sustainable.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.items.KnittingItem;
 import net.ivangeevo.self_sustainable.item.items.WoolItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.*;
+import net.minecraft.recipe.book.CookingRecipeCategory;
+import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
-
+/**
 public class KnittingRecipe implements Recipe<CraftingInventory> {
+
+
 
 
     // temporary variables used while processing recipes.
@@ -27,10 +37,10 @@ public class KnittingRecipe implements Recipe<CraftingInventory> {
     private ItemStack stackWool;
     private ItemStack stackWool2;
 
-    public KnittingRecipe(Identifier id, ItemStack output, DefaultedList<Ingredient> input) {
+    public KnittingRecipe(Identifier id, DefaultedList<Ingredient> input, ItemStack output) {
         this.id = id;
-        this.output = output;
         this.input = input;
+        this.output = output;
     }
 
     // Recipe added methods
@@ -43,6 +53,11 @@ public class KnittingRecipe implements Recipe<CraftingInventory> {
     @Override
     public boolean matches(CraftingInventory inventory, World world) {
         return checkForIngredients(inventory);
+    }
+
+    @Override
+    public ItemStack craft(CraftingInventory input, RegistryWrapper.WrapperLookup lookup) {
+        return null;
     }
 
     @Override
@@ -67,6 +82,11 @@ public class KnittingRecipe implements Recipe<CraftingInventory> {
     @Override
     public boolean fits(int width, int height) {
         return true;
+    }
+
+    @Override
+    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+        return null;
     }
 
     @Override
@@ -98,9 +118,60 @@ public class KnittingRecipe implements Recipe<CraftingInventory> {
 
     }
 
-    public static class Serializer implements RecipeSerializer<KnittingRecipe> {
+    // TODO: make the CODEC for Knitting recipes and refactor them as necessary.
+    //  They weren't working before anyway.
+    public static class Serializer implements RecipeSerializer<KnittingRecipe>
+    {
+        private static final MapCodec<KnittingRecipe> CODEC = RecordCodecBuilder.mapCodec(
+                instance -> instance.group(
+                        Codec.STRING
+                                .optionalFieldOf("group", "")
+                                .forGetter(recipe -> recipe.group),
+                        CookingRecipeCategory.CODEC
+                                .fieldOf("category")
+                                .orElse(CookingRecipeCategory.MISC)
+                                .forGetter(recipe -> recipe.category),
+                        Ingredient.DISALLOW_EMPTY_CODEC
+                                .fieldOf("ingredient")
+                                .forGetter(recipe -> recipe.ingredient),
+                        ItemStack.VALIDATED_CODEC
+                                .fieldOf("result")
+                                .forGetter(recipe -> recipe.result),
+                        Codec.FLOAT
+                                .fieldOf("experience")
+                                .forGetter(recipe -> recipe.experience),
+                        Codec.INT
+                                .fieldOf("cookingTime")
+                                .forGetter(recipe -> recipe.cookingTime)
+
+                ).apply(instance, KnittingRecipe::new)
+        );
+
+        public static final PacketCodec<RegistryByteBuf, KnittingRecipe> PACKET_CODEC = PacketCodec.ofStatic(
+                KnittingRecipe.Serializer::write, KnittingRecipe.Serializer::read
+        );
+
+        @Override
+        public MapCodec<KnittingRecipe> codec() {
+            return CODEC;
+        }
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "knitting";
+
+        private static KnittingRecipe read(RegistryByteBuf buf)
+        {
+            Identifier id = buf.readIdentifier();
+            Ingredient ingredient = Ingredient.PACKET_CODEC.decode(buf);
+            DefaultedList<Ingredient> ingredientList = ingredient
+            ItemStack result = ItemStack.PACKET_CODEC.decode(buf);
+
+            return new KnittingRecipe()
+        }
+
+        private static void write(RegistryByteBuf buf, KnittingRecipe recipe)
+        {
+
+        }
 
         @Override
         public KnittingRecipe read(Identifier id, JsonObject json) {
@@ -192,5 +263,6 @@ public class KnittingRecipe implements Recipe<CraftingInventory> {
 
 
 
-
 }
+
+ **/

@@ -1,40 +1,7 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-import net.ivangeevo.self_sustainable.block.entity.TorchBE;
-import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
-import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
-import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
-import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
-import net.ivangeevo.self_sustainable.item.items.TorchItem;
-import net.ivangeevo.self_sustainable.tag.ModTags;
-import net.ivangeevo.self_sustainable.util.ModTorchHandler;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-import java.util.function.IntSupplier;
-
-public abstract class AbstractTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock
+/**
+public abstract class AbstractModTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock
 {
 
     public ParticleEffect particle;
@@ -42,7 +9,7 @@ public abstract class AbstractTorchBlock extends BlockWithEntity implements Bloc
     public ModTorchHandler handler;
     public IntSupplier maxFuel;
 
-    public AbstractTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel, IntSupplier maxFuel)
+    public AbstractModTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel, IntSupplier maxFuel)
     {
         super(settings);
         this.particle = particle;
@@ -112,7 +79,7 @@ public abstract class AbstractTorchBlock extends BlockWithEntity implements Bloc
 
         if (isWall())
         {
-            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, curState.get(ModWallTorchBlock.FACING));
+            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, curState.get(ModWallModTorchBlock.FACING));
         }
         else
         {
@@ -265,3 +232,4 @@ public abstract class AbstractTorchBlock extends BlockWithEntity implements Bloc
 
 
 }
+ **/

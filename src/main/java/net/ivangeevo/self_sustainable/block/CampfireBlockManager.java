@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.recipe.CampfireCookingRecipe;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -64,7 +65,7 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
             }
 
 
-            Optional<CampfireCookingRecipe> optional;
+            Optional<RecipeEntry<CampfireCookingRecipe>> optional;
 
             // Handle stick input
             if (!getHasSpit(world, pos))
@@ -106,7 +107,7 @@ public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
                         campfireBE.addItem(player,
                                 player.getAbilities().creativeMode
                                         ? heldStack.copy()
-                                        : heldStack, optional.get().getCookTime());
+                                        : heldStack, optional.get().value().getCookingTime());
 
                         return ActionResult.SUCCESS;
                     }

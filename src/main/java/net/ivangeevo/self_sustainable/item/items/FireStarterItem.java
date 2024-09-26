@@ -5,6 +5,7 @@ package net.ivangeevo.self_sustainable.item.items;
 
 import net.ivangeevo.self_sustainable.item.util.DirectlyIgnitingItem;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,7 +49,7 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
 
             assert player != null;
             player.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
-            context.getStack().damage(1, player, p -> p.sendToolBreakStatus(context.getHand()));
+            context.getStack().damage(1, player, EquipmentSlot.MAINHAND);
             return ActionResult.SUCCESS;
         }
 

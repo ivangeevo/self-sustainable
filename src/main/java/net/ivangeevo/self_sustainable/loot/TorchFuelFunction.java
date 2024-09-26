@@ -3,8 +3,6 @@ package net.ivangeevo.self_sustainable.loot;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
-import net.ivangeevo.self_sustainable.block.blocks.AbstractTorchBlock;
-import net.ivangeevo.self_sustainable.block.entity.TorchBE;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -17,6 +15,7 @@ import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.nbt.NbtCompound;
 
+/**
 public class TorchFuelFunction extends ConditionalLootFunction {
 
     protected TorchFuelFunction(LootCondition[] conditions) {
@@ -35,7 +34,7 @@ public class TorchFuelFunction extends ConditionalLootFunction {
         BlockEntity blockEntity = context.get(LootContextParameters.BLOCK_ENTITY);
         Block block = ((BlockItem) stack.getItem()).getBlock();
 
-        if (block instanceof AbstractTorchBlock) {
+        if (block instanceof AbstractModTorchBlock) {
 
             // Set fuel
             if (blockEntity instanceof TorchBE) {
@@ -48,7 +47,7 @@ public class TorchFuelFunction extends ConditionalLootFunction {
                 }
             }
 
-            if (block instanceof AbstractTorchBlock && ((AbstractTorchBlock) ((BlockItem) stack.getItem()).getBlock()).fireState == TorchFireState.BURNED_OUT) {
+            if (block instanceof AbstractModTorchBlock && ((AbstractModTorchBlock) ((BlockItem) stack.getItem()).getBlock()).fireState == TorchFireState.BURNED_OUT) {
                 stack.removeSubNbt("Fuel");
             }
         }
@@ -64,3 +63,4 @@ public class TorchFuelFunction extends ConditionalLootFunction {
         }
     }
 }
+ **/

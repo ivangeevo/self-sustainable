@@ -1,10 +1,13 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
+import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.CampfireCookingRecipe;
+import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -25,9 +28,10 @@ public class BrickOvenBE extends AbstractOvenBE
         boolean bWasBurning = ovenBE.fuelBurnTime > 0;
         boolean bInvChanged = false;
 
-        SimpleInventory inventory = new SimpleInventory(cookStack);
-        ItemStack cookedStack = ovenBE.matchGetter.getFirstMatch(inventory, world)
-                .map(recipe -> recipe.craft(inventory, world.getRegistryManager()))
+        SingleStackRecipeInput singleStackRecipeInput = new SingleStackRecipeInput(cookStack);
+        ItemStack cookedStack = ovenBE.matchGetter
+                .getFirstMatch(singleStackRecipeInput, world)
+                .map(recipe -> recipe.value().craft(singleStackRecipeInput, world.getRegistryManager()))
                 .orElse(cookStack);
 
         // Decrease furnace burn time if it's still burning

@@ -40,6 +40,8 @@ public abstract class HungerManagerMixin
         return 0.001f;
     }
 
+
+    // TODO: Check on ways to modify this less intrusively
     /**
      * @author
      * @reason

@@ -55,7 +55,7 @@ public abstract class MobEntityMixin extends LivingEntity
             int var7 = var6.length;
 
             for (EquipmentSlot equipmentSlot : var6) {
-                if (equipmentSlot.getType() == EquipmentSlot.Type.ARMOR) {
+                if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                     ItemStack itemStack = this.getEquippedStack(equipmentSlot);
                     if (!bl && random.nextFloat() < f) {
                         break;

@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 public class ModItemGroup {
 
     public static final ItemGroup SS_GROUP = Registry.register(Registries.ITEM_GROUP,
-            new Identifier(SelfSustainableMod.MOD_ID, "ss_group"),
+            Identifier.of(SelfSustainableMod.MOD_ID, "ss_group"),
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.ss_group"))
                     .icon(() -> new ItemStack(ModItems.SS_GROUP)).entries((displayContext, entries) ->
                     {

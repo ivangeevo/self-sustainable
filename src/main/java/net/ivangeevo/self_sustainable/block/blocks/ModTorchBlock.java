@@ -1,41 +1,43 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.minecraft.block.*;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockRenderView;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.particle.SimpleParticleType;
+import net.minecraft.registry.Registries;
 
 import java.util.function.IntSupplier;
 
-public class ModTorchBlock extends AbstractTorchBlock {
+/**
+public class ModTorchBlock extends AbstractModTorchBlock
+{
 
-    public ModTorchBlock(Settings settings, ParticleEffect particle, TorchFireState fireState, IntSupplier maxFuel) {
+    protected static final MapCodec<SimpleParticleType> PARTICLE_TYPE_CODEC = Registries.PARTICLE_TYPE
+            .getCodec()
+            .<SimpleParticleType>comapFlatMap(
+                    particleType -> particleType instanceof SimpleParticleType simpleParticleType
+                            ? DataResult.success(simpleParticleType)
+                            : DataResult.error(() -> "Not a SimpleParticleType: " + particleType),
+                    particleType -> particleType
+            )
+            .fieldOf("particle_options");
+    public static final MapCodec<ModTorchBlock> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(PARTICLE_TYPE_CODEC.forGetter(block -> block.particle), createSettingsCodec()).apply(instance, ModTorchBlock::new)
+    );
+
+    protected final SimpleParticleType particle;
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return CODEC;
+    }
+
+
+    public ModTorchBlock(SimpleParticleType particle, AbstractBlock.Settings settings, TorchFireState fireState, IntSupplier maxFuel) {
         super(settings, particle, fireState, maxFuel);
-    }
-
-
-
-    @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return Blocks.TORCH.getOutlineShape(state, world, pos, context);
-    }
-
-    @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        return Blocks.TORCH.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
-    }
-
-    @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
-    {
-        return Blocks.TORCH.canPlaceAt(state, world, pos);
+        this.particle = particle;
     }
 
     @Override
@@ -43,3 +45,4 @@ public class ModTorchBlock extends AbstractTorchBlock {
 
 
 }
+ **/

@@ -53,18 +53,17 @@ public class WickerWeavingItem extends ProgressiveCraftingItem
         return new ItemStack( ModItems.WICKER );
     }
 
-    @Override
-    public void onCraft(ItemStack stack, World world, PlayerEntity player)
-    {
 
+    @Override
+    public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player)
+    {
         if (player.timesCraftedThisTick == 0 && world.isClient)
         {
             player.playSound( SoundEvents.BLOCK_GRASS_STEP, 1.0F, world.random.nextFloat() * 0.1F + 0.9F );
         }
 
-        super.onCraft( stack, world, player );
+        super.onCraftByPlayer(stack, world, player);
     }
-
 
     /**
     @Override

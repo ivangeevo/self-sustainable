@@ -29,6 +29,7 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
+/**
 public class WickerWeavingRecipe implements CraftingRecipe {
     final int width;
     final int height;
@@ -148,10 +149,7 @@ public class WickerWeavingRecipe implements CraftingRecipe {
         return this.height;
     }
 
-    /**
-     * Compiles a pattern and series of symbols into a list of ingredients (the matrix) suitable for matching
-     * against a crafting grid.
-     */
+
     static DefaultedList<Ingredient> createPatternMatrix(String[] pattern, Map<String, Ingredient> symbols, int width, int height) {
         DefaultedList<Ingredient> defaultedList = DefaultedList.ofSize(width * height, Ingredient.EMPTY);
         HashSet<String> set = Sets.newHashSet(symbols.keySet());
@@ -173,27 +171,7 @@ public class WickerWeavingRecipe implements CraftingRecipe {
         return defaultedList;
     }
 
-    /**
-     * Removes empty space from around the recipe pattern.
-     *
-     * <p>Turns patterns such as:</p>
-     * <pre>
-     * {@code
-     * "   o"
-     * "   a"
-     * "    "
-     * }
-     * </pre>
-     * Into:
-     * <pre>
-     * {@code
-     * "o"
-     * "a"
-     * }
-     * </pre>
-     *
-     * @return a new recipe pattern with all leading and trailing empty rows/columns removed
-     */
+
     @VisibleForTesting
     static String[] removePadding(String ... pattern) {
         int i = Integer.MAX_VALUE;
@@ -265,11 +243,7 @@ public class WickerWeavingRecipe implements CraftingRecipe {
         return strings;
     }
 
-    /**
-     * Reads the pattern symbols.
-     *
-     * @return a mapping from a symbol to the ingredient it represents
-     */
+
     static Map<String, Ingredient> readSymbols(JsonObject json) {
         HashMap<String, Ingredient> map = Maps.newHashMap();
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
@@ -377,4 +351,5 @@ public class WickerWeavingRecipe implements CraftingRecipe {
         }
     }
 }
+**/
 

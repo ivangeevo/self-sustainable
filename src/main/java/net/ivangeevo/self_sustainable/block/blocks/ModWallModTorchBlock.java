@@ -1,6 +1,5 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-import net.ivangeevo.self_sustainable.block.blocks.AbstractTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
@@ -20,12 +19,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntSupplier;
 
-public class ModWallTorchBlock extends AbstractTorchBlock
+/**
+public class ModWallModTorchBlock extends AbstractModTorchBlock
 {
 
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
-    public ModWallTorchBlock(Settings settings, ParticleEffect particle, TorchFireState fireState, IntSupplier maxFuel) {
+    public ModWallModTorchBlock(Settings settings, ParticleEffect particle, TorchFireState fireState, IntSupplier maxFuel) {
         super(settings, particle, fireState, maxFuel);
         setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
     }
@@ -84,7 +84,7 @@ public class ModWallTorchBlock extends AbstractTorchBlock
     public void smother(World world, BlockPos pos, BlockState state) {
         super.smother(world, pos, state);
 
-        ModWallTorchBlock newTorch;
+        ModWallModTorchBlock newTorch;
         newTorch = handler.getWallTorch(TorchFireState.SMOULDER);
 
         world.setBlockState(pos, newTorch.getDefaultState().with(HorizontalFacingBlock.FACING, state.get(FACING)));
@@ -94,7 +94,7 @@ public class ModWallTorchBlock extends AbstractTorchBlock
     public void burnOut(World world, BlockPos pos, BlockState state, boolean playSound) {
         super.burnOut(world, pos, state, playSound);
 
-        ModWallTorchBlock newTorch;
+        ModWallModTorchBlock newTorch;
         newTorch = handler.getWallTorch(TorchFireState.BURNED_OUT);
 
         world.setBlockState(pos, newTorch.getDefaultState().with(HorizontalFacingBlock.FACING, state.get(FACING)));
@@ -104,7 +104,7 @@ public class ModWallTorchBlock extends AbstractTorchBlock
     public void light(World world, BlockPos pos, BlockState state) {
         super.light(world, pos, state);
 
-        ModWallTorchBlock newTorch;
+        ModWallModTorchBlock newTorch;
         newTorch = handler.getWallTorch(TorchFireState.LIT);
 
         world.setBlockState(pos, newTorch.getDefaultState().with(HorizontalFacingBlock.FACING, state.get(FACING)));
@@ -115,3 +115,4 @@ public class ModWallTorchBlock extends AbstractTorchBlock
         return true;
     }
 }
+ **/

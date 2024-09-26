@@ -23,8 +23,11 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.CampfireCookingRecipe;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.input.SingleStackRecipeInput;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Clearable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -50,7 +53,9 @@ public class VariableCampfireBE
     private final DefaultedList<ItemStack> itemsBeingCooked = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private int cookingTime = 0;
     private int cookingTotalTime = 0;
-    public final RecipeManager.MatchGetter<Inventory, CampfireCookingRecipe> matchGetter = RecipeManager.createCachedMatchGetter(RecipeType.CAMPFIRE_COOKING);
+    private final RecipeManager.MatchGetter<SingleStackRecipeInput, CampfireCookingRecipe> matchGetter = RecipeManager.createCachedMatchGetter(
+            RecipeType.CAMPFIRE_COOKING
+    );
 
     // BTW Added variables
 
@@ -171,9 +176,11 @@ public class VariableCampfireBE
                     bl = true;
                     campfireBE.setCookTime(campfireBE.getCookTime() + 1);
                     if (campfireBE.getCookTime() >= campfireBE.getTotalCookTime()) {
-                        Inventory inventory = new SimpleInventory(itemStack);
-                        ItemStack itemStack2 = campfireBE.matchGetter.getFirstMatch(inventory, world).map((recipe) -> recipe.craft(inventory, world.getRegistryManager())).orElse(itemStack);
-                        if (itemStack2.isItemEnabled(world.getEnabledFeatures()))
+                        SingleStackRecipeInput singleStackRecipeInput = new SingleStackRecipeInput(itemStack);
+                        ItemStack itemStack2 = (ItemStack)campfireBE.matchGetter
+                                .getFirstMatch(singleStackRecipeInput, world)
+                                .map(recipe -> ((CampfireCookingRecipe)recipe.value()).craft(singleStackRecipeInput, world.getRegistryManager()))
+                                .orElse(itemStack);                        if (itemStack2.isItemEnabled(world.getEnabledFeatures()))
                         {
                             campfireBE.itemsBeingCooked.set(0, itemStack2);
                             world.updateListeners(pos, state, state, 3);
@@ -348,6 +355,8 @@ public class VariableCampfireBE
         return this.itemsBeingCooked;
     }
 
+    // TODO : Fix nbt data to work with the components system
+    /**
     @Override
     public void readNbt(NbtCompound nbt)
     {
@@ -375,23 +384,23 @@ public class VariableCampfireBE
         nbt.putInt("SmoulderCounter", smoulderCounter);
         nbt.putInt("CookBurning", cookBurningCounter);
     }
+    **/
 
     public BlockEntityUpdateS2CPacket toUpdatePacket() {
         return BlockEntityUpdateS2CPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt() {
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
         NbtCompound nbtCompound = new NbtCompound();
-        Inventories.writeNbt(nbtCompound, this.itemsBeingCooked, true);
+        Inventories.writeNbt(nbtCompound, this.itemsBeingCooked, true, registryLookup);
         return nbtCompound;
     }
 
-    public Optional<CampfireCookingRecipe> getRecipeFor(ItemStack stack) {
-        if (this.itemsBeingCooked.stream().noneMatch(ItemStack::isEmpty)) {
-            return Optional.empty();
-        }
-        return this.matchGetter.getFirstMatch(new SimpleInventory(stack), this.world);
+    public Optional<RecipeEntry<CampfireCookingRecipe>> getRecipeFor(ItemStack stack) {
+        return this.itemsBeingCooked.stream().noneMatch(ItemStack::isEmpty)
+                ? Optional.empty()
+                : this.matchGetter.getFirstMatch(new SingleStackRecipeInput(stack), this.world);
     }
 
     public void addItem(@Nullable Entity user, ItemStack stack, int cookTime) {

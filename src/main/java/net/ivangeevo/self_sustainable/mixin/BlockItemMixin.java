@@ -8,6 +8,7 @@ import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
@@ -85,7 +86,7 @@ public abstract class BlockItemMixin extends Item implements Ignitable
             } else {
                 // Default logic for placing or using the item
                 ActionResult actionResult = this.place(new ItemPlacementContext(context));
-                if (!actionResult.isAccepted() && this.isFood()) {
+                if (!actionResult.isAccepted() && context.getStack().contains(DataComponentTypes.FOOD)) {
                     ActionResult actionResult2 = this.use(context.getWorld(), context.getPlayer(), context.getHand()).getResult();
                     cir.setReturnValue(actionResult2 == ActionResult.CONSUME ? ActionResult.CONSUME_PARTIAL : actionResult2);
                 }

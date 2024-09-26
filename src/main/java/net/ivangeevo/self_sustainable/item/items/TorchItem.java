@@ -1,10 +1,8 @@
 package net.ivangeevo.self_sustainable.item.items;
 
 import net.fabricmc.fabric.api.item.v1.FabricItem;
-import net.ivangeevo.self_sustainable.block.blocks.AbstractTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.tag.ModTags;
-import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +21,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
+/**
 public class TorchItem extends VerticallyAttachableBlockItem implements FabricItem {
     TorchFireState torchState;
     ModTorchHandler handler;
@@ -193,7 +192,7 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
 
         if (inputItem instanceof TorchItem)
         {
-            AbstractTorchBlock newBlock = (AbstractTorchBlock) ((BlockItem)inputItem).getBlock();
+            AbstractModTorchBlock newBlock = (AbstractModTorchBlock) ((BlockItem)inputItem).getBlock();
 
             outputItem = newBlock.handler.getStandingTorch(newState).asItem();
         }
@@ -207,7 +206,7 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
 
         if (inputStack.getItem() instanceof BlockItem && inputStack.getItem() instanceof TorchItem)
         {
-            AbstractTorchBlock newBlock = (AbstractTorchBlock) ((BlockItem)inputStack.getItem()).getBlock();
+            AbstractModTorchBlock newBlock = (AbstractModTorchBlock) ((BlockItem)inputStack.getItem()).getBlock();
             TorchItem newItem = (TorchItem) newBlock.handler.getStandingTorch(newState).asItem();
 
             outputStack = changedCopy(inputStack, newItem);
@@ -294,3 +293,4 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
         return stack;
     }
 }
+ **/

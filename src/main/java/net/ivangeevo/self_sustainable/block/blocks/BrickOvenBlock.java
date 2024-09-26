@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -18,7 +20,6 @@ import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +33,7 @@ import java.util.Optional;
 
 public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 {
+
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
     protected final float clickYTopPortion = (6F / 16F);
@@ -43,6 +45,11 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
                 .with(LIT,false)
                 .with(FUEL_LEVEL, 0)
                 .with(FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return null;
     }
 
     @Override
@@ -100,10 +107,12 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
         return false;
     }
+
+
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit)
     {
-        ItemStack heldStack = player.getStackInHand(hand);
+        ItemStack heldStack = player.getStackInHand(player.getActiveHand());
         BlockEntity blockEntity = world.getBlockEntity(pos);
         Item item = heldStack.getItem();
 
@@ -117,7 +126,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
         if (blockEntity instanceof BrickOvenBE ovenBE)
         {
-            Optional<OvenCookingRecipe> optional;
+            Optional<RecipeEntry<OvenCookingRecipe>> optional;
 
             if (relativeClickY > clickYTopPortion)
             {
@@ -132,7 +141,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
                 else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() )
                 {
                     if ( !world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
-                            player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime()))
+                            player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime()))
                     {
 
                         return ActionResult.SUCCESS;
@@ -231,11 +240,11 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     {
         if (world.isClient)
         {
-            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::clientTick);
+            return BrickOvenBlock.validateTicker(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::clientTick);
         }
         else
         {
-            return BrickOvenBlock.checkType(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::serverTick);
+            return BrickOvenBlock.validateTicker(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::serverTick);
         }
     }
 

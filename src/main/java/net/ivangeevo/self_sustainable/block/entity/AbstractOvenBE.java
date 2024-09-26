@@ -3,7 +3,7 @@ package net.ivangeevo.self_sustainable.block.entity;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.ivangeevo.self_sustainable.block.blocks.SmokerOvenBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
-import net.ivangeevo.self_sustainable.entity.util.SingleStackInventory;
+import net.ivangeevo.self_sustainable.entity.util.CustomSingleStackInventory;
 import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -12,14 +12,13 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeManager;
+import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -32,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, SingleStackInventory
+public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, CustomSingleStackInventory
 {
 
     public int unlitFuelBurnTime;
@@ -44,8 +43,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
     private final int cookTimeMultiplier = 4;
     protected ItemStack cookStack = ItemStack.EMPTY;
     private final Object2IntOpenHashMap<Identifier> recipesUsed = new Object2IntOpenHashMap<>();
-    public final RecipeManager.MatchGetter<Inventory, OvenCookingRecipe> matchGetter = RecipeManager.createCachedMatchGetter(OvenCookingRecipe.Type.INSTANCE);
-
+    final RecipeManager.MatchGetter<SingleStackRecipeInput, OvenCookingRecipe> matchGetter = RecipeManager.createCachedMatchGetter(OvenCookingRecipe.Type.INSTANCE);
     // The fuel values are the same as vanilla's furnace map to maintain compatability with other mods.
     public static final Map<Item, Integer> FUEL_TIME_MAP = AbstractFurnaceBlockEntity.createFuelTimeMap();
     static private final float CHANCE_OF_FIRE_SPREAD = 0.01F;
@@ -61,14 +59,15 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
         super(type, pos, state);
     }
 
-    public Optional<OvenCookingRecipe> getRecipeFor(ItemStack stack)
+    public Optional<RecipeEntry<OvenCookingRecipe>> getRecipeFor(ItemStack stack)
     {
         if (stack.isEmpty()) {
             return Optional.empty();
         }
 
-        return this.matchGetter.getFirstMatch(new SimpleInventory(stack), this.world);
+        return this.matchGetter.getFirstMatch(new SingleStackRecipeInput(stack), this.world);
     }
+
 
     protected static void markDirty(World world, BlockPos pos, BlockState state) {
         world.markDirty(pos);
@@ -182,6 +181,9 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
         }
     }
 
+
+    // TODO: Fix nbt to be Component instead
+    /**
     @Override
     public void readNbt(NbtCompound nbt)
     {
@@ -228,6 +230,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
             nbt.put("CookStack", new NbtCompound()); // Empty compound to indicate empty ItemStack
         }
     }
+     **/
 
 
     @Override
@@ -268,24 +271,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
         this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
     }
 
-    /**
-    public void retrieveItem(World world, PlayerEntity player)
-    {
-        ItemStack cookStack = getCookStack();
-
-        if (!cookStack.isEmpty() && !world.isClient())
-        {
-            if (!getCookStack().isEmpty())
-            {
-                player.giveItemStack(getCookStack());
-                setStack(ItemStack.EMPTY);
-                markDirty();
-                Objects.requireNonNull(this.getWorld()).updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
-            }
-        }
-    }
-     **/
-
     public void retrieveItem(World world, PlayerEntity player)
     {
         ItemStack cookStack = getCookStack();
@@ -302,7 +287,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
                 Objects.requireNonNull(this.getWorld()).updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
         }
     }
-
 
     @Override
     public boolean isEmpty() {
@@ -328,14 +312,14 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, S
     }
 
 
+    /**
     @Override
-    public NbtCompound toInitialChunkDataNbt()
-    {
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
         NbtCompound nbtCompound = new NbtCompound();
         writeCookStackNbt(nbtCompound, this.cookStack);
         return nbtCompound;
     }
-
+     **/
 
     @Override
     public void clear() {

@@ -3,8 +3,9 @@ package net.ivangeevo.self_sustainable.item.items;
 import net.ivangeevo.self_sustainable.util.WoolColorsHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.color.item.ItemColorProvider;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -60,11 +61,11 @@ public class WoolKnitItem extends Item implements ItemColorProvider {
 
 
     private void setWoolItemTooltip(ItemStack stack) {
-        DyeableItem dyedItem = (DyeableItem) stack.getItem();
-        DyeColor dyeColor = DyeColor.byId(dyedItem.getColor(stack));
+        DyeItem dyedItem = (DyeItem) stack.getItem();
+        DyeColor dyeColor = DyeColor.byId(dyedItem.getColor().getId());
         String woolType = WoolColorsHelper.woolColorNames[dyeColor.getId()];
         String name = String.format("%s Wool", woolType);
-        stack.setCustomName(Text.of(name));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.of(name));
     }
 
     @Override

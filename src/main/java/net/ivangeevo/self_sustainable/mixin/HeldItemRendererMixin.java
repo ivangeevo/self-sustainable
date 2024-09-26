@@ -24,7 +24,7 @@ public abstract class HeldItemRendererMixin
         if (item.getItem().getCustomUseAction() == CustomUseAction.PROGRESSIVE_CRAFT)
         {
             float useCount = (float) player.getItemUseTimeLeft() - tickDelta + 1.0F;
-            float durationRatio = useCount / (float) item.getMaxUseTime();
+            float durationRatio = useCount / (float) item.getMaxUseTime(player);
             float inverseRatio = 1.0F - durationRatio;
 
             inverseRatio = inverseRatio * inverseRatio * inverseRatio;

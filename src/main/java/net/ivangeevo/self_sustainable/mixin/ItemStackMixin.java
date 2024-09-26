@@ -1,63 +1,40 @@
 package net.ivangeevo.self_sustainable.mixin;
 
+import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemStackAdded;
-import net.ivangeevo.self_sustainable.util.CustomUseAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemStackAdded
-{
-    @Shadow public abstract boolean hasNbt();
-    @Shadow @Nullable private NbtCompound nbt;
+public abstract class ItemStackMixin implements ItemStackAdded {
 
-    @Override
-    public CustomUseAction getCustomUseAction()
-    {
-        return CustomUseAction.NONE;
+
+    // Retrieve the current instance of ItemStack
+    private ItemStack getThis() {
+        return (ItemStack) (Object) this;
     }
 
     @Override
-    public long getTimeOfLastUse()
-    {
-        if ( hasNbt() && this.nbt.contains( "fcLastUse" ) )
-        {
-            return nbt.getLong( "fcLastUse" );
-        }
-
-        return -1;
+    public long getTimeOfLastUse() {
+        // Use the Components system to retrieve the value
+        return getThis().getComponents().getOrDefault(ModComponents.LAST_USE_COMPONENT, -1L);
     }
-    @Override
-    public void setTimeOfLastUse(long lTime)
-    {
-        if ( !hasNbt() )
-        {
-            nbt = new NbtCompound();
-        }
 
-        nbt.putLong( "fcLastUse", lTime );
+    @Override
+    public void setTimeOfLastUse(long lTime) {
+        // Set the value using the Components system
+        getThis().set(ModComponents.LAST_USE_COMPONENT, lTime);
     }
-    @Override
-    public float getAccumulatedChance(float fDefault)
-    {
-        if ( hasNbt() && this.nbt.contains( "fcChance" ) )
-        {
-            return nbt.getFloat( "fcChance" );
-        }
 
-        return fDefault;
+    @Override
+    public float getAccumulatedChance(float fDefault) {
+        // Use the Components system to retrieve the value
+        return getThis().getComponents().getOrDefault(ModComponents.ACCUMULATED_CHANCE_COMPONENT, fDefault);
     }
-    @Override
-    public void setAccumulatedChance(float fChance)
-    {
-        if ( !hasNbt() )
-        {
-            nbt = new NbtCompound( );
-        }
 
-        nbt.putFloat( "fcChance", fChance );
+    @Override
+    public void setAccumulatedChance(float fChance) {
+        // Set the value using the Components system
+        getThis().set(ModComponents.ACCUMULATED_CHANCE_COMPONENT, fChance);
     }
 }

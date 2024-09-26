@@ -34,10 +34,12 @@ public class SelfSustainableBlockTagProvider extends FabricTagProvider.BlockTagP
                 .add(Blocks.CAMPFIRE)
                 .add(Blocks.SOUL_CAMPFIRE)
                 .add(Blocks.LAVA)
+                /**
                 .add(ModBlocks.TORCH_LIT)
                 .add(ModBlocks.TORCH_SMOULDER)
                 .add(ModBlocks.WALL_TORCH_LIT)
                 .add(ModBlocks.WALL_TORCH_SMOULDER)
+                 **/
                 .add(ModBlocks.OVEN_BRICK);
 
 

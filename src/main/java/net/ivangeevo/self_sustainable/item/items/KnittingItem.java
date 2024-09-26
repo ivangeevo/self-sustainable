@@ -27,7 +27,21 @@ public class KnittingItem extends ProgressiveCraftingItem
                 ( world.random.nextFloat() - world.random.nextFloat() ) * 0.25F + 1.75F );
     }
 
+    @Override
+    public boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack)
+    {
+        return false;
+    }
 
+    @Override
+    public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack)
+    {
+        return false;
+    }
+
+
+    // TODO: Fix Nbt data to be Component instead.
+    /**
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         int iColorIndex = WoolItem.getClosestColorIndex(getColor(stack));
@@ -50,17 +64,6 @@ public class KnittingItem extends ProgressiveCraftingItem
         return new ItemStack(ModItems.KNITTING_NEEDLES);
     }
 
-    @Override
-    public boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack)
-    {
-        return false;
-    }
 
 
     static public void setColor(ItemStack stack, DyeColor iColor)
@@ -91,4 +94,5 @@ public class KnittingItem extends ProgressiveCraftingItem
 
         return 0;
     }
+     **/
 }

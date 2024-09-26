@@ -5,8 +5,7 @@ import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.config.SSSettings;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.item.ModItems;
-import net.ivangeevo.self_sustainable.loot.LootFunctionTorch;
-import net.ivangeevo.self_sustainable.loot.TorchFuelFunction;
+import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import net.ivangeevo.self_sustainable.registry.FuelRegistryManager;
@@ -32,8 +31,8 @@ public class SelfSustainableMod implements ModInitializer
         return instance;
     }
 
-    public static final LootFunctionType TORCH_LOOT_FUNCTION = new LootFunctionType(new LootFunctionTorch.Serializer());
-    public static final LootFunctionType TORCH_FUEL_FUNCTION = new LootFunctionType(new TorchFuelFunction.Serializer());
+    //public static final LootFunctionType TORCH_LOOT_FUNCTION = new LootFunctionType(new LootFunctionTorch.Serializer());
+    //public static final LootFunctionType TORCH_FUEL_FUNCTION = new LootFunctionType(new TorchFuelFunction.Serializer());
 
     @Override
     public void onInitialize()
@@ -43,6 +42,7 @@ public class SelfSustainableMod implements ModInitializer
         instance = this;
         ModBlocks.registerModBlocks();
         ModItems.registerModItems();
+        ModComponents.registerComponents();
         ModItemGroup.registerItemGroups();
         ModBlockEntities.registerBlockEntities();
         ModRecipes.registerRecipes();

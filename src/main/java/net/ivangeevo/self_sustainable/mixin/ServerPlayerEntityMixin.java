@@ -2,23 +2,18 @@ package net.ivangeevo.self_sustainable.mixin;
 
 import com.mojang.authlib.GameProfile;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
-import net.ivangeevo.self_sustainable.item.items.TorchItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Random;
@@ -34,7 +29,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
 
     @Unique private static Random random = new Random();
 
-
+/**
     //@Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
         if ( !this.getWorld().isClient)
@@ -56,6 +51,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
             waterCheck(player, inventory);
         }
     }
+
 
     @Unique
     private void waterCheck(ServerPlayerEntity player, PlayerInventory inventory)
@@ -81,6 +77,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
             }
         }
     }
+
 
     @Unique
     private void waterTorch(int i, TorchItem torchItem, ItemStack stack, ServerPlayerEntity player, boolean mainOrOffhand, BlockPos pos)
@@ -134,6 +131,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
             }
         }
     }
-
+     **/
 
 }

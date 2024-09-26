@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.ivangeevo.self_sustainable.block.entity.SmokerOvenBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
@@ -13,12 +14,14 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -51,6 +54,11 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                 .with(LIT,false)
                 .with(FUEL_LEVEL, 0)
                 .with(FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return null;
     }
 
     @Override
@@ -97,9 +105,11 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
         return true;
     }
 
+
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit)
     {
+        Hand hand = player.getActiveHand();
         ItemStack heldStack = player.getStackInHand(hand);
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
@@ -113,7 +123,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
 
         if (blockEntity instanceof SmokerOvenBE ovenBE)
         {
-            Optional<OvenCookingRecipe> optional;
+            Optional<RecipeEntry<OvenCookingRecipe>> optional;
 
             if (relativeClickY > clickYTopPortion)
             {
@@ -128,7 +138,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                 else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() )
                 {
                     if ( !world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
-                            player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().getCookTime()))
+                            player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime()))
                     {
 
                         return ActionResult.SUCCESS;
@@ -148,7 +158,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                         {
                             world.setBlockState(pos, state.with(LIT, true));
                             Ignitable.playLitFX(world, pos);
-                            heldStack.damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
+                            heldStack.damage(1, player, EquipmentSlot.MAINHAND);
                         }
 
                         return ActionResult.SUCCESS;
@@ -203,11 +213,11 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
     {
         if (world.isClient)
         {
-            return SmokerOvenBlock.checkType(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::clientTick);
+            return SmokerOvenBlock.validateTicker(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::clientTick);
         }
         else
         {
-            return SmokerOvenBlock.checkType(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::serverTick);
+            return SmokerOvenBlock.validateTicker(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::serverTick);
         }
     }
 

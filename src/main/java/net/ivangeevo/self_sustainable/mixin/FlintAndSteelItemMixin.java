@@ -4,6 +4,7 @@ import net.ivangeevo.self_sustainable.item.interfaces.ItemStackAdded;
 import net.ivangeevo.self_sustainable.item.util.DirectlyIgnitingItem;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
 import net.minecraft.block.*;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FlintAndSteelItem;
@@ -60,7 +61,7 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
 
             assert player != null;
             player.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
-            context.getStack().damage(1, player, p -> p.sendToolBreakStatus(context.getHand()));
+            context.getStack().damage(1, player, EquipmentSlot.MAINHAND);
             cir.setReturnValue( ActionResult.SUCCESS ) ;
         }
 

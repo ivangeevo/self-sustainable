@@ -1,15 +1,12 @@
 package net.ivangeevo.self_sustainable.util;
 
-import net.ivangeevo.self_sustainable.block.blocks.ModTorchBlock;
-import net.ivangeevo.self_sustainable.block.blocks.ModWallTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.minecraft.block.Block;
-import net.minecraft.block.TorchBlock;
-import net.minecraft.block.WallTorchBlock;
 
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
 public class ModTorchHandler
 {
 
@@ -17,7 +14,7 @@ public class ModTorchHandler
     //  should actually be new classes with custom block functionality added, like extinguishing in water, in rain etc...
 
     private final Map<TorchFireState, ModTorchBlock> standingTorches = new EnumMap<>(TorchFireState.class);
-    private final Map<TorchFireState, ModWallTorchBlock> wallTorches = new EnumMap<>(TorchFireState.class);
+    private final Map<TorchFireState, ModWallModTorchBlock> wallTorches = new EnumMap<>(TorchFireState.class);
     public final String name;
 
     public ModTorchHandler(String name) {
@@ -29,7 +26,7 @@ public class ModTorchHandler
         {
             addStandingTorch(standingTorch);
         }
-        else if (block instanceof ModWallTorchBlock wallTorch)
+        else if (block instanceof ModWallModTorchBlock wallTorch)
         {
             addWallTorch(wallTorch);
         }
@@ -41,7 +38,7 @@ public class ModTorchHandler
         block.handler = this;
     }
 
-    private void addWallTorch(ModWallTorchBlock block)
+    private void addWallTorch(ModWallModTorchBlock block)
     {
         wallTorches.put(block.fireState, block);
         block.handler = this;
@@ -51,8 +48,9 @@ public class ModTorchHandler
     {
         return standingTorches.get(state);
     }
-    public ModWallTorchBlock getWallTorch(TorchFireState state)
+    public ModWallModTorchBlock getWallTorch(TorchFireState state)
     {
         return wallTorches.get(state);
     }
 }
+         **/

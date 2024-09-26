@@ -11,15 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import net.ivangeevo.self_sustainable.recipe.WickerWeavingRecipe;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementRewards;
-import net.minecraft.advancement.CriterionMerger;
 import net.minecraft.advancement.criterion.CriterionConditions;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.RecipeJsonBuilder;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -33,6 +29,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+/**
 public class WickerWeavingRecipeJsonBuilder extends RecipeJsonBuilder implements CraftingRecipeJsonBuilder {
     private final RecipeCategory category;
     private final ItemStack output;
@@ -222,4 +219,6 @@ public class WickerWeavingRecipeJsonBuilder extends RecipeJsonBuilder implements
             return this.advancementId;
         }
     }
+
 }
+ **/

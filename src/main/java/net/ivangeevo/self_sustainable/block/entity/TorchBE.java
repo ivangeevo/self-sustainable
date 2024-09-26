@@ -1,6 +1,5 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
-import net.ivangeevo.self_sustainable.block.blocks.AbstractTorchBlock;
 import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
@@ -12,6 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+/**
 public class TorchBE extends BlockEntity
 {
     protected int fuel;
@@ -24,12 +24,12 @@ public class TorchBE extends BlockEntity
     {
         if (!world.isClient)
         {
-            if (!(state.getBlock() instanceof AbstractTorchBlock)) return;
-            if (((AbstractTorchBlock) state.getBlock()).getFireState() == TorchFireState.LIT)
+            if (!(state.getBlock() instanceof AbstractModTorchBlock)) return;
+            if (((AbstractModTorchBlock) state.getBlock()).getFireState() == TorchFireState.LIT)
             {
                 tickLit(world, pos, state, be);
             }
-            else if (((AbstractTorchBlock) state.getBlock()).getFireState() == TorchFireState.SMOULDER)
+            else if (((AbstractModTorchBlock) state.getBlock()).getFireState() == TorchFireState.SMOULDER)
             {
                 tickSmoldering(world, pos, state, be);
             }
@@ -43,7 +43,7 @@ public class TorchBE extends BlockEntity
         {
             if (random.nextInt(200) == 0)
             {
-                ((AbstractTorchBlock) world.getBlockState(pos).getBlock()).extinguish(world, pos, state);
+                ((AbstractModTorchBlock) world.getBlockState(pos).getBlock()).extinguish(world, pos, state);
             }
         }
 
@@ -52,7 +52,7 @@ public class TorchBE extends BlockEntity
             be.fuel--;
 
             if (be.fuel <= 0) {
-                ((AbstractTorchBlock) world.getBlockState(pos).getBlock()).outOfFuel(world, pos, state, false);
+                ((AbstractModTorchBlock) world.getBlockState(pos).getBlock()).outOfFuel(world, pos, state, false);
             }
         }
 
@@ -67,7 +67,7 @@ public class TorchBE extends BlockEntity
                 be.fuel--;
 
                 if (be.fuel <= 0) {
-                    ((AbstractTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
+                    ((AbstractModTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
                 }
             }
         }
@@ -119,3 +119,4 @@ public class TorchBE extends BlockEntity
         }
     }
 }
+ **/

@@ -14,7 +14,7 @@ import net.minecraft.util.Clearable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface SingleStackInventory
+public interface CustomSingleStackInventory
         extends Clearable {
 
     boolean isEmpty();

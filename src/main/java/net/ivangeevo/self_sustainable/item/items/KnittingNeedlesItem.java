@@ -1,8 +1,7 @@
 package net.ivangeevo.self_sustainable.item.items;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -14,7 +13,7 @@ public class KnittingNeedlesItem extends Item
 
     private final ToolMaterials material;
 
-    public KnittingNeedlesItem(ToolMaterials material, FabricItemSettings group) {
+    public KnittingNeedlesItem(ToolMaterials material, Item.Settings group) {
         super(group);
         this.material = material;
     }
@@ -32,8 +31,9 @@ public class KnittingNeedlesItem extends Item
 
         }
 
+
     @Override
-    public int getMaxUseTime(ItemStack stack) {
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
         // stupid large so it's never actually hit in practice
         return 72000;
     }

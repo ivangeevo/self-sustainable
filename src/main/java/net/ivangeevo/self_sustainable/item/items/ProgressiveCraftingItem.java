@@ -48,7 +48,7 @@ public class ProgressiveCraftingItem extends Item
     {
         int iUseCount = user.getItemUseTimeLeft();
 
-        if ( getMaxUseTime( stack ) - iUseCount > getItemUseWarmupDuration() )
+        if ( getMaxUseTime( stack, user ) - iUseCount > getItemUseWarmupDuration() )
         {
             if ( iUseCount % 4 == 0 )
             {
@@ -86,7 +86,7 @@ public class ProgressiveCraftingItem extends Item
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack) { return 72000; }
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) { return 72000; }
 
     @Override
     public void updateUsingItem(ItemStack stack, World world, PlayerEntity player)

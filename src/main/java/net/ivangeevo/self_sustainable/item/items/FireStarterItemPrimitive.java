@@ -99,8 +99,7 @@ public class FireStarterItemPrimitive extends FireStarterItem
         PlayerEntity player = context.getPlayer();;
 
         assert player != null;
-        player.playSound(SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS,
-                0.5f + 0.5f * (float)player.getRandom().nextInt(2),
+        player.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5f + 0.5f * (float)player.getRandom().nextInt(2),
                 (player.getRandom().nextFloat() * 0.25f) + 1.75f);
 
         if (!player.getWorld().isClient())

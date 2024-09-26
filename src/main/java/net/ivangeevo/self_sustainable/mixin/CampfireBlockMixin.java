@@ -17,6 +17,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.registry.tag.BlockTags;
@@ -28,6 +29,7 @@ import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -59,6 +61,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     @Shadow @Final public static DirectionProperty FACING;
 
+    // helper method for easier calling of the campfire block manager class
+    @Unique private static final CampfireBlockManager managerInstance = CampfireBlockManager.getInstance();
+
     protected CampfireBlockMixin(Settings settings) {
         super(settings);
     }
@@ -71,13 +76,18 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectedDefaultState(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
     {
-        this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false).with(FIRE_LEVEL, 0).with(FUEL_STATE, CampfireState.NORMAL).with(HAS_SPIT, false));
+        this.setDefaultState(
+                this.getStateManager().getDefaultState()
+                        .with(LIT, false)
+                        .with(FIRE_LEVEL, 0)
+                        .with(FUEL_STATE, CampfireState.NORMAL)
+                        .with(HAS_SPIT, false));
     }
 
     @Inject(method = "createBlockEntity", at = @At("HEAD"), cancellable = true)
     private void injectedBE(BlockPos pos, BlockState state, CallbackInfoReturnable<BlockEntity> cir)
     {
-        cir.setReturnValue(new VariableCampfireBE(pos, state));
+        cir.setReturnValue( new VariableCampfireBE(pos, state) );
     }
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
@@ -97,7 +107,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "appendProperties", at = @At("HEAD"), cancellable = true)
     private void addedCustomProperties(StateManager.Builder<Block, BlockState> builder, CallbackInfo ci)
     {
-        CampfireBlockManager.getInstance().appendCustomProperties(builder);
+        managerInstance.appendCustomProperties(builder);
         ci.cancel();
     }
 
@@ -143,7 +153,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void injectedCustomOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir)
     {
-        cir.setReturnValue( CampfireBlockManager.getInstance().setCustomShapes(state) );
+        cir.setReturnValue( managerInstance.setCustomShapes(state) );
     }
 
     @Override
@@ -151,28 +161,53 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         return VoxelShapes.empty();
     }
 
+    @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+
+        if (state.getBlock() == Blocks.CAMPFIRE)
+        {
+            return managerInstance.onUse(state, world, pos, player, player.getActiveHand(), hit);
+        }
+
+        return super.onUse(state, world, pos, player, hit);
+    }
+
+    @Inject(method = "onUseWithItem", at = @At("HEAD"), cancellable = true)
+    private void cancelOnUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ItemActionResult> cir)
+    {
+        cir.setReturnValue(ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
+    }
+
+    // TODO: Fix this
+    // Original method before the onUse method rework
+
+    /**
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir)
     {
+
         if (state.getBlock() == Blocks.CAMPFIRE)
         {
-            cir.setReturnValue( CampfireBlockManager.getInstance().onUse(state, world, pos, player, hand, hit) );
+            cir.setReturnValue( managerInstance.onUse(state, world, pos, player, player.getActiveHand(), hit) );
         }
 
-
     }
+    **/
+
 
     // Change LIT for FIRE LEVEL greater than 1 when checking to damage entities.
+
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     private void injectedOnEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci)
     {
-        if (state.get(FIRE_LEVEL) > 1 && entity instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)entity)) {
+        if (state.get(FIRE_LEVEL) > 1 && entity instanceof LivingEntity) {
             entity.damage(world.getDamageSources().inFire(), this.fireDamage);
         }
+
         super.onEntityCollision(state, world, pos, entity);
         ci.cancel();
-
     }
+
 
     // Making it randomly display only if the FIRE Level is more than 0, instead of the LIT property.
     @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
@@ -229,16 +264,16 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         {
             if (state.get(FIRE_LEVEL) > 0)
             {
-                return checkType(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::clientTick);
+                return validateTicker(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::clientTick);
             }
         }
         else
         {
             if (state.get(FIRE_LEVEL) > 0)
             {
-                return checkType(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::litServerTick);
+                return validateTicker(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::litServerTick);
             }
-            return checkType(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::unlitServerTick);
+            return validateTicker(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::unlitServerTick);
         }
         return null;
     }

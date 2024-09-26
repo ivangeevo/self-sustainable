@@ -17,23 +17,25 @@ public class ModBlockEntities {
     public static BlockEntityType<BrickOvenBE> OVEN_BRICK;
     public static BlockEntityType<SmokerOvenBE> SMOKER_BRICK;
     public static BlockEntityType<VariableCampfireBE> CAMPFIRE;
-    public static BlockEntityType<TorchBE> TORCH;
+
+    // public static BlockEntityType<TorchBE> TORCH;
 
     public static void registerBlockEntities()
         {
-            OVEN_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
-                            "oven_brick"), FabricBlockEntityTypeBuilder.create(BrickOvenBE::new,
+            OVEN_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
+                            "oven_brick"), BlockEntityType.Builder.create(BrickOvenBE::new,
                             ModBlocks.OVEN_BRICK).build(null));
 
-            SMOKER_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
-                    "smoker_brick"), FabricBlockEntityTypeBuilder.create(SmokerOvenBE::new,
+            SMOKER_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
+                    "smoker_brick"), BlockEntityType.Builder.create(SmokerOvenBE::new,
                     ModBlocks.SMOKER_BRICK).build(null));
 
-            CAMPFIRE = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
-                    "campfire"), FabricBlockEntityTypeBuilder.create(VariableCampfireBE::new,
+            CAMPFIRE = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
+                    "campfire"), BlockEntityType.Builder.create(VariableCampfireBE::new,
                     Blocks.CAMPFIRE).build(null));
 
 
+            /**
             Block[] arrTorches = new Block[] {
                     ModBlocks.TORCH_LIT,
                     ModBlocks.TORCH_UNLIT,
@@ -48,7 +50,7 @@ public class ModBlockEntities {
             TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "torch"), FabricBlockEntityTypeBuilder.create(TorchBE::new, arrTorches).build(null));
 
-            /**
+
 
             CRUDE_TORCH = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SelfSustainableMod.MOD_ID,
                     "crude_torch"), FabricBlockEntityTypeBuilder.create(CrudeTorchBlockEntity::new,

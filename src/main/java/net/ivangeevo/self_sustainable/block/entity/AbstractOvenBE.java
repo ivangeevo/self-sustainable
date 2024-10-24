@@ -10,15 +10,19 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -183,17 +187,17 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
 
 
     // TODO: Fix nbt to be Component instead
-    /**
+
+
     @Override
-    public void readNbt(NbtCompound nbt)
-    {
-        super.readNbt(nbt);
+    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
         this.cookStack = ItemStack.EMPTY;
         this.visualFuelLevel = nbt.getInt("VisualFuelLevel");
 
         if (nbt.contains("CookStack"))
         {
-            cookStack = ItemStack.fromNbt(nbt.getCompound("CookStack"));
+            cookStack = ItemStack.fromNbt(registryLookup, nbt.getCompound("CookStack")).get();
         }
         this.unlitFuelBurnTime = nbt.getShort("UnlitFuelBurnTime");
         this.fuelBurnTime = nbt.getShort("FuelBurnTime");
@@ -202,14 +206,14 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
 
         NbtCompound nbtCompound = nbt.getCompound("RecipesUsed");
         for (String string : nbtCompound.getKeys()) {
-            this.recipesUsed.put(new Identifier(string), nbtCompound.getInt(string));
+            this.recipesUsed.put(Identifier.of(string), nbtCompound.getInt(string));
         }
     }
 
+
     @Override
-    protected void writeNbt(NbtCompound nbt)
-    {
-        super.writeNbt(nbt);
+    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
         nbt.putShort("VisualFuelLevel", (short) this.visualFuelLevel);
         nbt.putShort("UnlitFuelBurnTime", (short) this.unlitFuelBurnTime);
         nbt.putShort("FuelBurnTime", (short) this.fuelBurnTime);
@@ -221,16 +225,19 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         nbt.put("RecipesUsed", nbtCompound);
     }
 
+
     private void writeCookStackNbt(NbtCompound nbt, ItemStack stack) {
+        NbtCompound stackNbt = new NbtCompound();
+
         if (!stack.isEmpty()) {
-            NbtCompound stackNbt = new NbtCompound();
-            stack.writeNbt(stackNbt);
             nbt.put("CookStack", stackNbt);
         } else {
             nbt.put("CookStack", new NbtCompound()); // Empty compound to indicate empty ItemStack
         }
+        NbtComponent component = NbtComponent.of(stackNbt) ;
+        stack.set(DataComponentTypes.BLOCK_ENTITY_DATA, component);
     }
-     **/
+
 
 
     @Override

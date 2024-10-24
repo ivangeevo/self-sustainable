@@ -1,12 +1,13 @@
 {
-  "type": "minecraft:smelting",
+  "type": "self_sustainable:oven_cooking",
   "category": "misc",
-  "cookingtime": 10000,
+  "cookingTime": 10000,
   "experience": 0.2,
   "ingredient": {
     "item": "minecraft:raw_copper"
   },
   "result": {
+    "count": 1,
     "id": "minecraft:copper_ingot"
   }
 }

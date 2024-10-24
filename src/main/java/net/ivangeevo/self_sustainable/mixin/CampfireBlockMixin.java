@@ -1,6 +1,6 @@
 package net.ivangeevo.self_sustainable.mixin;
 
-import net.ivangeevo.self_sustainable.block.CampfireBlockManager;
+import net.ivangeevo.self_sustainable.block.CampfireBlockMixinManager;
 import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.interfaces.*;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
@@ -9,7 +9,6 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +18,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -62,7 +60,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Shadow @Final public static DirectionProperty FACING;
 
     // helper method for easier calling of the campfire block manager class
-    @Unique private static final CampfireBlockManager managerInstance = CampfireBlockManager.getInstance();
+    @Unique private static final CampfireBlockMixinManager managerInstance = CampfireBlockMixinManager.getInstance();
 
     protected CampfireBlockMixin(Settings settings) {
         super(settings);

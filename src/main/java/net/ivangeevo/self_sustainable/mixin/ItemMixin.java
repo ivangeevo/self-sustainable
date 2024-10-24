@@ -1,23 +1,11 @@
 package net.ivangeevo.self_sustainable.mixin;
 
-import com.terraformersmc.modmenu.util.mod.Mod;
-import net.ivangeevo.self_sustainable.block.CampfireBlockManager;
+import net.ivangeevo.self_sustainable.block.CampfireBlockMixinManager;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.CustomUseAction;
-import net.minecraft.block.Block;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
 public abstract class ItemMixin implements ItemAdded
@@ -44,7 +32,7 @@ public abstract class ItemMixin implements ItemAdded
     @Override
     public int getCampfireBurnTime(ItemStack stack)
     {
-        return CampfireBlockManager.getInstance().getItemFuelTime(stack);
+        return CampfireBlockMixinManager.getInstance().getItemFuelTime(stack);
     }
 
     @Override

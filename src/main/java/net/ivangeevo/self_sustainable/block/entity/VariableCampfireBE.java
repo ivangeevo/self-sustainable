@@ -46,33 +46,42 @@ import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBl
 import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.FUEL_STATE;
 
 
-public class VariableCampfireBE
-        extends BlockEntity
-        implements Clearable
+public class VariableCampfireBE extends BlockEntity implements Clearable
 {
     private final DefaultedList<ItemStack> itemsBeingCooked = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private int cookingTime = 0;
     private int cookingTotalTime = 0;
-    private final RecipeManager.MatchGetter<SingleStackRecipeInput, CampfireCookingRecipe> matchGetter = RecipeManager.createCachedMatchGetter(
-            RecipeType.CAMPFIRE_COOKING
-    );
+    private final RecipeManager.MatchGetter<SingleStackRecipeInput, CampfireCookingRecipe> matchGetter =
+            RecipeManager.createCachedMatchGetter(RecipeType.CAMPFIRE_COOKING);
 
     // BTW Added variables
-
     private static final int BASE_BURN_TIME_MULTIPLIER = 2;
+
     private static final int CAMPFIRE_BURN_TIME_MULTIPLIER = 8;
+
     private static final int DEFAULT_COOK_TIME = 400;
-    private static final int TIME_TO_COOK = (DEFAULT_COOK_TIME * CAMPFIRE_BURN_TIME_MULTIPLIER *
-            3 / 2 ); // this line represents efficiency relative to furnace cooking
+
+    // this variable represents efficiency relative to furnace cooking
+    private static final int TIME_TO_COOK = (DEFAULT_COOK_TIME * CAMPFIRE_BURN_TIME_MULTIPLIER * 3 / 2 );
+
     private static final int MAX_BURN_TIME = (5 * MiscUtils.TICKS_PER_MINUTE);
-    private static final int INITIAL_BURN_TIME = (50 * 4 * CAMPFIRE_BURN_TIME_MULTIPLIER *
-            BASE_BURN_TIME_MULTIPLIER); // 50 is the furnace burn time of a shaft
+
+    // 50 is the furnace burn time of a shaft
+    private static final int INITIAL_BURN_TIME = (50 * 4 * CAMPFIRE_BURN_TIME_MULTIPLIER * BASE_BURN_TIME_MULTIPLIER);
+
     private static final int WARMUP_TIME = (10 * MiscUtils.TICKS_PER_SECOND);
+
     private static final int REVERT_TO_SMALL_TIME = (20 * MiscUtils.TICKS_PER_SECOND);
+
     private static final int BLAZE_TIME = (INITIAL_BURN_TIME * 3 / 2 );
-    private static final int SMOULDER_TIME = (5 * MiscUtils.TICKS_PER_MINUTE); // used to be 2 minutes
+
+    // used to be 2 minutes
+    private static final int SMOULDER_TIME = (5 * MiscUtils.TICKS_PER_MINUTE);
+
     private static final int TIME_TO_BURN_FOOD = (TIME_TO_COOK / 2 );
+
     private static final float CHANCE_OF_FIRE_SPREAD = 0.05F;
+
     private static final float CHANCE_OF_GOING_OUT_FROM_RAIN = 0.01F;
 
     @Unique private ItemStack spitStack = null;
@@ -87,12 +96,15 @@ public class VariableCampfireBE
     public int getCookTime() {
         return cookingTime;
     }
+
     public void setCookTime(int value) {
         cookingTime = value;
     }
+
     public void setTotalCookTime(int value) {
         cookingTotalTime = value;
     }
+
     public int getTotalCookTime() {
         return cookingTotalTime;
     }
@@ -100,6 +112,7 @@ public class VariableCampfireBE
     public int getBurnTimeSinceLit() {
         return burnTimeSinceLit;
     }
+
     public int getBurnTimeCd() {
         return burnTimeCountdown;
     }
@@ -150,7 +163,6 @@ public class VariableCampfireBE
 
 
             campfireBE.burnTimeSinceLit++;
-
 
             if (campfireBE.burnTimeCountdown > 0 )
             {

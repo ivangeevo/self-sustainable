@@ -1,12 +1,13 @@
 {
-  "type": "minecraft:smelting",
+  "type": "self_sustainable:oven_cooking",
   "category": "misc",
-  "cookingtime": 12000,
+  "cookingTime": 12000,
   "experience": 0.25,
   "ingredient": {
     "item": "minecraft:raw_iron"
   },
   "result": {
+    "count": 1,
     "id": "minecraft:iron_ingot"
   }
 }

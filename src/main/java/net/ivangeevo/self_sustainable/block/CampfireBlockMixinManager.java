@@ -34,11 +34,13 @@ import java.util.Optional;
 
 import static net.minecraft.block.CampfireBlock.*;
 
-public class CampfireBlockManager implements Ignitable, VariableCampfireBlock
+public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlock
 {
-    private static final CampfireBlockManager instance = new CampfireBlockManager();
-    private CampfireBlockManager() {}
-    public static CampfireBlockManager getInstance()
+    private static final CampfireBlockMixinManager instance = new CampfireBlockMixinManager();
+
+    private CampfireBlockMixinManager() {}
+
+    public static CampfireBlockMixinManager getInstance()
     {
         return instance;
     }

@@ -30,10 +30,10 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     @Override
     public void generate(RecipeExporter exporter)
     {
+        //this.generateVanillaRecipesOverride(exporter);
         this.generateModRecipes(exporter);
-        this.generateVanillaRecipesOverride(exporter);
-
     }
+
 
     private void generateModRecipes(RecipeExporter exporter)
     {
@@ -72,13 +72,20 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
 
         // Shaped Recipes
+
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.CAMPFIRE)
                 .input('S', Items.STICK)
                 .pattern("SS")
                 .pattern("SS")
                 .criterion("has_stick", RecipeProvider.conditionsFromItem(Items.STICK))
                 .showNotification(true)
-                .offerTo(exporter, Identifier.of("minecraft", "campfire"));
+                .offerTo(exporter);
+
+        removeRecipeEntry(Items.FURNACE).offerTo(exporter);
+        removeRecipeEntry(Items.BLAST_FURNACE).offerTo(exporter);
+        removeRecipeEntry(Items.SMOKER).offerTo(exporter);
+
 
 
 
@@ -122,21 +129,6 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .input(BTWRConventionalTags.Items.STRING_TOOL_MATERIALS)
                 .criterion("has_string", RecipeProvider.conditionsFromItem(Items.STRING))
                 .offerTo(exporter);
-
-    }
-
-    private void addCookingRecipes()
-    {
-
-    }
-
-    private void addOvenSmokingRecipes()
-    {
-
-    }
-
-    private void addOvenBlastingRecipes()
-    {
 
     }
 

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_potato": {
+    "has_salmon": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:potato"
+            "items": "minecraft:salmon"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:baked_potato"
+        "recipe": "minecraft:cooked_salmon_from_smoking"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_potato"
+      "has_salmon"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:baked_potato"
+      "minecraft:cooked_salmon_from_smoking"
     ]
   }
 }

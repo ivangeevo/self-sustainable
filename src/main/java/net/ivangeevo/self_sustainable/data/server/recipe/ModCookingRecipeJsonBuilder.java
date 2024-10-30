@@ -68,8 +68,8 @@ public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder
         return new ModCookingRecipeJsonBuilder(category, getCookingRecipeCategory(serializer, output), output, input, experience, cookingTime, recipeFactory);
     }
 
-    public static ModCookingRecipeJsonBuilder createOvenCooking(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
-        return new ModCookingRecipeJsonBuilder(category, getRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe::new);
+    public static ModCookingRecipeJsonBuilder offerOvenCooking(ItemConvertible output, RecipeCategory category, Ingredient input , float experience, int cookingTime) {
+        return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe::new);
     }
 
 

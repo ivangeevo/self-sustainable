@@ -186,7 +186,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
     }
 
 
-    // TODO: Fix nbt to be Component instead
+    // TODO: Fix nbt to be Component instead ? PS: ivan from 30 october 2024 -> not sure what this is
 
 
     @Override

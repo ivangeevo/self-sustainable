@@ -111,7 +111,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
             {
                 player.heal(1.0F);
 
-                //TODO: Maybe add a minimal exhaustion on heal when the im-movens mod is not present
+                // Maybe add a minimal exhaustion on heal when the im-movens mod is not present
                 //  I was also tinkering with adding a satisfying sound on heal? dunno
                 //player.addExhaustion(0.2f);
 

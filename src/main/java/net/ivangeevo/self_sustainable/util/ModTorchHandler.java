@@ -10,7 +10,7 @@ import java.util.Map;
 public class ModTorchHandler
 {
 
-    // TODO: The torch classes defined in the 2nd parameter of these maps & the rest of the class
+    //  The torch classes defined in the 2nd parameter of these maps & the rest of the class
     //  should actually be new classes with custom block functionality added, like extinguishing in water, in rain etc...
 
     private final Map<TorchFireState, ModTorchBlock> standingTorches = new EnumMap<>(TorchFireState.class);

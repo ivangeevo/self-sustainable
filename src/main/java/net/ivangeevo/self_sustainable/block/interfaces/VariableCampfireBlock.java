@@ -11,10 +11,14 @@ import net.minecraft.util.shape.VoxelShapes;
 
 public interface VariableCampfireBlock
 {
-    BooleanProperty HAS_SPIT = ModProperties.HAS_SPIT;
     VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 7.0, 16.0);
+
     VoxelShape SHAPE_WITH_SPIT = VoxelShapes.fullCube();
+
+    BooleanProperty HAS_SPIT = ModProperties.HAS_SPIT;
+
     IntProperty FIRE_LEVEL = IntProperty.of("fire_level", 0, 3);
+
     EnumProperty<CampfireState> FUEL_STATE = EnumProperty.of("fuel_state", CampfireState.class);
 
 

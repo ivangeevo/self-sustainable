@@ -7,7 +7,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,6 +24,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 {
     @Shadow public abstract boolean isPlayer();
     @Shadow public abstract void jump();
+
+    @Shadow public abstract void incrementStat(Identifier stat);
+
+    @Shadow public abstract void addExhaustion(float exhaustion);
+
     @Unique private final boolean runningImMovens = FabricLoader.getInstance().isModLoaded("im-movens");
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -45,8 +51,26 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
         }
     }
 
+    @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
+    private void onJump(CallbackInfo ci)
+    {
+        if (!runningImMovens)
+        {
+            super.jump();
+            this.incrementStat(Stats.JUMP);
+            if (this.isSprinting()) {
+                this.addExhaustion(0.33F);
+            } else {
+                this.addExhaustion(0.12F);
+            }
 
-    /** Modify food exhaustion values for jumping and jump sprinting 1/3 of what i'm movens values are **/
+            ci.cancel();
+        }
+
+    }
+
+/**
+    //Modify food exhaustion values for jumping and jump sprinting 1/3 of what i'm movens values are
     // Sprint jumping
     @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.2f))
     private float modifySprintJump(float constant)
@@ -63,13 +87,16 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
     @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.05f))
     private float modifyJump(float constant)
     {
+        constant = 0.05f;
+
         if (!runningImMovens)
         {
-            return 0.12f;
+            constant = 0.12f;
         }
 
         return constant;
     }
+    **/
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)

@@ -302,7 +302,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
             }
 
         }
-        else // iCurrenFireLevel == 0
+        else // iCurrentFireLevel == 0
         {
             if (burnTimeCountdown > 0 && state.get(FUEL_STATE) == CampfireState.SMOULDERING)
             {

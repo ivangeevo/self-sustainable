@@ -11,6 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
@@ -93,6 +94,13 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
         createSmoking(Ingredient.ofItems(Items.POTATO), RecipeCategory.FOOD, Items.BAKED_POTATO, 0.35f, 2200).criterion("has_potato", conditionsFromItem(Items.POTATO)).offerTo(exporter, Identifier.ofVanilla("baked_potato" + fs));
 
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.FURNACE)
+                .input('#', org.tough_environment.block.ModBlocks.SLAB_COBBLESTONE_LOOSE)
+                .pattern("###")
+                .pattern("# #")
+                .pattern("###")
+                .criterion("has_cobblestone", conditionsFromTag(ItemTags.STONE_CRAFTING_MATERIALS))
+                        .offerTo(exporter, Identifier.ofVanilla("furnace"));
         // Shaped Recipes
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.CAMPFIRE)
                 .input('S', Items.STICK)
@@ -100,7 +108,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .pattern("SS")
                 .criterion("has_stick", RecipeProvider.conditionsFromItem(Items.STICK))
                 .showNotification(true)
-                .offerTo(exporter);
+                .offerTo(exporter, Identifier.ofVanilla("campfire"));
 
 
         // TODO: We should re-enable this recipe removal for the furnaces after we get the Brick Oven working properly.

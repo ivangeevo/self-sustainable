@@ -8,6 +8,7 @@ import net.minecraft.component.type.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.Items;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // TODO: Figure out how to modify food related items nutrition and saturation with the new component system.
-/**
+
 @Mixin(Item.Settings.class)
 public abstract class ItemSettingsMixin
 {
@@ -149,6 +150,7 @@ public abstract class ItemSettingsMixin
         CUSTOM_FOOD_COMPONENTS.put(FoodComponents.MUSHROOM_STEW, new FoodComponent.Builder()
                 .nutrition(2)
                 .saturationModifier(0.02F)
+                .usingConvertsTo(Items.BOWL)
                 .build());
 
         CUSTOM_FOOD_COMPONENTS.put(FoodComponents.COOKIE, new FoodComponent.Builder()
@@ -185,6 +187,7 @@ public abstract class ItemSettingsMixin
         CUSTOM_FOOD_COMPONENTS.put(FoodComponents.RABBIT_STEW, new FoodComponent.Builder()
                 .nutrition(6)
                 .saturationModifier(0.01F)
+                .usingConvertsTo(Items.BOWL)
                 .build());
 
         CUSTOM_FOOD_COMPONENTS.put(FoodComponents.BEETROOT, new FoodComponent.Builder()
@@ -240,15 +243,15 @@ public abstract class ItemSettingsMixin
     @Inject(method = "food", at = @At("HEAD"), cancellable = true)
     private void modifyFoodComponent(FoodComponent foodComponent, CallbackInfoReturnable<Item.Settings> cir)
     {
-        if (CUSTOM_FOOD_COMPONENTS.containsKey(foodComponent))
+        if (foodComponent != null && CUSTOM_FOOD_COMPONENTS.containsKey(foodComponent))
         {
-            // Get the custom FoodComponent
             FoodComponent customFoodComponent = CUSTOM_FOOD_COMPONENTS.get(foodComponent);
 
-            // Replace the food component using the shadowed food method
             cir.setReturnValue(this.component(DataComponentTypes.FOOD, customFoodComponent));
+            System.out.println("modifyFoodComponent triggered for: " + foodComponent);
+
         }
+
     }
 
 }
- **/

@@ -234,8 +234,9 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         } else {
             nbt.put("CookStack", new NbtCompound()); // Empty compound to indicate empty ItemStack
         }
-        NbtComponent component = NbtComponent.of(stackNbt) ;
+        NbtComponent component = NbtComponent.of(stackNbt);
         stack.set(DataComponentTypes.BLOCK_ENTITY_DATA, component);
+
     }
 
 
@@ -317,7 +318,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
     public boolean canPlayerUse(PlayerEntity var1) {
         return true;
     }
-
 
     /**
     @Override

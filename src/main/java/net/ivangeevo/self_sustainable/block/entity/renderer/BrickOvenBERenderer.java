@@ -16,7 +16,6 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
 
     private final ItemRenderer itemRenderer;
 
-
     public BrickOvenBERenderer(BlockEntityRendererFactory.Context ctx) {
         this.itemRenderer = ctx.getItemRenderer();
     }
@@ -36,8 +35,36 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
 
     }
 
+    /**     private void renderCookItem(BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+     // Get the item being cooked from the entity
+     ItemStack cookStack = ovenBE.getCookStack();
+     Direction facing = ovenBE.getCachedState().get(BrickOvenBlock.FACING);
 
-    private void renderCookItem(BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+     if (cookStack.isEmpty()) return;
+
+     matrices.push();
+
+     // Move to the center of the block
+     matrices.translate(0.5f, 0.58f, 0.5f);
+
+     // Apply facing-based rotation
+     float rotationAngle = -facing.asRotation();
+     matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotationAngle));
+     matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90.0F));  // Align item flat
+
+     // Scale the item to an appropriate size
+     matrices.scale(0.35f, 0.35f, 0.35f);
+
+     // Render the item with fixed transformation mode
+     this.itemRenderer.renderItem(cookStack, ModelTransformationMode.FIXED,
+     light, overlay, matrices, vertexConsumers, ovenBE.getWorld(), 0);
+
+     matrices.pop();
+     }
+ **/
+
+
+     private void renderCookItem(BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         // Get the itemsBeingCooked from the entity
         ItemStack cookStack = ovenBE.getCookStack();
         Direction facing = ovenBE.getCachedState().get(BrickOvenBlock.FACING);
@@ -64,7 +91,6 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
 
         matrices.pop();
     }
-
 
 
     // Get RotationAxis based on facing direction

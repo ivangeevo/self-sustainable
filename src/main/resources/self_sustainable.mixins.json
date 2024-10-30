@@ -12,6 +12,7 @@
     "FlintAndSteelItemMixin",
     "HungerManagerMixin",
     "ItemMixin",
+    "ItemSettingsMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "MobEntityMixin",

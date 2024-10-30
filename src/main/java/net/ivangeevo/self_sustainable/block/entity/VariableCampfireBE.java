@@ -367,7 +367,32 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         return this.itemsBeingCooked;
     }
 
-    // TODO : Fix nbt data to work with the components system
+    @Override
+    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
+        this.itemsBeingCooked.clear();
+        Inventories.readNbt(nbt, this.itemsBeingCooked, registryLookup);
+        if (nbt.contains("CookingTime")) { cookingTime = nbt.getInt("CookingTime"); }
+        if (nbt.contains("CookingTotalTime")) { cookingTotalTime = nbt.getInt("CookingTotalTime"); }
+
+        if (nbt.contains("BurnCounter")) { burnTimeCountdown = nbt.getInt("BurnCounter"); }
+        if (nbt.contains("BurnTime")) { burnTimeSinceLit = nbt.getInt("BurnTime"); }
+        if (nbt.contains("SmoulderCounter")) { smoulderCounter = nbt.getInt("SmoulderCounter"); }
+        if (nbt.contains("CookBurning")) { cookBurningCounter = nbt.getInt("CookBurning"); }
+    }
+
+    @Override
+    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
+        Inventories.writeNbt(nbt, this.itemsBeingCooked, true, registryLookup);
+        nbt.putInt("CookingTime", cookingTime);
+        nbt.putInt("CookingTotalTime", cookingTotalTime);
+        nbt.putInt("BurnCounter", burnTimeCountdown);
+        nbt.putInt("BurnTime", burnTimeSinceLit);
+        nbt.putInt("SmoulderCounter", smoulderCounter);
+        nbt.putInt("CookBurning", cookBurningCounter);
+    }
+
     /**
     @Override
     public void readNbt(NbtCompound nbt)

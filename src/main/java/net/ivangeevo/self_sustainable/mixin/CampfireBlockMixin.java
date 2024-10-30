@@ -47,7 +47,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
 
-
+// TODO:HELP: Make campfire turning to embers and then burned out after it goes out.
 @Mixin(CampfireBlock.class)
 public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, VariableCampfireBlock
 {

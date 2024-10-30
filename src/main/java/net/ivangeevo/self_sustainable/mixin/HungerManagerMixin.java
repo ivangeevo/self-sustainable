@@ -34,7 +34,7 @@ public abstract class HungerManagerMixin
             )
     )
     private float modifySaturationLevel(float original) {
-        return 0.001f;
+        return 0f;
     }
 
 

@@ -1,6 +1,5 @@
 package net.ivangeevo.self_sustainable.datagen;
 
-import com.bwt.items.BwtItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.ivangeevo.self_sustainable.block.ModBlocks;

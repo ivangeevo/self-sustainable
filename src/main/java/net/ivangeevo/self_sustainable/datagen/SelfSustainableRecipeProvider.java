@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.datagen;
 
+import com.bwt.items.BwtItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
@@ -84,6 +85,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
         createCampfireCooking(Ingredient.ofItems(Items.COD), RecipeCategory.FOOD, Items.COOKED_COD, 0.15f, 5600).criterion("has_cod", conditionsFromItem(Items.COD)).offerTo(exporter, Identifier.ofVanilla("cooked_cod" + fcc));
         createCampfireCooking(Ingredient.ofItems(Items.POTATO), RecipeCategory.FOOD, Items.BAKED_POTATO, 0.15f, 5600).criterion("has_potato", conditionsFromItem(Items.POTATO)).offerTo(exporter, Identifier.ofVanilla("baked_potato" + fcc));
 
+
         createSmoking(Ingredient.ofItems(Items.BEEF), RecipeCategory.FOOD, Items.COOKED_BEEF, 0.35f, 2500).criterion("has_beef", conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.ofVanilla("cooked_beef" + fs));
         createSmoking(Ingredient.ofItems(Items.CHICKEN), RecipeCategory.FOOD, Items.COOKED_CHICKEN, 0.35f, 2500).criterion("has_chicken", conditionsFromItem(Items.CHICKEN)).offerTo(exporter, Identifier.ofVanilla("cooked_chicken" + fs));
         createSmoking(Ingredient.ofItems(Items.MUTTON), RecipeCategory.FOOD, Items.COOKED_MUTTON, 0.35f, 2500).criterion("has_mutton", conditionsFromItem(Items.MUTTON)).offerTo(exporter, Identifier.ofVanilla("cooked_mutton" + fs));
@@ -161,14 +163,14 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     private void ovenCooking(RecipeExporter exporter)
     {
         // Food
-        offerOvenCooking(Items.BAKED_POTATO, RecipeCategory.FOOD, Ingredient.ofItems(Items.POTATO), 0.25f, 1700).criterion("has_potato", RecipeProvider.conditionsFromItem(Items.POTATO)).offerTo(exporter, Identifier.of("self_sustainable", "baked_potato" + foc));
-        offerOvenCooking(Items.COOKED_CHICKEN, RecipeCategory.FOOD, Ingredient.ofItems(Items.CHICKEN), 0.15f, 1800).criterion("has_chicken", RecipeProvider.conditionsFromItem(Items.CHICKEN)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_chicken" + foc));
-        offerOvenCooking(Items.COOKED_BEEF, RecipeCategory.FOOD, Ingredient.ofItems(Items.BEEF), 0.15f, 1800).criterion("has_beef", RecipeProvider.conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_beef" + foc));
-        offerOvenCooking(Items.COOKED_PORKCHOP, RecipeCategory.FOOD, Ingredient.ofItems(Items.PORKCHOP), 0.15f, 1800).criterion("has_porkchop", RecipeProvider.conditionsFromItem(Items.PORKCHOP)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_porkchop" + foc));
-        offerOvenCooking(Items.COOKED_MUTTON, RecipeCategory.FOOD, Ingredient.ofItems(Items.MUTTON), 0.15f, 1800).criterion("has_mutton", RecipeProvider.conditionsFromItem(Items.MUTTON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_mutton" + foc));
-        offerOvenCooking(Items.COOKED_RABBIT, RecipeCategory.FOOD, Ingredient.ofItems(Items.RABBIT), 0.10f, 1600).criterion("has_rabbit", RecipeProvider.conditionsFromItem(Items.RABBIT)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_rabbit" + foc));
-        offerOvenCooking(Items.COOKED_COD, RecipeCategory.FOOD, Ingredient.ofItems(Items.COD), 0.10f, 1600).criterion("has_cod", RecipeProvider.conditionsFromItem(Items.COD)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_cod" + foc));
-        offerOvenCooking(Items.COOKED_SALMON, RecipeCategory.FOOD, Ingredient.ofItems(Items.SALMON), 0.10f, 1600).criterion("has_salmon", RecipeProvider.conditionsFromItem(Items.SALMON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_salmon" + foc));
+        offerOvenCooking(Items.BAKED_POTATO, RecipeCategory.FOOD, Ingredient.ofItems(Items.POTATO), 0.25f, 5200).criterion("has_potato", RecipeProvider.conditionsFromItem(Items.POTATO)).offerTo(exporter, Identifier.of("self_sustainable", "baked_potato" + foc));
+        offerOvenCooking(Items.COOKED_CHICKEN, RecipeCategory.FOOD, Ingredient.ofItems(Items.CHICKEN), 0.15f, 6000).criterion("has_chicken", RecipeProvider.conditionsFromItem(Items.CHICKEN)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_chicken" + foc));
+        offerOvenCooking(Items.COOKED_BEEF, RecipeCategory.FOOD, Ingredient.ofItems(Items.BEEF), 0.15f, 6000).criterion("has_beef", RecipeProvider.conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_beef" + foc));
+        offerOvenCooking(Items.COOKED_PORKCHOP, RecipeCategory.FOOD, Ingredient.ofItems(Items.PORKCHOP), 0.15f, 6000).criterion("has_porkchop", RecipeProvider.conditionsFromItem(Items.PORKCHOP)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_porkchop" + foc));
+        offerOvenCooking(Items.COOKED_MUTTON, RecipeCategory.FOOD, Ingredient.ofItems(Items.MUTTON), 0.15f, 6000).criterion("has_mutton", RecipeProvider.conditionsFromItem(Items.MUTTON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_mutton" + foc));
+        offerOvenCooking(Items.COOKED_RABBIT, RecipeCategory.FOOD, Ingredient.ofItems(Items.RABBIT), 0.10f, 5800).criterion("has_rabbit", RecipeProvider.conditionsFromItem(Items.RABBIT)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_rabbit" + foc));
+        offerOvenCooking(Items.COOKED_COD, RecipeCategory.FOOD, Ingredient.ofItems(Items.COD), 0.10f, 5600).criterion("has_cod", RecipeProvider.conditionsFromItem(Items.COD)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_cod" + foc));
+        offerOvenCooking(Items.COOKED_SALMON, RecipeCategory.FOOD, Ingredient.ofItems(Items.SALMON), 0.10f, 5600).criterion("has_salmon", RecipeProvider.conditionsFromItem(Items.SALMON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_salmon" + foc));
         
 
         // Ores

@@ -10,7 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,11 +19,9 @@ import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -48,70 +45,175 @@ public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlo
         return instance;
     }
 
-
-    public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof VariableCampfireBE campfireBE) {
-            if (stack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0) {
-                if (!world.isClient) {
-                    campfireBE.changeFireLevel(world, 0);
-                }
-                Ignitable.playExtinguishSound(world, pos, false);
-                return ItemActionResult.SUCCESS;
-            }
 
-            if (!getHasSpit(world, pos) && stack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT)) {
-                setHasSpit(world, state, pos, true);
-                stack.decrement(1);
-                return ItemActionResult.SUCCESS;
-            } else {
-                Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
-                if (!getCookStack(campfireBE).isEmpty() && !isIgnitableItem(stack) && !fuelMap.containsKey(stack.getItem())) {
+        if (blockEntity instanceof VariableCampfireBE campfireBE) {
+            if (heldStack.isEmpty()) {
+                // Handle the case where the heldStack is empty
+                if (!getCookStack(campfireBE).isEmpty()) {
                     campfireBE.retrieveItem(world, campfireBE, player);
                     playGetItemSound(world, pos, player);
-                    return ItemActionResult.SUCCESS;
-                } else if (campfireBE.getRecipeFor(stack).isPresent()) {
-                    if (getCookStack(campfireBE).isEmpty()) {
+                    return ActionResult.SUCCESS;
+                }
+
+                // Check for stick retrieval
+                if (getCookStack(campfireBE).isEmpty() && !getHasSpit(world, pos)) {
+                    setHasSpit(world, state, pos, false);
+                    player.giveItemStack(new ItemStack(Items.STICK));
+                    playGetItemSound(world, pos, player);
+                    return ActionResult.SUCCESS;
+                }
+            } else {
+                // Handle the case where the heldStack has an item
+                if (heldStack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0) {
+                    if (!world.isClient) {
+                        campfireBE.changeFireLevel(world, 0);
+                    }
+                    Ignitable.playExtinguishSound(world, pos, false);
+                    return ActionResult.SUCCESS;
+                }
+
+                Optional<RecipeEntry<CampfireCookingRecipe>> optional;
+
+                // Handle stick input
+                if (!getHasSpit(world, pos)) {
+                    if (heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT)) {
+                        setHasSpit(world, state, pos, true);
+                        heldStack.decrement(1); // Decrease the heldStack count
+                        return ActionResult.SUCCESS;
+                    }
+                } else {
+                    Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
+
+                    if (!getCookStack(campfireBE).isEmpty() && !isIgnitableItem(heldStack) && !fuelMap.containsKey(heldStack.getItem())) {
+                        campfireBE.retrieveItem(world, campfireBE, player);
+                        playGetItemSound(world, pos, player);
+                        return ActionResult.SUCCESS;
+                    }
+
+                    if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent()) {
+                        if (getCookStack(campfireBE).isEmpty()) {
+                            campfireBE.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime());
+                            return ActionResult.SUCCESS;
+                        }
+                    }
+                }
+
+                if (state.get(FIRE_LEVEL) > 0 || getFuelState(world, pos) == CampfireState.SMOULDERING) {
+                    int itemBurnTime = getItemFuelTime(heldStack);
+
+                    if (heldStack.getItem().getCanBeFedDirectlyIntoCampfire(heldStack)) {
+                        if (!world.isClient) {
+                            Ignitable.playLitFX(world, pos);
+                            campfireBE.addBurnTime(state, itemBurnTime);
+                        }
+                        heldStack.decrement(1);
+                        return ActionResult.SUCCESS;
+                    }
+                }
+            }
+        }
+
+        return ActionResult.PASS;
+    }
+
+    /**
+    public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+
+        if (blockEntity instanceof VariableCampfireBE campfireBE)
+        {
+
+            if (heldStack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0)
+            {
+                if (!world.isClient)
+                {
+                    campfireBE.changeFireLevel(world, 0);
+                }
+
+                Ignitable.playExtinguishSound(world, pos, false);
+
+                return ActionResult.SUCCESS;
+            }
+
+
+            Optional<RecipeEntry<CampfireCookingRecipe>> optional;
+
+            // Handle stick input
+            if (!getHasSpit(world, pos))
+            {
+                if (heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT))
+                {
+                    setHasSpit(world, state, pos, true);
+                    heldStack.decrement(1); // Decrease the heldStack count
+
+                    return ActionResult.SUCCESS;
+                }
+            }
+            else
+            {
+
+                Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
+
+                if (!getCookStack(campfireBE).isEmpty() && !isIgnitableItem(heldStack) && !fuelMap.containsKey(heldStack.getItem()))
+                {
+                    campfireBE.retrieveItem(world, campfireBE, player);
+                    playGetItemSound(world, pos, player);
+
+                    return ActionResult.SUCCESS;
+                }
+
+                if (heldStack.isEmpty() && getCookStack(campfireBE).isEmpty())
+                {
+                    setHasSpit(world, state, pos, false);
+                    player.giveItemStack(new ItemStack(Items.STICK));
+                    playGetItemSound(world, pos, player);
+
+                    return ActionResult.SUCCESS;
+                }
+                else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent())
+                {
+                    if (getCookStack(campfireBE).isEmpty())
+                    {
+
                         campfireBE.addItem(player,
-                                player.getAbilities().creativeMode ? stack.copy() : stack,
-                                campfireBE.getRecipeFor(stack).get().value().getCookingTime());
-                        return ItemActionResult.SUCCESS;
+                                player.getAbilities().creativeMode
+                                        ? heldStack.copy()
+                                        : heldStack, optional.get().value().getCookingTime());
+
+                        return ActionResult.SUCCESS;
                     }
                 }
             }
 
-            if ((state.get(FIRE_LEVEL) > 0 || getFuelState(world, pos) == CampfireState.SMOULDERING) && stack.getItem().getCanBeFedDirectlyIntoCampfire(stack)) {
-                if (!world.isClient) {
-                    Ignitable.playLitFX(world, pos);
-                    campfireBE.addBurnTime(state, getItemFuelTime(stack));
+            if (state.get(FIRE_LEVEL) > 0 || getFuelState(world, pos) == CampfireState.SMOULDERING)
+            {
+                int itemBurnTime = getItemFuelTime(heldStack);
+
+                if ( heldStack.getItem().getCanBeFedDirectlyIntoCampfire(heldStack) )
+                {
+                    if ( !world.isClient )
+                    {
+                        Ignitable.playLitFX(world, pos);
+                        campfireBE.addBurnTime(state, itemBurnTime);
+                    }
+
+                    heldStack.decrement(1);
+
+                    return ActionResult.SUCCESS;
                 }
-                stack.decrement(1);
-                return ItemActionResult.SUCCESS;
             }
+
+
         }
 
-        return ItemActionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-    }
-
-    public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof VariableCampfireBE campfireBE) {
-            if (!getCookStack(campfireBE).isEmpty()) {
-                campfireBE.retrieveItem(world, campfireBE, player);
-                playGetItemSound(world, pos, player);
-                return ActionResult.SUCCESS;
-            }
-
-            if (getHasSpit(world, pos)) {
-                setHasSpit(world, state, pos, false);
-                player.giveItemStack(new ItemStack(Items.STICK));
-                playGetItemSound(world, pos, player);
-                return ActionResult.SUCCESS;
-            }
-        }
         return ActionResult.PASS;
     }
+     **/
 
     private boolean isIgnitableItem(ItemStack stack)
     {

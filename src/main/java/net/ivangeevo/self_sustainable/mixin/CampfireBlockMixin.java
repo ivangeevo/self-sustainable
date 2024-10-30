@@ -173,10 +173,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "onUseWithItem", at = @At("HEAD"), cancellable = true)
     private void cancelOnUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ItemActionResult> cir)
     {
-        if (state.getBlock() == Blocks.CAMPFIRE)
-        {
-            cir.setReturnValue(managerInstance.onUseWithItem(stack, state, world, pos, player, player.getActiveHand(), hit));
-        }
+        cir.setReturnValue(ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
     }
 
     // TODO: Fix this

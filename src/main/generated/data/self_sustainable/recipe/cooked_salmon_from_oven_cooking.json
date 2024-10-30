@@ -1,7 +1,7 @@
 {
   "type": "self_sustainable:oven_cooking",
   "category": "food",
-  "cookingTime": 1600,
+  "cookingTime": 5600,
   "experience": 0.1,
   "ingredient": {
     "item": "minecraft:salmon"

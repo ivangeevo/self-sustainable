@@ -82,9 +82,9 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .showNotification(true)
                 .offerTo(exporter);
 
-        removeRecipeEntry(Items.FURNACE).offerTo(exporter);
-        removeRecipeEntry(Items.BLAST_FURNACE).offerTo(exporter);
-        removeRecipeEntry(Items.SMOKER).offerTo(exporter);
+        //removeRecipeEntry(Items.FURNACE).offerTo(exporter);
+        //removeRecipeEntry(Items.BLAST_FURNACE).offerTo(exporter);
+        //removeRecipeEntry(Items.SMOKER).offerTo(exporter);
 
 
 

@@ -27,7 +27,6 @@ public abstract class HungerManagerMixin
     @Shadow private int foodTickTimer;
 
 
-
     @ModifyConstant(method = "<init>",
             constant = @Constant(floatValue = 5.0f),
             slice = @Slice(

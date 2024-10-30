@@ -30,8 +30,6 @@ public abstract class MobEntityMixin extends LivingEntity
 
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-
-
     @Inject(method = "initEquipment", at = @At(value = "HEAD"), cancellable = true)
     private void modifiedInitEqupment(Random random, LocalDifficulty localDifficulty, CallbackInfo ci)
     {

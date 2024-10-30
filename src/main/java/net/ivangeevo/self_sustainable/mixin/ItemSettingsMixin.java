@@ -20,12 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: Figure out how to modify food related items nutrition and saturation with the new component system.
+// TODO:HELP: Figure out how to modify food related items nutrition and saturation with the new component system.
+//  not necessary for alpha release but would be cool to have it.
 
 @Mixin(Item.Settings.class)
 public abstract class ItemSettingsMixin
 {
-
 
     @Shadow public abstract Item.Settings food(FoodComponent foodComponent);
 

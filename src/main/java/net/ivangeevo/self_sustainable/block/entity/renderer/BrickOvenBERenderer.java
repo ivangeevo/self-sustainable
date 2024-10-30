@@ -23,7 +23,7 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
 
     // TODO: Fix the item model orientation.
 
-    // TODO: But more importantly fix rendering the cookStack since 1.20.5-1.21 changes. I belive the error might originate
+    // TODO:HELP: But more importantly fix rendering the cookStack since 1.20.5-1.21 changes. I belive the error might originate
     //  from the cook stack not being correct in the Block entity (BrickOvenBE)
     // It displays with a wrong orientation for different directions.
     @Override

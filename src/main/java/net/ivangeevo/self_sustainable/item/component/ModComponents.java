@@ -8,14 +8,14 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModComponents {
-    // Define your custom components with proper boxing
+
     public static final ComponentType<Long> LAST_USE_COMPONENT = ComponentType.<Long>builder()
             // Use xmap to box long to Long
             .codec(Codec.LONG.xmap(Long::valueOf, longValue -> longValue))
             .build();
 
     public static final ComponentType<Float> ACCUMULATED_CHANCE_COMPONENT = ComponentType.<Float>builder()
-            // Use xmap to box float to Float
+            // box float to Float
             .codec(Codec.FLOAT.xmap(Float::valueOf, Float::floatValue))
             .build();
 

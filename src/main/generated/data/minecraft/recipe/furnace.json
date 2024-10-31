@@ -3,13 +3,12 @@
   "category": "misc",
   "key": {
     "#": {
-      "item": "tough_environment:slab_cobblestone_loose"
+      "item": "tough_environment:cobblestone_loose"
     }
   },
   "pattern": [
-    "###",
-    "# #",
-    "###"
+    "##",
+    "##"
   ],
   "result": {
     "count": 1,

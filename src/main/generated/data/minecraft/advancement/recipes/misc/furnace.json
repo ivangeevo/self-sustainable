@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_cobblestone": {
+    "has_cobblestone_loose": {
       "conditions": {
         "items": [
           {
-            "items": "#minecraft:stone_crafting_materials"
+            "items": "tough_environment:cobblestone_loose"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_cobblestone"
+      "has_cobblestone_loose"
     ]
   ],
   "rewards": {

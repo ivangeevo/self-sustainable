@@ -1,5 +1,7 @@
 package net.ivangeevo.self_sustainable.item.component;
 
+import btwr.core.item.ModFoodComponents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -215,9 +217,121 @@ public class ModifiedFoodComponents
                 .statusEffect(new StatusEffectInstance(StatusEffects.POISON, 200, 1), 1.0F)
                 .build());
 
+        // Recipes to modify from BTWR
+        if (FabricLoader.getInstance().isModLoaded("btwr"))
+        {
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.CHOWDER, new FoodComponent.Builder()
+                    .nutrition(5)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.BOILED_POTATO, new FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.EGGS_SCRAMBLED_RAW, new FoodComponent.Builder()
+                    .nutrition(3)
+                    .saturationModifier(0F)
+                    .statusEffect(addHungerStatusEffect(600, 2), 0.3f)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.MUSHROOM_OMELETTE_RAW, new FoodComponent.Builder()
+                    .nutrition(3)
+                    .saturationModifier(0F)
+                    .statusEffect(addHungerStatusEffect(600, 2), 0.3f)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.KEBAB_RAW, new FoodComponent.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0F)
+                    .statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600,2), 0.3f)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.COOKED_CARROT, new FoodComponent.Builder()
+                    .nutrition(2)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.EGG_SCRAMBLED_COOKED, new FoodComponent.Builder()
+                    .nutrition(4)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.MUSHROOM_OMELETTE_COOKED, new FoodComponent.Builder()
+                    .nutrition(4)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.SANDWICH, new FoodComponent.Builder()
+                    .nutrition(5)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.HAM_AND_EGGS, new FoodComponent.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.STEAK_AND_POTATOES, new FoodComponent.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.KEBAB_COOKED, new FoodComponent.Builder()
+                    .nutrition(8)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.STEAK_DINNER, new FoodComponent.Builder()
+                    .nutrition(8)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.PORK_DINNER, new FoodComponent.Builder()
+                    .nutrition(8)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.WOLF_DINNER, new FoodComponent.Builder()
+                    .nutrition(8)
+                    .saturationModifier(0F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.CHICKEN_SOUP, createStew(8).build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.HEARTY_STEW, createStew(10).build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.CREEPER_OYSTERS, new FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0F)
+                    .statusEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 0), 1F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.BEAST_LIVER_RAW, new FoodComponent.Builder()
+                    .nutrition(5)
+                    .saturationModifier(0F)
+                    .statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 1), 0.3F)
+                    .build());
+
+            CUSTOM_FOOD_COMPONENTS.put(ModFoodComponents.BEAST_LIVER_COOKED, new FoodComponent.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0F)
+                    .build());
+        }
+
     }
 
     public static FoodComponent getCustomFoodComponent(FoodComponent original) {
         return CUSTOM_FOOD_COMPONENTS.getOrDefault(original, original);
+    }
+
+    private static FoodComponent.Builder createStew(int hunger) {
+        return (new FoodComponent.Builder()).nutrition(hunger).saturationModifier(0f).usingConvertsTo(Items.BOWL);
+    }
+
+    private static StatusEffectInstance addHungerStatusEffect(int dur, int amp)
+    {
+        return new StatusEffectInstance(StatusEffects.HUNGER, dur, amp, false, false, false);
     }
 }

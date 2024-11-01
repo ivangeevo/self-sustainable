@@ -65,6 +65,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
         // Cooking Recipes (we only leave campfire and smoker(until brick oven is added) as viable cooking sources now)
 
         // Smelting (furnace cooking recipes) removal
+        /**
         removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_beef"));
         removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_chicken"));
         removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_mutton"));
@@ -73,6 +74,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
         removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_salmon"));
         removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_cod"));
         removeRecipeEntry(exporter, Identifier.ofVanilla("baked_potato"));
+         **/
 
 
         createCampfireCooking(Ingredient.ofItems(Items.BEEF), RecipeCategory.FOOD, Items.COOKED_BEEF, 0.15f, 6000).criterion("has_beef", conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.ofVanilla("cooked_beef" + fcc));

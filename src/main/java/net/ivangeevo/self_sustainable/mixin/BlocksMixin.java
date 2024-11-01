@@ -1,11 +1,16 @@
 package net.ivangeevo.self_sustainable.mixin;
 
 import net.minecraft.block.*;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.state.property.Properties;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashMap;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.FIRE_LEVEL;
@@ -37,13 +42,16 @@ public abstract class BlocksMixin {
             // Check if the block is CampfireBlock or its subclass
             if (state.getBlock() instanceof CampfireBlock)
             {
-                // Modify the return value for CampfireBlock
-                return state.get(FIRE_LEVEL) != 0 ? litLevel : 0;
+                int fireLevel = state.get(FIRE_LEVEL);
+                if (fireLevel == 0) { return 0; }
+                else if (fireLevel == 1) { return 8; }
+                else if (fireLevel == 2) { return 11; }
+                else if (fireLevel == 3) { return 14; }
             }
+
             // Return default value for other blocks
-            return 0;
+            return state.get(Properties.LIT) ? litLevel : 0;
         });
     }
-
 
 }

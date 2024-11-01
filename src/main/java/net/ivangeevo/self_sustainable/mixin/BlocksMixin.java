@@ -4,6 +4,7 @@ import net.minecraft.block.*;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,11 +44,10 @@ public abstract class BlocksMixin
             // Check if the block is CampfireBlock or its subclass
             if (state.getBlock() instanceof CampfireBlock)
             {
-                int fireLevel = state.get(FIRE_LEVEL);
-                if (fireLevel == 0) { return 0; }
-                else if (fireLevel == 1) { return 8; }
-                else if (fireLevel == 2) { return 11; }
-                else if (fireLevel == 3) { return 14; }
+                switch (state.get(FIRE_LEVEL))
+                {
+                    case 0: return 0; case 1: return 8; case 2: return 11; case 3: return 14;
+                }
             }
 
             // Return default value for other blocks

@@ -16,7 +16,8 @@ import java.util.function.ToIntFunction;
 import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.FIRE_LEVEL;
 
 @Mixin(Blocks.class)
-public abstract class BlocksMixin {
+public abstract class BlocksMixin
+{
 
     /**
     // TorchBlock's luminance lambda

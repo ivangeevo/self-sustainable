@@ -46,7 +46,10 @@ public abstract class BlocksMixin
             {
                 switch (state.get(FIRE_LEVEL))
                 {
-                    case 0: return 0; case 1: return 8; case 2: return 11; case 3: return 14;
+                    case 0: return 0;
+                    case 1: return 8;
+                    case 2: return 11;
+                    case 3: return 14;
                 }
             }
 

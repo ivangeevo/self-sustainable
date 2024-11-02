@@ -45,6 +45,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
+import java.util.function.ToIntFunction;
+
 import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
 
 // TODO:HELP: Make campfire turning to embers and then burned out after it goes out.
@@ -71,6 +73,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     {
         settings.notSolid();
     }
+
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectedDefaultState(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
     {
@@ -453,6 +456,17 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     private static boolean isOverworldOrNether(World world)
     {
         return world.getRegistryKey() == World.OVERWORLD || world.getRegistryKey() == World.NETHER;
+    }
+
+
+    @Unique
+    private static ToIntFunction<BlockState> createLightLevelFromLitBlockState() {
+        return (state) -> switch (state.get(FIRE_LEVEL)) {
+            case 1 -> 8;
+            case 2 -> 11;
+            case 3 -> 14;
+            default -> 0;
+        };
     }
 
 

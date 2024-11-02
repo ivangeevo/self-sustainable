@@ -46,27 +46,27 @@ public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlo
     }
 
     public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
+         ItemStack heldStack = player.getStackInHand(hand); // Get the held stack in the specified hand
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
         if (blockEntity instanceof VariableCampfireBE campfireBE) {
             if (heldStack.isEmpty()) {
-                // Handle the case where the heldStack is empty
+                // Handle the case where the held stack is empty and retrieve item if there's one cooking
                 if (!getCookStack(campfireBE).isEmpty()) {
                     campfireBE.retrieveItem(world, campfireBE, player);
                     playGetItemSound(world, pos, player);
                     return ActionResult.SUCCESS;
                 }
 
-                // Check for stick retrieval
-                if (getCookStack(campfireBE).isEmpty() && !getHasSpit(world, pos)) {
+                // Remove the spit if it's already present and the cook stack is empty
+                if (getCookStack(campfireBE).isEmpty() && getHasSpit(world, pos)) {
                     setHasSpit(world, state, pos, false);
                     player.giveItemStack(new ItemStack(Items.STICK));
                     playGetItemSound(world, pos, player);
                     return ActionResult.SUCCESS;
                 }
             } else {
-                // Handle the case where the heldStack has an item
+                // Handle the case where the held stack has an item
                 if (heldStack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0) {
                     if (!world.isClient) {
                         campfireBE.changeFireLevel(world, 0);
@@ -77,11 +77,11 @@ public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlo
 
                 Optional<RecipeEntry<CampfireCookingRecipe>> optional;
 
-                // Handle stick input
+                // Handle adding a spit if not present
                 if (!getHasSpit(world, pos)) {
-                    if (heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT)) {
+                    if (heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && state.get(FUEL_STATE) != CampfireState.BURNED_OUT) {
                         setHasSpit(world, state, pos, true);
-                        heldStack.decrement(1); // Decrease the heldStack count
+                        heldStack.decrement(1); // Decrease the held stack count
                         return ActionResult.SUCCESS;
                     }
                 } else {
@@ -118,6 +118,7 @@ public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlo
 
         return ActionResult.PASS;
     }
+
 
     /**
     public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit)

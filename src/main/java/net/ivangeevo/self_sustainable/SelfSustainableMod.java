@@ -47,11 +47,13 @@ public class SelfSustainableMod implements ModInitializer
     public void onInitialize()
     {
 
+        // Modifying foods to gave less hunger in general and 0 saturation.
+        // Also some additional negative effects to certain ones.
         FoodComponentModifier.register();
 
         // Register an event that blocks the player from eating if he has food poisoning (hunger)
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (player.hasStatusEffect(StatusEffects.HUNGER) && !player.isSpectator()) {
+            if (player.hasStatusEffect(StatusEffects.HUNGER) && !player.isCreative() && !player.isSpectator()) {
                 ItemStack heldItem = player.getMainHandStack();
                 if (heldItem.getComponents().contains(DataComponentTypes.FOOD)) {
                     return TypedActionResult.fail(heldItem);

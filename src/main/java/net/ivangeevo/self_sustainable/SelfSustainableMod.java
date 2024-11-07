@@ -2,12 +2,12 @@ package net.ivangeevo.self_sustainable;
 
 import com.google.gson.Gson;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.config.SSSettings;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.component.FoodComponentModifier;
+import net.ivangeevo.self_sustainable.item.component.OGFoodComponentModifier;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
@@ -47,8 +47,7 @@ public class SelfSustainableMod implements ModInitializer
     public void onInitialize()
     {
 
-        // Register the event that modifies food components.
-        DefaultItemComponentEvents.MODIFY.register(FoodComponentModifier::modifyFoodComponents);
+        FoodComponentModifier.register();
 
         // Register an event that blocks the player from eating if he has food poisoning (hunger)
         UseItemCallback.EVENT.register((player, world, hand) -> {

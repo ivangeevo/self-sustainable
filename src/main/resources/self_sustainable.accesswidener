@@ -4,5 +4,4 @@ accessible method net/minecraft/client/render/block/entity/BlockEntityRendererFa
 accessible class net/minecraft/entity/mob/ZombieEntity$DestroyEggGoal
 accessible method net/minecraft/block/FireBlock getSpreadChance (Lnet/minecraft/block/BlockState;)I
 
-
-accessible field net/minecraft/component/type/FoodComponents COOKED_PORKCHOP Lnet/minecraft/component/type/FoodComponent;
+accessible method net/minecraft/component/ComponentMap$Builder put (Lnet/minecraft/component/ComponentType;Ljava/lang/Object;)V

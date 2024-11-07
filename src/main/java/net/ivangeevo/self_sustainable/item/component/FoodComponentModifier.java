@@ -4,32 +4,34 @@ import btwr.core.item.BTWR_Items;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Items;
 
-import java.lang.reflect.Method;
-
 public class FoodComponentModifier
 {
 
+    /**
+     * Registers a listener to modify the food components of specific vanilla items.
+     */
+    public static void register() {
+        DefaultItemComponentEvents.MODIFY.register(FoodComponentModifier::modifyFoodComponents);
+    }
 
     // Method to modify components
-    public static void modifyFoodComponents(DefaultItemComponentEvents.ModifyContext context)
+    private static void modifyFoodComponents(DefaultItemComponentEvents.ModifyContext context)
     {
-
         context.modify(Items.GOLDEN_APPLE, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addRegenerationEffect(100, 0), 1F).statusEffect(addAbsorptionEffect(2400, 0), 1F).alwaysEdible().build()));
         context.modify(Items.BREAD, builder -> modifyEntry(builder, replaceWith(3).build()));
         context.modify(Items.DRIED_KELP, builder -> modifyEntry(builder, replaceWith(0).build()));
-        context.modify(Items.CHICKEN, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(1200, 2), 0.30F).statusEffect(addSlownessEffect(1000, 2), 0.1F).build()));
-        context.modify(Items.PORKCHOP, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(1200, 2), 0.30F).statusEffect(addSlownessEffect(1000, 2), 0.1F).build()));
-        context.modify(Items.BEEF, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(1200, 2), 0.30F).statusEffect(addSlownessEffect(1000, 2), 0.1F).build()));
-        context.modify(Items.MUTTON, builder -> modifyEntry(builder, replaceWith(2).statusEffect(addHungerEffect(1200, 2), 0.30F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
-        context.modify(Items.RABBIT, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addHungerEffect(1200, 2), 0.30F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
-        context.modify(Items.COD, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addHungerEffect(1200, 2), 0.30F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+        context.modify(Items.CHICKEN, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(1200, 2), 0.3F).statusEffect(addSlownessEffect(1000, 2), 0.1F).build()));
+        context.modify(Items.PORKCHOP, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(1200, 2), 0.3F).statusEffect(addSlownessEffect(1000, 2), 0.1F).build()));
+        context.modify(Items.BEEF, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(1200, 2), 0.3F).statusEffect(addSlownessEffect(1000, 2), 0.1F).build()));
+        context.modify(Items.MUTTON, builder -> modifyEntry(builder, replaceWith(2).statusEffect(addHungerEffect(1200, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+        context.modify(Items.RABBIT, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addHungerEffect(1200, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+        context.modify(Items.COD, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addHungerEffect(1200, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
         context.modify(Items.SALMON, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addHungerEffect(1200, 2), 0.25F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
         context.modify(Items.COOKED_CHICKEN, builder -> modifyEntry(builder, replaceWith(4).build()));
         context.modify(Items.COOKED_BEEF, builder -> modifyEntry(builder, replaceWith(4).build()));
@@ -57,14 +59,13 @@ public class FoodComponentModifier
         context.modify(Items.PUFFERFISH, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addPoisonEffect(400, 1), 1.0F).build()));
         context.modify(Items.POISONOUS_POTATO, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addPoisonEffect(200, 1), 1.0F).build()));
 
-
         if (FabricLoader.getInstance().isModLoaded("btwr"))
         {
             context.modify(BTWR_Items.CHOWDER, builder -> modifyEntry(builder, replaceWith(5).build()));
             context.modify(BTWR_Items.BOILED_POTATO, builder -> modifyEntry(builder, replaceWith(1).build()));
-            context.modify(BTWR_Items.EGG_SCRAMBLED_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).build()));
-            context.modify(BTWR_Items.MUSHROOM_OMELETTE_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).build()));
-            context.modify(BTWR_Items.RAW_KEBAB, builder -> modifyEntry(builder, replaceWith(6).statusEffect(addHungerEffect(600, 2), 0.3F).build()));
+            context.modify(BTWR_Items.EGG_SCRAMBLED_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+            context.modify(BTWR_Items.MUSHROOM_OMELETTE_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+            context.modify(BTWR_Items.RAW_KEBAB, builder -> modifyEntry(builder, replaceWith(6).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
             context.modify(BTWR_Items.COOKED_CARROT, builder -> modifyEntry(builder, replaceWith(2).build()));
             context.modify(BTWR_Items.EGG_SCRAMBLED_COOKED, builder -> modifyEntry(builder, replaceWith(4).build()));
             context.modify(BTWR_Items.MUSHROOM_OMELETTE_COOKED, builder -> modifyEntry(builder, replaceWith(4).build()));
@@ -78,29 +79,20 @@ public class FoodComponentModifier
             context.modify(BTWR_Items.CHICKEN_SOUP, builder -> modifyEntry(builder, replaceWith(8).build()));
             context.modify(BTWR_Items.HEARTY_STEW, builder -> modifyEntry(builder, createStew(10).build()));
             context.modify(BTWR_Items.CREEPER_OYSTERS, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addPoisonEffect(100, 0), 1.0F).build()));
-            context.modify(BTWR_Items.BEAST_LIVER_RAW, builder -> modifyEntry(builder, replaceWith(5).statusEffect(addHungerEffect(600, 1), 0.3F).build()));
+            context.modify(BTWR_Items.BEAST_LIVER_RAW, builder -> modifyEntry(builder, replaceWith(5).statusEffect(addHungerEffect(600, 1), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
             context.modify(BTWR_Items.BEAST_LIVER_COOKED, builder -> modifyEntry(builder, replaceWith(6).build()));
-
         }
-
     }
 
-    // Reflection-based helper to put the food component
+    // Directly modify the builder with access widening the put method (it was reflection before)
     private static void modifyEntry(ComponentMap.Builder builder, FoodComponent foodComponent) {
-        try {
-            Method putMethod = ComponentMap.Builder.class.getDeclaredMethod("put", ComponentType.class, Object.class);
-            putMethod.setAccessible(true);
-            putMethod.invoke(builder, DataComponentTypes.FOOD, foodComponent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        builder.put(DataComponentTypes.FOOD, foodComponent);
     }
 
     private static FoodComponent.Builder replaceWith(int hunger)
     {
         return new FoodComponent.Builder().nutrition(hunger).saturationModifier(0f);
     }
-
 
     private static FoodComponent.Builder createStew(int hunger) {
         return (new FoodComponent.Builder()).nutrition(hunger).saturationModifier(0f).usingConvertsTo(Items.BOWL);
@@ -135,5 +127,4 @@ public class FoodComponentModifier
     {
         return new StatusEffectInstance(StatusEffects.POISON, dur, amp, false, false, false);
     }
-
 }

@@ -152,6 +152,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
             return 0;
         }
         Item item = fuel.getItem();
+
         return AbstractFurnaceBlockEntity.createFuelTimeMap().getOrDefault(item, 0);
     }
 
@@ -190,16 +191,10 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
         builder.add(LIT, FUEL_STATE, FIRE_LEVEL, HAS_SPIT, SIGNAL_FIRE, WATERLOGGED, FACING);
     }
 
-    public void appendCustomPropertiesNoLIT(StateManager.Builder<Block, BlockState> builder)
-    {
-        builder.add(FUEL_STATE, FIRE_LEVEL, HAS_SPIT, SIGNAL_FIRE, WATERLOGGED, FACING);
-    }
-
     public boolean getHasSpit(WorldAccess blockAccess, BlockPos pos)
     {
         return blockAccess.getBlockState(pos).get(HAS_SPIT);
     }
-
 
     public boolean setHasSpit(World world, BlockState state, BlockPos pos, boolean bHasSpit)
     {

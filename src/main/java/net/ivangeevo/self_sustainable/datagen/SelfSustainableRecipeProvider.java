@@ -98,11 +98,12 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.FURNACE)
-                .input('#', org.tough_environment.block.ModBlocks.COBBLESTONE_LOOSE)
+                .input('#', Items.COBBLESTONE)
                 .pattern("##")
                 .pattern("##")
-                .criterion("has_cobblestone_loose", conditionsFromItem(org.tough_environment.block.ModBlocks.COBBLESTONE_LOOSE))
+                .criterion("has_cobblestone_loose", conditionsFromItem(Items.COBBLESTONE))
                         .offerTo(exporter, Identifier.ofVanilla("furnace"));
+
         // Shaped Recipes
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.CAMPFIRE)
                 .input('S', Items.STICK)

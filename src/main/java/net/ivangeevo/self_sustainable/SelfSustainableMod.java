@@ -1,16 +1,22 @@
 package net.ivangeevo.self_sustainable;
 
 import com.google.gson.Gson;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.config.SSSettings;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.item.ModItems;
+import net.ivangeevo.self_sustainable.item.component.FoodComponentModifier;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import net.ivangeevo.self_sustainable.registry.FuelRegistryManager;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
-import net.minecraft.loot.function.LootFunctionType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.TypedActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +40,29 @@ public class SelfSustainableMod implements ModInitializer
     //public static final LootFunctionType TORCH_LOOT_FUNCTION = new LootFunctionType(new LootFunctionTorch.Serializer());
     //public static final LootFunctionType TORCH_FUEL_FUNCTION = new LootFunctionType(new TorchFuelFunction.Serializer());
 
+
+
+
     @Override
     public void onInitialize()
     {
+
+        // Register the event that modifies food components.
+        DefaultItemComponentEvents.MODIFY.register(FoodComponentModifier::modifyFoodComponents);
+
+        // Register an event that blocks the player from eating if he has food poisoning (hunger)
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if (player.hasStatusEffect(StatusEffects.HUNGER) && !player.isSpectator()) {
+                ItemStack heldItem = player.getMainHandStack();
+                if (heldItem.getComponents().contains(DataComponentTypes.FOOD)) {
+                    return TypedActionResult.fail(heldItem);
+                }
+            }
+
+            // Allow the use of non-food items or if the player isn't hungry
+            return TypedActionResult.pass(player.getStackInHand(hand));
+        });
+
         LOGGER.info("Initializing Self Sustainable.");
         loadSettings();
         instance = this;
@@ -46,6 +72,9 @@ public class SelfSustainableMod implements ModInitializer
         ModItemGroup.registerItemGroups();
         ModBlockEntities.registerBlockEntities();
         ModRecipes.registerRecipes();
+
+
+
 
         //ModBlocks.registerTorchHandler();
 

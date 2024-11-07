@@ -29,8 +29,9 @@ public class ModItems
     public static final Item KNITTING_NEEDLES = registerItem("knitting_needles",
             new KnittingNeedlesItem(ToolMaterials.WOOD,
                     new Item.Settings().recipeRemainder(ModItems.KNITTING_NEEDLES)));
+
     public static final Item KNITTING = registerItem("knitting",
-            new KnittingItem(new Item.Settings().maxDamage(0)));
+            new KnittingItem(new Item.Settings()));
 
 
     public static final Item WICKER = registerItem("wicker", new Item(new Item.Settings()));

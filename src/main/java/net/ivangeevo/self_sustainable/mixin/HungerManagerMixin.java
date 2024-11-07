@@ -1,7 +1,5 @@
 package net.ivangeevo.self_sustainable.mixin;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
@@ -11,10 +9,7 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 
 @Mixin(HungerManager.class)
 public abstract class HungerManagerMixin
@@ -71,4 +66,5 @@ public abstract class HungerManagerMixin
             }
         }
     }
+
 }

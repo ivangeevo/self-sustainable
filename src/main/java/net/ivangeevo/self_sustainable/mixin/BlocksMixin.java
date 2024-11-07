@@ -1,20 +1,15 @@
 package net.ivangeevo.self_sustainable.mixin;
 
 import net.minecraft.block.*;
-import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.HashMap;
-import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
-import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.FIRE_LEVEL;
+import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 
 @Mixin(Blocks.class)
 public abstract class BlocksMixin

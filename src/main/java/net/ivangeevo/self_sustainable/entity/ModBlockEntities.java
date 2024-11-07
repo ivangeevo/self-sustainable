@@ -1,11 +1,9 @@
 package net.ivangeevo.self_sustainable.entity;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.entity.*;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
@@ -21,18 +19,18 @@ public class ModBlockEntities {
     // public static BlockEntityType<TorchBE> TORCH;
 
     public static void registerBlockEntities()
-        {
-            OVEN_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
-                            "oven_brick"), BlockEntityType.Builder.create(BrickOvenBE::new,
-                            ModBlocks.OVEN_BRICK).build(null));
+    {
+        OVEN_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
+                "oven_brick"), BlockEntityType.Builder.create(BrickOvenBE::new,
+                ModBlocks.OVEN_BRICK).build(null));
 
-            SMOKER_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
-                    "smoker_brick"), BlockEntityType.Builder.create(SmokerOvenBE::new,
-                    ModBlocks.SMOKER_BRICK).build(null));
+        SMOKER_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
+                "smoker_brick"), BlockEntityType.Builder.create(SmokerOvenBE::new,
+                ModBlocks.SMOKER_BRICK).build(null));
 
-            CAMPFIRE = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
-                    "campfire"), BlockEntityType.Builder.create(VariableCampfireBE::new,
-                    Blocks.CAMPFIRE).build(null));
+        CAMPFIRE = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
+                "campfire"), BlockEntityType.Builder.create(VariableCampfireBE::new,
+                Blocks.CAMPFIRE).build(null));
 
 
             /**

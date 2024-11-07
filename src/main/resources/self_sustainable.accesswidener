@@ -3,3 +3,6 @@ accessWidener v1 named
 accessible method net/minecraft/client/render/block/entity/BlockEntityRendererFactories register (Lnet/minecraft/block/entity/BlockEntityType;Lnet/minecraft/client/render/block/entity/BlockEntityRendererFactory;)V
 accessible class net/minecraft/entity/mob/ZombieEntity$DestroyEggGoal
 accessible method net/minecraft/block/FireBlock getSpreadChance (Lnet/minecraft/block/BlockState;)I
+
+
+accessible field net/minecraft/component/type/FoodComponents COOKED_PORKCHOP Lnet/minecraft/component/type/FoodComponent;

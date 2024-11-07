@@ -68,11 +68,7 @@ public class ModBlocks
 
     private static AbstractBlock.Settings initTorchSettings()
     {
-       return AbstractBlock.Settings.create()
-                .noCollision()
-                .breakInstantly()
-                .pistonBehavior(PistonBehavior.DESTROY)
-                .sounds(BlockSoundGroup.WOOD);
+       return AbstractBlock.Settings.create().noCollision().breakInstantly().pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.WOOD);
     }
 
     /**

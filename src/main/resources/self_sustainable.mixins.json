@@ -4,6 +4,7 @@
   "package": "net.ivangeevo.self_sustainable.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractBlock$AbstractBlockStateMixin",
     "BlockItemMixin",
     "BlockMixin",
     "BlocksMixin",
@@ -12,7 +13,6 @@
     "FlintAndSteelItemMixin",
     "HungerManagerMixin",
     "ItemMixin",
-    "ItemSettingsMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "MobEntityMixin",

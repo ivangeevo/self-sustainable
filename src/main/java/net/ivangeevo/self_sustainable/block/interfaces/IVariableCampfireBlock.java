@@ -9,7 +9,7 @@ import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 
-public interface VariableCampfireBlock
+public interface IVariableCampfireBlock
 {
     VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 7.0, 16.0);
 

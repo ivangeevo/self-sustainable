@@ -11,13 +11,10 @@ import net.ivangeevo.self_sustainable.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.FireBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -28,10 +25,10 @@ import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Clearable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -42,8 +39,8 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.FIRE_LEVEL;
-import static net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock.FUEL_STATE;
+import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
+import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FUEL_STATE;
 
 
 public class VariableCampfireBE extends BlockEntity implements Clearable
@@ -171,7 +168,6 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
                 if ( iCurrentFireLevel == 3 )
                 {
                     // blaze burns extra fast
-
                     campfireBE.burnTimeCountdown--;
                 }
             }
@@ -307,11 +303,19 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
             if (burnTimeCountdown > 0 && state.get(FUEL_STATE) == CampfireState.SMOULDERING)
             {
                 relightSmouldering(world, pos);
+                setFuelState(world, pos, CampfireState.NORMAL);
                 return 1;
             }
         }
 
         return iCurrentFireLevel;
+    }
+
+    // Method to set the fuel state
+
+    public void setFuelState(World world, BlockPos pos, CampfireState fuelState)
+    {
+        world.setBlockState(pos, world.getBlockState(pos).with(FUEL_STATE, fuelState).with(Properties.WATERLOGGED, false));
     }
 
 
@@ -387,6 +391,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         Inventories.writeNbt(nbt, this.itemsBeingCooked, true, registryLookup);
         nbt.putInt("CookingTime", cookingTime);
         nbt.putInt("CookingTotalTime", cookingTotalTime);
+
         nbt.putInt("BurnCounter", burnTimeCountdown);
         nbt.putInt("BurnTime", burnTimeSinceLit);
         nbt.putInt("SmoulderCounter", smoulderCounter);

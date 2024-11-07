@@ -51,7 +51,7 @@ import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
 
 // TODO:HELP: Make campfire turning to embers and then burned out after it goes out.
 @Mixin(CampfireBlock.class)
-public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, VariableCampfireBlock
+public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, IVariableCampfireBlock
 {
     @Shadow @Final private boolean emitsParticles;
     @Shadow @Final private int fireDamage;
@@ -125,12 +125,16 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                 {
                     world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0f, 1.0f);
                 }
+
                 CampfireBlock.extinguish(null, world, pos, state);
             }
+
             world.setBlockState(pos, state.with(WATERLOGGED, true).with(FIRE_LEVEL, 0), Block.NOTIFY_ALL);
             world.scheduleFluidTick(pos, fluidState.getFluid(), fluidState.getFluid().getTickRate(world));
+
             cir.setReturnValue(true);
         }
+
         cir.setReturnValue(false);
     }
 
@@ -179,22 +183,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         cir.setReturnValue(ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
     }
 
-    // TODO: Fix this
-    // Original method before the onUse method rework
-
-    /**
-    @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
-    private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir)
-    {
-
-        if (state.getBlock() == Blocks.CAMPFIRE)
-        {
-            cir.setReturnValue( managerInstance.onUse(state, world, pos, player, player.getActiveHand(), hit) );
-        }
-
-    }
-    **/
-
 
     // Change LIT for FIRE LEVEL greater than 1 when checking to damage entities.
 
@@ -206,6 +194,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         }
 
         super.onEntityCollision(state, world, pos, entity);
+
         ci.cancel();
     }
 
@@ -368,7 +357,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     @Override
     public void relightFire(World world, BlockPos pos) {
-        changeFireLevel(world, pos, setFuelState(world, pos, CampfireState.NORMAL));
+        changeFireLevel(world, pos, 1);
 
     }
 
@@ -412,16 +401,12 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     // Method to set the fuel state
 
-    public int setFuelState(World world, BlockPos pos, CampfireState fuelState)
+    public void setFuelState(World world, BlockPos pos, CampfireState fuelState)
     {
-        BlockState state = world.getBlockState(pos);
-        return setCampfireState(state, setCampfireState(state, fuelState)).ordinal();
+        world.setBlockState(pos, this.getDefaultState().with(FUEL_STATE, fuelState).with(Properties.WATERLOGGED, false));
     }
 
-    public CampfireState setCampfireState(BlockState state, CampfireState fuelState)
-    {
-      return state.get(FUEL_STATE);
-    }
+
 
     public void relightFire(World world, BlockPos pos, BlockState state)
     {

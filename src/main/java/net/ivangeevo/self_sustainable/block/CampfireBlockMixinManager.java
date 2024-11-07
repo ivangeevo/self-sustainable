@@ -1,9 +1,10 @@
 package net.ivangeevo.self_sustainable.block;
 
 import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
-import net.ivangeevo.self_sustainable.block.interfaces.VariableCampfireBlock;
+import net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
+import net.ivangeevo.self_sustainable.mixin.CampfireBlockMixin;
 import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
@@ -34,7 +35,7 @@ import java.util.Optional;
 
 import static net.minecraft.block.CampfireBlock.*;
 
-public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlock
+public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBlock
 {
     private static final CampfireBlockMixinManager instance = new CampfireBlockMixinManager();
 
@@ -45,82 +46,6 @@ public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlo
         return instance;
     }
 
-    public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit) {
-         ItemStack heldStack = player.getStackInHand(hand); // Get the held stack in the specified hand
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-
-        if (blockEntity instanceof VariableCampfireBE campfireBE) {
-            if (heldStack.isEmpty()) {
-                // Handle the case where the held stack is empty and retrieve item if there's one cooking
-                if (!getCookStack(campfireBE).isEmpty()) {
-                    campfireBE.retrieveItem(world, campfireBE, player);
-                    playGetItemSound(world, pos, player);
-                    return ActionResult.SUCCESS;
-                }
-
-                // Remove the spit if it's already present and the cook stack is empty
-                if (getCookStack(campfireBE).isEmpty() && getHasSpit(world, pos)) {
-                    setHasSpit(world, state, pos, false);
-                    player.giveItemStack(new ItemStack(Items.STICK));
-                    playGetItemSound(world, pos, player);
-                    return ActionResult.SUCCESS;
-                }
-            } else {
-                // Handle the case where the held stack has an item
-                if (heldStack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0) {
-                    if (!world.isClient) {
-                        campfireBE.changeFireLevel(world, 0);
-                    }
-                    Ignitable.playExtinguishSound(world, pos, false);
-                    return ActionResult.SUCCESS;
-                }
-
-                Optional<RecipeEntry<CampfireCookingRecipe>> optional;
-
-                // Handle adding a spit if not present
-                if (!getHasSpit(world, pos)) {
-                    if (heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && state.get(FUEL_STATE) != CampfireState.BURNED_OUT) {
-                        setHasSpit(world, state, pos, true);
-                        heldStack.decrement(1); // Decrease the held stack count
-                        return ActionResult.SUCCESS;
-                    }
-                } else {
-                    Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
-
-                    if (!getCookStack(campfireBE).isEmpty() && !isIgnitableItem(heldStack) && !fuelMap.containsKey(heldStack.getItem())) {
-                        campfireBE.retrieveItem(world, campfireBE, player);
-                        playGetItemSound(world, pos, player);
-                        return ActionResult.SUCCESS;
-                    }
-
-                    if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent()) {
-                        if (getCookStack(campfireBE).isEmpty()) {
-                            campfireBE.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime());
-                            return ActionResult.SUCCESS;
-                        }
-                    }
-                }
-
-                if (state.get(FIRE_LEVEL) > 0 || getFuelState(world, pos) == CampfireState.SMOULDERING) {
-                    int itemBurnTime = getItemFuelTime(heldStack);
-
-                    if (heldStack.getItem().getCanBeFedDirectlyIntoCampfire(heldStack)) {
-                        if (!world.isClient) {
-                            Ignitable.playLitFX(world, pos);
-                            campfireBE.addBurnTime(state, itemBurnTime);
-                        }
-                        heldStack.decrement(1);
-                        return ActionResult.SUCCESS;
-                    }
-                }
-            }
-        }
-
-        return ActionResult.PASS;
-    }
-
-
-    /**
     public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
@@ -140,7 +65,6 @@ public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlo
 
                 return ActionResult.SUCCESS;
             }
-
 
             Optional<RecipeEntry<CampfireCookingRecipe>> optional;
 
@@ -214,7 +138,7 @@ public class CampfireBlockMixinManager implements Ignitable, VariableCampfireBlo
 
         return ActionResult.PASS;
     }
-     **/
+
 
     private boolean isIgnitableItem(ItemStack stack)
     {

@@ -67,6 +67,7 @@ dependencies {
     //modImplementation files("libs/tough_environment-0.4.1-1.21.1.jar")
     //modImplementation files("libs/better_with_time-1.7.jar")
     modImplementation files("libs/btwr-core-0.27-1.21.1.jar")
+    modImplementation files("libs/sturdy_trees-1.4.4-1.21.1.jar")
 
 }
 

@@ -1,8 +1,8 @@
 {
-  "type": "minecraft:smoking",
+  "type": "minecraft:smelting",
   "category": "food",
-  "cookingtime": 1250,
-  "experience": 0.35,
+  "cookingtime": 2500,
+  "experience": 0.25,
   "ingredient": {
     "item": "minecraft:beef"
   },

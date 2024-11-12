@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.config.SSSettings;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
+import net.ivangeevo.self_sustainable.event.ModLootTableReplacement;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.component.FoodComponentModifier;
-import net.ivangeevo.self_sustainable.item.component.OGFoodComponentModifier;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
@@ -46,6 +46,8 @@ public class SelfSustainableMod implements ModInitializer
     @Override
     public void onInitialize()
     {
+
+        ModLootTableReplacement.initialize();
 
         // Modifying foods to gave less hunger in general and 0 saturation.
         // Also some additional negative effects to certain ones.

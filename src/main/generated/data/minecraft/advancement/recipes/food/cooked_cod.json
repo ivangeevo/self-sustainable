@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_cobblestone_material": {
+    "has_cod": {
       "conditions": {
         "items": [
           {
-            "items": "#c:cobblestone_crafting_materials"
+            "items": "minecraft:cod"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:furnace"
+        "recipe": "minecraft:cooked_cod"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_cobblestone_material"
+      "has_cod"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:furnace"
+      "minecraft:cooked_cod"
     ]
   }
 }

@@ -1,0 +1,96 @@
+package net.ivangeevo.self_sustainable.event;
+
+import btwr.core.tag.BTWRConventionalTags;
+import ivangeevo.sturdy_trees.SturdyTreesItems;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.TallPlantBlock;
+import net.minecraft.block.enums.DoubleBlockHalf;
+import net.minecraft.data.server.loottable.BlockLootTableGenerator;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.condition.*;
+import net.minecraft.loot.entry.AlternativeEntry;
+import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.entry.LeafEntry;
+import net.minecraft.loot.entry.LootPoolEntry;
+import net.minecraft.loot.function.SetCountLootFunction;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
+import net.minecraft.predicate.BlockPredicate;
+import net.minecraft.predicate.StatePredicate;
+import net.minecraft.predicate.entity.LocationPredicate;
+import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static net.minecraft.data.server.loottable.BlockLootTableGenerator.WITH_SHEARS;
+
+public abstract class ModLootTableReplacement extends BlockLootTableGenerator
+{
+
+    // Condition for MODERN_AXES or ADVANCED_AXES tag check
+    private static final LootCondition.Builder WITH_STRONG_AXE = MatchToolLootCondition.builder(
+            ItemPredicate.Builder.create()
+                    .tag(BTWRConventionalTags.Items.MODERN_AXES)
+                    .tag(BTWRConventionalTags.Items.ADVANCED_AXES));
+
+    private static final List<Identifier> planks = List.of(
+            Identifier.ofVanilla("oak_planks"),
+            Identifier.ofVanilla("spruce_planks"),
+            Identifier.ofVanilla("birch_planks"),
+            Identifier.ofVanilla("jungle_planks"),
+            Identifier.ofVanilla("acacia_planks"),
+            Identifier.ofVanilla("dark_oak_planks")
+            // Add more plank types as needed
+    );
+
+    protected ModLootTableReplacement(Set<Item> explosionImmuneItems, FeatureSet requiredFeatures, RegistryWrapper.WrapperLookup registryLookup) {
+        super(explosionImmuneItems, requiredFeatures, registryLookup);
+    }
+
+
+    // Register loot table replacements
+    public static void initialize()
+    {
+        //. replacePlanksWithToolCondition();
+    }
+
+    // Method to replace planks' loot tables with a tool-based condition using AlternativeEntry.builder
+    public static void replacePlanksWithToolCondition() {
+
+
+
+
+        LootTableEvents.REPLACE.register((key, original, source, registries) -> {
+            if (source.isBuiltin()) {
+                for (Identifier blockId : planks) {
+                    Block blockToModify = Registries.BLOCK.get(blockId);
+
+                    if (blockToModify.getLootTableKey().equals(key)) {
+                        LootTable.Builder newTable = LootTable.builder();
+
+
+                        // Add the alternative entry to the loot table
+                        newTable.pool(LootPool.builder());
+
+                        return newTable.build();
+                    }
+                }
+            }
+            return null;
+        });
+    }
+
+}

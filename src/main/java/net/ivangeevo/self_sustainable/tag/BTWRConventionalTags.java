@@ -16,6 +16,8 @@ public class BTWRConventionalTags
         // Blocks that can convert on break and are NOT from vanilla
         public static final TagKey<Block> MODDED_CONVERTING_BLOCKS = createTag("modded_converting_blocks");
 
+
+
         // Stump blocks grouped; initially used for Sturdy Tree's Stump blocks
         public static final TagKey<Block> STUMP_BLOCKS = createTag("stump_blocks");
 
@@ -68,6 +70,9 @@ public class BTWRConventionalTags
         public static final TagKey<Item> STRING_TOOL_MATERIALS = createTag("string_tool_materials");
 
         public static final TagKey<Item> TORCHES_CAN_IGNITE = createTag("torches_can_ignite");
+
+        public static final TagKey<Item> COBBLESTONE_CRAFTING_MATERIALS = createTag("cobblestone_crafting_materials");
+
 
 
 

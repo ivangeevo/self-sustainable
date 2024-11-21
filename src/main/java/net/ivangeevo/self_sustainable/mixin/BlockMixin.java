@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.mixin;
 
 import net.ivangeevo.self_sustainable.block.interfaces.BlockAdded;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,7 +25,8 @@ public abstract class BlockMixin implements BlockAdded
     }
 
     @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos) {
+    public boolean setOnFireDirectly(World world, BlockPos pos)
+    {
         return false;
     }
 }

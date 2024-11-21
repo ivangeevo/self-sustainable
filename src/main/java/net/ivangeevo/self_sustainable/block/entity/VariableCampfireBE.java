@@ -10,6 +10,7 @@ import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -126,6 +127,11 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
 
         if ( iCurrentFireLevel > 0 )
         {
+
+            if (world.getBlockState(pos.down()).isOf(Blocks.NETHERRACK) || world.getBlockState(pos.down()).isOf(Blocks.OBSIDIAN))
+            {
+                world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+            }
 
 /**
             //TODO : Fire spread for campfire. NOT WORKING ATM

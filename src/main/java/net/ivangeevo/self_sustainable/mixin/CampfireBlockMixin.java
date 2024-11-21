@@ -88,7 +88,10 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "createBlockEntity", at = @At("HEAD"), cancellable = true)
     private void injectedBE(BlockPos pos, BlockState state, CallbackInfoReturnable<BlockEntity> cir)
     {
-        cir.setReturnValue( new VariableCampfireBE(pos, state) );
+        if (state.isOf(Blocks.CAMPFIRE))
+        {
+            cir.setReturnValue( new VariableCampfireBE(pos, state) );
+        }
     }
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)

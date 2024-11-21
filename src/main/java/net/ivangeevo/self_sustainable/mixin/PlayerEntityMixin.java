@@ -27,7 +27,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 
     @Shadow public abstract void addExhaustion(float exhaustion);
 
-    @Unique private final boolean runningImMovens = FabricLoader.getInstance().isModLoaded("im-movens");
+    @Unique private final boolean runningImMovens = FabricLoader.getInstance().isModLoaded("im_movens");
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -103,6 +103,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
         {
             PlayerEntity player = (PlayerEntity) (Object) this;
 
+            // TODO: Fix? Maybe only serverPlayerEntity should heal?
             int healTicks = 200;
             if (player.age % healTicks == 0 && player.getHealth() < player.getMaxHealth()
                     && player.getHungerManager().getFoodLevel() >= 9)

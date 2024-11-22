@@ -108,7 +108,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .pattern("##")
                 .pattern("##")
                 .criterion("has_cobblestone_material", conditionsFromTag(BTWRConventionalTags.Items.COBBLESTONE_CRAFTING_MATERIALS))
-                        .offerTo(exporter, Identifier.ofVanilla("furnace"));
+                .offerTo(exporter, Identifier.ofVanilla("furnace"));
 
         // Shaped Recipes
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.CAMPFIRE)

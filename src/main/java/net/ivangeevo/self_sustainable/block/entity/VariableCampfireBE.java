@@ -128,6 +128,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         if ( iCurrentFireLevel > 0 )
         {
 
+            // allow campfire to turn to fire block if under these blocks
             if (world.getBlockState(pos.down()).isOf(Blocks.NETHERRACK) || world.getBlockState(pos.down()).isOf(Blocks.OBSIDIAN))
             {
                 world.setBlockState(pos, Blocks.FIRE.getDefaultState());
@@ -162,8 +163,6 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
                 }
             }
  **/
-
-
 
             campfireBE.burnTimeSinceLit++;
 

@@ -406,7 +406,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     public void setFuelState(World world, BlockPos pos, CampfireState fuelState)
     {
-        world.setBlockState(pos, this.getDefaultState().with(FUEL_STATE, fuelState).with(Properties.WATERLOGGED, false));
+        world.setBlockState(pos, this.getDefaultState().with(FUEL_STATE, fuelState).with(Properties.WATERLOGGED, false).with(HAS_SPIT, managerInstance.getHasSpit(world, pos)));
     }
 
 
@@ -425,6 +425,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         {
             return;
         }
+
         /**
         if (isOverworldOrNether(world)
                 && (optional = NetherPortal.getNewPortal(world, pos, Direction.Axis.X)).isPresent() && state.get(LIT))
@@ -433,6 +434,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
             return;
         }
          **/
+
         if (!state.canPlaceAt(world, pos))
         {
             world.removeBlock(pos, false);

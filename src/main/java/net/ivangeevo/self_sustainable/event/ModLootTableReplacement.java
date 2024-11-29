@@ -1,6 +1,6 @@
 package net.ivangeevo.self_sustainable.event;
 
-import btwr.core.tag.BTWRConventionalTags;
+import btwr.btwrsl.tag.BTWRConventionalTags;
 import ivangeevo.sturdy_trees.SturdyTreesItems;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Block;

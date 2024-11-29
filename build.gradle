@@ -45,6 +45,8 @@ repositories {
 
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
+    maven { url "https://ivangeevo.github.io/btwr-shared-lib" }
+
 
 
 }
@@ -68,6 +70,9 @@ dependencies {
     //modImplementation files("libs/better_with_time-1.7.jar")
     modImplementation files("libs/btwr-core-0.27-1.21.1.jar")
     modImplementation files("libs/sturdy_trees-1.4.4-1.21.1.jar")
+
+    modImplementation("org.ivangeevo:btwr-shared-lib:${project.btwr_lib_version}")
+
 
 }
 

@@ -84,13 +84,15 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
 
                 Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
 
-                if (!getCookStack(campfireBE).isEmpty() && !isIgnitableItem(heldStack) && !fuelMap.containsKey(heldStack.getItem()))
-                {
-                    campfireBE.retrieveItem(world, campfireBE, player);
-                    playGetItemSound(world, pos, player);
-
-                    return ActionResult.SUCCESS;
+                if (!getCookStack(campfireBE).isEmpty()) {
+                    if (heldStack.isEmpty() || (!isIgnitableItem(heldStack) && !fuelMap.containsKey(heldStack.getItem()))) {
+                        // Allow retrieval if hand is empty or if the held item is neither ignitable nor fuel
+                        campfireBE.retrieveItem(world, campfireBE, player);
+                        playGetItemSound(world, pos, player);
+                        return ActionResult.SUCCESS;
+                    }
                 }
+
 
                 if (heldStack.isEmpty() && getCookStack(campfireBE).isEmpty())
                 {

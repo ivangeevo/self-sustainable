@@ -64,6 +64,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     // helper method for easier calling of the campfire block manager class
     @Unique private static final CampfireBlockMixinManager managerInstance = CampfireBlockMixinManager.getInstance();
 
+    @Unique private static final Block isNormalCampfire = Blocks.CAMPFIRE;
+
     protected CampfireBlockMixin(Settings settings) {
         super(settings);
     }
@@ -154,7 +156,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "isLitCampfire", at = @At("HEAD"), cancellable = true)
     private static void injectedIsLitCampfire(BlockState state, CallbackInfoReturnable<Boolean> cir)
     {
-        cir.setReturnValue( state.contains(FIRE_LEVEL) && state.isIn(BlockTags.CAMPFIRES) && state.get(FIRE_LEVEL) > 0 );
+        cir.setReturnValue( state.contains(FIRE_LEVEL) && state.isIn(BlockTags.CAMPFIRES) && state.get(FIRE_LEVEL) > 1 );
     }
 
 

@@ -47,7 +47,9 @@ repositories {
     maven { url "https://maven.terraformersmc.com/releases/" }
     maven { url "https://ivangeevo.github.io/btwr-shared-lib" }
 
-
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
 
 }
 
@@ -66,10 +68,7 @@ dependencies {
     // Mod Menu
     modApi "com.terraformersmc:modmenu:11.0.2"
 
-    //modImplementation files("libs/tough_environment-0.4.1-1.21.1.jar")
-    //modImplementation files("libs/better_with_time-1.7.jar")
-    modImplementation files("libs/btwr-core-0.27-1.21.1.jar")
-    modImplementation files("libs/sturdy_trees-1.4.4-1.21.1.jar")
+    modImplementation "maven.modrinth:btwrcore:0.28.1"
 
     modImplementation("org.ivangeevo:btwr-shared-lib:${project.btwr_lib_version}")
 

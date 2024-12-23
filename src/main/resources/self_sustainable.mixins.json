@@ -11,7 +11,7 @@
     "CampfireBlockMixin",
     "DifficultyMixin",
     "FlintAndSteelItemMixin",
-    "HungerManagerMixin",
+    "OGHungerManagerMixin",
     "ItemMixin",
     "ItemStackMixin",
     "LivingEntityMixin",

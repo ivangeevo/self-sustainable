@@ -19,7 +19,5 @@ public class SelfSustainableDataGenerator implements DataGeneratorEntrypoint
         pack.addProvider(SelfSustainableBlockTagProvider::new);
         pack.addProvider(SelfSustainableItemTagProvider::new);
 
-
-
     }
 }

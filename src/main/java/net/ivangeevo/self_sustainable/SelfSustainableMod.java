@@ -40,18 +40,18 @@ public class SelfSustainableMod implements ModInitializer
     //public static final LootFunctionType TORCH_LOOT_FUNCTION = new LootFunctionType(new LootFunctionTorch.Serializer());
     //public static final LootFunctionType TORCH_FUEL_FUNCTION = new LootFunctionType(new TorchFuelFunction.Serializer());
 
-
-
-
     @Override
     public void onInitialize()
     {
+        LOGGER.info("Initializing Self Sustainable.");
+        loadSettings();
+        instance = this;
 
         ModLootTableReplacement.initialize();
 
         // Modifying foods to gave less hunger in general and 0 saturation.
         // Also some additional negative effects to certain ones.
-        //FoodComponentModifier.register();
+        FoodComponentModifier.register();
 
         // Register an event that blocks the player from eating if he has food poisoning (hunger)
         UseItemCallback.EVENT.register((player, world, hand) -> {
@@ -66,18 +66,12 @@ public class SelfSustainableMod implements ModInitializer
             return TypedActionResult.pass(player.getStackInHand(hand));
         });
 
-        LOGGER.info("Initializing Self Sustainable.");
-        loadSettings();
-        instance = this;
         ModBlocks.registerModBlocks();
         ModItems.registerModItems();
         ModComponents.registerComponents();
         ModItemGroup.registerItemGroups();
         ModBlockEntities.registerBlockEntities();
         ModRecipes.registerRecipes();
-
-
-
 
         //ModBlocks.registerTorchHandler();
 

@@ -57,7 +57,7 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-        // Fabric API. This is technically optional, but you probably want it anyway.
+    // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Adding Cloth Config API
@@ -66,9 +66,10 @@ dependencies {
     // Mod Menu
     modApi "com.terraformersmc:modmenu:11.0.2"
 
-    modImplementation "maven.modrinth:btwrcore:0.28.1"
-
     modImplementation("org.ivangeevo:btwr-shared-lib:${project.btwr_lib_version}")
+
+    //modImplementation("maven.modrinth:btwrcore:${project.btwr_core_version}")
+    modImplementation files("libs/btwr-core-${project.btwr_core_version}-1.21.1.jar")
 
 
 }

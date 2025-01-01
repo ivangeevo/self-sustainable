@@ -1,6 +1,6 @@
 package net.ivangeevo.self_sustainable.event;
 
-import btwr.btwrsl.tag.BTWRConventionalTags;
+import btwr.btwr_sl.tag.BTWRConventionalTags;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Block;
 import net.minecraft.data.server.loottable.BlockLootTableGenerator;
@@ -24,7 +24,8 @@ public abstract class ModLootTableReplacement extends BlockLootTableGenerator
     private static final LootCondition.Builder WITH_STRONG_AXE = MatchToolLootCondition.builder(
             ItemPredicate.Builder.create()
                     .tag(BTWRConventionalTags.Items.MODERN_AXES)
-                    .tag(BTWRConventionalTags.Items.ADVANCED_AXES));
+                    .tag(BTWRConventionalTags.Items.ADVANCED_AXES)
+    );
 
     private static final List<Identifier> planks = List.of(
             Identifier.ofVanilla("oak_planks"),
@@ -42,16 +43,12 @@ public abstract class ModLootTableReplacement extends BlockLootTableGenerator
 
 
     // Register loot table replacements
-    public static void initialize()
-    {
+    public static void initialize() {
         //. replacePlanksWithToolCondition();
     }
 
     // Method to replace planks' loot tables with a tool-based condition using AlternativeEntry.builder
     public static void replacePlanksWithToolCondition() {
-
-
-
 
         LootTableEvents.REPLACE.register((key, original, source, registries) -> {
             if (source.isBuiltin()) {

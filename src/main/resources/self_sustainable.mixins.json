@@ -11,16 +11,18 @@
     "CampfireBlockMixin",
     "DifficultyMixin",
     "FlintAndSteelItemMixin",
-    "OGHungerManagerMixin",
+    "FurnaceFuelSlotMixin",
     "ItemMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "MobEntityMixin",
+    "OGHungerManagerMixin",
     "PlayerEntityMixin",
     "SpawnHelperMixin",
     "ZombieVillagerEntityMixin"
   ],
   "client": [
+    "AbstractFurnaceScreenHandlerMixin",
     "HeldItemRendererMixin"
   ],
   "injectors": {

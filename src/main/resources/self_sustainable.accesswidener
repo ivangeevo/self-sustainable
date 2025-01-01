@@ -5,3 +5,4 @@ accessible class net/minecraft/entity/mob/ZombieEntity$DestroyEggGoal
 accessible method net/minecraft/block/FireBlock getSpreadChance (Lnet/minecraft/block/BlockState;)I
 
 accessible method net/minecraft/component/ComponentMap$Builder put (Lnet/minecraft/component/ComponentType;Ljava/lang/Object;)V
+accessible field net/minecraft/screen/AbstractFurnaceScreenHandler propertyDelegate Lnet/minecraft/screen/PropertyDelegate;

@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractBlock$AbstractBlockStateMixin",
+    "AbstractBlockMixin",
     "BlockItemMixin",
     "BlockMixin",
     "BlocksMixin",
@@ -12,18 +13,19 @@
     "DifficultyMixin",
     "FlintAndSteelItemMixin",
     "FurnaceFuelSlotMixin",
+    "OGHungerManagerMixin",
     "ItemMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "MobEntityMixin",
-    "OGHungerManagerMixin",
     "PlayerEntityMixin",
     "SpawnHelperMixin",
     "ZombieVillagerEntityMixin"
   ],
   "client": [
     "AbstractFurnaceScreenHandlerMixin",
-    "HeldItemRendererMixin"
+    "HeldItemRendererMixin",
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

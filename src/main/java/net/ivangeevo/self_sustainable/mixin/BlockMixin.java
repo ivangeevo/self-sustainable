@@ -8,10 +8,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 @Mixin(Block.class)
 public abstract class BlockMixin implements BlockAdded
 {
+
+
     @Override
     public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos)
     {
@@ -29,4 +32,8 @@ public abstract class BlockMixin implements BlockAdded
     {
         return false;
     }
+
+
+
+
 }

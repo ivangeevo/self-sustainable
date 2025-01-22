@@ -3,13 +3,15 @@
   "id":"self_sustainable",
   "version":"${version}",
   "name":"Self Sustainable",
-  "description":"",
-  "authors":[],
+  "description":"Real survival, scarcity, very rewarding. Are you ready?",
+  "authors":[
+    "ivangeevo"
+  ],
   "contact":{
-    "repo":"https://github.com/Ivan/self-sustainablew-remastered-private"
+    "repo":"https://github.com/ivangeevo/self-sustainable"
   },
-  "license":"MIT",
-  "icon":"assets/self-sustainable/icon.png",
+  "license":"CC-BY 4.0",
+  "icon":"assets/self_sustainable/icon.png",
   "environment":"*",
   "entrypoints":{
     "client":[

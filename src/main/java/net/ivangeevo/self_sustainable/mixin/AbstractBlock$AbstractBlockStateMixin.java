@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Unique;
 import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 
 @Mixin(AbstractBlock.AbstractBlockState.class)
-public class AbstractBlock$AbstractBlockStateMixin
+public abstract class AbstractBlock$AbstractBlockStateMixin
 {
 
     // TODO: Fix this so it's setting the campfire light level here instead of in the BlocksMixin

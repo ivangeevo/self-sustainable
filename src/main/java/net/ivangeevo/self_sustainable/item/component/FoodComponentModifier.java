@@ -86,6 +86,9 @@ public class FoodComponentModifier
         {
             context.modify(ModItems.BOILED_POTATO, builder -> modifyEntry(builder, replaceWith(1).build()));
             context.modify(ModItems.COOKED_CARROT, builder -> modifyEntry(builder, replaceWith(2).build()));
+            context.modify(ModItems.CHOCOLATE, builder -> modifyEntry(builder, replaceWith(2).build()));
+            context.modify(ModItems.CHOCOLATE_MILK, builder -> modifyEntry(builder, replaceWith(3).build()));
+
         }
     }
 

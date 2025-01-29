@@ -45,7 +45,7 @@ repositories {
 
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
-    maven { url "https://ivangeevo.github.io/btwr-shared-lib" }
+    maven { url "https://ivangeevo.github.io/btwr-shared-lib/" }
 
     maven { url "https://api.modrinth.com/maven" }
 
@@ -66,12 +66,11 @@ dependencies {
     // Mod Menu
     modApi "com.terraformersmc:modmenu:11.0.2"
 
-    modImplementation("org.ivangeevo:btwr-shared-lib:${project.btwr_lib_version}")
+    // BTWR Shared Library
+    modImplementation("org.ivangeevo:btwr-shared-lib:${project.btwr_sl_version}")
 
-    //modImplementation("maven.modrinth:btwrcore:${project.btwr_core_version}")
     modImplementation files("libs/btwr-core-${project.btwr_core_version}-1.21.1.jar")
     modImplementation files("libs/vegehenna-${project.vegehenna_version}-1.21.1.jar")
-
 
 }
 
@@ -79,12 +78,15 @@ processResources {
     inputs.property "version", project.version
     inputs.property "minecraft_version", project.minecraft_version
     inputs.property "loader_version", project.loader_version
+    inputs.property "btwr_sl_version", project.btwr_sl_version
+
     filteringCharset "UTF-8"
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
                 "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version
+                "loader_version": project.loader_version,
+                "btwr_sl_version": project.btwr_sl_version
     }
 }
 

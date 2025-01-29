@@ -57,7 +57,7 @@ public abstract class InGameHudMixin
 
 
     // For progressive crafting
-    @Inject(method = "renderFood", at = @At("HEAD"))
+    //@Inject(method = "renderFood", at = @At("HEAD"))
     private void onRenderFood(DrawContext context, PlayerEntity player, int top, int right, CallbackInfo ci) {
         drawFoodOverlay(context, player, top, right);
     }

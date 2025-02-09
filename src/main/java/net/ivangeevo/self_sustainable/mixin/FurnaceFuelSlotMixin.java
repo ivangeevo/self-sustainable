@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FurnaceFuelSlot.class)
-public class FurnaceFuelSlotMixin {
+public abstract class FurnaceFuelSlotMixin {
 
     @Shadow @Final private AbstractFurnaceScreenHandler handler;
 

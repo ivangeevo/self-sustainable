@@ -1,6 +1,7 @@
 package net.ivangeevo.self_sustainable.item.component;
 
 import btwr.core.item.BTWR_Items;
+import com.bwt.items.BwtItems;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.ComponentMap;
@@ -11,19 +12,17 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Items;
 import org.ivangeevo.vegehenna.item.ModItems;
 
-public class FoodComponentModifier
-{
+public class FoodComponentModifier {
 
     /**
-     * Registers a listener to modify the food components of specific vanilla items.
+     * Registers a listener to modify the food components of food items.
      */
     public static void register() {
         DefaultItemComponentEvents.MODIFY.register(FoodComponentModifier::modifyFoodComponents);
     }
 
     // Method to modify components
-    private static void modifyFoodComponents(DefaultItemComponentEvents.ModifyContext context)
-    {
+    private static void modifyFoodComponents(DefaultItemComponentEvents.ModifyContext context) {
         context.modify(Items.GOLDEN_APPLE, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addRegenerationEffect(100, 0), 1F).statusEffect(addAbsorptionEffect(2400, 0), 1F).alwaysEdible().build()));
         context.modify(Items.BREAD, builder -> modifyEntry(builder, replaceWith(3).build()));
         context.modify(Items.DRIED_KELP, builder -> modifyEntry(builder, replaceWith(0).build()));
@@ -59,9 +58,9 @@ public class FoodComponentModifier
         context.modify(Items.SPIDER_EYE, builder -> modifyEntry(builder, replaceWith(2).statusEffect(addPoisonEffect(100, 0), 1.0F).build()));
         context.modify(Items.PUFFERFISH, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addPoisonEffect(400, 1), 1.0F).build()));
         context.modify(Items.POISONOUS_POTATO, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addPoisonEffect(200, 1), 1.0F).build()));
+        context.modify(Items.CHORUS_FRUIT, builder -> modifyEntry(builder, replaceWith(1).build()));
 
-        if (FabricLoader.getInstance().isModLoaded("btwr"))
-        {
+        if (FabricLoader.getInstance().isModLoaded("btwr")) {
             context.modify(BTWR_Items.CHOWDER, builder -> modifyEntry(builder, replaceWith(5).build()));
             context.modify(BTWR_Items.EGG_SCRAMBLED_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
             context.modify(BTWR_Items.MUSHROOM_OMELETTE_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
@@ -82,14 +81,20 @@ public class FoodComponentModifier
             context.modify(BTWR_Items.BEAST_LIVER_COOKED, builder -> modifyEntry(builder, replaceWith(6).build()));
         }
 
-        if (FabricLoader.getInstance().isModLoaded("vegehenna"))
-        {
+        if (FabricLoader.getInstance().isModLoaded("vegehenna")) {
             context.modify(ModItems.BOILED_POTATO, builder -> modifyEntry(builder, replaceWith(1).build()));
             context.modify(ModItems.COOKED_CARROT, builder -> modifyEntry(builder, replaceWith(2).build()));
             context.modify(ModItems.CHOCOLATE, builder -> modifyEntry(builder, replaceWith(2).build()));
             context.modify(ModItems.CHOCOLATE_MILK, builder -> modifyEntry(builder, replaceWith(3).build()));
 
         }
+
+        if (FabricLoader.getInstance().isModLoaded("bwt")) {
+            context.modify(BwtItems.rawEggItem, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addHungerEffect(600, 2), 0.3F).build()));
+            context.modify(BwtItems.friedEggItem, builder -> modifyEntry(builder, replaceWith(3).build()));
+            context.modify(BwtItems.poachedEggItem, builder -> modifyEntry(builder, replaceWith(3).build()));
+        }
+
     }
 
     // Directly modify the builder with access widening the put method (it was reflection before)
@@ -97,8 +102,7 @@ public class FoodComponentModifier
         builder.put(DataComponentTypes.FOOD, foodComponent);
     }
 
-    private static FoodComponent.Builder replaceWith(int hunger)
-    {
+    private static FoodComponent.Builder replaceWith(int hunger) {
         return new FoodComponent.Builder().nutrition(hunger).saturationModifier(0f);
     }
 
@@ -106,33 +110,27 @@ public class FoodComponentModifier
         return (new FoodComponent.Builder()).nutrition(hunger).saturationModifier(0f).usingConvertsTo(Items.BOWL);
     }
 
-    private static StatusEffectInstance addAbsorptionEffect(int dur, int amp)
-    {
+    private static StatusEffectInstance addAbsorptionEffect(int dur, int amp) {
         return new StatusEffectInstance(StatusEffects.ABSORPTION, dur, amp, false, false, false);
     }
 
-    private static StatusEffectInstance addRegenerationEffect(int dur, int amp)
-    {
-        return new StatusEffectInstance(StatusEffects.WEAKNESS, dur, amp, false, false, false);
+    private static StatusEffectInstance addRegenerationEffect(int dur, int amp) {
+        return new StatusEffectInstance(StatusEffects.REGENERATION, dur, amp, false, false, false);
     }
 
-    private static StatusEffectInstance addSlownessEffect(int dur, int amp)
-    {
+    private static StatusEffectInstance addSlownessEffect(int dur, int amp) {
         return new StatusEffectInstance(StatusEffects.SLOWNESS, dur, amp, false, false, false);
     }
 
-    private static StatusEffectInstance addWeaknessEffect(int dur, int amp)
-    {
+    private static StatusEffectInstance addWeaknessEffect(int dur, int amp) {
         return new StatusEffectInstance(StatusEffects.WEAKNESS, dur, amp, false, false, false);
     }
 
-    private static StatusEffectInstance addHungerEffect(int dur, int amp)
-    {
+    private static StatusEffectInstance addHungerEffect(int dur, int amp) {
         return new StatusEffectInstance(StatusEffects.HUNGER, dur, amp, false, false, false);
     }
 
-    private static StatusEffectInstance addPoisonEffect(int dur, int amp)
-    {
+    private static StatusEffectInstance addPoisonEffect(int dur, int amp) {
         return new StatusEffectInstance(StatusEffects.POISON, dur, amp, false, false, false);
     }
 }

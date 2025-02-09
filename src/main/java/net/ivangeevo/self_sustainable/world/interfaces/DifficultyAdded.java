@@ -1,7 +1,6 @@
 package net.ivangeevo.self_sustainable.world.interfaces;
 
-public interface DifficultyAdded
-{
+public interface DifficultyAdded {
 
       float getHungerIntensiveActionCostMultiplier();
 

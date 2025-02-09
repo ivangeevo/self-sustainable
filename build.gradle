@@ -69,6 +69,10 @@ dependencies {
     // BTWR Shared Library
     modImplementation("org.ivangeevo:btwr-shared-lib:${project.btwr_sl_version}")
 
+    // Better With Time
+    modImplementation "maven.modrinth:better-with-time:${project.bwt_version}"
+
+
     modImplementation files("libs/btwr-core-${project.btwr_core_version}-1.21.1.jar")
     modImplementation files("libs/vegehenna-${project.vegehenna_version}-1.21.1.jar")
 

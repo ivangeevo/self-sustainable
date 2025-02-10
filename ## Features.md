@@ -9,7 +9,14 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 ### 🔥 Firestarting Overhaul
 - **Fire Plough & Bow Drill** – New fire-starting tools that **require holding down** to light fires instead of working instantly.
 - **Flint & Steel** - It's the current best firestarter and works exactly like the Fire Plough & Bow Drill, though lighting up fires much faster.
-- 
+
+---
+
+### 🍖 Food changes
+
+- **Saturation changes** 🍖 – All food items now provide **less hunger and no saturation**.
+- **Raw food penalties** 🤮 - Eating raw foods/unintended has a high change of giving the player the hunger effect(renamed to food poisoning) and making him unable to eat again until the effect passes.
+
 ---
 
 ### 🏃 Stamina & Exhaustion Changes
@@ -25,7 +32,6 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 - **Passive Healing** 🏥 – Heals **½ heart every 10 seconds** if hunger is high enough.
     - If **"I'm Movens" mod** is installed, healing happens every **30 seconds** instead.
 - **No full hunger healing** ❌ – Difficulty-based healing removed.
-- **Saturation changes** 🍖 – All food items now provide **less hunger and no saturation**.
 - **Cooking takes longer** ⏳ – Food now requires more time to cook, making survival harder.
 
 ---

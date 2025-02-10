@@ -3,12 +3,13 @@
   "category": "misc",
   "key": {
     "#": {
-      "tag": "c:cobblestone_crafting_materials"
+      "item": "minecraft:brick"
     }
   },
   "pattern": [
-    "##",
-    "##"
+    "###",
+    "# #",
+    "###"
   ],
   "result": {
     "count": 1,

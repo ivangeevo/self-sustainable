@@ -18,7 +18,7 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
     - **Jumping & sprinting** now consume more stamina.
     - **Sprint-jumping** is even more exhausting.
     - This makes early-game movement more strategic.
-
+- The above **increased exhaustion for movement** is compatible with the "I'm movens" mod, and is removed when that mod is present, as it enforces even higher exhaustion values.
 ---
 
 ### ❤️ Health & Hunger Adjustments
@@ -37,7 +37,7 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 ## ♨️ Furnace Overhaul
 - **One slot cooking** - You can cook only a single item per furnace/smoker.
 - **Fuel slot overhaul** - You can have only 1 inserted fuel item, besides what is already burning.
-- **Furnace Recipe Changed** 🏗️ – Now crafted in a **2x2 grid** for better balance.
+- **Furnace Recipe Changed** 🏗️ – Now requires bricks to craft. (temporary until ovens are added, then furnaces are removed)
 
 ---
 

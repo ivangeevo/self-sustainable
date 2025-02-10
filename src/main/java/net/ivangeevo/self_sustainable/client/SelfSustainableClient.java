@@ -23,6 +23,9 @@ public class SelfSustainableClient implements ClientModInitializer {
         BlockEntityRendererFactories.register(ModBlockEntities.SMOKER_BRICK, SmokeOvenBERenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.CAMPFIRE, CampfireBERenderer::new);
 
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BRICK_UNFIRED, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BRICK, RenderLayer.getCutout());
+
         /**
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TORCH_UNLIT, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TORCH_LIT, RenderLayer.getCutout());

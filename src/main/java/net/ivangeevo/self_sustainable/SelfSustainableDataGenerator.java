@@ -2,9 +2,7 @@ package net.ivangeevo.self_sustainable;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.ivangeevo.self_sustainable.datagen.SelfSustainableBlockTagProvider;
-import net.ivangeevo.self_sustainable.datagen.SelfSustainableItemTagProvider;
-import net.ivangeevo.self_sustainable.datagen.SelfSustainableRecipeProvider;
+import net.ivangeevo.self_sustainable.datagen.*;
 
 
 public class SelfSustainableDataGenerator implements DataGeneratorEntrypoint
@@ -18,6 +16,8 @@ public class SelfSustainableDataGenerator implements DataGeneratorEntrypoint
         pack.addProvider(SelfSustainableRecipeProvider::new);
         pack.addProvider(SelfSustainableBlockTagProvider::new);
         pack.addProvider(SelfSustainableItemTagProvider::new);
+        pack.addProvider(SelfSustainableLootTableProvider::new);
+        pack.addProvider(SelfSustainableLangProvider::new);
 
     }
 }

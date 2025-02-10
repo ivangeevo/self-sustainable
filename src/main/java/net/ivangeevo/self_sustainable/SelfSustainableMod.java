@@ -67,6 +67,7 @@ public class SelfSustainableMod implements ModInitializer
         });
 
         ModBlocks.registerModBlocks();
+        ModBlocks.registerItemsPlaceableAsBlocks();
         ModItems.registerModItems();
         ModComponents.registerComponents();
         ModItemGroup.registerItemGroups();

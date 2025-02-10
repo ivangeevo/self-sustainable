@@ -20,6 +20,7 @@ public class ModItemGroup {
                         // Items
                         entries.add(ModItems.FIRESTARTER_STICKS);
                         entries.add(ModItems.FIRESTARTER_BOW);
+                        entries.add(ModItems.BRICK_UNFIRED);
 
 
                         // Blocks

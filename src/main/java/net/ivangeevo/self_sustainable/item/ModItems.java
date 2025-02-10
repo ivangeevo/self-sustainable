@@ -2,10 +2,9 @@ package net.ivangeevo.self_sustainable.item;
 
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
-import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.items.*;
+import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -20,6 +19,9 @@ public class ModItems
             new FireStarterItemPrimitive(new Item.Settings().maxDamage(250), 0.05F, -0.1F, 0.1F, 0.001F));
     public static final Item FIRESTARTER_BOW = registerItem("firestarter_bow",
             new FireStarterItemPrimitive(new Item.Settings().maxDamage(250),0.025F, -0.1F, 0.1F, 0.004F));
+
+    public static final Item BRICK_UNFIRED = registerItem( "brick_unfired",
+            new AliasedBlockItem(ModBlocks.BRICK_UNFIRED, new Item.Settings()));
 
 
     // All items below are unused for now

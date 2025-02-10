@@ -1,0 +1,10 @@
+{
+  "variants":
+  {
+    "facing=east": { "model": "self_sustainable:block/brick",  "y": 270 },
+    "facing=north": { "model": "self_sustainable:block/brick", "y": 180 },
+    "facing=south": { "model": "self_sustainable:block/brick" },
+    "facing=west": { "model": "self_sustainable:block/brick", "y": 90 }
+
+  }
+}

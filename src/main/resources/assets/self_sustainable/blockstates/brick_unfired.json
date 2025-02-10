@@ -1,0 +1,46 @@
+{
+  "variants":
+  {
+    "facing=east,drying_level=0": { "model": "self_sustainable:block/unfired_brick",  "y": 270 },
+    "facing=north,drying_level=0": { "model": "self_sustainable:block/unfired_brick", "y": 180 },
+    "facing=south,drying_level=0": { "model": "self_sustainable:block/unfired_brick" },
+    "facing=west,drying_level=0": { "model": "self_sustainable:block/unfired_brick", "y": 90 },
+
+    "facing=east,drying_level=1": { "model": "self_sustainable:block/unfired_brick_level_1",  "y": 270 },
+    "facing=north,drying_level=1": { "model": "self_sustainable:block/unfired_brick_level_1", "y": 180 },
+    "facing=south,drying_level=1": { "model": "self_sustainable:block/unfired_brick_level_1" },
+    "facing=west,drying_level=1": { "model": "self_sustainable:block/unfired_brick_level_1", "y": 90 },
+
+    "facing=east,drying_level=2": { "model": "self_sustainable:block/unfired_brick_level_2",  "y": 270 },
+    "facing=north,drying_level=2": { "model": "self_sustainable:block/unfired_brick_level_2", "y": 180 },
+    "facing=south,drying_level=2": { "model": "self_sustainable:block/unfired_brick_level_2" },
+    "facing=west,drying_level=2": { "model": "self_sustainable:block/unfired_brick_level_2", "y": 90 },
+
+    "facing=east,drying_level=3": { "model": "self_sustainable:block/unfired_brick_level_3",  "y": 270 },
+    "facing=north,drying_level=3": { "model": "self_sustainable:block/unfired_brick_level_3", "y": 180 },
+    "facing=south,drying_level=3": { "model": "self_sustainable:block/unfired_brick_level_3" },
+    "facing=west,drying_level=3": { "model": "self_sustainable:block/unfired_brick_level_3", "y": 90 },
+
+    "facing=east,drying_level=4": { "model": "self_sustainable:block/unfired_brick_level_4",  "y": 270 },
+    "facing=north,drying_level=4": { "model": "self_sustainable:block/unfired_brick_level_4", "y": 180 },
+    "facing=south,drying_level=4": { "model": "self_sustainable:block/unfired_brick_level_4" },
+    "facing=west,drying_level=4": { "model": "self_sustainable:block/unfired_brick_level_4", "y": 90 },
+
+    "facing=east,drying_level=5": { "model": "self_sustainable:block/unfired_brick_level_5",  "y": 270 },
+    "facing=north,drying_level=5": { "model": "self_sustainable:block/unfired_brick_level_5", "y": 180 },
+    "facing=south,drying_level=5": { "model": "self_sustainable:block/unfired_brick_level_5" },
+    "facing=west,drying_level=5": { "model": "self_sustainable:block/unfired_brick_level_5", "y": 90 },
+
+    "facing=east,drying_level=6": { "model": "self_sustainable:block/unfired_brick_level_6",  "y": 270 },
+    "facing=north,drying_level=6": { "model": "self_sustainable:block/unfired_brick_level_6", "y": 180 },
+    "facing=south,drying_level=6": { "model": "self_sustainable:block/unfired_brick_level_6" },
+    "facing=west,drying_level=6": { "model": "self_sustainable:block/unfired_brick_level_6", "y": 90 },
+
+    "facing=east,drying_level=7": { "model": "self_sustainable:block/unfired_brick_level_7",  "y": 270 },
+    "facing=north,drying_level=7": { "model": "self_sustainable:block/unfired_brick_level_7", "y": 180 },
+    "facing=south,drying_level=7": { "model": "self_sustainable:block/unfired_brick_level_7" },
+    "facing=west,drying_level=7": { "model": "self_sustainable:block/unfired_brick_level_7", "y": 90 }
+
+
+  }
+}

@@ -15,22 +15,36 @@ public class ModBlockEntities {
     public static BlockEntityType<BrickOvenBE> OVEN_BRICK;
     public static BlockEntityType<SmokerOvenBE> SMOKER_BRICK;
     public static BlockEntityType<VariableCampfireBE> CAMPFIRE;
+    public static BlockEntityType<UnfiredBrickBE> BRICK_UNFIRED;
 
     // public static BlockEntityType<TorchBE> TORCH;
 
     public static void registerBlockEntities()
     {
-        OVEN_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
-                "oven_brick"), BlockEntityType.Builder.create(BrickOvenBE::new,
-                ModBlocks.OVEN_BRICK).build(null));
+        OVEN_BRICK = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                Identifier.of(SelfSustainableMod.MOD_ID, "oven_brick"),
+                BlockEntityType.Builder.create(BrickOvenBE::new, ModBlocks.OVEN_BRICK).build(null)
+        );
 
-        SMOKER_BRICK = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
-                "smoker_brick"), BlockEntityType.Builder.create(SmokerOvenBE::new,
-                ModBlocks.SMOKER_BRICK).build(null));
+        SMOKER_BRICK = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                Identifier.of(SelfSustainableMod.MOD_ID, "smoker_brick"),
+                BlockEntityType.Builder.create(SmokerOvenBE::new,
+                ModBlocks.SMOKER_BRICK).build(null)
+        );
 
-        CAMPFIRE = Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(SelfSustainableMod.MOD_ID,
-                "campfire"), BlockEntityType.Builder.create(VariableCampfireBE::new,
-                Blocks.CAMPFIRE).build(null));
+        CAMPFIRE = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                Identifier.of(SelfSustainableMod.MOD_ID, "campfire"),
+                BlockEntityType.Builder.create(VariableCampfireBE::new, Blocks.CAMPFIRE).build(null)
+        );
+
+        BRICK_UNFIRED = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                Identifier.of(SelfSustainableMod.MOD_ID, "brick_unfired"),
+                BlockEntityType.Builder.create(UnfiredBrickBE::new, ModBlocks.BRICK_UNFIRED).build()
+        );
 
 
             /**

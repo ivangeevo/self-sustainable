@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.datagen;
 
+import btwr.core.item.BTWR_Items;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
@@ -35,8 +36,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
     }
 
     @Override
-    public void generate(RecipeExporter exporter)
-    {
+    public void generate(RecipeExporter exporter) {
         this.generateVanillaRecipesOverride(exporter);
         this.generateModRecipes(exporter);
     }
@@ -104,10 +104,11 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
         // TODO: remove after Brick Ovens are added
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.FURNACE)
-                .input('#', BTWRConventionalTags.Items.COBBLESTONE_CRAFTING_MATERIALS)
-                .pattern("##")
-                .pattern("##")
-                .criterion("has_cobblestone_material", conditionsFromTag(BTWRConventionalTags.Items.COBBLESTONE_CRAFTING_MATERIALS))
+                .input('#', Items.BRICK)
+                .pattern("###")
+                .pattern("# #")
+                .pattern("###")
+                .criterion("has_brick", conditionsFromItem(Items.BRICK))
                 .offerTo(exporter, Identifier.ofVanilla("furnace"));
 
         // Shaped Recipes
@@ -164,6 +165,12 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .input(BTWRConventionalTags.Items.STRING_TOOL_MATERIALS)
                 .criterion("has_string", RecipeProvider.conditionsFromItem(Items.STRING))
                 .offerTo(exporter);
+
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.BRICK_UNFIRED)
+                .input(Items.CLAY_BALL)
+                .criterion("has_clay_ball", conditionsFromItem(Items.CLAY_BALL))
+                .offerTo(exporter);
+
 
     }
 

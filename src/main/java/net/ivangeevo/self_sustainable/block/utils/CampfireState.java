@@ -2,8 +2,7 @@ package net.ivangeevo.self_sustainable.block.utils;
 
 import net.minecraft.util.StringIdentifiable;
 
-public enum CampfireState implements StringIdentifiable
-{
+public enum CampfireState implements StringIdentifiable {
     NORMAL("normal"),
     BURNED_OUT("burned_out"),
     SMOULDERING("smouldering");

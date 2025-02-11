@@ -28,6 +28,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemActionResult;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -47,8 +48,7 @@ import java.util.Optional;
 
 import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
 
-// TODO: Make campfire drop it's cooked stack (stored cooked item) when broken
-// TODO: Make campfire drop itself normally when mined when it hasn't been lit, instead of sticks
+// TODO: Make campfire spread fire to neighbouring campfires and also to set fire around like it does in BTW
 @Mixin(CampfireBlock.class)
 public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, IVariableCampfireBlock
 {
@@ -82,13 +82,14 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                         .with(LIT, false)
                         .with(FIRE_LEVEL, 0)
                         .with(FUEL_STATE, CampfireState.NORMAL)
-                        .with(HAS_SPIT, false));
+                        .with(HAS_SPIT, false)
+        );
     }
 
     @Inject(method = "createBlockEntity", at = @At("HEAD"), cancellable = true)
     private void injectedBE(BlockPos pos, BlockState state, CallbackInfoReturnable<BlockEntity> cir) {
         if (state.isOf(Blocks.CAMPFIRE)) {
-            cir.setReturnValue( new VariableCampfireBE(pos, state) );
+            cir.setReturnValue(new VariableCampfireBE(pos, state));
         }
     }
 
@@ -102,13 +103,26 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                         .with(WATERLOGGED, bl)
                         .with(SIGNAL_FIRE, this.isSignalFireBaseBlock(worldAccess.getBlockState(blockPos.down())))
                         .with(FIRE_LEVEL, 0)
-                        .with(FACING, context.getHorizontalPlayerFacing()));
+                        .with(FACING, context.getHorizontalPlayerFacing())
+        );
     }
 
     @Inject(method = "appendProperties", at = @At("HEAD"), cancellable = true)
     private void addedCustomProperties(StateManager.Builder<Block, BlockState> builder, CallbackInfo ci) {
         managerInstance.appendCustomProperties(builder);
         ci.cancel();
+    }
+
+    @Inject(method = "onStateReplaced", at = @At("HEAD"))
+    private void onOnStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved, CallbackInfo ci) {
+        if (state.isOf(newState.getBlock())) {
+            return;
+        }
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof VariableCampfireBE) {
+            ItemScatterer.spawn(world, pos, ((VariableCampfireBE)blockEntity).getItemsBeingCooked());
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     // Change LIT for FIRE_LEVEL here too.

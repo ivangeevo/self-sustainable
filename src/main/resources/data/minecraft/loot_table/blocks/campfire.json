@@ -6,35 +6,8 @@
       "bonus_rolls": 0,
       "entries": [
         {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "name": "minecraft:stick",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
-            },
-            {
-              "type": "minecraft:item",
-              "name": "minecraft:stick",
-              "conditions": [
-                {
-                  "condition": "minecraft:block_state_property",
-                  "block": "minecraft:campfire",
-                  "properties": {
-                    "has_spit": "true"
-                  }
-                }
-              ]
-            }
-          ],
+          "type": "minecraft:item",
+          "name": "minecraft:campfire",
           "conditions": [
             {
               "condition": "minecraft:block_state_property",
@@ -42,11 +15,38 @@
               "properties": {
                 "fuel_state": "normal"
               }
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "minecraft:campfire",
+              "properties": {
+                "fire_level": "0"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:stick",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "minecraft:campfire",
+              "properties": {
+                "has_spit": "true"
+              }
             }
           ]
         }
       ]
     }
   ],
+  "functions": [],
   "random_sequence": "minecraft:blocks/campfire"
 }

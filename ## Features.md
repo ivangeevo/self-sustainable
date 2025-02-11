@@ -12,6 +12,11 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 
 ---
 
+### 🧱 Bricks Overhaul
+- **Bricks now must be sun-dried** ☀️ or cooked in a furnace(after acquiring one)
+
+---
+
 ### 🍖 Food changes
 
 - **Saturation changes** 🍖 – All food items now provide **less hunger and no saturation**.
@@ -40,6 +45,8 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 - **Campfire requires fuel** 🔥 – Now works like a **mini-furnace** and can **only cook one food item at a time**.
 - **New Campfire Recipe** – Crafted in a **2x2** pattern, making it easier to craft but requiring a **firestarter** to ignite.
 
+---
+
 ## ♨️ Furnace Overhaul
 - **One slot cooking** - You can cook only a single item per furnace/smoker.
 - **Fuel slot overhaul** - You can have only 1 inserted fuel item, besides what is already burning.
@@ -47,8 +54,10 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 
 ---
 
-## ️🧱 Burn Time Adjustments
+###  ️🌲🔥 Burn Time Adjustments
 - Logs are now the primary fuel source and many fuel item times have been changed.
+
+---
 
 ### 🏚️ World Generation & Structure Changes
 - **Villages now spawn only Zombie Villagers** 🧟.

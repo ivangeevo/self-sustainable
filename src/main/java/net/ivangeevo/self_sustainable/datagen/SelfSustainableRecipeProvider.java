@@ -104,11 +104,11 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
         // TODO: remove after Brick Ovens are added
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Blocks.FURNACE)
-                .input('#', Items.BRICK)
+                .input('#', Items.BRICKS)
                 .pattern("###")
                 .pattern("# #")
                 .pattern("###")
-                .criterion("has_brick", conditionsFromItem(Items.BRICK))
+                .criterion("has_bricks", conditionsFromItem(Items.BRICKS))
                 .offerTo(exporter, Identifier.ofVanilla("furnace"));
 
         // Shaped Recipes

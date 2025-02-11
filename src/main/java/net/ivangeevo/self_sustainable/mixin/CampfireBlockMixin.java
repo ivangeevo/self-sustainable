@@ -30,7 +30,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -45,11 +44,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
-import java.util.function.ToIntFunction;
 
 import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
 
-// TODO:HELP: Make campfire turning to embers and then burned out after it goes out.
+// TODO: Make campfire drop it's cooked stack (stored cooked item) when broken
+// TODO: Make campfire drop itself normally when mined when it hasn't been lit, instead of sticks
 @Mixin(CampfireBlock.class)
 public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, IVariableCampfireBlock
 {
@@ -77,8 +76,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void injectedDefaultState(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
-    {
+    private void injectedDefaultState(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci) {
         this.setDefaultState(
                 this.getStateManager().getDefaultState()
                         .with(LIT, false)
@@ -88,17 +86,14 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Inject(method = "createBlockEntity", at = @At("HEAD"), cancellable = true)
-    private void injectedBE(BlockPos pos, BlockState state, CallbackInfoReturnable<BlockEntity> cir)
-    {
-        if (state.isOf(Blocks.CAMPFIRE))
-        {
+    private void injectedBE(BlockPos pos, BlockState state, CallbackInfoReturnable<BlockEntity> cir) {
+        if (state.isOf(Blocks.CAMPFIRE)) {
             cir.setReturnValue( new VariableCampfireBE(pos, state) );
         }
     }
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
-    private void getPlacementState(ItemPlacementContext context, CallbackInfoReturnable<BlockState> cir)
-    {
+    private void getPlacementState(ItemPlacementContext context, CallbackInfoReturnable<BlockState> cir) {
         BlockPos blockPos;
         World worldAccess = context.getWorld();
         boolean bl = worldAccess.getFluidState(blockPos = context.getBlockPos()).getFluid() == Fluids.WATER;
@@ -111,8 +106,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Inject(method = "appendProperties", at = @At("HEAD"), cancellable = true)
-    private void addedCustomProperties(StateManager.Builder<Block, BlockState> builder, CallbackInfo ci)
-    {
+    private void addedCustomProperties(StateManager.Builder<Block, BlockState> builder, CallbackInfo ci) {
         managerInstance.appendCustomProperties(builder);
         ci.cancel();
     }
@@ -121,13 +115,10 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "tryFillWithFluid", at = @At("HEAD"), cancellable = true)
     private void injectedTryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState, CallbackInfoReturnable<Boolean> cir)
     {
-        if (!state.get(Properties.WATERLOGGED) && fluidState.getFluid() == Fluids.WATER)
-        {
+        if (!state.get(Properties.WATERLOGGED) && fluidState.getFluid() == Fluids.WATER) {
             int fl = state.get(FIRE_LEVEL);
-            if (fl > 0)
-            {
-                if (!world.isClient())
-                {
+            if (fl > 0) {
+                if (!world.isClient()) {
                     world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0f, 1.0f);
                 }
 
@@ -148,7 +139,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     private void injectedOnProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile, CallbackInfo ci)
     {
         BlockPos blockPos = hit.getBlockPos();
-        if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, blockPos) && state.get(FIRE_LEVEL) < 1 && !state.get(WATERLOGGED)) {
+        if (!world.isClient && projectile.isOnFire() &&
+                projectile.canModifyAt(world, blockPos) && state.get(FIRE_LEVEL) < 1 && !state.get(WATERLOGGED))
+        {
             world.setBlockState(blockPos, state.with(FIRE_LEVEL, 1), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
         }
     }
@@ -188,7 +181,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
 
     // Change LIT for FIRE LEVEL greater than 1 when checking to damage entities.
-
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     private void injectedOnEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci)
     {
@@ -390,11 +382,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
 
     @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
-    {
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
         Optional<NetherPortal> optional;
-        if (oldState.isOf(state.getBlock()))
-        {
+        if (oldState.isOf(state.getBlock())) {
             return;
         }
 
@@ -407,8 +397,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         }
          **/
 
-        if (!state.canPlaceAt(world, pos))
-        {
+        if (!state.canPlaceAt(world, pos)) {
             world.removeBlock(pos, false);
         }
     }

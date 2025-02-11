@@ -34,6 +34,15 @@
                 }
               ]
             }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "minecraft:campfire",
+              "properties": {
+                "fuel_state": "normal"
+              }
+            }
           ]
         }
       ]

@@ -51,13 +51,10 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
         ItemStack heldStack = player.getStackInHand(hand); // Get the heldStack in the specified hand
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof VariableCampfireBE campfireBE)
-        {
+        if (blockEntity instanceof VariableCampfireBE campfireBE) {
 
-            if (heldStack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0)
-            {
-                if (!world.isClient)
-                {
+            if (heldStack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0) {
+                if (!world.isClient) {
                     campfireBE.changeFireLevel(world, 0);
                 }
 
@@ -69,8 +66,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
             Optional<RecipeEntry<CampfireCookingRecipe>> optional;
 
             // Handle stick input
-            if (!getHasSpit(world, pos))
-            {
+            if (!getHasSpit(world, pos)) {
                 if (heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT))
                 {
                     setHasSpit(world, state, pos, true);
@@ -78,9 +74,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
 
                     return ActionResult.SUCCESS;
                 }
-            }
-            else
-            {
+            } else {
 
                 Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
 
@@ -89,24 +83,20 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                         // Allow retrieval if hand is empty or if the held item is neither ignitable nor fuel
                         campfireBE.retrieveItem(world, campfireBE, player);
                         playGetItemSound(world, pos, player);
+
                         return ActionResult.SUCCESS;
                     }
                 }
 
 
-                if (heldStack.isEmpty() && getCookStack(campfireBE).isEmpty())
-                {
+                if (heldStack.isEmpty() && getCookStack(campfireBE).isEmpty()) {
                     setHasSpit(world, state, pos, false);
                     player.giveItemStack(new ItemStack(Items.STICK));
                     playGetItemSound(world, pos, player);
 
                     return ActionResult.SUCCESS;
-                }
-                else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent())
-                {
-                    if (getCookStack(campfireBE).isEmpty())
-                    {
-
+                } else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent()) {
+                    if (getCookStack(campfireBE).isEmpty()) {
                         campfireBE.addItem(player,
                                 player.getAbilities().creativeMode
                                         ? heldStack.copy()
@@ -117,33 +107,26 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                 }
             }
 
-            if (state.get(FIRE_LEVEL) > 0 || getFuelState(world, pos) == CampfireState.SMOULDERING)
-            {
+            if (state.get(FIRE_LEVEL) > 0 || getFuelState(world, pos) == CampfireState.SMOULDERING) {
                 int itemBurnTime = getItemFuelTime(heldStack);
 
-                if ( heldStack.getItem().getCanBeFedDirectlyIntoCampfire(heldStack) )
-                {
-                    if ( !world.isClient )
-                    {
+                if (heldStack.getItem().getCanBeFedDirectlyIntoCampfire(heldStack)) {
+                    if ( !world.isClient ) {
                         Ignitable.playLitFX(world, pos);
                         campfireBE.addBurnTime(state, itemBurnTime);
                     }
-
                     heldStack.decrement(1);
 
                     return ActionResult.SUCCESS;
                 }
             }
-
-
         }
 
         return ActionResult.PASS;
     }
 
 
-    private boolean isIgnitableItem(ItemStack stack)
-    {
+    private boolean isIgnitableItem(ItemStack stack) {
         return stack.isIn(ModTags.Items.DIRECT_IGNITERS)
                 || stack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)
                 || stack.getItem() == Items.FLINT_AND_STEEL;
@@ -158,8 +141,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
         return AbstractFurnaceBlockEntity.createFuelTimeMap().getOrDefault(item, 0);
     }
 
-    private CampfireState getFuelState(WorldAccess blockAccess, BlockPos pos)
-    {
+    private CampfireState getFuelState(WorldAccess blockAccess, BlockPos pos) {
         return getFuelState(blockAccess.getBlockState(pos));
     }
 
@@ -168,43 +150,32 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
         return state.get(FUEL_STATE);
     }
 
-
-
     private ItemStack getCookStack(VariableCampfireBE campfireBE)
     {
         return campfireBE.getItemsBeingCooked().get(0);
     }
 
-
-    public VoxelShape setCustomShapes(BlockState state)
-    {
-        if (!state.get(HAS_SPIT))
-        {
+    public VoxelShape setCustomShapes(BlockState state) {
+        if (!state.get(HAS_SPIT)) {
             return SHAPE;
-        }
-        else
-        {
+        } else {
             return SHAPE_WITH_SPIT;
         }
     }
 
-    public void appendCustomProperties(StateManager.Builder<Block, BlockState> builder)
-    {
+    public void appendCustomProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(LIT, FUEL_STATE, FIRE_LEVEL, HAS_SPIT, SIGNAL_FIRE, WATERLOGGED, FACING);
     }
 
-    public boolean getHasSpit(WorldAccess blockAccess, BlockPos pos)
-    {
+    public boolean getHasSpit(WorldAccess blockAccess, BlockPos pos) {
         return blockAccess.getBlockState(pos).get(HAS_SPIT);
     }
 
-    public boolean setHasSpit(World world, BlockState state, BlockPos pos, boolean bHasSpit)
-    {
+    public boolean setHasSpit(World world, BlockState state, BlockPos pos, boolean bHasSpit) {
        return !world.isClient() && world.setBlockState(pos, state.with(HAS_SPIT, bHasSpit));
     }
 
-    private void playGetItemSound(World world, BlockPos pos, PlayerEntity player)
-    {
+    private void playGetItemSound(World world, BlockPos pos, PlayerEntity player) {
         world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.2F,
                 ( ( player.getRandom().nextFloat() - player.getRandom().nextFloat() ) * 0.7F + 1F ) * 2F);
     }

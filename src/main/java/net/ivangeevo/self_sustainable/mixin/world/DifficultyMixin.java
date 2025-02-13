@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.world;
 
 import net.ivangeevo.self_sustainable.world.interfaces.DifficultyAdded;
 import net.minecraft.world.Difficulty;

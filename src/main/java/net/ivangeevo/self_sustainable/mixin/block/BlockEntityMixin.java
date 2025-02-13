@@ -1,11 +1,7 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.block;
 
-import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin

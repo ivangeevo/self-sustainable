@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.block;
 
 import net.minecraft.block.CakeBlock;
 import org.spongepowered.asm.mixin.Mixin;

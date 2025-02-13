@@ -29,13 +29,15 @@ public class ModTags {
 
         public static final TagKey<Item> OVEN_COOKABLE = createTag("oven_cookable");
 
+        // Items that can start a fire when used on a block
         public static final TagKey<Item> CAN_START_FIRE_ON_USE = createTag("can_start_fire_on_use");
 
-        public static final TagKey<Item> TORCHES_CAN_LIGHT_UP = createTag("torches_can_light_up");
+        // Items that can be set on fire on use on a block
+        public static final TagKey<Item> CAN_BE_SET_ON_FIRE_ON_USE = createTag("can_be_set_on_fire_on_use");
 
+        // Items that can extinguish torches on use on a block
         public static final TagKey<Item> EXTINGUISH_TORCHES_ON_USE = createTag("extinguish_torches_on_use");
 
-        public static final TagKey<Item> CAN_BE_SET_ON_FIRE_ON_USE = createTag("can_be_set_on_fire_on_use");
 
 
         /** Items that can instantly start a fire on use(right click). **/

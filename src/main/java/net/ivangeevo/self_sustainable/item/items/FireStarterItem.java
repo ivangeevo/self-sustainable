@@ -71,8 +71,7 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
     public abstract boolean checkChanceOfStart(ItemStack stack, Random random);
 
     @Override
-    public void performUseEffects(ItemUsageContext context)
-    {
+    public void performUseEffects(ItemUsageContext context) {
     }
 
     @Override

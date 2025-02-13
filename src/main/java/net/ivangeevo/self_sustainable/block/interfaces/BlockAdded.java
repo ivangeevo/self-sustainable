@@ -1,6 +1,5 @@
 package net.ivangeevo.self_sustainable.block.interfaces;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;

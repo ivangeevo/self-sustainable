@@ -1,9 +1,7 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.block;
 
-import com.terraformersmc.modmenu.util.mod.Mod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
-import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -56,9 +54,9 @@ public abstract class BlockItemMixin extends Item implements Ignitable
      **/
 
 
+    // TODO: Find a way to make this less hardcoded.
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
-    private void injectedOnUse(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir)
-    {
+    private void injectedOnUse(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
         World world = context.getWorld();
         PlayerEntity player = context.getPlayer();
         BlockPos pos = context.getBlockPos();
@@ -68,17 +66,14 @@ public abstract class BlockItemMixin extends Item implements Ignitable
 
         ItemStack heldStack = context.getStack();
 
-        if (heldStack.isIn(ModTags.Items.CAN_START_FIRE_ON_USE))
-        {
+        if (heldStack.isIn(ModTags.Items.CAN_START_FIRE_ON_USE)) {
 
             // Check if the block at the position is a campfire or oven and try lighting up.
-            if (block == Blocks.CAMPFIRE
-                    || (block == ModBlocks.OVEN_BRICK && heldStack.getItem() != ModBlocks.OVEN_BRICK.asItem())) {
+            if (block == Blocks.CAMPFIRE || (block == ModBlocks.OVEN_BRICK && heldStack.getItem() != ModBlocks.OVEN_BRICK.asItem()) || block == ModBlocks.TORCH_UNLIT || block == ModBlocks.WALL_TORCH_UNLIT) {
                 if (world.canPlayerModifyAt(player, pos)) {
                     if (!world.isClient) {
                         attemptToLightBlock(context.getStack(), world, pos, context.getSide());
                     }
-
                     cir.setReturnValue(ActionResult.SUCCESS);
                 } else {
                     cir.setReturnValue(ActionResult.FAIL);
@@ -96,12 +91,10 @@ public abstract class BlockItemMixin extends Item implements Ignitable
     }
 
     @Override
-    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing)
-    {
+    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if ( targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos) )
-        {
+        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos)) {
             return targetBlock.setOnFireDirectly(world, pos);
         }
 

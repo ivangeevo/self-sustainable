@@ -1,7 +1,8 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.entity;
 
 import com.mojang.authlib.GameProfile;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
+import net.ivangeevo.self_sustainable.item.items.TorchItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -14,37 +15,33 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Random;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntity
-{
+public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
 
-
     @Unique private static Random random = new Random();
 
-/**
-    //@Inject(at = @At("TAIL"), method = "tick")
+    @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
-        if ( !this.getWorld().isClient)
-        {
+        if (!this.getWorld().isClient) {
             ServerPlayerEntity player = ((ServerPlayerEntity) (Object) this);
 
             PlayerInventory inventory = player.getInventory();
 
-            for (int i = 0; i < inventory.offHand.size(); i++)
-            {
+            for (int i = 0; i < inventory.offHand.size(); i++) {
                 tickTorch(inventory.offHand.get(i), inventory, i, inventory.offHand);
             }
 
-            for (int i = 0; i < inventory.main.size(); i++)
-            {
+            for (int i = 0; i < inventory.main.size(); i++) {
                 tickTorch(inventory.main.get(i), inventory, i, inventory.main);
             }
 
@@ -54,8 +51,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
 
 
     @Unique
-    private void waterCheck(ServerPlayerEntity player, PlayerInventory inventory)
-    {
+    private void waterCheck(ServerPlayerEntity player, PlayerInventory inventory) {
         BlockPos pos = player.getBlockPos();
         boolean isRaining =  player.getWorld().hasRain(pos);
 
@@ -67,7 +63,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
             // Torches
             if (item instanceof TorchItem torchItem)
             {
-                boolean mainOrOffhand = (i == inventory.selectedSlot || inventory.offHand.get(0) == stack);
+                boolean mainOrOffhand = (i == inventory.selectedSlot || inventory.offHand.getFirst() == stack);
 
                 // Rain
                 rainTorch(i, torchItem, stack, inventory, player.getWorld(), pos);
@@ -96,41 +92,30 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
     }
 
     @Unique
-    private void rainTorch(int i, TorchItem torchItem, ItemStack stack, PlayerInventory inventory, World world, BlockPos pos)
-    {
-        if (torchItem.getTorchState() == TorchFireState.LIT)
-        {
+    private void rainTorch(int i, TorchItem torchItem, ItemStack stack, PlayerInventory inventory, World world, BlockPos pos) {
+        if (torchItem.getTorchState() == TorchFireState.LIT) {
             inventory.setStack(i, TorchItem.stateStack(stack, TorchFireState.SMOULDER));
             world.playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
-
-        }
-        else if (torchItem.getTorchState() == TorchFireState.SMOULDER)
-        {
+        } else if (torchItem.getTorchState() == TorchFireState.SMOULDER) {
             inventory.setStack(i, TorchItem.stateStack(stack, TorchFireState.BURNED_OUT));
             world.playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
-
         }
     }
 
     @Unique
-    private void tickTorch(ItemStack stack, PlayerInventory inventory, int index, DefaultedList<ItemStack> list)
-    {
+    private void tickTorch(ItemStack stack, PlayerInventory inventory, int index, DefaultedList<ItemStack> list) {
         Item item = stack.getItem();
 
-        if (item instanceof TorchItem)
-        {
+        if (item instanceof TorchItem) {
             TorchFireState state = ((TorchItem) item).getTorchState();
 
-            if (state == TorchFireState.LIT)
-            {
+            if (state == TorchFireState.LIT) {
                 list.set(index, TorchItem.addFuel(stack, getWorld(),-1));
-            }
-            else if (state == TorchFireState.SMOULDER)
-            {
+            } else if (state == TorchFireState.SMOULDER) {
                 if (random.nextInt(3) == 0) list.set(index, TorchItem.addFuel(stack, getWorld(),-1));
             }
         }
     }
-     **/
+
 
 }

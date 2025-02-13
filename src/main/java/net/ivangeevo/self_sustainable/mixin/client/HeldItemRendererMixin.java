@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.client;
 
 import net.ivangeevo.self_sustainable.util.CustomUseAction;
 import net.minecraft.client.network.AbstractClientPlayerEntity;

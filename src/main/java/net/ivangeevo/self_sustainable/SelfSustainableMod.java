@@ -3,6 +3,7 @@ package net.ivangeevo.self_sustainable;
 import com.google.gson.Gson;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
+import net.ivangeevo.self_sustainable.block.utils.FuelBasedLootModifier;
 import net.ivangeevo.self_sustainable.config.SSSettings;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.event.ModLootTableReplacement;
@@ -41,13 +42,16 @@ public class SelfSustainableMod implements ModInitializer
     //public static final LootFunctionType TORCH_FUEL_FUNCTION = new LootFunctionType(new TorchFuelFunction.Serializer());
 
     @Override
-    public void onInitialize()
-    {
+    public void onInitialize() {
+
         LOGGER.info("Initializing Self Sustainable.");
         loadSettings();
         instance = this;
 
         ModLootTableReplacement.initialize();
+
+        // Torches dropping stacks with the correct damage for the fuel of the block
+        FuelBasedLootModifier.register();
 
         // Modifying foods to gave less hunger in general and 0 saturation.
         // Also some additional negative effects to certain ones.

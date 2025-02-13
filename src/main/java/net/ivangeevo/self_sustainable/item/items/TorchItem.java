@@ -27,7 +27,7 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
     TorchFireState torchState;
     ModTorchHandler handler;
     int maxFuel;
-    private static final int FUEL_TIME = 48000;
+    private static final int FUEL_TIME = 24000;
     public TorchItem(Block standingBlock, Block wallBlock, Item.Settings settings, TorchFireState torchState, int maxFuel, ModTorchHandler group) {
         super(standingBlock, wallBlock, settings, Direction.DOWN);
         this.torchState = torchState;
@@ -254,36 +254,47 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
         return itemStack;
     }
 
-    /**
-    public static ItemStack addFuel(ItemStack stack, World world, int amount)
-    {
+    public static ItemStack addFuel(ItemStack stack, World world, int amount) {
 
-        if (stack.getItem() instanceof  TorchItem && !world.isClient)
-        {
+        if (stack.getItem() instanceof TorchItem torchItem && !world.isClient) {
+            int fuel = FUEL_TIME;
+            if (torchItem.getDefaultStack().contains(ModComponents.TORCH_FUEL_COMPONENT)) {
+                stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
+            }
+
+            fuel += amount;
+
+            // if burned out
+            if (fuel <= 0) {
+                stack = stateStack(stack, TorchFireState.BURNED_OUT);
+            } else {
+                if (fuel > FUEL_TIME) {
+                    fuel = FUEL_TIME;
+                }
+                stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
+            }
+        }
+
+        return stack;
+        /**
+        if (stack.getItem() instanceof  TorchItem && !world.isClient) {
             NbtCompound nbt = stack.getNbt();
             int fuel = FUEL_TIME;
 
-            if (nbt != null)
-            {
+            if (nbt != null) {
                 fuel = nbt.getInt("Fuel");
-            }
-            else
-            {
+            } else {
                 nbt = new NbtCompound();
             }
 
             fuel += amount;
 
             // If burn out
-            if (fuel <= 0)
-            {
+            if (fuel <= 0) {
                 stack = stateStack(stack, TorchFireState.BURNED_OUT);
 
-            }
-            else
-            {
-                if (fuel > FUEL_TIME)
-                {
+            } else {
+                if (fuel > FUEL_TIME) {
                     fuel = FUEL_TIME;
                 }
 
@@ -293,6 +304,7 @@ public class TorchItem extends VerticallyAttachableBlockItem implements FabricIt
         }
 
         return stack;
+         **/
     }
-     **/
+
 }

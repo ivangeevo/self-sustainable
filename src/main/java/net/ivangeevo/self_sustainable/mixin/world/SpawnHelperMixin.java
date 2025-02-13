@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.world;
 
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.server.world.ServerWorld;

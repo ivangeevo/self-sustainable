@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.block;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.CampfireBlock;

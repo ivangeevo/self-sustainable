@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.entity;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.ivangeevo.self_sustainable.entity.interfaces.PlayerEntityAdded;

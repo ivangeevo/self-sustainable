@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.block;
 
 import net.minecraft.block.*;
 import net.minecraft.state.property.Properties;

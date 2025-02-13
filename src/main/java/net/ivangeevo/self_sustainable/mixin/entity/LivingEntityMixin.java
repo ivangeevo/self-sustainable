@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.entity;
 
 import net.ivangeevo.self_sustainable.entity.interfaces.LivingEntityAdded;
 import net.minecraft.entity.Entity;

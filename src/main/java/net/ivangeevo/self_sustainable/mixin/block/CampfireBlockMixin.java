@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.mixin;
+package net.ivangeevo.self_sustainable.mixin.block;
 
 import net.ivangeevo.self_sustainable.block.CampfireBlockMixinManager;
 import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;

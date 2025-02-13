@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Unique;
 
-public interface Ignitable
-{
+public interface Ignitable {
+
     BooleanProperty LIT = Properties.LIT;
 
     static void playLitFX(World world, BlockPos pos)

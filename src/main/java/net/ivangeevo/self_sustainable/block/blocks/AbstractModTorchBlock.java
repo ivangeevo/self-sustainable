@@ -1,6 +1,7 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
 import net.ivangeevo.self_sustainable.block.entity.TorchBE;
+import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
@@ -159,6 +161,7 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
             }
         }
 
+        /**
         if (fireState == TorchFireState.UNLIT) {
             if (tryUse(ModTags.Items.CAN_START_FIRE_ON_USE, stack, player, hand)) {
                 light(world, pos, state);
@@ -166,6 +169,7 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
                 return ActionResult.SUCCESS;
             }
         }
+         **/
 
         return ActionResult.PASS;
     }
@@ -255,5 +259,25 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         return AbstractTorchBlock.sideCoversSmallSquare(world, pos.down(), Direction.UP);
     }
 
+    @Override
+    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
+        return fireState == TorchFireState.UNLIT;
+    }
 
+    @Override
+    public boolean setOnFireDirectly(World world, BlockPos pos) {
+        if (this.getCanBeSetOnFireDirectly(world, pos)) {
+
+            if (!world.hasRain(pos)) {
+                changeTorch(world, pos, world.getBlockState(pos), TorchFireState.LIT);
+                Ignitable.playLitFX(world, pos);
+            } else {
+                Ignitable.playExtinguishSound(world, pos, false);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -1,12 +1,13 @@
 package net.ivangeevo.self_sustainable.util;
 
+import net.ivangeevo.self_sustainable.block.blocks.ModTorchBlock;
+import net.ivangeevo.self_sustainable.block.blocks.ModWallModTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.minecraft.block.Block;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-/**
 public class ModTorchHandler
 {
 
@@ -22,35 +23,28 @@ public class ModTorchHandler
     }
 
     public void addTorch(Block block) {
-        if (block instanceof ModTorchBlock standingTorch)
-        {
+        if (block instanceof ModTorchBlock standingTorch) {
             addStandingTorch(standingTorch);
-        }
-        else if (block instanceof ModWallModTorchBlock wallTorch)
-        {
+        } else if (block instanceof ModWallModTorchBlock wallTorch) {
             addWallTorch(wallTorch);
         }
     }
 
-    private void addStandingTorch(ModTorchBlock block)
-    {
+    private void addStandingTorch(ModTorchBlock block) {
         standingTorches.put(block.fireState, block);
         block.handler = this;
     }
 
-    private void addWallTorch(ModWallModTorchBlock block)
-    {
+    private void addWallTorch(ModWallModTorchBlock block) {
         wallTorches.put(block.fireState, block);
         block.handler = this;
     }
 
-    public ModTorchBlock getStandingTorch(TorchFireState state)
-    {
+    public ModTorchBlock getStandingTorch(TorchFireState state) {
         return standingTorches.get(state);
     }
-    public ModWallModTorchBlock getWallTorch(TorchFireState state)
-    {
+
+    public ModWallModTorchBlock getWallTorch(TorchFireState state) {
         return wallTorches.get(state);
     }
 }
-         **/

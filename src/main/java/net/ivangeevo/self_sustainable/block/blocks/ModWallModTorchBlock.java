@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
@@ -17,32 +18,23 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.IntSupplier;
-
-/**
-public class ModWallModTorchBlock extends AbstractModTorchBlock
-{
+public class ModWallModTorchBlock extends AbstractModTorchBlock {
 
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
-    public ModWallModTorchBlock(Settings settings, ParticleEffect particle, TorchFireState fireState, IntSupplier maxFuel) {
-        super(settings, particle, fireState, maxFuel);
+    public ModWallModTorchBlock(Settings settings, ParticleEffect particle, TorchFireState fireState) {
+        super(settings, particle, fireState);
         setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
     }
 
-    // region Overridden methods for TorchBlock since I can't extend 2 classes
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return Blocks.WALL_TORCH.getOutlineShape(state, world, pos, context);
-    }
-
-    public static VoxelShape getBoundingShape(BlockState state) {
         return WallTorchBlock.getBoundingShape(state);
     }
 
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return Blocks.WALL_TORCH.canPlaceAt(state, world, pos);
+        return WallTorchBlock.canPlaceAt(world, pos, state.get(FACING));
     }
 
     @Override
@@ -61,19 +53,21 @@ public class ModWallModTorchBlock extends AbstractModTorchBlock
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        return Blocks.WALL_TORCH.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        if (direction.getOpposite() == state.get(FACING) && !state.canPlaceAt(world, pos)) {
+            return Blocks.AIR.getDefaultState();
+        }
+        return state;
     }
 
     @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {
-        return Blocks.WALL_TORCH.rotate(state, rotation);
+        return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, BlockMirror mirror) {
-        return Blocks.WALL_TORCH.mirror(state, mirror);
+        return state.rotate(mirror.getRotation(state.get(FACING)));
     }
-    // endregion
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
@@ -81,8 +75,8 @@ public class ModWallModTorchBlock extends AbstractModTorchBlock
     }
 
     @Override
-    public void smother(World world, BlockPos pos, BlockState state) {
-        super.smother(world, pos, state);
+    public void doSmoulder(World world, BlockPos pos, BlockState state) {
+        super.doSmoulder(world, pos, state);
 
         ModWallModTorchBlock newTorch;
         newTorch = handler.getWallTorch(TorchFireState.SMOULDER);
@@ -104,15 +98,17 @@ public class ModWallModTorchBlock extends AbstractModTorchBlock
     public void light(World world, BlockPos pos, BlockState state) {
         super.light(world, pos, state);
 
-        ModWallModTorchBlock newTorch;
-        newTorch = handler.getWallTorch(TorchFireState.LIT);
-
+        ModWallModTorchBlock newTorch = handler.getWallTorch(TorchFireState.LIT);
         world.setBlockState(pos, newTorch.getDefaultState().with(HorizontalFacingBlock.FACING, state.get(FACING)));
     }
 
     @Override
-    public boolean isWall() {
+    public boolean isWallTorch() {
         return true;
     }
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return null;
+    }
 }
- **/

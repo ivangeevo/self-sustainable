@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.item;
 
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
+import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.items.*;
 import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.Item;
@@ -40,10 +41,10 @@ public class ModItems
     public static final Item WICKER_WEAVING = registerItem("wicker_weaving",
             new WickerWeavingItem(new Item.Settings().maxCount(1)));
 
-    //public static final Item TORCH_UNLIT = registerItem("torch_unlit", new TorchItem(ModBlocks.TORCH_UNLIT, ModBlocks.WALL_TORCH_UNLIT, new FabricItemSettings(), TorchFireState.UNLIT,48000, ModBlocks.torches));
-    //public static final Item TORCH_LIT = registerItem("torch_lit",new TorchItem(ModBlocks.TORCH_LIT, ModBlocks.WALL_TORCH_LIT, new FabricItemSettings(), TorchFireState.LIT,48000, ModBlocks.torches));
-    //public static final Item TORCH_SMOULDER = registerItem("torch_smoulder",new TorchItem(ModBlocks.TORCH_SMOULDER, ModBlocks.WALL_TORCH_SMOULDER, new FabricItemSettings(), TorchFireState.SMOULDER,48000, ModBlocks.torches));
-    //public static final Item TORCH_BURNED_OUT = registerItem("torch_burned_out",new TorchItem(ModBlocks.TORCH_BURNED_OUT, ModBlocks.WALL_TORCH_BURNED_OUT, new FabricItemSettings(), TorchFireState.BURNED_OUT,48000, ModBlocks.torches));
+    public static final Item TORCH_UNLIT = registerItem("torch_unlit", new TorchItem(ModBlocks.TORCH_UNLIT, ModBlocks.WALL_TORCH_UNLIT, new Item.Settings(), TorchFireState.UNLIT,48000, ModBlocks.torches));
+    public static final Item TORCH_LIT = registerItem("torch_lit",new TorchItem(ModBlocks.TORCH_LIT, ModBlocks.WALL_TORCH_LIT, new Item.Settings(), TorchFireState.LIT,48000, ModBlocks.torches));
+    public static final Item TORCH_SMOULDER = registerItem("torch_smoulder",new TorchItem(ModBlocks.TORCH_SMOULDER, ModBlocks.WALL_TORCH_SMOULDER, new Item.Settings(), TorchFireState.SMOULDER,48000, ModBlocks.torches));
+    public static final Item TORCH_BURNED_OUT = registerItem("torch_burned_out",new TorchItem(ModBlocks.TORCH_BURNED_OUT, ModBlocks.WALL_TORCH_BURNED_OUT, new Item.Settings(), TorchFireState.BURNED_OUT,48000, ModBlocks.torches));
 
 
 

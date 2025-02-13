@@ -4,16 +4,11 @@ import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
-import net.ivangeevo.self_sustainable.mixin.CampfireBlockMixin;
-import net.ivangeevo.self_sustainable.tag.BTWRConventionalTags;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.CampfireBlockEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,9 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
@@ -72,11 +65,9 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
 
             // Handle stick input
             if (!getHasSpit(world, pos)) {
-                if (heldStack.isIn(BTWRConventionalTags.Items.SPIT_CAMPFIRE_ITEMS) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT))
-                {
+                if (heldStack.isOf(Items.STICK) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT)) {
                     setHasSpit(world, state, pos, true);
                     heldStack.decrement(1); // Decrease the heldStack count
-
                     return ActionResult.SUCCESS;
                 }
             } else {
@@ -88,7 +79,6 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                         // Allow retrieval if hand is empty or if the held item is neither ignitable nor fuel
                         campfireBE.retrieveItem(world, campfireBE, player);
                         playGetItemSound(world, pos, player);
-
                         return ActionResult.SUCCESS;
                     }
                 }
@@ -98,15 +88,11 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                     setHasSpit(world, state, pos, false);
                     player.giveItemStack(new ItemStack(Items.STICK));
                     playGetItemSound(world, pos, player);
-
                     return ActionResult.SUCCESS;
                 } else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent()) {
                     if (getCookStack(campfireBE).isEmpty()) {
-                        campfireBE.addItem(player,
-                                player.getAbilities().creativeMode
-                                        ? heldStack.copy()
-                                        : heldStack, optional.get().value().getCookingTime());
-
+                        campfireBE.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack,
+                                optional.get().value().getCookingTime());
                         return ActionResult.SUCCESS;
                     }
                 }

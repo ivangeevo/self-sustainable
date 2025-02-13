@@ -26,7 +26,6 @@ public class SelfSustainableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BRICK_UNFIRED, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BRICK, RenderLayer.getCutout());
 
-        /**
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TORCH_UNLIT, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TORCH_LIT, RenderLayer.getCutout());
 
@@ -38,7 +37,7 @@ public class SelfSustainableClient implements ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TORCH_BURNED_OUT, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WALL_TORCH_BURNED_OUT, RenderLayer.getCutout());
-        **/
+
 
 
     }

@@ -22,22 +22,17 @@ public class ModItemGroup {
                         entries.add(ModItems.FIRESTARTER_BOW);
                         entries.add(ModItems.BRICK_UNFIRED);
 
-
                         // Blocks
-                        entries.add(ModBlocks.OVEN_BRICK);
-
+                        entries.add(ModItems.TORCH_UNLIT);
+                        entries.add(ModItems.TORCH_LIT);
+                        entries.add(ModItems.TORCH_SMOULDER);
+                        entries.add(ModItems.TORCH_BURNED_OUT);
 
                         // TO ADD:
-
                         //entries.add(ModBlocks.SMOKER_BRICK);
-
-                        //entries.add(ModItems.TORCH_UNLIT);
-                        //entries.add(ModItems.TORCH_LIT);
-                        //entries.add(ModItems.TORCH_SMOULDER);
-                        //entries.add(ModItems.TORCH_BURNED_OUT);
+                        //entries.add(ModBlocks.OVEN_BRICK);
                         //entries.add(ModItems.WICKER_PANE);
                         //entries.add(ModItems.KNITTING_NEEDLES);
-
 
                     }).build());
 

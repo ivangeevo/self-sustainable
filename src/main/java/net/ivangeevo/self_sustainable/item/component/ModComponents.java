@@ -19,12 +19,17 @@ public class ModComponents {
             .codec(Codec.FLOAT.xmap(Float::valueOf, Float::floatValue))
             .build();
 
+    public static final ComponentType<Integer> TORCH_FUEL_COMPONENT = ComponentType.<Integer>builder()
+            .codec(Codec.INT)
+            .build();
+
 
 
     // Register method, to be called in the mod initialization
     public static void registerComponents() {
         register(Registries.DATA_COMPONENT_TYPE, LAST_USE_COMPONENT, "last_use_component");
         register(Registries.DATA_COMPONENT_TYPE, ACCUMULATED_CHANCE_COMPONENT, "accumulated_chance_component");
+        register(Registries.DATA_COMPONENT_TYPE, TORCH_FUEL_COMPONENT, "torch_fuel");
     }
 
     private static void register(Registry<ComponentType<?>> registryType, ComponentType<?> componentType, String stringName )

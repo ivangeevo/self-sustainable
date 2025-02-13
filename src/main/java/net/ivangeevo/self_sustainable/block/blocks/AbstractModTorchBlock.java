@@ -1,26 +1,63 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-/**
-public abstract class AbstractModTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock
-{
+import net.ivangeevo.self_sustainable.block.entity.TorchBE;
+import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
+import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
+import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
+import net.ivangeevo.self_sustainable.item.items.TorchItem;
+import net.ivangeevo.self_sustainable.tag.ModTags;
+import net.ivangeevo.self_sustainable.util.ModTorchHandler;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+
+public abstract class AbstractModTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock {
 
     public ParticleEffect particle;
-    public TorchFireState fireState;
-    public ModTorchHandler handler;
-    public IntSupplier maxFuel;
 
-    public AbstractModTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel, IntSupplier maxFuel)
-    {
+    public TorchFireState fireState;
+
+    public ModTorchHandler handler;
+
+    private static final int MAX_FUEL_AMOUNT = 24000;
+
+    protected static final VoxelShape SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return SHAPE;
+    }
+
+    public AbstractModTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel) {
         super(settings);
         this.particle = particle;
         this.fireState = fireLevel;
-        this.maxFuel = maxFuel;
     }
 
-    public void smother(World world, BlockPos pos, BlockState state)
-    {
-        if (!world.isClient)
-        {
+    public void doSmoulder(World world, BlockPos pos, BlockState state) {
+        if (!world.isClient) {
             world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
             displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
             displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
@@ -30,23 +67,19 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         }
     }
 
-    public void extinguish(World world, BlockPos pos, BlockState state)
-    {
-        if (!world.isClient)
-        {
+    public void extinguish(World world, BlockPos pos, BlockState state) {
+        if (!world.isClient) {
             world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
             displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
             displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
             displayParticle(ParticleTypes.SMOKE, state, world, pos);
             displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            changeTorch(world, pos, state, TorchFireState.UNLIT);
+            changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
         }
     }
 
-    public void burnOut(World world, BlockPos pos, BlockState state, boolean playSound)
-    {
-        if (!world.isClient)
-        {
+    public void burnOut(World world, BlockPos pos, BlockState state, boolean playSound) {
+        if (!world.isClient) {
             if (playSound) world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
             displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
             displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
@@ -56,10 +89,8 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         }
     }
 
-    public void light(World world, BlockPos pos, BlockState state)
-    {
-        if (!world.isClient)
-        {
+    public void light(World world, BlockPos pos, BlockState state) {
+        if (!world.isClient) {
             Ignitable.playLitFX(world, pos);
             displayParticle(ParticleTypes.LAVA, state, world, pos);
             displayParticle(ParticleTypes.FLAME, state, world, pos);
@@ -67,34 +98,28 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         }
     }
 
-    public abstract boolean isWall();
+    public abstract boolean isWallTorch();
 
     public TorchFireState getFireState()
     {
         return fireState;
     }
 
-    public void changeTorch(World world, BlockPos pos, BlockState curState, TorchFireState newType) {
+    public void changeTorch(World world, BlockPos pos, BlockState oldState, TorchFireState newType) {
         BlockState newState;
 
-        if (isWall())
-        {
-            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, curState.get(ModWallModTorchBlock.FACING));
-        }
-        else
-        {
+        if (isWallTorch()) {
+            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(ModWallModTorchBlock.FACING));
+        } else {
             newState = handler.getStandingTorch(newType).getDefaultState();
         }
 
-        int newFuel = 0;
-        if (world.getBlockEntity(pos) != null) newFuel = ((TorchBE) Objects.requireNonNull(world.getBlockEntity(pos))).getFuel();
         world.setBlockState(pos, newState);
-        if (world.getBlockEntity(pos) != null) ((TorchBE) Objects.requireNonNull(world.getBlockEntity(pos))).setFuel(newFuel);
+        if (world.getBlockEntity(pos) != null) ((TorchBE) Objects.requireNonNull(world.getBlockEntity(pos))).setFuel(0);
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new TorchBE(pos, state);
     }
 
@@ -104,16 +129,8 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-    {
-        return checkType(type, ModBlockEntities.TORCH, TorchBE::tick);
-    }
-
-    @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
-    {
-        if (fireState == TorchFireState.LIT || fireState == TorchFireState.SMOULDER)
-        {
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        if (fireState == TorchFireState.LIT || fireState == TorchFireState.SMOULDER) {
             displayParticle(ParticleTypes.SMOKE, state, world, pos);
         }
 
@@ -122,8 +139,9 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         }
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
+    @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        Hand hand = player.getActiveHand();
         ItemStack stack = player.getStackInHand(hand);
         boolean success = false;
 
@@ -135,14 +153,14 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
             }
 
             if (tryUse(ModTags.Items.EXTINGUISH_TORCHES_ON_USE, stack, player, hand)) {
-                smother(world, pos, state);
+                doSmoulder(world, pos, state);
                 player.swingHand(hand);
                 return ActionResult.SUCCESS;
             }
         }
 
-        if (fireState == TorchFireState.SMOULDER || fireState == TorchFireState.UNLIT) {
-            if (tryUse(ModTags.Items.EXTINGUISH_TORCHES_ON_USE, stack, player, hand)) {
+        if (fireState == TorchFireState.UNLIT) {
+            if (tryUse(ModTags.Items.CAN_START_FIRE_ON_USE, stack, player, hand)) {
                 light(world, pos, state);
                 player.swingHand(hand);
                 return ActionResult.SUCCESS;
@@ -151,6 +169,7 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
 
         return ActionResult.PASS;
     }
+
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
@@ -163,12 +182,13 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
             int fuel = TorchItem.getFuel(itemStack);
 
             if (fuel == 0) {
-                ((TorchBE) be).setFuel(48000);
+                ((TorchBE) be).setFuel(MAX_FUEL_AMOUNT);
             } else {
                 ((TorchBE) be).setFuel(fuel);
             }
         }
     }
+
     @Override
     public void outOfFuel(World world, BlockPos pos, BlockState state, boolean playSound) {
         burnOut(world, pos, state, playSound);
@@ -230,6 +250,10 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         displayParticle(particle, state, world, pos, 0f);
     }
 
+    @Override
+    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        return AbstractTorchBlock.sideCoversSmallSquare(world, pos.down(), Direction.UP);
+    }
+
 
 }
- **/

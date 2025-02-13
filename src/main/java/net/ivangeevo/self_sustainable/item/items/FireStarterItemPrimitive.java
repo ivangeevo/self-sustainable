@@ -94,18 +94,15 @@ public class FireStarterItemPrimitive extends FireStarterItem
     }
 
     @Override
-    public void performUseEffects(ItemUsageContext context)
-    {
+    public void performUseEffects(ItemUsageContext context) {
         PlayerEntity player = context.getPlayer();;
 
         assert player != null;
         player.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5f + 0.5f * (float)player.getRandom().nextInt(2),
                 (player.getRandom().nextFloat() * 0.25f) + 1.75f);
 
-        if (!player.getWorld().isClient())
-        {
-            for (int var3 = 0; var3 < 5; ++var3)
-            {
+        if (!player.getWorld().isClient()) {
+            for (int var3 = 0; var3 < 5; ++var3) {
                 Vec3d var4 = new Vec3d((player.getRandom().nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0);
 
                 var4 = var4.rotateX(-player.getPitch() * (float)Math.PI / 180.0f);

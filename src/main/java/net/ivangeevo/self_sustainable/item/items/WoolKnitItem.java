@@ -23,7 +23,6 @@ public class WoolKnitItem extends Item implements ItemColorProvider {
 
     }
 
-
     private static final Map<DyeColor, Integer> colorMap = new HashMap<>();
 
     static {

@@ -2,6 +2,6 @@
   "values": [
     "minecraft:torch",
     "minecraft:soul_torch",
-    "self_sustainable:torch_lit"
+    "self_sustainable:crude_torch_lit"
   ]
 }

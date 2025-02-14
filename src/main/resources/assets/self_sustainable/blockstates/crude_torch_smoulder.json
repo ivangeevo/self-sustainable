@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "self_sustainable:block/crude_torch_smoulder"
+    }
+  }
+}

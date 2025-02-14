@@ -4,6 +4,7 @@ import btwr.core.BTWRMod;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
+import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.minecraft.registry.RegistryWrapper;
 
@@ -25,13 +26,29 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
     }
 
     private void addBlockTranslations(TranslationBuilder tb) {
-        //tb.add();
+        /**
+        tb.add(ModBlocks.CRUDE_TORCH_UNLIT, "Unlit Crude Torch Block");
+        tb.add(ModBlocks.CRUDE_TORCH_LIT, "Lit Crude Torch Block");
+        tb.add(ModBlocks.CRUDE_TORCH_SMOULDER, "Smouldering Crude Torch Block");
+        tb.add(ModBlocks.CRUDE_TORCH_BURNED_OUT, "Burned Out Crude Torch Block");
+
+        tb.add(ModBlocks.CRUDE_WALL_TORCH_UNLIT, "Unlit Crude Wall Torch Block");
+        tb.add(ModBlocks.CRUDE_WALL_TORCH_LIT, "Lit Crude Wall Torch Block");
+        tb.add(ModBlocks.CRUDE_WALL_TORCH_SMOULDER, "Smouldering Crude Wall Torch Block");
+        tb.add(ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT, "Burned Out Crude Wall Torch Block");
+         **/
     }
 
     private void addItemTranslations(TranslationBuilder tb) {
         tb.add(ModItems.FIRESTARTER_STICKS, "Fire Plough");
         tb.add(ModItems.FIRESTARTER_BOW, "Bow Drill");
         tb.add(ModItems.BRICK_UNFIRED, "Wet Brick");
+
+        tb.add(ModItems.CRUDE_TORCH_UNLIT, "Unlit Crude Torch");
+        tb.add(ModItems.CRUDE_TORCH_LIT, "Lit Crude Torch");
+        tb.add(ModItems.CRUDE_TORCH_SMOULDER, "Smouldering Crude Torch");
+        tb.add(ModItems.CRUDE_TORCH_BURNED_OUT, "Burned Out Crude Torch");
+
     }
 
     private void addConfigTranslations(TranslationBuilder tb) {

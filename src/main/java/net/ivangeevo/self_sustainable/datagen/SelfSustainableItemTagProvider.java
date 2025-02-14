@@ -51,6 +51,6 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
         getOrCreateTagBuilder(ModTags.Items.DIRECT_IGNITERS)
                 .add(Items.TORCH)
                 .add(Items.SOUL_TORCH)
-                .add(ModItems.TORCH_LIT);
+                .add(ModItems.CRUDE_TORCH_LIT);
     }
 }

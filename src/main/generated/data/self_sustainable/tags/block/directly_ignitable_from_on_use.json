@@ -5,10 +5,10 @@
     "minecraft:campfire",
     "minecraft:soul_campfire",
     "minecraft:lava",
-    "self_sustainable:torch_lit",
-    "self_sustainable:wall_torch_lit",
-    "self_sustainable:torch_smoulder",
-    "self_sustainable:wall_torch_smoulder",
+    "self_sustainable:crude_torch_lit",
+    "self_sustainable:crude_wall_torch_lit",
+    "self_sustainable:crude_torch_smoulder",
+    "self_sustainable:crude_wall_torch_smoulder",
     "self_sustainable:oven_brick",
     "self_sustainable:smoker_brick"
   ]

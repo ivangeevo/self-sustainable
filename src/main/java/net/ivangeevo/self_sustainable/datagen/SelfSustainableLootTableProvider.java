@@ -20,12 +20,12 @@ public class SelfSustainableLootTableProvider extends FabricBlockLootTableProvid
     public void generate() {
         this.addDrop(ModBlocks.BRICK, drops(Items.BRICK));
         this.addDrop(ModBlocks.BRICK_UNFIRED, drops(Items.CLAY_BALL));
-        this.addDrop(ModBlocks.TORCH_UNLIT, drops(ModItems.TORCH_UNLIT));
-        this.addDrop(ModBlocks.TORCH_LIT, drops(ModItems.TORCH_LIT));
-        this.addDrop(ModBlocks.TORCH_SMOULDER, drops(ModItems.TORCH_SMOULDER));
-        this.addDrop(ModBlocks.WALL_TORCH_UNLIT, drops(ModItems.TORCH_UNLIT));
-        this.addDrop(ModBlocks.WALL_TORCH_LIT, drops(ModItems.TORCH_LIT));
-        this.addDrop(ModBlocks.WALL_TORCH_SMOULDER, drops(ModItems.TORCH_SMOULDER));
+        this.addDrop(ModBlocks.CRUDE_TORCH_UNLIT, drops(ModItems.CRUDE_TORCH_UNLIT));
+        this.addDrop(ModBlocks.CRUDE_TORCH_LIT, drops(ModItems.CRUDE_TORCH_LIT));
+        this.addDrop(ModBlocks.CRUDE_TORCH_SMOULDER, drops(ModItems.CRUDE_TORCH_SMOULDER));
+        this.addDrop(ModBlocks.CRUDE_WALL_TORCH_UNLIT, drops(ModItems.CRUDE_TORCH_UNLIT));
+        this.addDrop(ModBlocks.CRUDE_WALL_TORCH_LIT, drops(ModItems.CRUDE_TORCH_LIT));
+        this.addDrop(ModBlocks.CRUDE_WALL_TORCH_SMOULDER, drops(ModItems.CRUDE_TORCH_SMOULDER));
 
     }
 

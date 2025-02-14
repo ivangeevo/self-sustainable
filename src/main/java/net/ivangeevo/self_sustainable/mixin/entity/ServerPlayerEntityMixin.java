@@ -2,7 +2,7 @@ package net.ivangeevo.self_sustainable.mixin.entity;
 
 import com.mojang.authlib.GameProfile;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
-import net.ivangeevo.self_sustainable.item.items.TorchItem;
+import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -55,18 +55,18 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         BlockPos pos = player.getBlockPos();
         boolean isRaining =  player.getWorld().hasRain(pos);
 
-        for (int i = 0; i < inventory.size(); i++)
-        {
+        for (int i = 0; i < inventory.size(); i++) {
             ItemStack stack = inventory.getStack(i);
             Item item = stack.getItem();
 
             // Torches
-            if (item instanceof TorchItem torchItem)
-            {
+            if (item instanceof CrudeTorchItem torchItem) {
                 boolean mainOrOffhand = (i == inventory.selectedSlot || inventory.offHand.getFirst() == stack);
 
                 // Rain
-                rainTorch(i, torchItem, stack, inventory, player.getWorld(), pos);
+                if (isRaining && random.nextInt(200) == 0) {
+                    rainTorch(i, torchItem, stack, inventory, player.getWorld(), pos);
+                }
 
                 // Underwater
                 waterTorch(i, torchItem, stack, player, mainOrOffhand, pos);
@@ -76,15 +76,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
 
     @Unique
-    private void waterTorch(int i, TorchItem torchItem, ItemStack stack, ServerPlayerEntity player, boolean mainOrOffhand, BlockPos pos)
+    private void waterTorch(int i, CrudeTorchItem torchItem, ItemStack stack, ServerPlayerEntity player, boolean mainOrOffhand, BlockPos pos)
     {
-        if (player.isSubmergedInWater())
-        {
+        if (player.isSubmergedInWater()) {
             if (torchItem.getTorchState() == TorchFireState.LIT || torchItem.getTorchState() == TorchFireState.SMOULDER)
             {
-                if ( mainOrOffhand )
-                {
-                    player.getInventory().setStack(i, TorchItem.stateStack(stack, TorchFireState.UNLIT));
+                if ( mainOrOffhand ) {
+                    player.getInventory().setStack(i, CrudeTorchItem.stateStack(stack, TorchFireState.UNLIT));
                     player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
                 }
             }
@@ -92,12 +90,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     }
 
     @Unique
-    private void rainTorch(int i, TorchItem torchItem, ItemStack stack, PlayerInventory inventory, World world, BlockPos pos) {
+    private void rainTorch(int i, CrudeTorchItem torchItem, ItemStack stack, PlayerInventory inventory, World world, BlockPos pos) {
         if (torchItem.getTorchState() == TorchFireState.LIT) {
-            inventory.setStack(i, TorchItem.stateStack(stack, TorchFireState.SMOULDER));
-            world.playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
-        } else if (torchItem.getTorchState() == TorchFireState.SMOULDER) {
-            inventory.setStack(i, TorchItem.stateStack(stack, TorchFireState.BURNED_OUT));
+            inventory.setStack(i, CrudeTorchItem.stateStack(stack, TorchFireState.BURNED_OUT));
             world.playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
         }
     }
@@ -106,13 +101,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private void tickTorch(ItemStack stack, PlayerInventory inventory, int index, DefaultedList<ItemStack> list) {
         Item item = stack.getItem();
 
-        if (item instanceof TorchItem) {
-            TorchFireState state = ((TorchItem) item).getTorchState();
+        if (item instanceof CrudeTorchItem) {
+            TorchFireState state = ((CrudeTorchItem) item).getTorchState();
 
             if (state == TorchFireState.LIT) {
-                list.set(index, TorchItem.addFuel(stack, getWorld(),-1));
+                list.set(index, CrudeTorchItem.addFuel(stack, getWorld(),-1));
             } else if (state == TorchFireState.SMOULDER) {
-                if (random.nextInt(3) == 0) list.set(index, TorchItem.addFuel(stack, getWorld(),-1));
+                if (random.nextInt(3) == 0) list.set(index, CrudeTorchItem.addFuel(stack, getWorld(),-1));
             }
         }
     }

@@ -1,11 +1,10 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
 import net.ivangeevo.self_sustainable.block.entity.TorchBE;
-import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
-import net.ivangeevo.self_sustainable.item.items.TorchItem;
+import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.*;
@@ -111,7 +110,7 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         BlockState newState;
 
         if (isWallTorch()) {
-            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(ModWallModTorchBlock.FACING));
+            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(CrudeWallTorchBlock.FACING));
         } else {
             newState = handler.getStandingTorch(newType).getDefaultState();
         }
@@ -182,8 +181,8 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
 
         BlockEntity be = world.getBlockEntity(pos);
 
-        if (be instanceof TorchBE && itemStack.getItem() instanceof TorchItem) {
-            int fuel = TorchItem.getFuel(itemStack);
+        if (be instanceof TorchBE && itemStack.getItem() instanceof CrudeTorchItem) {
+            int fuel = CrudeTorchItem.getFuel(itemStack);
 
             if (fuel == 0) {
                 ((TorchBE) be).setFuel(MAX_FUEL_AMOUNT);
@@ -201,9 +200,9 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     public static boolean canLight(Item item, BlockState blockState)
     {
 
-        if (item instanceof TorchItem)
+        if (item instanceof CrudeTorchItem)
         {
-            TorchFireState state = ((TorchItem) item).getTorchState();
+            TorchFireState state = ((CrudeTorchItem) item).getTorchState();
 
             if (state == TorchFireState.UNLIT || state == TorchFireState.SMOULDER)
             {

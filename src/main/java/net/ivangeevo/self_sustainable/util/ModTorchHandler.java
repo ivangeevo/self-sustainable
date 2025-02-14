@@ -1,7 +1,7 @@
 package net.ivangeevo.self_sustainable.util;
 
-import net.ivangeevo.self_sustainable.block.blocks.ModTorchBlock;
-import net.ivangeevo.self_sustainable.block.blocks.ModWallModTorchBlock;
+import net.ivangeevo.self_sustainable.block.blocks.CrudeTorchBlock;
+import net.ivangeevo.self_sustainable.block.blocks.CrudeWallTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.minecraft.block.Block;
 
@@ -14,8 +14,8 @@ public class ModTorchHandler
     //  The torch classes defined in the 2nd parameter of these maps & the rest of the class
     //  should actually be new classes with custom block functionality added, like extinguishing in water, in rain etc...
 
-    private final Map<TorchFireState, ModTorchBlock> standingTorches = new EnumMap<>(TorchFireState.class);
-    private final Map<TorchFireState, ModWallModTorchBlock> wallTorches = new EnumMap<>(TorchFireState.class);
+    private final Map<TorchFireState, CrudeTorchBlock> standingTorches = new EnumMap<>(TorchFireState.class);
+    private final Map<TorchFireState, CrudeWallTorchBlock> wallTorches = new EnumMap<>(TorchFireState.class);
     public final String name;
 
     public ModTorchHandler(String name) {
@@ -23,28 +23,28 @@ public class ModTorchHandler
     }
 
     public void addTorch(Block block) {
-        if (block instanceof ModTorchBlock standingTorch) {
+        if (block instanceof CrudeTorchBlock standingTorch) {
             addStandingTorch(standingTorch);
-        } else if (block instanceof ModWallModTorchBlock wallTorch) {
+        } else if (block instanceof CrudeWallTorchBlock wallTorch) {
             addWallTorch(wallTorch);
         }
     }
 
-    private void addStandingTorch(ModTorchBlock block) {
+    private void addStandingTorch(CrudeTorchBlock block) {
         standingTorches.put(block.fireState, block);
         block.handler = this;
     }
 
-    private void addWallTorch(ModWallModTorchBlock block) {
+    private void addWallTorch(CrudeWallTorchBlock block) {
         wallTorches.put(block.fireState, block);
         block.handler = this;
     }
 
-    public ModTorchBlock getStandingTorch(TorchFireState state) {
+    public CrudeTorchBlock getStandingTorch(TorchFireState state) {
         return standingTorches.get(state);
     }
 
-    public ModWallModTorchBlock getWallTorch(TorchFireState state) {
+    public CrudeWallTorchBlock getWallTorch(TorchFireState state) {
         return wallTorches.get(state);
     }
 }

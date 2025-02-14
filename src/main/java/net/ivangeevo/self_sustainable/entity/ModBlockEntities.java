@@ -20,14 +20,14 @@ public class ModBlockEntities {
     public static BlockEntityType<TorchBE> TORCH;
 
     private static final Block[] torchesArray = new Block[] {
-        ModBlocks.TORCH_LIT,
-                ModBlocks.TORCH_UNLIT,
-                ModBlocks.TORCH_SMOULDER,
-                ModBlocks.TORCH_BURNED_OUT,
-                ModBlocks.WALL_TORCH_LIT,
-                ModBlocks.WALL_TORCH_UNLIT,
-                ModBlocks.WALL_TORCH_SMOULDER,
-                ModBlocks.WALL_TORCH_BURNED_OUT
+        ModBlocks.CRUDE_TORCH_LIT,
+                ModBlocks.CRUDE_TORCH_UNLIT,
+                ModBlocks.CRUDE_TORCH_SMOULDER,
+                ModBlocks.CRUDE_TORCH_BURNED_OUT,
+                ModBlocks.CRUDE_WALL_TORCH_LIT,
+                ModBlocks.CRUDE_WALL_TORCH_UNLIT,
+                ModBlocks.CRUDE_WALL_TORCH_SMOULDER,
+                ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT
     };
 
     public static void registerBlockEntities() {

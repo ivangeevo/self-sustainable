@@ -39,7 +39,6 @@ public class ModTags {
         public static final TagKey<Item> EXTINGUISH_TORCHES_ON_USE = createTag("extinguish_torches_on_use");
 
 
-
         /** Items that can instantly start a fire on use(right click). **/
         public static final TagKey<Item> DIRECT_IGNITERS = createTag("direct_igniters");
         public static final TagKey<Item> PRIMITIVE_FIRESTARTERS = createTag("primitive_firestarters");

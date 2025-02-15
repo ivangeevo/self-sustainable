@@ -82,7 +82,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             if (torchItem.getTorchState() == TorchFireState.LIT || torchItem.getTorchState() == TorchFireState.SMOULDER)
             {
                 if ( mainOrOffhand ) {
-                    player.getInventory().setStack(i, CrudeTorchItem.stateStack(stack, TorchFireState.UNLIT));
+                    stack.decrement(1);
                     player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
                 }
             }

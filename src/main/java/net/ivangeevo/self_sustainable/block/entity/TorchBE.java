@@ -6,6 +6,7 @@ import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
@@ -105,5 +106,10 @@ public class TorchBE extends BlockEntity {
                 block.outOfFuel(world, pos, world.getBlockState(pos), false);
             }
         }
+    }
+
+    @Override
+    protected void addComponents(ComponentMap.Builder componentMapBuilder) {
+        super.addComponents(componentMapBuilder);
     }
 }

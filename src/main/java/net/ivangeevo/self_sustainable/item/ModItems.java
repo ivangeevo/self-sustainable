@@ -42,8 +42,8 @@ public class ModItems
             new WickerWeavingItem(new Item.Settings().maxCount(1)));
 
     public static final Item CRUDE_TORCH_UNLIT = registerItem("crude_torch_unlit", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_UNLIT, ModBlocks.CRUDE_WALL_TORCH_UNLIT, new Item.Settings(), TorchFireState.UNLIT, ModBlocks.torches));
-    public static final Item CRUDE_TORCH_LIT = registerItem("crude_torch_lit", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_LIT, ModBlocks.CRUDE_WALL_TORCH_LIT, new Item.Settings().maxCount(1), TorchFireState.LIT, ModBlocks.torches));
-    public static final Item CRUDE_TORCH_SMOULDER = registerItem("crude_torch_smoulder", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_SMOULDER, ModBlocks.CRUDE_WALL_TORCH_SMOULDER, new Item.Settings().maxCount(1), TorchFireState.SMOULDER, ModBlocks.torches));
+    public static final Item CRUDE_TORCH_LIT = registerItem("crude_torch_lit", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_LIT, ModBlocks.CRUDE_WALL_TORCH_LIT, new Item.Settings().maxDamage(24000), TorchFireState.LIT, ModBlocks.torches));
+    public static final Item CRUDE_TORCH_SMOULDER = registerItem("crude_torch_smoulder", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_SMOULDER, ModBlocks.CRUDE_WALL_TORCH_SMOULDER, new Item.Settings().maxDamage(24000), TorchFireState.SMOULDER, ModBlocks.torches));
     public static final Item CRUDE_TORCH_BURNED_OUT = registerItem("crude_torch_burned_out", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_BURNED_OUT, ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT, new Item.Settings().maxCount(1), TorchFireState.BURNED_OUT, ModBlocks.torches));
 
 

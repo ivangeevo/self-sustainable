@@ -2,7 +2,6 @@ package net.ivangeevo.self_sustainable.item.items;
 
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.ivangeevo.self_sustainable.block.blocks.AbstractModTorchBlock;
-import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.tag.ModTags;
@@ -10,14 +9,11 @@ import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -127,6 +123,7 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         return super.useOnBlock(context);
     }
 
+    /**
     @Override
     public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference)
     {
@@ -171,12 +168,6 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
             int stack2Fuel = getFuel(otherStack) * addedNew;
             int totalFuel = stack1Fuel + stack2Fuel;
 
-            /**
-            // NBT
-            NbtCompound nbt = new NbtCompound();
-            nbt.putInt("Fuel", totalFuel / (stack.getCount() + addedNew));
-             **/
-
             int updatedFuelAmount = totalFuel / (stack.getCount() + addedNew);
 
             if (addedNew > 0) {
@@ -190,6 +181,7 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
 
         return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference);
     }
+    **/
 
     public boolean sameTorchGroup(CrudeTorchItem item1, CrudeTorchItem item2) {
         return item1.getHandler() == item2.getHandler();
@@ -253,8 +245,8 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
     public static ItemStack addFuel(ItemStack stack, World world, int amount) {
 
         if (stack.getItem() instanceof CrudeTorchItem torchItem && !world.isClient) {
-            int fuel = FUEL_TIME;
-            if (torchItem.getDefaultStack().contains(ModComponents.TORCH_FUEL_COMPONENT)) {
+            int fuel = getFuel(stack);
+            if (torchItem.getComponents().contains(ModComponents.TORCH_FUEL_COMPONENT)) {
                 stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
             }
 

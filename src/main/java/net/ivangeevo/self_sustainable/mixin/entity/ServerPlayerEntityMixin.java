@@ -38,11 +38,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             PlayerInventory inventory = player.getInventory();
 
             for (int i = 0; i < inventory.offHand.size(); i++) {
-                tickTorch(inventory.offHand.get(i), inventory, i, inventory.offHand);
+                tickTorch(inventory.offHand.get(i), i, inventory.offHand);
             }
 
             for (int i = 0; i < inventory.main.size(); i++) {
-                tickTorch(inventory.main.get(i), inventory, i, inventory.main);
+                tickTorch(inventory.main.get(i), i, inventory.main);
             }
 
             waterCheck(player, inventory);
@@ -53,7 +53,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     @Unique
     private void waterCheck(ServerPlayerEntity player, PlayerInventory inventory) {
         BlockPos pos = player.getBlockPos();
-        boolean isRaining =  player.getWorld().hasRain(pos);
+        boolean isRainingOnTorch =  player.getWorld().hasRain(pos);
 
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack stack = inventory.getStack(i);
@@ -64,19 +64,19 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
                 boolean mainOrOffhand = (i == inventory.selectedSlot || inventory.offHand.getFirst() == stack);
 
                 // Rain
-                if (isRaining && random.nextInt(200) == 0) {
-                    rainTorch(i, torchItem, stack, inventory, player.getWorld(), pos);
+                if (isRainingOnTorch && random.nextInt(200) == 0) {
+                    rainTorch(torchItem, stack, player.getWorld(), pos);
                 }
 
                 // Underwater
-                waterTorch(i, torchItem, stack, player, mainOrOffhand, pos);
+                waterTorch(torchItem, stack, player, mainOrOffhand, pos);
             }
         }
     }
 
 
     @Unique
-    private void waterTorch(int i, CrudeTorchItem torchItem, ItemStack stack, ServerPlayerEntity player, boolean mainOrOffhand, BlockPos pos)
+    private void waterTorch(CrudeTorchItem torchItem, ItemStack stack, ServerPlayerEntity player, boolean mainOrOffhand, BlockPos pos)
     {
         if (player.isSubmergedInWater()) {
             if (torchItem.getTorchState() == TorchFireState.LIT || torchItem.getTorchState() == TorchFireState.SMOULDER)
@@ -90,15 +90,15 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     }
 
     @Unique
-    private void rainTorch(int i, CrudeTorchItem torchItem, ItemStack stack, PlayerInventory inventory, World world, BlockPos pos) {
+    private void rainTorch(CrudeTorchItem torchItem, ItemStack stack, World world, BlockPos pos) {
         if (torchItem.getTorchState() == TorchFireState.LIT) {
-            inventory.setStack(i, CrudeTorchItem.stateStack(stack, TorchFireState.BURNED_OUT));
+            stack.decrement(1);
             world.playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
         }
     }
 
     @Unique
-    private void tickTorch(ItemStack stack, PlayerInventory inventory, int index, DefaultedList<ItemStack> list) {
+    private void tickTorch(ItemStack stack, int index, DefaultedList<ItemStack> list) {
         Item item = stack.getItem();
 
         if (item instanceof CrudeTorchItem) {

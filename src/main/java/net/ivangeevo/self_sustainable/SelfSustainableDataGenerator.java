@@ -5,9 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.ivangeevo.self_sustainable.datagen.*;
 
 
-public class SelfSustainableDataGenerator implements DataGeneratorEntrypoint
-{
-
+public class SelfSustainableDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
@@ -18,6 +16,5 @@ public class SelfSustainableDataGenerator implements DataGeneratorEntrypoint
         pack.addProvider(SelfSustainableItemTagProvider::new);
         pack.addProvider(SelfSustainableLootTableProvider::new);
         pack.addProvider(SelfSustainableLangProvider::new);
-
     }
 }

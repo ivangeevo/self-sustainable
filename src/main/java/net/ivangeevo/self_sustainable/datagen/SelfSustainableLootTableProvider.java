@@ -11,7 +11,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class SelfSustainableLootTableProvider extends FabricBlockLootTableProvider {
 
-
     public SelfSustainableLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(dataOutput, registryLookup);
     }

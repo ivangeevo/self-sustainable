@@ -27,8 +27,8 @@ public class FuelBasedLootModifier {
     }
 
     private static boolean isFuelHavingTorch(RegistryKey<LootTable> key) {
-        return key.getRegistry().equals(Identifier.of(SelfSustainableMod.MOD_ID, "blocks/torch_lit"))
-                || key.getRegistry().equals(Identifier.of(SelfSustainableMod.MOD_ID, "blocks/torch_smoulder"))
+        return key.getRegistry().equals(Identifier.of(SelfSustainableMod.MOD_ID, "blocks/crude_torch_lit"))
+                || key.getRegistry().equals(Identifier.of(SelfSustainableMod.MOD_ID, "blocks/crude_torch_smoulder"))
                 || key.getRegistry().equals(Identifier.of(SelfSustainableMod.MOD_ID, "blocks/wall_torch_lit"))
                 || key.getRegistry().equals(Identifier.of(SelfSustainableMod.MOD_ID, "blocks/wall_torch_smoulder"));
 

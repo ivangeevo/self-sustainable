@@ -19,24 +19,14 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
 
     @Override
     public void generateTranslations(RegistryWrapper.WrapperLookup registryLookup, TranslationBuilder tb) {
-        addItemGroup(SelfSustainableMod.MOD_ID, "Self Sustainable!", tb);
+        addItemGroup("ss_group", "Self Sustainable!", tb);
         this.addBlockTranslations(tb);
         this.addItemTranslations(tb);
         this.addConfigTranslations(tb);
     }
 
     private void addBlockTranslations(TranslationBuilder tb) {
-        /**
-        tb.add(ModBlocks.CRUDE_TORCH_UNLIT, "Unlit Crude Torch Block");
-        tb.add(ModBlocks.CRUDE_TORCH_LIT, "Lit Crude Torch Block");
-        tb.add(ModBlocks.CRUDE_TORCH_SMOULDER, "Smouldering Crude Torch Block");
-        tb.add(ModBlocks.CRUDE_TORCH_BURNED_OUT, "Burned Out Crude Torch Block");
 
-        tb.add(ModBlocks.CRUDE_WALL_TORCH_UNLIT, "Unlit Crude Wall Torch Block");
-        tb.add(ModBlocks.CRUDE_WALL_TORCH_LIT, "Lit Crude Wall Torch Block");
-        tb.add(ModBlocks.CRUDE_WALL_TORCH_SMOULDER, "Smouldering Crude Wall Torch Block");
-        tb.add(ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT, "Burned Out Crude Wall Torch Block");
-         **/
     }
 
     private void addItemTranslations(TranslationBuilder tb) {

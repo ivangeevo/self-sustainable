@@ -52,14 +52,26 @@ public class ModBlocks {
                     .strength(1.5F,2.0F)
                     .luminance((state) -> state.get(LIT) ? 10 : 0)
                     .sounds(BlockSoundGroup.STONE)));
+
     public static final Block SMOKER_BRICK = registerBlock("smoker_brick",
             new SmokerOvenBlock(AbstractBlock.Settings.create()
                     .strength(1.5F,2.0F)
                     .luminance((state) -> state.get(LIT) ? 10 : 0)
                     .sounds(BlockSoundGroup.STONE)));
 
-    public static final Block BRICK_UNFIRED = registerWithoutItem("brick_unfired", new UnfiredBrickBlock(AbstractBlock.Settings.create().breakInstantly().nonOpaque().sounds(BlockSoundGroup.STONE)));
-    public static final Block BRICK = registerWithoutItem("brick", new BrickBlock(AbstractBlock.Settings.create().breakInstantly().nonOpaque().sounds(BlockSoundGroup.STONE)));
+    public static final Block BRICK_UNFIRED = registerWithoutItem("brick_unfired",
+            new UnfiredBrickBlock(AbstractBlock.Settings.create()
+                    .breakInstantly()
+                    .nonOpaque()
+                    .sounds(BlockSoundGroup.STONE))
+    );
+
+    public static final Block BRICK = registerWithoutItem("brick",
+            new BrickBlock(AbstractBlock.Settings.create()
+                    .breakInstantly()
+                    .nonOpaque()
+                    .sounds(BlockSoundGroup.STONE))
+    );
 
 
     private static AbstractBlock.Settings initTorchSettings() {

@@ -7,6 +7,8 @@ import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.TorchBlock;
+import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -46,6 +48,12 @@ public class ModBlocks {
     public static final Block CRUDE_WALL_TORCH_BURNED_OUT = registerWithoutItem("crude_wall_torch_burned_out",
             new CrudeWallTorchBlock(initTorchSettings(), ParticleTypes.FLAME, TorchFireState.BURNED_OUT));
 
+    public static final Block TORCH_UNLIT = registerWithoutItem("torch_unlit",
+            new TorchBlock(ParticleTypes.FLAME, initTorchSettings()));
+
+    public static final Block WALL_TORCH_UNLIT = registerWithoutItem("wall_torch_unlit",
+            new WallTorchBlock(ParticleTypes.FLAME, initTorchSettings()));
+
 
     public static final Block OVEN_BRICK = registerBlock("oven_brick",
             new BrickOvenBlock(AbstractBlock.Settings.create()
@@ -78,17 +86,21 @@ public class ModBlocks {
        return AbstractBlock.Settings.create().noCollision().breakInstantly().pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.WOOD);
     }
 
-   public static ModTorchHandler torches = new ModTorchHandler("basic");
+   public static ModTorchHandler crudeTorches = new ModTorchHandler("crude");
+    public static ModTorchHandler torches = new ModTorchHandler("infinite");
 
     public static void registerTorchHandler() {
-        torches.addTorch(ModBlocks.CRUDE_TORCH_LIT);
-        torches.addTorch(ModBlocks.CRUDE_TORCH_UNLIT);
-        torches.addTorch(ModBlocks.CRUDE_TORCH_SMOULDER);
-        torches.addTorch(ModBlocks.CRUDE_TORCH_BURNED_OUT);
-        torches.addTorch(ModBlocks.CRUDE_WALL_TORCH_LIT);
-        torches.addTorch(ModBlocks.CRUDE_WALL_TORCH_UNLIT);
-        torches.addTorch(ModBlocks.CRUDE_WALL_TORCH_SMOULDER);
-        torches.addTorch(ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT);
+        crudeTorches.addTorch(ModBlocks.CRUDE_TORCH_LIT);
+        crudeTorches.addTorch(ModBlocks.CRUDE_TORCH_UNLIT);
+        crudeTorches.addTorch(ModBlocks.CRUDE_TORCH_SMOULDER);
+        crudeTorches.addTorch(ModBlocks.CRUDE_TORCH_BURNED_OUT);
+        crudeTorches.addTorch(ModBlocks.CRUDE_WALL_TORCH_LIT);
+        crudeTorches.addTorch(ModBlocks.CRUDE_WALL_TORCH_UNLIT);
+        crudeTorches.addTorch(ModBlocks.CRUDE_WALL_TORCH_SMOULDER);
+        crudeTorches.addTorch(ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT);
+
+        torches.addTorch(ModBlocks.TORCH_UNLIT);
+        torches.addTorch(ModBlocks.WALL_TORCH_UNLIT);
     }
 
     private static Block registerBlock(String name, Block block) {

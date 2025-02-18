@@ -2,11 +2,15 @@ package net.ivangeevo.self_sustainable.mixin.entity;
 
 import com.mojang.authlib.GameProfile;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
+import net.ivangeevo.self_sustainable.item.ModItems;
+import net.ivangeevo.self_sustainable.item.interfaces.TorchAdded;
 import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.VerticallyAttachableBlockItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -45,13 +49,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
                 tickTorch(inventory.main.get(i), i, inventory.main);
             }
 
-            waterCheck(player, inventory);
+            checkWaterBehaviour(player, inventory);
         }
     }
 
 
     @Unique
-    private void waterCheck(ServerPlayerEntity player, PlayerInventory inventory) {
+    private void checkWaterBehaviour(ServerPlayerEntity player, PlayerInventory inventory) {
         BlockPos pos = player.getBlockPos();
         boolean isRainingOnTorch =  player.getWorld().hasRain(pos);
 
@@ -61,40 +65,54 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
             // Torches
             if (item instanceof CrudeTorchItem torchItem) {
-                boolean mainOrOffhand = (i == inventory.selectedSlot || inventory.offHand.getFirst() == stack);
 
                 // Rain
                 if (isRainingOnTorch && random.nextInt(200) == 0) {
                     rainTorch(torchItem, stack, player.getWorld(), pos);
                 }
 
-                // Underwater
-                waterTorch(torchItem, stack, player, mainOrOffhand, pos);
+                destroyInWater(torchItem, stack, player, pos);
+            }
+
+            if (item instanceof VerticallyAttachableBlockItem) {
+                extinguishInWater(stack, player, pos);
             }
         }
     }
-
 
     @Unique
-    private void waterTorch(CrudeTorchItem torchItem, ItemStack stack, ServerPlayerEntity player, boolean mainOrOffhand, BlockPos pos)
-    {
+    private void destroyInWater(CrudeTorchItem torchItem, ItemStack stack, ServerPlayerEntity player, BlockPos pos) {
         if (player.isSubmergedInWater()) {
-            if (torchItem.getTorchState() == TorchFireState.LIT || torchItem.getTorchState() == TorchFireState.SMOULDER)
-            {
-                if ( mainOrOffhand ) {
-                    stack.decrement(1);
-                    player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
-                }
+            if (isBurning(torchItem)) {
+                stack.decrement(1);
+                player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
             }
         }
     }
+
+    @Unique
+    private void extinguishInWater(ItemStack stack, PlayerEntity player, BlockPos pos) {
+        if (player.isSubmergedInWater() && stack.isOf(Items.TORCH)) {
+            ItemStack unlitTorch = new ItemStack(ModItems.TORCH_UNLIT, stack.getCount()); // Preserve the count
+            player.getInventory().setStack(player.getInventory().getSlotWithStack(stack), unlitTorch); // Replace stack
+            player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
+        }
+    }
+
+
 
     @Unique
     private void rainTorch(CrudeTorchItem torchItem, ItemStack stack, World world, BlockPos pos) {
-        if (torchItem.getTorchState() == TorchFireState.LIT) {
+        if (isBurning(torchItem)) {
             stack.decrement(1);
             world.playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
         }
+    }
+
+    /** Lit or Smouldering **/
+    @Unique
+    private boolean isBurning(CrudeTorchItem torchItem) {
+        return torchItem.getTorchState() == TorchFireState.LIT || torchItem.getTorchState() == TorchFireState.SMOULDER;
     }
 
     @Unique

@@ -22,6 +22,7 @@
     "item.FlintAndSteelItemMixin",
     "item.ItemMixin",
     "item.ItemStackMixin",
+    "item.VerticallyAttachableBlockItemMixin",
     "world.DifficultyMixin",
     "world.SpawnHelperMixin"
   ],

@@ -15,6 +15,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -69,7 +70,7 @@ public abstract class BlockItemMixin extends Item implements Ignitable
         if (heldStack.isIn(ModTags.Items.CAN_START_FIRE_ON_USE)) {
 
             // Check if the block at the position is a campfire or oven and try lighting up.
-            if (block == Blocks.CAMPFIRE || (block == ModBlocks.OVEN_BRICK && heldStack.getItem() != ModBlocks.OVEN_BRICK.asItem()) || block == ModBlocks.CRUDE_TORCH_UNLIT || block == ModBlocks.CRUDE_WALL_TORCH_UNLIT) {
+            if (isLightableFromOnUseBlock(block, heldStack)) {
                 if (world.canPlayerModifyAt(player, pos)) {
                     if (!world.isClient) {
                         attemptToLightBlock(context.getStack(), world, pos, context.getSide());
@@ -99,6 +100,18 @@ public abstract class BlockItemMixin extends Item implements Ignitable
         }
 
         return false;
+    }
+
+    @Unique
+    private boolean isLightableFromOnUseBlock(Block block, ItemStack stack) {
+      return block == Blocks.CAMPFIRE
+              || (block == ModBlocks.OVEN_BRICK && stack.getItem() != ModBlocks.OVEN_BRICK.asItem())
+              || block == ModBlocks.CRUDE_TORCH_UNLIT
+              || block == ModBlocks.CRUDE_WALL_TORCH_UNLIT
+              || block == ModBlocks.TORCH_UNLIT
+              || block == ModBlocks.WALL_TORCH_UNLIT;
+
+
     }
 
 }

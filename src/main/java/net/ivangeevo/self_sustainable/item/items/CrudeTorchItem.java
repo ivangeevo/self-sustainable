@@ -17,7 +17,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class CrudeTorchItem extends VerticallyAttachableBlockItem implements FabricItem {
@@ -50,42 +49,24 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         return 0;
     }
 
+    /**
     @Override
     public int getItemBarColor(ItemStack stack) {
         return MathHelper.hsvToRgb(3.0f, 1.0f, 1.0f);
     }
+     **/
+
+
+
+
 
     @Override
     public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
         boolean oldHasFuel = oldStack.getComponents().contains(ModComponents.TORCH_FUEL_COMPONENT);
         boolean newHasFuel = newStack.getComponents().contains(ModComponents.TORCH_FUEL_COMPONENT);
 
-        // If one stack has the component and the other does not, trigger animation
         return oldHasFuel != newHasFuel;
     }
-
-
-    /**
-    @Override
-    public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
-        NbtCompound oldNbt = null;
-        NbtCompound newNbt = null;
-
-        if (oldStack.getNbt() != null) {
-            oldNbt = oldStack.getNbt().copy();
-            oldNbt.remove("Fuel");
-        }
-
-        if (newStack.getNbt() != null) {
-            newNbt = newStack.getNbt().copy();
-            newNbt.remove("Fuel");
-        }
-
-        if (oldNbt == null && newNbt != null) return true;
-
-        return oldNbt != null && newNbt == null;
-    }
-     **/
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
@@ -121,82 +102,6 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         }
 
         return super.useOnBlock(context);
-    }
-
-    /**
-    @Override
-    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference)
-    {
-        // If you are clicking on it with a non HCTorch item or with empty, use vanilla behavior
-        if (!slot.canTakePartial(player) || !(otherStack.getItem() instanceof CrudeTorchItem) || otherStack.isEmpty()) {
-            return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference);
-        }
-
-        // Return left click if either is full
-        if (clickType != ClickType.RIGHT && (stack.getCount() >= stack.getMaxCount() || otherStack.getCount() >= otherStack.getMaxCount()))
-        {
-            return false;
-        }
-
-        // Ensure torches are in same group
-        if (!sameTorchGroup((CrudeTorchItem) stack.getItem(), (CrudeTorchItem) otherStack.getItem())) {
-            return false;
-        }
-
-        if (((CrudeTorchItem) stack.getItem()).torchState == TorchFireState.LIT) {
-            // If clicked is lit, return if clicked with burnt
-            if (((CrudeTorchItem) otherStack.getItem()).torchState == TorchFireState.BURNED_OUT) {
-                return false;
-            }
-        } else if (((CrudeTorchItem) stack.getItem()).torchState == TorchFireState.UNLIT) {
-            // If clicked is unlit, return if clicked is not unlit
-            if (((CrudeTorchItem) otherStack.getItem()).torchState != TorchFireState.UNLIT) {
-                return false;
-            }
-        }
-
-        if (!otherStack.isEmpty()) {
-            int max = stack.getMaxCount();
-            int usedCount = clickType != ClickType.RIGHT ? otherStack.getCount() : 1;
-            int otherMax = otherStack.getMaxCount();
-
-            int remainder = Math.max(0, usedCount - (max - stack.getCount()));
-            int addedNew = usedCount - remainder;
-
-            // Average both stacks
-            int stack1Fuel = getFuel(stack) * stack.getCount();
-            int stack2Fuel = getFuel(otherStack) * addedNew;
-            int totalFuel = stack1Fuel + stack2Fuel;
-
-            int updatedFuelAmount = totalFuel / (stack.getCount() + addedNew);
-
-            if (addedNew > 0) {
-                stack.increment(addedNew);
-                stack.set(ModComponents.TORCH_FUEL_COMPONENT, updatedFuelAmount);
-                otherStack.setCount(otherStack.getCount() - addedNew);
-
-                return true;
-            }
-        }
-
-        return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference);
-    }
-    **/
-
-    public boolean sameTorchGroup(CrudeTorchItem item1, CrudeTorchItem item2) {
-        return item1.getHandler() == item2.getHandler();
-    }
-
-    public static Item stateItem(Item inputItem, TorchFireState newState) {
-        Item outputItem = Items.AIR;
-
-        if (inputItem instanceof CrudeTorchItem) {
-            AbstractModTorchBlock newBlock = (AbstractModTorchBlock) ((BlockItem)inputItem).getBlock();
-
-            outputItem = newBlock.handler.getStandingTorch(newState).asItem();
-        }
-
-        return outputItem;
     }
 
     public static ItemStack stateStack(ItemStack inputStack, TorchFireState newState) {
@@ -264,35 +169,6 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         }
 
         return stack;
-        /**
-        if (stack.getItem() instanceof  TorchItem && !world.isClient) {
-            NbtCompound nbt = stack.getNbt();
-            int fuel = FUEL_TIME;
-
-            if (nbt != null) {
-                fuel = nbt.getInt("Fuel");
-            } else {
-                nbt = new NbtCompound();
-            }
-
-            fuel += amount;
-
-            // If burn out
-            if (fuel <= 0) {
-                stack = stateStack(stack, TorchFireState.BURNED_OUT);
-
-            } else {
-                if (fuel > FUEL_TIME) {
-                    fuel = FUEL_TIME;
-                }
-
-                nbt.putInt("Fuel", fuel);
-                stack.setNbt(nbt);
-            }
-        }
-
-        return stack;
-         **/
     }
 
 }

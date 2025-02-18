@@ -26,6 +26,8 @@ public class SelfSustainableLootTableProvider extends FabricBlockLootTableProvid
         this.addDrop(ModBlocks.CRUDE_WALL_TORCH_LIT, drops(ModItems.CRUDE_TORCH_LIT));
         this.addDrop(ModBlocks.CRUDE_WALL_TORCH_SMOULDER, drops(ModItems.CRUDE_TORCH_SMOULDER));
 
+        this.addDrop(ModBlocks.TORCH_UNLIT, drops(ModItems.TORCH_UNLIT));
+        this.addDrop(ModBlocks.WALL_TORCH_UNLIT, drops(ModItems.TORCH_UNLIT));
     }
 
     @Override

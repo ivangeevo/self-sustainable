@@ -37,7 +37,6 @@ public class SelfSustainableBlockTagProvider extends FabricTagProvider.BlockTagP
                 .add(ModBlocks.CRUDE_TORCH_SMOULDER)
                 .add(ModBlocks.CRUDE_WALL_TORCH_SMOULDER)
 
-
                 .add(ModBlocks.OVEN_BRICK)
                 .add(ModBlocks.SMOKER_BRICK)
         ;

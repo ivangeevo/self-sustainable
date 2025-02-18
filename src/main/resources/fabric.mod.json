@@ -44,6 +44,7 @@
 
       "net/minecraft/class_1792": ["net/ivangeevo/self_sustainable/item/interfaces/ItemAdded"],
       "net/minecraft/class_1799": ["net/ivangeevo/self_sustainable/item/interfaces/ItemStackAdded"],
+      "net/minecraft/class_1827": ["net/ivangeevo/self_sustainable/item/interfaces/TorchAdded"],
 
       "net/minecraft/class_2248": ["net/ivangeevo/self_sustainable/block/interfaces/BlockAdded"],
 
@@ -53,6 +54,8 @@
 
       "net/minecraft/class_1267": ["net/ivangeevo/self_sustainable/world/interfaces/DifficultyAdded"],
       "net/minecraft/class_2358": ["net/ivangeevo/self_sustainable/block/interfaces/FireBlockAdded"]
+
+
 
     }
   }

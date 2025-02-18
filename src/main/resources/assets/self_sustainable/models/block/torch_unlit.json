@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_torch",
+  "textures": {
+    "torch": "self_sustainable:block/torch_unlit"
+  }
+}

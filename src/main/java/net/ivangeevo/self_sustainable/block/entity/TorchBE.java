@@ -93,21 +93,6 @@ public class TorchBE extends BlockEntity {
         fuel = newValue;
     }
 
-    public void changeFuel(int increment) {
-        World world = this.getWorld();
-        BlockPos pos = this.getPos();
-
-        fuel += increment;
-
-        if (fuel <= 0) {
-            fuel = 0;
-
-            if (world.getBlockState(pos).getBlock() instanceof FuelBurningBlock block) {
-                block.outOfFuel(world, pos, world.getBlockState(pos), false);
-            }
-        }
-    }
-
     @Override
     protected void addComponents(ComponentMap.Builder componentMapBuilder) {
         super.addComponents(componentMapBuilder);

@@ -49,77 +49,15 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
 
     protected static final VoxelShape SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
 
-    @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return SHAPE;
-    }
-
     public AbstractModTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel) {
         super(settings);
         this.particle = particle;
         this.fireState = fireLevel;
     }
 
-    public void doSmoulder(World world, BlockPos pos, BlockState state) {
-        if (!world.isClient) {
-            world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            changeTorch(world, pos, state, TorchFireState.SMOULDER);
-        }
-    }
-
-    public void extinguish(World world, BlockPos pos, BlockState state) {
-        if (!world.isClient) {
-            world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
-        }
-    }
-
-    public void burnOut(World world, BlockPos pos, BlockState state, boolean playSound) {
-        if (!world.isClient) {
-            if (playSound) world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
-        }
-    }
-
-    public void light(World world, BlockPos pos, BlockState state) {
-        if (!world.isClient) {
-            Ignitable.playLitFX(world, pos);
-            displayParticle(ParticleTypes.LAVA, state, world, pos);
-            displayParticle(ParticleTypes.FLAME, state, world, pos);
-            changeTorch(world, pos, state, TorchFireState.LIT);
-        }
-    }
-
-    public abstract boolean isWallTorch();
-
-    public TorchFireState getFireState()
-    {
-        return fireState;
-    }
-
-    public void changeTorch(World world, BlockPos pos, BlockState oldState, TorchFireState newType) {
-        BlockState newState;
-
-        if (isWallTorch()) {
-            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(CrudeWallTorchBlock.FACING));
-        } else {
-            newState = handler.getStandingTorch(newType).getDefaultState();
-        }
-
-        world.setBlockState(pos, newState);
-        if (world.getBlockEntity(pos) != null) ((TorchBE) Objects.requireNonNull(world.getBlockEntity(pos))).setFuel(0);
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return SHAPE;
     }
 
     @Override
@@ -200,62 +138,6 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         burnOut(world, pos, state, playSound);
     }
 
-    public static boolean canLight(Item item, BlockState blockState)
-    {
-
-        if (item instanceof CrudeTorchItem)
-        {
-            TorchFireState state = ((CrudeTorchItem) item).getTorchState();
-
-            if (state == TorchFireState.UNLIT || state == TorchFireState.SMOULDER)
-            {
-                return blockState.isIn(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE);
-            }
-        }
-
-        return false;
-    }
-
-    public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos, float spread)
-    {
-        double d = (double)pos.getX() + 0.5;
-        double e = (double)pos.getY() + 0.7;
-        double f = (double)pos.getZ() + 0.5;
-
-        if (particle != null)
-        {
-            if (state.contains(Properties.HORIZONTAL_FACING))
-            {
-                Direction dir = state.get(Properties.HORIZONTAL_FACING);
-                Direction dir2 = dir.getOpposite();
-
-                if (world instanceof ServerWorld)
-                {
-                    ((ServerWorld) world).spawnParticles(particle, d + 0.27 * (double) dir2.getOffsetX(), e + 0.22, f + 0.27 * (double) dir2.getOffsetZ(), 1, 0, 0, 0, 0);
-                }
-                else if (world.isClient)
-                {
-                    world.addParticle(particle, d + 0.27 * (double) dir2.getOffsetX(), e + 0.22, f + 0.27 * (double) dir2.getOffsetZ(), 0.0, 0.0, 0.0);
-                }
-            }
-            else
-            {
-                if (world instanceof  ServerWorld)
-                {
-                    ((ServerWorld) world).spawnParticles(particle, d, e, f, 1, 0, 0, 0, 0);
-                }
-                else if (world.isClient)
-                {
-                    world.addParticle(particle, d, e, f, 0.0, 0.0, 0.0);
-                }
-            }
-        }
-    }
-
-    public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos) {
-        displayParticle(particle, state, world, pos, 0f);
-    }
-
     @Override
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return AbstractTorchBlock.sideCoversSmallSquare(world, pos.down(), Direction.UP);
@@ -281,5 +163,97 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         }
 
         return false;
+    }
+
+    public void doSmoulder(World world, BlockPos pos, BlockState state) {
+        if (!world.isClient) {
+            world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
+            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            changeTorch(world, pos, state, TorchFireState.SMOULDER);
+        }
+    }
+
+    public void extinguish(World world, BlockPos pos, BlockState state) {
+        if (!world.isClient) {
+            world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
+            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
+        }
+    }
+
+    public void burnOut(World world, BlockPos pos, BlockState state, boolean playSound) {
+        if (!world.isClient) {
+            if (playSound) world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
+            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
+        }
+    }
+
+    public void light(World world, BlockPos pos, BlockState state) {
+        if (!world.isClient) {
+            Ignitable.playLitFX(world, pos);
+            displayParticle(ParticleTypes.LAVA, state, world, pos);
+            displayParticle(ParticleTypes.FLAME, state, world, pos);
+            changeTorch(world, pos, state, TorchFireState.LIT);
+        }
+    }
+
+    public abstract boolean isWallTorch();
+
+    public TorchFireState getFireState()
+    {
+        return fireState;
+    }
+
+    public void changeTorch(World world, BlockPos pos, BlockState oldState, TorchFireState newType) {
+        BlockState newState;
+
+        if (isWallTorch()) {
+            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(CrudeWallTorchBlock.FACING));
+        } else {
+            newState = handler.getStandingTorch(newType).getDefaultState();
+        }
+
+        world.setBlockState(pos, newState);
+        if (world.getBlockEntity(pos) != null) ((TorchBE) Objects.requireNonNull(world.getBlockEntity(pos))).setFuel(0);
+    }
+
+    public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos, float spread)
+    {
+        double d = (double)pos.getX() + 0.5;
+        double e = (double)pos.getY() + 0.7;
+        double f = (double)pos.getZ() + 0.5;
+
+        if (particle != null) {
+            if (state.contains(Properties.HORIZONTAL_FACING)) {
+                Direction dir = state.get(Properties.HORIZONTAL_FACING);
+                Direction dir2 = dir.getOpposite();
+
+                if (world instanceof ServerWorld) {
+                    ((ServerWorld) world).spawnParticles(particle, d + 0.27 * (double) dir2.getOffsetX(), e + 0.22, f + 0.27 * (double) dir2.getOffsetZ(), 1, 0, 0, 0, 0);
+                } else if (world.isClient) {
+                    world.addParticle(particle, d + 0.27 * (double) dir2.getOffsetX(), e + 0.22, f + 0.27 * (double) dir2.getOffsetZ(), 0.0, 0.0, 0.0);
+                }
+            } else {
+                if (world instanceof  ServerWorld) {
+                    ((ServerWorld) world).spawnParticles(particle, d, e, f, 1, 0, 0, 0, 0);
+                } else if (world.isClient) {
+                    world.addParticle(particle, d, e, f, 0.0, 0.0, 0.0);
+                }
+            }
+        }
+    }
+
+    public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos) {
+        displayParticle(particle, state, world, pos, 0f);
     }
 }

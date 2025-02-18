@@ -7,9 +7,11 @@ import net.ivangeevo.self_sustainable.item.items.*;
 import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
+import net.minecraft.item.VerticallyAttachableBlockItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 
 public class ModItems
 {
@@ -41,11 +43,12 @@ public class ModItems
     public static final Item WICKER_WEAVING = registerItem("wicker_weaving",
             new WickerWeavingItem(new Item.Settings().maxCount(1)));
 
-    public static final Item CRUDE_TORCH_UNLIT = registerItem("crude_torch_unlit", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_UNLIT, ModBlocks.CRUDE_WALL_TORCH_UNLIT, new Item.Settings(), TorchFireState.UNLIT, ModBlocks.torches));
-    public static final Item CRUDE_TORCH_LIT = registerItem("crude_torch_lit", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_LIT, ModBlocks.CRUDE_WALL_TORCH_LIT, new Item.Settings().maxDamage(24000), TorchFireState.LIT, ModBlocks.torches));
-    public static final Item CRUDE_TORCH_SMOULDER = registerItem("crude_torch_smoulder", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_SMOULDER, ModBlocks.CRUDE_WALL_TORCH_SMOULDER, new Item.Settings().maxDamage(24000), TorchFireState.SMOULDER, ModBlocks.torches));
-    public static final Item CRUDE_TORCH_BURNED_OUT = registerItem("crude_torch_burned_out", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_BURNED_OUT, ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT, new Item.Settings().maxCount(1), TorchFireState.BURNED_OUT, ModBlocks.torches));
+    public static final Item CRUDE_TORCH_UNLIT = registerItem("crude_torch_unlit", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_UNLIT, ModBlocks.CRUDE_WALL_TORCH_UNLIT, new Item.Settings(), TorchFireState.UNLIT, ModBlocks.crudeTorches));
+    public static final Item CRUDE_TORCH_LIT = registerItem("crude_torch_lit", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_LIT, ModBlocks.CRUDE_WALL_TORCH_LIT, new Item.Settings().maxDamage(24000), TorchFireState.LIT, ModBlocks.crudeTorches));
+    public static final Item CRUDE_TORCH_SMOULDER = registerItem("crude_torch_smoulder", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_SMOULDER, ModBlocks.CRUDE_WALL_TORCH_SMOULDER, new Item.Settings().maxDamage(24000), TorchFireState.SMOULDER, ModBlocks.crudeTorches));
+    public static final Item CRUDE_TORCH_BURNED_OUT = registerItem("crude_torch_burned_out", new CrudeTorchItem(ModBlocks.CRUDE_TORCH_BURNED_OUT, ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT, new Item.Settings().maxCount(1), TorchFireState.BURNED_OUT, ModBlocks.crudeTorches));
 
+    public static final Item TORCH_UNLIT = registerItem("torch_unlit", new VerticallyAttachableBlockItem(ModBlocks.TORCH_UNLIT, ModBlocks.WALL_TORCH_UNLIT, new Item.Settings(), Direction.DOWN));
 
 
 

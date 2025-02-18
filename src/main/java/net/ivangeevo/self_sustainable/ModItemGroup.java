@@ -27,6 +27,7 @@ public class ModItemGroup {
                         //entries.add(ModItems.CRUDE_TORCH_SMOULDER);
                         //entries.add(ModItems.CRUDE_TORCH_BURNED_OUT);
 
+                        entries.add(ModItems.TORCH_UNLIT);
 
                         // Blocks
 

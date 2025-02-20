@@ -1,9 +1,12 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
+import com.terraformersmc.modmenu.util.mod.Mod;
 import net.ivangeevo.self_sustainable.block.entity.TorchBE;
 import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
+import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.ModTorchHandler;
@@ -11,10 +14,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -34,9 +34,6 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Objects;
-
 public abstract class AbstractModTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock {
 
     public ParticleEffect particle;
@@ -44,8 +41,6 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     public TorchFireState fireState;
 
     public ModTorchHandler handler;
-
-    private static final int MAX_FUEL_AMOUNT = 24000;
 
     protected static final VoxelShape SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
 
@@ -85,7 +80,6 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         Hand hand = player.getActiveHand();
         ItemStack stack = player.getStackInHand(hand);
-        boolean success = false;
 
         if (fireState == TorchFireState.LIT) {
             if (tryUse(ModTags.Items.EXTINGUISH_TORCHES_ON_USE, stack, player, hand)) {
@@ -120,16 +114,17 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     {
         super.onPlaced(world, pos, state, placer, itemStack);
 
-        BlockEntity be = world.getBlockEntity(pos);
+        if (world.getBlockEntity(pos) instanceof TorchBE be && itemStack.getItem() instanceof CrudeTorchItem) {
 
-        if (be instanceof TorchBE && itemStack.getItem() instanceof CrudeTorchItem) {
-            int fuel = CrudeTorchItem.getFuel(itemStack);
+            TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
 
-            if (fuel == 0) {
-                ((TorchBE) be).setFuel(MAX_FUEL_AMOUNT);
-            } else {
-                ((TorchBE) be).setFuel(fuel);
+            if (fuelComponent == null) {
+                // Handle the case where fuelComponent is null
+                return;
             }
+
+            int fuel = fuelComponent.getFuel();
+            fuelComponent.setFuel(fuel);
         }
     }
 
@@ -147,6 +142,7 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
         return fireState == TorchFireState.UNLIT;
     }
+
 
     @Override
     public boolean setOnFireDirectly(World world, BlockPos pos) {
@@ -224,7 +220,16 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         }
 
         world.setBlockState(pos, newState);
-        if (world.getBlockEntity(pos) != null) ((TorchBE) Objects.requireNonNull(world.getBlockEntity(pos))).setFuel(0);
+        if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TorchBE be) {
+            TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
+            if (fuelComponent == null) {
+                return;
+            }
+
+            //((TorchBE) Objects.requireNonNull(world.getBlockEntity(pos))).setFuel(0);
+            fuelComponent.setFuel(0);
+
+        }
     }
 
     public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos, float spread)

@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.ivangeevo.self_sustainable.block.blocks.AbstractModTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.Block;
@@ -48,17 +49,6 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
 
         return 0;
     }
-
-    /**
-    @Override
-    public int getItemBarColor(ItemStack stack) {
-        return MathHelper.hsvToRgb(3.0f, 1.0f, 1.0f);
-    }
-     **/
-
-
-
-
 
     @Override
     public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
@@ -119,7 +109,7 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
     }
 
     public static int getFuel(ItemStack stack) {
-        return stack.getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, FUEL_TIME);
+        return stack.getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent()).getFuel();
     }
 
     public TorchFireState getTorchState()
@@ -152,7 +142,8 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         if (stack.getItem() instanceof CrudeTorchItem torchItem && !world.isClient) {
             int fuel = getFuel(stack);
             if (torchItem.getComponents().contains(ModComponents.TORCH_FUEL_COMPONENT)) {
-                stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
+                //stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
+                stack.set(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent(fuel));
             }
 
             fuel += amount;
@@ -164,7 +155,9 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
                 if (fuel > FUEL_TIME) {
                     fuel = FUEL_TIME;
                 }
-                stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
+                //stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
+                stack.set(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent(fuel));
+
             }
         }
 

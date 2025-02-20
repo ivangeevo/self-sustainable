@@ -8,11 +8,7 @@ import net.minecraft.block.Block;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class ModTorchHandler
-{
-
-    //  The torch classes defined in the 2nd parameter of these maps & the rest of the class
-    //  should actually be new classes with custom block functionality added, like extinguishing in water, in rain etc...
+public class ModTorchHandler {
 
     private final Map<TorchFireState, CrudeTorchBlock> standingTorches = new EnumMap<>(TorchFireState.class);
     private final Map<TorchFireState, CrudeWallTorchBlock> wallTorches = new EnumMap<>(TorchFireState.class);

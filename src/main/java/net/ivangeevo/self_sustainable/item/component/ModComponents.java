@@ -19,10 +19,15 @@ public class ModComponents {
             .codec(Codec.FLOAT.xmap(Float::valueOf, Float::floatValue))
             .build();
 
+    /**
     public static final ComponentType<Integer> TORCH_FUEL_COMPONENT = ComponentType.<Integer>builder()
             .codec(Codec.INT)
             .build();
+     **/
 
+    public static final ComponentType<TorchFuelComponent> TORCH_FUEL_COMPONENT = ComponentType.<TorchFuelComponent>builder()
+            .codec(TorchFuelComponent.CODEC)
+            .build();
 
 
     // Register method, to be called in the mod initialization

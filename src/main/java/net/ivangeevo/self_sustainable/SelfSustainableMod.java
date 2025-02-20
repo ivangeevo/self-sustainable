@@ -9,7 +9,6 @@ import net.ivangeevo.self_sustainable.event.ModLootTableReplacement;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.component.FoodComponentModifier;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
-import net.ivangeevo.self_sustainable.loot.ModLootFunctionTypes;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import net.ivangeevo.self_sustainable.registry.FuelRegistryManager;
@@ -47,10 +46,9 @@ public class SelfSustainableMod implements ModInitializer
         instance = this;
 
         ModLootTableReplacement.initialize();
-        ModLootFunctionTypes.register();
 
         // Modifying foods to gave less hunger in general and 0 saturation.
-        // Also some additional negative effects to certain ones.
+        // Also, some additional negative effects to certain ones.
         FoodComponentModifier.register();
 
         // Register an event that blocks the player from eating if he has food poisoning (hunger)

@@ -130,7 +130,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.FIRESTARTER_STICKS)
                 .input('#', Items.STICK)
                 .pattern("##")
-                .criterion("has_stick", RecipeProvider.conditionsFromItem(Items.STICK))
+                .criterion("has_stick", conditionsFromItem(Items.STICK))
                 .offerTo(exporter);
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK)
@@ -138,7 +138,25 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .pattern("###")
                 .pattern("# #")
                 .pattern("###")
-                .criterion("has_bricks", RecipeProvider.conditionsFromItem(Blocks.BRICKS))
+                .criterion("has_bricks", conditionsFromItem(Blocks.BRICKS))
+                .offerTo(exporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.CRUDE_TORCH_UNLIT, 4)
+                .input('I', Items.STICK)
+                .input('C', Items.COAL)
+                .pattern("C")
+                .pattern("I")
+                .criterion("has_coal", conditionsFromItem(Items.COAL))
+                .offerTo(exporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.TORCH_UNLIT, 4)
+                .input('I', Items.STICK)
+                .input('C', Items.COAL)
+                .input('G', Items.GLOWSTONE_DUST)
+                .pattern("C")
+                .pattern("G")
+                .pattern("I")
+                .criterion("has_glowstone_dust", conditionsFromItem(Items.GLOWSTONE_DUST))
                 .offerTo(exporter);
 
         /**
@@ -150,6 +168,8 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
                 .criterion("has_sugar_cane", RecipeProvider.conditionsFromItem(Items.SUGAR_CANE))
                 .offerTo(exporter);
          **/
+
+
 
 
     }

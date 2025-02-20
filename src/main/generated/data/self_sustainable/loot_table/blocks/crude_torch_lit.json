@@ -2,22 +2,28 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "self_sustainable:crude_torch_lit",
           "functions": [
             {
-              "source": "block_entity",
+              "function": "minecraft:copy_components",
               "include": [
                 "self_sustainable:torch_fuel"
               ],
-              "function": "minecraft:copy_components"
+              "source": "block_entity"
             }
-          ]
+          ],
+          "name": "self_sustainable:crude_torch_lit"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
   ]
 }

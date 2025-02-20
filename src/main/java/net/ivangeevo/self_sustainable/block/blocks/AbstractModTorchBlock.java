@@ -164,10 +164,7 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     public void doSmoulder(World world, BlockPos pos, BlockState state) {
         if (!world.isClient) {
             world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            this.displaySharedParticles(state, world, pos);
             changeTorch(world, pos, state, TorchFireState.SMOULDER);
         }
     }
@@ -175,10 +172,7 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     public void extinguish(World world, BlockPos pos, BlockState state) {
         if (!world.isClient) {
             world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            this.displaySharedParticles(state, world, pos);
             changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
         }
     }
@@ -186,10 +180,7 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     public void burnOut(World world, BlockPos pos, BlockState state, boolean playSound) {
         if (!world.isClient) {
             if (playSound) world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
-            displayParticle(ParticleTypes.SMOKE, state, world, pos);
+            this.displaySharedParticles(state, world, pos);
             changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
         }
     }
@@ -201,6 +192,14 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
             displayParticle(ParticleTypes.FLAME, state, world, pos);
             changeTorch(world, pos, state, TorchFireState.LIT);
         }
+    }
+
+    /** Particles that torches display on light up, smoulder and burn out **/
+    private void displaySharedParticles(BlockState state, World world, BlockPos pos) {
+        displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
+        displayParticle(ParticleTypes.LARGE_SMOKE, state, world, pos);
+        displayParticle(ParticleTypes.SMOKE, state, world, pos);
+        displayParticle(ParticleTypes.SMOKE, state, world, pos);
     }
 
     public abstract boolean isWallTorch();

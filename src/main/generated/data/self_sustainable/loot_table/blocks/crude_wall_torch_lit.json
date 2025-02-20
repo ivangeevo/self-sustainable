@@ -11,6 +11,15 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "self_sustainable:torch_fuel"
+              ],
+              "source": "block_entity"
+            }
+          ],
           "name": "self_sustainable:crude_torch_lit"
         }
       ],

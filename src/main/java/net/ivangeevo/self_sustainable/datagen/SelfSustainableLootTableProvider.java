@@ -4,7 +4,14 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
+import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.function.CopyComponentsLootFunction;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
@@ -20,18 +27,30 @@ public class SelfSustainableLootTableProvider extends FabricBlockLootTableProvid
         this.addDrop(ModBlocks.BRICK, drops(Items.BRICK));
         this.addDrop(ModBlocks.BRICK_UNFIRED, drops(Items.CLAY_BALL));
         this.addDrop(ModBlocks.CRUDE_TORCH_UNLIT, drops(ModItems.CRUDE_TORCH_UNLIT));
-        this.addDrop(ModBlocks.CRUDE_TORCH_LIT, drops(ModItems.CRUDE_TORCH_LIT));
-        this.addDrop(ModBlocks.CRUDE_TORCH_SMOULDER, drops(ModItems.CRUDE_TORCH_SMOULDER));
+
+        this.addDrop(ModBlocks.CRUDE_TORCH_LIT, burningFiniteTorchDrops(ModItems.CRUDE_TORCH_LIT));
+        this.addDrop(ModBlocks.CRUDE_TORCH_SMOULDER, burningFiniteTorchDrops(ModItems.CRUDE_TORCH_SMOULDER));
         this.addDrop(ModBlocks.CRUDE_WALL_TORCH_UNLIT, drops(ModItems.CRUDE_TORCH_UNLIT));
-        this.addDrop(ModBlocks.CRUDE_WALL_TORCH_LIT, drops(ModItems.CRUDE_TORCH_LIT));
-        this.addDrop(ModBlocks.CRUDE_WALL_TORCH_SMOULDER, drops(ModItems.CRUDE_TORCH_SMOULDER));
+        this.addDrop(ModBlocks.CRUDE_WALL_TORCH_LIT, burningFiniteTorchDrops(ModItems.CRUDE_TORCH_LIT));
+        this.addDrop(ModBlocks.CRUDE_WALL_TORCH_SMOULDER, burningFiniteTorchDrops(ModItems.CRUDE_TORCH_SMOULDER));
 
         this.addDrop(ModBlocks.TORCH_UNLIT, drops(ModItems.TORCH_UNLIT));
         this.addDrop(ModBlocks.WALL_TORCH_UNLIT, drops(ModItems.TORCH_UNLIT));
     }
 
-    @Override
-    public String getName() {
-        return null;
+    public LootTable.Builder burningFiniteTorchDrops(ItemConvertible drop) {
+        return LootTable.builder().pool(
+                this.addSurvivesExplosionCondition(drop, LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0f))
+                        .with(ItemEntry.builder(drop)
+                                .apply(
+                                        CopyComponentsLootFunction.builder(
+                                                CopyComponentsLootFunction.Source.BLOCK_ENTITY)
+                                                .include(ModComponents.TORCH_FUEL_COMPONENT)
+                                )
+                        )
+
+                )
+        );
     }
+
 }

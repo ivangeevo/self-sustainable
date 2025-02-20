@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:coal"
+    },
+    "I": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "C",
+    "I"
+  ],
+  "result": {
+    "count": 4,
+    "id": "self_sustainable:crude_torch_unlit"
+  }
+}

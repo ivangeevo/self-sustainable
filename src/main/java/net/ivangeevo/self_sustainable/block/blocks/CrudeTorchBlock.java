@@ -40,12 +40,6 @@ public class CrudeTorchBlock extends AbstractModTorchBlock {
         return CODEC;
     }
 
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-    {
-        return AbstractModTorchBlock.validateTicker(type, ModBlockEntities.TORCH, TorchBE::tick);
-    }
-
     public CrudeTorchBlock(SimpleParticleType particle, AbstractBlock.Settings settings, TorchFireState fireState) {
         super(settings, particle, fireState);
         this.particle = particle;
@@ -54,6 +48,13 @@ public class CrudeTorchBlock extends AbstractModTorchBlock {
     public CrudeTorchBlock(SimpleParticleType particle, AbstractBlock.Settings settings) {
         this(particle, settings, TorchFireState.UNLIT);
     }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return AbstractModTorchBlock.validateTicker(type, ModBlockEntities.TORCH, TorchBE::tick);
+    }
+
 
     @Override
     public boolean isWallTorch() { return false; }

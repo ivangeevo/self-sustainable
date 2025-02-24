@@ -38,7 +38,6 @@ public class ModItems
     public static final Item KNITTING = registerItem("knitting",
             new KnittingItem(new Item.Settings()));
 
-
     public static final Item WICKER = registerItem("wicker", new Item(new Item.Settings()));
     public static final Item WICKER_WEAVING = registerItem("wicker_weaving",
             new WickerWeavingItem(new Item.Settings().maxCount(1)));

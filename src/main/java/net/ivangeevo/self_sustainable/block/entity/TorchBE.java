@@ -8,23 +8,23 @@ import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.inventory.ContainerLock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class TorchBE extends BlockEntity {
+
     protected static Random random = new Random();
+
     public TorchBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TORCH, pos, state);
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, TorchBE be) {
-        TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
-
-        if (fuelComponent == null) {
-            return;
-        }
+        TorchFuelComponent fuelComponent = be.getComponents().getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent());
 
         if (!world.isClient) {
             if (!(state.getBlock() instanceof AbstractModTorchBlock torchBlock)) return;
@@ -33,6 +33,8 @@ public class TorchBE extends BlockEntity {
             } else if (torchBlock.getFireState() == TorchFireState.SMOULDER) {
                 tickSmoldering(world, pos, state, be, fuelComponent);
             }
+
+
         }
     }
 
@@ -46,6 +48,7 @@ public class TorchBE extends BlockEntity {
         }
 
         int fuel = fuelComponent.getFuel();
+
         // Burn out
         if (fuel > 0) {
             fuelComponent.decrement();
@@ -59,6 +62,7 @@ public class TorchBE extends BlockEntity {
 
         be.markDirty();
     }
+
 
     private static void tickSmoldering(World world, BlockPos pos, BlockState state, TorchBE be, TorchFuelComponent fuelComponent) {
         int fuel = fuelComponent.getFuel();

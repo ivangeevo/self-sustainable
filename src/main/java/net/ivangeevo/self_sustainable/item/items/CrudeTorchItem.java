@@ -58,6 +58,7 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         return oldHasFuel != newHasFuel;
     }
 
+
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         ItemStack stack = context.getStack();
@@ -164,4 +165,8 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         return stack;
     }
 
+    @Override
+    public boolean getCanItemStartFireOnUse(ItemStack stack) {
+        return torchState == TorchFireState.LIT || torchState == TorchFireState.SMOULDER;
+    }
 }

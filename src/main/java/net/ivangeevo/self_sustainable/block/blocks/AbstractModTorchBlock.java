@@ -1,6 +1,7 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
 import com.terraformersmc.modmenu.util.mod.Mod;
+import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.TorchBE;
 import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
@@ -12,6 +13,7 @@ import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -143,14 +145,29 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         return fireState == TorchFireState.UNLIT;
     }
 
-
     @Override
     public boolean setOnFireDirectly(World world, BlockPos pos) {
         if (this.getCanBeSetOnFireDirectly(world, pos)) {
 
+            if (!(world.getBlockEntity(pos) instanceof TorchBE be)) {
+                return false;
+            }
+
             if (!world.hasRain(pos)) {
                 changeTorch(world, pos, world.getBlockState(pos), TorchFireState.LIT);
                 Ignitable.playLitFX(world, pos);
+
+                // Ensure the block entity has the required component
+                ComponentMap components = be.getComponents();
+                if (!components.contains(ModComponents.TORCH_FUEL_COMPONENT)) {
+                    ComponentMap updatedComponents = ComponentMap.builder()
+                            .add(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent())
+                            .build();
+                    be.setComponents(updatedComponents);
+                }
+                be.markDirty();
+
+
             } else {
                 Ignitable.playExtinguishSound(world, pos, false);
             }
@@ -159,6 +176,22 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
         }
 
         return false;
+    }
+
+    @Override
+    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.getBlock() != newState.getBlock() && isFuelHavingTorchBlock(newState)) {
+            return;
+        }
+
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    private boolean isFuelHavingTorchBlock(BlockState state) {
+        return state.isOf(ModBlocks.CRUDE_TORCH_LIT)
+                || state.isOf(ModBlocks.CRUDE_TORCH_SMOULDER)
+                || state.isOf(ModBlocks.CRUDE_WALL_TORCH_LIT)
+                || state.isOf(ModBlocks.CRUDE_WALL_TORCH_SMOULDER);
     }
 
     public void doSmoulder(World world, BlockPos pos, BlockState state) {
@@ -210,14 +243,13 @@ public abstract class AbstractModTorchBlock extends BlockWithEntity implements B
     }
 
     public void changeTorch(World world, BlockPos pos, BlockState oldState, TorchFireState newType) {
-        BlockState newState;
 
-        if (isWallTorch()) {
-            newState = handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(CrudeWallTorchBlock.FACING));
-        } else {
-            newState = handler.getStandingTorch(newType).getDefaultState();
-        }
+        // Change the block state
+        BlockState newState = isWallTorch()
+                ? handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(CrudeWallTorchBlock.FACING))
+                : handler.getStandingTorch(newType).getDefaultState();
 
+        // TODO: Fix items set on fire initially don't have the torch fuel component set
         world.setBlockState(pos, newState);
         if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TorchBE be) {
             TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);

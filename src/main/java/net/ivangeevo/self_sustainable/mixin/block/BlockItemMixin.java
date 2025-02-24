@@ -69,7 +69,7 @@ public abstract class BlockItemMixin extends Item implements Ignitable
 
         if (heldStack.isIn(ModTags.Items.CAN_START_FIRE_ON_USE)) {
 
-            // Check if the block at the position is a campfire or oven and try lighting up.
+            // Check if the block at the position is viable for lighting up.
             if (isLightableFromOnUseBlock(block, heldStack)) {
                 if (world.canPlayerModifyAt(player, pos)) {
                     if (!world.isClient) {

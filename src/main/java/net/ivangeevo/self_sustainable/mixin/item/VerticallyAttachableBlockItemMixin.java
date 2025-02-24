@@ -34,7 +34,7 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem
         BlockState state = world.getBlockState(pos);
 
         // Make sure it's a torch and get its type
-        if (stack.getItem() instanceof VerticallyAttachableBlockItem) {
+        if (stack.getItem() instanceof VerticallyAttachableBlockItem && !(stack.getItem() instanceof CrudeTorchItem)) {
             if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE)) {
                     // No lighting on unlit fires etc.
                     if (state.contains(Properties.LIT))

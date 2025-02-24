@@ -2,12 +2,8 @@ package net.ivangeevo.self_sustainable.mixin.block;
 
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.blocks.CrudeWallTorchBlock;
-import net.ivangeevo.self_sustainable.block.entity.TorchBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
-import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
-import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.*;
-import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -18,18 +14,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
 @Mixin(TorchBlock.class)
 public abstract class TorchBlockMixin extends AbstractTorchBlock {
 
     protected TorchBlockMixin(Settings settings) {
         super(settings);
-    }
-
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void onInit(SimpleParticleType particle, Settings settings, CallbackInfo ci) {
-
     }
 
     @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)

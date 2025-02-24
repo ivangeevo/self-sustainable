@@ -34,32 +34,32 @@ public class ModBlockEntities {
 
         OVEN_BRICK = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(SelfSustainableMod.MOD_ID, "oven_brick"),
+                Identifier.of(SelfSustainableMod.MOD_ID, "oven_brick_block_entity"),
                 BlockEntityType.Builder.create(BrickOvenBE::new, ModBlocks.OVEN_BRICK).build(null)
         );
 
         SMOKER_BRICK = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(SelfSustainableMod.MOD_ID, "smoker_brick"),
+                Identifier.of(SelfSustainableMod.MOD_ID, "smoker_brick_block_entity"),
                 BlockEntityType.Builder.create(SmokerOvenBE::new,
                 ModBlocks.SMOKER_BRICK).build(null)
         );
 
         CAMPFIRE = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(SelfSustainableMod.MOD_ID, "campfire"),
+                Identifier.of(SelfSustainableMod.MOD_ID, "campfire_block_entity"),
                 BlockEntityType.Builder.create(VariableCampfireBE::new, Blocks.CAMPFIRE).build(null)
         );
 
         BRICK_UNFIRED = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(SelfSustainableMod.MOD_ID, "brick_unfired"),
+                Identifier.of(SelfSustainableMod.MOD_ID, "brick_unfired_block_entity"),
                 BlockEntityType.Builder.create(UnfiredBrickBE::new, ModBlocks.BRICK_UNFIRED).build()
         );
 
         TORCH = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(SelfSustainableMod.MOD_ID, "torch"),
+                Identifier.of(SelfSustainableMod.MOD_ID, "torch_block_entity"),
                 BlockEntityType.Builder.create(TorchBE::new, torchesArray).build()
         );
 

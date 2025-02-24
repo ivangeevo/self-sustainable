@@ -3,7 +3,6 @@ package net.ivangeevo.self_sustainable.mixin.entity;
 import com.mojang.authlib.GameProfile;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.ModItems;
-import net.ivangeevo.self_sustainable.item.interfaces.TorchAdded;
 import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

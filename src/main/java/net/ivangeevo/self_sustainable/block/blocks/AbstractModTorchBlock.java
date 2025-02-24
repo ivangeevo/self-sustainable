@@ -1,6 +1,5 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
-import com.terraformersmc.modmenu.util.mod.Mod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.TorchBE;
 import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;

@@ -10,7 +10,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.items.KnittingItem;
-import net.ivangeevo.self_sustainable.item.items.WoolItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;

@@ -4,7 +4,6 @@ import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.WoolColorsHelper;
 import net.ivangeevo.self_sustainable.util.WoolType;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.color.item.ItemColorProvider;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -19,7 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.*;
-
+/**
 public class WoolItem extends Item implements ItemColorProvider {
 
 	static private final List<List<Integer>> colorConversionArray = new LinkedList<>();
@@ -35,8 +34,6 @@ public class WoolItem extends Item implements ItemColorProvider {
 					0x101010, 0xb3312c, 0x3b511a, 0x51301a, 0x253192, 0x7b2fbe, 0x287697, 0x838383, 0x434343, 0xd88198,
 					0x41cd34, 0xdecf2a, 0x6689d3, 0xc354cd, 0xeb8844, 0xffffff
 			};
-
-
 
 
 	//------------- Class Specific Methods ------------//
@@ -301,10 +298,11 @@ public class WoolItem extends Item implements ItemColorProvider {
 	 }
 	 }
 
-	 **/
+
 	@Override
 	public int getColor(ItemStack stack, int tintIndex) {
 		return stack.getDamage();
 	}
 
 }
+**/

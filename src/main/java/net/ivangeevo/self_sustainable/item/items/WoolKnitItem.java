@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
 public class WoolKnitItem extends Item implements ItemColorProvider {
     public WoolKnitItem(Settings settings) {
         super(settings);
@@ -44,7 +45,7 @@ public class WoolKnitItem extends Item implements ItemColorProvider {
         colorMap.put(DyeColor.BLACK, 0X1E1B1B);
     }
 
-    /**
+
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> list) {
         for (DyeColor color : DyeColor.values()){
@@ -52,7 +53,7 @@ public class WoolKnitItem extends Item implements ItemColorProvider {
            // setWoolItemTooltip(stack);
         }
     }
-    **/
+
 
 
 
@@ -141,3 +142,4 @@ public class WoolKnitItem extends Item implements ItemColorProvider {
     }
 
 }
+ **/

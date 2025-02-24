@@ -1,12 +1,9 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
-import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.block.entity.renderer;
+package net.ivangeevo.self_sustainable.client.block.entity.renderer;
 
 import net.ivangeevo.self_sustainable.block.blocks.BrickOvenBlock;
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;

@@ -35,8 +35,8 @@ public class ModItems
 
 
     // All items below are unused for now
-    public static final Item WOOL = registerItem("wool", new WoolItem( new Item.Settings().maxCount(64)));
-    public static final Item WOOL_KNIT = registerItem( "wool_knit", new WoolKnitItem(new Item.Settings()));
+    //public static final Item WOOL = registerItem("wool", new WoolItem( new Item.Settings().maxCount(64)));
+    //public static final Item WOOL_KNIT = registerItem( "wool_knit", new WoolKnitItem(new Item.Settings()));
     public static final Item KNITTING_NEEDLES = registerItem("knitting_needles", new KnittingNeedlesItem(ToolMaterials.WOOD, new Item.Settings().recipeRemainder(ModItems.KNITTING_NEEDLES)));
     public static final Item KNITTING = registerItem("knitting", new KnittingItem(new Item.Settings()));
     public static final Item WICKER = registerItem("wicker", new Item(new Item.Settings()));

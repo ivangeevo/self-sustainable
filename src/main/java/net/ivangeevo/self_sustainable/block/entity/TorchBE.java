@@ -7,9 +7,6 @@ import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.inventory.ContainerLock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

@@ -1,7 +1,6 @@
 package net.ivangeevo.self_sustainable;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

@@ -1,12 +1,8 @@
 package net.ivangeevo.self_sustainable.mixin.item;
 
 import net.ivangeevo.self_sustainable.block.ModBlocks;
-import net.ivangeevo.self_sustainable.block.blocks.AbstractModTorchBlock;
-import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
-import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
 import net.ivangeevo.self_sustainable.tag.ModTags;
-import net.minecraft.block.AbstractTorchBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

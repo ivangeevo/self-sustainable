@@ -143,6 +143,43 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
              }
              **/
 
+            if (iCurrentFireLevel > 1 && world.random.nextFloat() <= MODIFIED_CHANCE_OF_FIRE_SPREAD) {
+                for (Direction direction : Direction.values()) {
+
+                    BlockPos adjacentPos = pos.offset(direction);
+                    BlockState adjacentState = world.getBlockState(adjacentPos);
+                    Block adjacentBlock = adjacentState.getBlock();
+                    if (adjacentBlock instanceof CampfireBlock) {
+                        VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
+                        if (adjacentCampfireBE != null && isAdjacentCampfireLightableFromSpread(adjacentState)) {
+                            adjacentCampfireBE.changeFireLevel(world, 1); // Set fire level to 1
+                            adjacentCampfireBE.onFirstLit();
+                            Ignitable.playLitFX(world, pos);
+                        }
+                    }
+                }
+
+            }
+
+
+            // New try //
+            // Fire spreading logic
+            for (Direction direction : Direction.values()) {
+                BlockPos adjacentPos = pos.offset(direction);
+                BlockState adjacentState = world.getBlockState(adjacentPos);
+                Block adjacentBlock = adjacentState.getBlock();
+                if (adjacentBlock instanceof CampfireBlock) {
+                    VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
+                    if (adjacentCampfireBE != null && isAdjacentCampfireLightableFromSpread(adjacentState)) {
+                        if (world.random.nextFloat() <= MODIFIED_CHANCE_OF_FIRE_SPREAD) {
+                            adjacentCampfireBE.changeFireLevel(world, 1); // Set fire level to 1
+                            adjacentCampfireBE.onFirstLit();
+                            Ignitable.playLitFX(world, pos);
+                        }
+                    }
+                }
+            }
+
             campfireBE.burnTimeSinceLit++;
 
             if (campfireBE.burnTimeCountdown > 0 ) {
@@ -185,26 +222,12 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
                     campfireBE.extinguishFire(world, state, pos, false);
                 }
 
-                // New try //
-                // Fire spreading logic
-                for (Direction direction : Direction.values()) {
-                    BlockPos adjacentPos = pos.offset(direction);
-                    BlockState adjacentState = world.getBlockState(adjacentPos);
-                    Block adjacentBlock = adjacentState.getBlock();
-                    if (adjacentBlock instanceof CampfireBlock) {
-                        VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
-                        if (adjacentCampfireBE != null && (getCurrentFireLevel(adjacentState) == 0 && adjacentBlock.getDefaultState().get(FUEL_STATE) == CampfireState.NORMAL)) {
-                            if (world.random.nextFloat() <= MODIFIED_CHANCE_OF_FIRE_SPREAD) {
-                                adjacentCampfireBE.changeFireLevel(world, 1); // Set fire level to 1
-                                adjacentCampfireBE.onFirstLit();
-                                Ignitable.playLitFX(world, pos);
-                            }
-                        }
-                    }
-                }
-
             }
         }
+    }
+
+    private static boolean isAdjacentCampfireLightableFromSpread(BlockState state) {
+        return state.get(FIRE_LEVEL) == 0 && state.get(FUEL_STATE) == CampfireState.NORMAL;
     }
 
     public static void unlitServerTick(World world, BlockPos pos, BlockState state, VariableCampfireBE campfireBE) {

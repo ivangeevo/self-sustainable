@@ -30,6 +30,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.Clearable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -79,6 +80,9 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
     private static final int TIME_TO_BURN_FOOD = (TIME_TO_COOK / 2 );
 
     private static final float CHANCE_OF_FIRE_SPREAD = 0.05F;
+
+    // custom set chance because we don't take into account the fire chance spreading values that btw applies from the fire block logic
+    private static final float MODIFIED_CHANCE_OF_FIRE_SPREAD = 0.0004F;
 
     private static final float CHANCE_OF_GOING_OUT_FROM_RAIN = 0.01F;
 
@@ -131,32 +135,13 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
                 world.setBlockState(pos, Blocks.FIRE.getDefaultState());
             }
 
+            /**
             //TODO : Fire spread for campfire. NOT WORKING ATM
              if ( iCurrentFireLevel > 1 && world.random.nextFloat() <= CHANCE_OF_FIRE_SPREAD) {
                  Block fireBlock = state.getBlock();
                  fireBlock.checkForFireSpreadFromLocation(world, pos, world.random, 0);
              }
-
-            /**
-            // New try //
-            // Fire spreading logic
-            if (world.random.nextFloat() <= CHANCE_OF_FIRE_SPREAD) {
-                for (Direction direction : Direction.values()) {
-                    BlockPos adjacentPos = pos.offset(direction);
-                    BlockState adjacentState = world.getBlockState(adjacentPos);
-                    Block adjacentBlock = adjacentState.getBlock();
-                    if (adjacentBlock instanceof CampfireBlock) {
-                        VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
-                        if (adjacentCampfireBE != null && getCurrentFireLevel(adjacentState) == 0) {
-                            adjacentCampfireBE.changeFireLevel(world,1); // Set fire level to 1
-                            Ignitable.playLitFX(world, pos);
-
-                        }
-                    }
-                }
-            }
              **/
-
 
             campfireBE.burnTimeSinceLit++;
 
@@ -174,15 +159,15 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
             if ( iCurrentFireLevel > 0 ) {
                 boolean bl = false;
 
-                ItemStack itemStack = campfireBE.itemsBeingCooked.get(0);
+                ItemStack itemStack = campfireBE.itemsBeingCooked.getFirst();
                 if (!itemStack.isEmpty()) {
                     bl = true;
                     campfireBE.setCookTime(campfireBE.getCookTime() + 1);
                     if (campfireBE.getCookTime() >= campfireBE.getTotalCookTime()) {
                         SingleStackRecipeInput singleStackRecipeInput = new SingleStackRecipeInput(itemStack);
-                        ItemStack itemStack2 = (ItemStack)campfireBE.matchGetter
+                        ItemStack itemStack2 = campfireBE.matchGetter
                                 .getFirstMatch(singleStackRecipeInput, world)
-                                .map(recipe -> ((CampfireCookingRecipe)recipe.value()).craft(singleStackRecipeInput, world.getRegistryManager()))
+                                .map(recipe -> recipe.value().craft(singleStackRecipeInput, world.getRegistryManager()))
                                 .orElse(itemStack);                        if (itemStack2.isItemEnabled(world.getEnabledFeatures()))
                         {
                             campfireBE.itemsBeingCooked.set(0, itemStack2);
@@ -199,6 +184,25 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
                 if ( isGoOutFromRainChance(world, pos) ) {
                     campfireBE.extinguishFire(world, state, pos, false);
                 }
+
+                // New try //
+                // Fire spreading logic
+                for (Direction direction : Direction.values()) {
+                    BlockPos adjacentPos = pos.offset(direction);
+                    BlockState adjacentState = world.getBlockState(adjacentPos);
+                    Block adjacentBlock = adjacentState.getBlock();
+                    if (adjacentBlock instanceof CampfireBlock) {
+                        VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
+                        if (adjacentCampfireBE != null && (getCurrentFireLevel(adjacentState) == 0 && adjacentBlock.getDefaultState().get(FUEL_STATE) == CampfireState.NORMAL)) {
+                            if (world.random.nextFloat() <= MODIFIED_CHANCE_OF_FIRE_SPREAD) {
+                                adjacentCampfireBE.changeFireLevel(world, 1); // Set fire level to 1
+                                adjacentCampfireBE.onFirstLit();
+                                Ignitable.playLitFX(world, pos);
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -271,7 +275,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
                 }
 
                 if ( iDesiredFireLevel != iCurrentFireLevel ) {
-                    changeFireLevel(world,iDesiredFireLevel);
+                    changeFireLevel(world, iDesiredFireLevel);
 
                     if ( iDesiredFireLevel == 1 && iCurrentFireLevel == 2 ) {
                         Ignitable.playExtinguishSound(world, pos, false);
@@ -420,7 +424,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         this.itemsBeingCooked.clear();
     }
 
-    public void changeFireLevel(World world ,int iFireLevel) {
+    public void changeFireLevel(World world, int iFireLevel) {
 
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof CampfireBlock block) {

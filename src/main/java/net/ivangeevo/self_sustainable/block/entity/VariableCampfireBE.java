@@ -152,27 +152,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
                     if (adjacentBlock instanceof CampfireBlock) {
                         VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
                         if (adjacentCampfireBE != null && isAdjacentCampfireLightableFromSpread(adjacentState)) {
-                            adjacentCampfireBE.changeFireLevel(world, 1); // Set fire level to 1
-                            adjacentCampfireBE.onFirstLit();
-                            Ignitable.playLitFX(world, pos);
-                        }
-                    }
-                }
-
-            }
-
-
-            // New try //
-            // Fire spreading logic
-            for (Direction direction : Direction.values()) {
-                BlockPos adjacentPos = pos.offset(direction);
-                BlockState adjacentState = world.getBlockState(adjacentPos);
-                Block adjacentBlock = adjacentState.getBlock();
-                if (adjacentBlock instanceof CampfireBlock) {
-                    VariableCampfireBE adjacentCampfireBE = (VariableCampfireBE) world.getBlockEntity(adjacentPos);
-                    if (adjacentCampfireBE != null && isAdjacentCampfireLightableFromSpread(adjacentState)) {
-                        if (world.random.nextFloat() <= MODIFIED_CHANCE_OF_FIRE_SPREAD) {
-                            adjacentCampfireBE.changeFireLevel(world, 1); // Set fire level to 1
+                            adjacentCampfireBE.changeFireLevel(world, 1);
                             adjacentCampfireBE.onFirstLit();
                             Ignitable.playLitFX(world, pos);
                         }

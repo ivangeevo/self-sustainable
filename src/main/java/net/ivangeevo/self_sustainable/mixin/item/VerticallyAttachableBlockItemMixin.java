@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.mixin.item;
 
+import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.blocks.AbstractModTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
@@ -8,6 +9,7 @@ import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.AbstractTorchBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
@@ -38,7 +40,7 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem
             if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE)) {
                     // No lighting on unlit fires etc.
                     if (state.contains(Properties.LIT))
-                        if (!state.get(Properties.LIT))
+                        if (!state.get(Properties.LIT) || !isLitTorchBlock(state))
                             return super.useOnBlock(context);
 
                     PlayerEntity player = context.getPlayer();
@@ -51,6 +53,20 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem
         }
 
         return super.useOnBlock(context);
+    }
+    private boolean isLitTorchBlock(BlockState state) {
+        return state.isOf(ModBlocks.CRUDE_TORCH_LIT)
+                || state.isOf(ModBlocks.CRUDE_TORCH_SMOULDER)
+                || state.isOf(ModBlocks.CRUDE_WALL_TORCH_LIT)
+                || state.isOf(ModBlocks.CRUDE_WALL_TORCH_SMOULDER)
+                || state.isOf(Blocks.TORCH)
+                || state.isOf(Blocks.SOUL_TORCH)
+                || state.isOf(Blocks.WALL_TORCH)
+                || state.isOf(Blocks.SOUL_WALL_TORCH)
+
+
+
+                ;
     }
 
 }

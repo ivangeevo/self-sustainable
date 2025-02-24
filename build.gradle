@@ -75,7 +75,8 @@ dependencies {
     // BTWR: Core
     modImplementation "maven.modrinth:btwrcore:${project.btwr_core_version}"
 
-    modImplementation files("libs/vegehenna-${project.vegehenna_version}-1.21.1.jar")
+    // Vegehenna
+    modImplementation "maven.modrinth:54334vegehenna:${project.vegehenna_version}"
 
 }
 

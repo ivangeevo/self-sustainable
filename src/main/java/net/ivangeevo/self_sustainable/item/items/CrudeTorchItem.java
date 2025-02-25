@@ -73,10 +73,12 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
             if (torchState == TorchFireState.UNLIT || torchState == TorchFireState.SMOULDER) {
                 // Unlit and Smoldering
                 if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE)) {
+                    /**
                     // No lighting on unlit fires etc.
                     if (state.contains(Properties.LIT))
                         if (!state.get(Properties.LIT))
                             return super.useOnBlock(context);
+                     **/
 
                     PlayerEntity player = context.getPlayer();
                     if (player != null && !world.isClient)

@@ -4,6 +4,8 @@ import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
+import net.ivangeevo.self_sustainable.item.ModItems;
+import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -65,7 +67,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
 
             // Handle stick input
             if (!getHasSpit(world, pos)) {
-                if (heldStack.isOf(Items.STICK) && !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT)) {
+                if (heldStack.isOf(Items.STICK) /**&& !(state.get(FUEL_STATE) == CampfireState.BURNED_OUT)**/) {
                     setHasSpit(world, state, pos, true);
                     heldStack.decrement(1); // Decrease the heldStack count
                     return ActionResult.SUCCESS;
@@ -102,7 +104,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                 int itemBurnTime = getItemFuelTime(heldStack);
 
                 if (heldStack.getItem().getCanBeFedDirectlyIntoCampfire(heldStack)) {
-                    if ( !world.isClient ) {
+                    if (!world.isClient) {
                         Ignitable.playLitFX(world, pos);
                         campfireBE.addBurnTime(state, itemBurnTime);
                     }

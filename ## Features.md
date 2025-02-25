@@ -54,6 +54,15 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 
 ---
 
+## 🕯️ Torches Overhaul
+- **Lighting** 🔥 – Torches need to be lit to produce light. Unlit torches will not provide any light.
+- **Water & Weather Effects** 🌊🌧️:
+  - **Crude torches** will be destroyed and extinguished when submerged in water or rain.
+  - **Normal Torches** (infinite) will be extinguished in water, but can be lit again and don't get put ot in rain.
+- **Crafting** 🛠️:
+  - **Basic Torches**: Crafted using the original Minecraft recipe. These torches will burn out after **20 minutes**.
+  - **Infinite Torches**: Crafted with the original recipe, plus **Glowstone Dust** added in a **3x3 crafting grid**. These torches burn indefinitely.
+
 ###  ️🌲🔥 Burn Time Adjustments
 - Logs are now the primary fuel source and many fuel item times have been changed.
 
@@ -72,7 +81,6 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 
 ## 🐄 Animal changes
 - **Passive Mobs No Longer Respawn** 🐄❌ – Players must **breed** & preserve existing animals instead of relying on infinite spawns.
-
 ---
 
 ## 🔮 Planned Features

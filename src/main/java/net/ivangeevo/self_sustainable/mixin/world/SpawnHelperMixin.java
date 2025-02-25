@@ -10,8 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SpawnHelper.class)
-public abstract class SpawnHelperMixin
-{
+public abstract class SpawnHelperMixin {
 
     // Removes the random respawning of passive mobs
     @Inject(method = "spawnEntitiesInChunk*", at = @At("HEAD"), cancellable = true)

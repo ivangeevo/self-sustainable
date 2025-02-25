@@ -83,6 +83,7 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 
 ## 🐄 Animal changes
 - **Passive Mobs No Longer Respawn** 🐄❌ – Players must **breed** & preserve existing animals instead of relying on infinite spawns.
+
 ---
 
 ## 🔮 Planned Features

@@ -27,15 +27,15 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 ### 🏃 Stamina & Exhaustion Changes
 - **Periodic exhaustion added** ⏳ – Players will **lose stamina over time** even when idle, preventing infinite AFK play.
 - **Increased exhaustion for movement**:
-    - **Jumping & sprinting** now consume more stamina.
-    - **Sprint-jumping** is even more exhausting.
-    - This makes early-game movement more strategic.
+  - **Jumping & sprinting** now consume more stamina.
+  - **Sprint-jumping** is even more exhausting.
+  - This makes early-game movement more strategic.
 - The above **increased exhaustion for movement** is compatible with the "I'm movens" mod, and is removed when that mod is present, as it enforces even higher exhaustion values.
 ---
 
 ### ❤️ Health & Hunger Adjustments
 - **Passive Healing** 🏥 – Heals **½ heart every 10 seconds** if hunger is high enough.
-    - If **"I'm Movens" mod** is installed, healing happens every **30 seconds** instead.
+  - If **"I'm Movens" mod** is installed, healing happens every **30 seconds** instead.
 - **No full hunger healing** ❌ – Difficulty-based healing removed.
 - **Cooking takes longer** ⏳ – Food now requires more time to cook, making survival harder.
 
@@ -63,6 +63,8 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
   - **Basic Torches**: Crafted using the original Minecraft recipe. These torches will burn out after **20 minutes**.
   - **Infinite Torches**: Crafted with the original recipe, plus **Glowstone Dust** added in a **3x3 crafting grid**. These torches burn indefinitely.
 
+---
+
 ###  ️🌲🔥 Burn Time Adjustments
 - Logs are now the primary fuel source and many fuel item times have been changed.
 
@@ -71,8 +73,8 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 ### 🏚️ World Generation & Structure Changes
 - **Villages now spawn only Zombie Villagers** 🧟.
 - **Zombie Villagers**:
-    - **Do not burn in sunlight** ☀️❌.
-    - **Do not despawn quickly**, making them a constant threat.
+  - **Do not burn in sunlight** ☀️❌.
+  - **Do not despawn quickly**, making them a constant threat.
 - **Loot Overhaul** 🎁 – All world-generated chests have been **rebalanced for fairness** (no easy loot).
 - **Melons removed** 🍉❌ – No more Melon patches in world generation or villages.
 - **Iron Golems removed** 🚫 – No longer spawn in villages.

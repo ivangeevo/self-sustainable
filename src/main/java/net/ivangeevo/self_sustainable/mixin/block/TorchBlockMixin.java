@@ -23,7 +23,7 @@ public abstract class TorchBlockMixin extends AbstractTorchBlock {
 
     @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
     private void stopParticles(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci) {
-        if (state.isOf(ModBlocks.TORCH_UNLIT) || state.isOf(ModBlocks.WALL_TORCH_UNLIT)) {
+        if (state.isOf(ModBlocks.TORCH_UNLIT)) {
             ci.cancel();
         }
     }

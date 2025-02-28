@@ -9,6 +9,7 @@ import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
@@ -19,6 +20,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 
 public class CrudeTorchItem extends VerticallyAttachableBlockItem implements FabricItem {
     TorchFireState torchState;
@@ -73,6 +76,14 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
             if (torchState == TorchFireState.UNLIT || torchState == TorchFireState.SMOULDER) {
                 // Unlit and Smoldering
                 if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE)) {
+
+                    if (state.getBlock() instanceof CampfireBlock) {
+                        if (!(state.get(FIRE_LEVEL) > 0)) {
+                            return ActionResult.PASS;
+                        }
+
+                    }
+
                     /**
                     // No lighting on unlit fires etc.
                     if (state.contains(Properties.LIT))

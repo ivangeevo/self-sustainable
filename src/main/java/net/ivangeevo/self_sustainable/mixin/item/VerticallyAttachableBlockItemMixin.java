@@ -6,6 +6,7 @@ import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
@@ -15,6 +16,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+
+import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 
 @Mixin(VerticallyAttachableBlockItem.class)
 public abstract class VerticallyAttachableBlockItemMixin extends BlockItem
@@ -34,12 +37,22 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem
         // Make sure it's a torch and get its type
         if (stack.getItem() instanceof VerticallyAttachableBlockItem && !(stack.getItem() instanceof CrudeTorchItem)) {
             if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE)) {
-                    // No lighting on unlit fires etc.
+
+                if (state.getBlock() instanceof CampfireBlock) {
+                    if (!(state.get(FIRE_LEVEL) > 0)) {
+                        return ActionResult.PASS;
+                    }
+
+                }
+
+                /**
+                // No lighting on unlit fires etc.
                     if (state.contains(Properties.LIT))
                         if (!state.get(Properties.LIT) || !isLitTorchBlock(state))
                             return super.useOnBlock(context);
+                 **/
 
-                    PlayerEntity player = context.getPlayer();
+                PlayerEntity player = context.getPlayer();
                     if (player != null && !world.isClient)
                         player.getInventory().setStack(player.getInventory().selectedSlot, Items.TORCH.getDefaultStack().copyWithCount(stack.getCount()));
                     if (!world.isClient) world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);

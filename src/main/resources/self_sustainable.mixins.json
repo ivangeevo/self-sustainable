@@ -13,6 +13,7 @@
     "block.CakeBlockMixin",
     "block.CampfireBlockMixin",
     "block.TorchBlockMixin",
+    "block.WallTorchBlockMixin",
     "entity.LivingEntityMixin",
     "entity.MobEntityMixin",
     "entity.OGHungerManagerMixin",

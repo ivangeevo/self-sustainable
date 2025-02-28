@@ -52,8 +52,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import java.util.Set;
 
-import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
-
 // TODO: Make campfire spread fire to neighbouring campfires and also to set fire around like it does in BTW
 @Mixin(CampfireBlock.class)
 public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, IVariableCampfireBlock
@@ -61,6 +59,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Shadow @Final private boolean emitsParticles;
     @Shadow @Final private int fireDamage;
     @Shadow @Final public static BooleanProperty WATERLOGGED;
+    @Shadow @Final public static BooleanProperty SIGNAL_FIRE;
 
     @Shadow protected abstract boolean isSignalFireBaseBlock(BlockState state);
 
@@ -69,12 +68,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     // helper method for easier calling of the campfire block manager class
     @Unique private static final CampfireBlockMixinManager managerInstance = CampfireBlockMixinManager.getInstance();
 
-    @Unique private static final Block isNormalCampfire = Blocks.CAMPFIRE;
-
     protected CampfireBlockMixin(Settings settings) {
         super(settings);
     }
 
+    @Unique
     Ingredient fuels;
 
     @Inject(method = "<init>", at = @At("RETURN"))
@@ -248,7 +246,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                     if (!world.isClient) {
                         campfireBE.addBurnTime(state, stack, itemBurnTime);
                         stack.decrement(stack.getCount());
-
                     }
                 } else {
                     if (!world.isClient) {

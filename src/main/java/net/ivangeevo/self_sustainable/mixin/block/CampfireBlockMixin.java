@@ -6,18 +6,23 @@ import net.ivangeevo.self_sustainable.block.interfaces.*;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -45,6 +50,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static net.minecraft.block.CampfireBlock.SIGNAL_FIRE;
 
@@ -69,10 +75,13 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         super(settings);
     }
 
+    Ingredient fuels;
+
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectedConstructorSettings(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
     {
         settings.notSolid();
+
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
@@ -84,6 +93,32 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                         .with(FUEL_STATE, CampfireState.NORMAL)
                         .with(HAS_SPIT, false)
         );
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        boolean isSolidBlockBelow = world.getBlockState(pos.down()).isSolidBlock(world, pos.down());
+        if (!isSolidBlockBelow) {
+            if (state.get(FIRE_LEVEL) == 0 && state.get(FUEL_STATE) == CampfireState.NORMAL) {
+                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), Items.CAMPFIRE.getDefaultStack());
+            } else {
+                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), Items.STICK.getDefaultStack());
+                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), Items.STICK.getDefaultStack());
+            }
+
+            if (state.get(HAS_SPIT)) {
+                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), Items.STICK.getDefaultStack());
+            }
+            world.removeBlock(pos, false);
+        }
+
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+    }
+
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        return world.getBlockState(pos.down()).isSolidBlock(world, pos.down());
     }
 
     @Inject(method = "createBlockEntity", at = @At("HEAD"), cancellable = true)
@@ -194,17 +229,44 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
 
-    // Change LIT for FIRE LEVEL greater than 1 when checking to damage entities.
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     private void injectedOnEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci)
     {
+        // Change LIT for FIRE LEVEL greater than 1 when checking to damage entities.
         if (state.get(FIRE_LEVEL) > 1 && entity instanceof LivingEntity) {
             entity.damage(world.getDamageSources().inFire(), this.fireDamage);
+        }
+
+        // make items burn on touch & fuels add to fuel time of campfire
+        if (entity instanceof ItemEntity itemEntity) {
+
+            ItemStack stack = itemEntity.getStack();
+            this.fuels = Ingredient.ofStacks(this.getAllowedFuels().stream().filter(item -> item.isEnabled(world.getEnabledFeatures())).map(ItemStack::new));
+            if (world.getBlockEntity(pos) instanceof VariableCampfireBE campfireBE) {
+                int itemBurnTime = managerInstance.getItemFuelTime(stack);
+                if (this.fuels.test(stack)) {
+                    if (!world.isClient) {
+                        campfireBE.addBurnTime(state, stack, itemBurnTime);
+                        stack.decrement(stack.getCount());
+
+                    }
+                } else {
+                    if (!world.isClient) {
+                        stack.decrement(stack.getCount());
+                    }
+                }
+                Ignitable.playLitFX(world, pos);
+            }
+
         }
 
         super.onEntityCollision(state, world, pos, entity);
 
         ci.cancel();
+    }
+
+    protected Set<Item> getAllowedFuels() {
+        return AbstractFurnaceBlockEntity.createFuelTimeMap().keySet();
     }
 
 

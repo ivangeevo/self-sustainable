@@ -143,6 +143,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
              }
              **/
 
+            // New try - lighting adjacent campfires only (no fire spread atm)
             if (iCurrentFireLevel > 1 && world.random.nextFloat() <= MODIFIED_CHANCE_OF_FIRE_SPREAD) {
                 for (Direction direction : Direction.values()) {
 
@@ -454,6 +455,12 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
 
     public void addBurnTime(BlockState state, int iBurnTime) {
         burnTimeCountdown += iBurnTime * CAMPFIRE_BURN_TIME_MULTIPLIER * BASE_BURN_TIME_MULTIPLIER;
+        burnTimeCountdown = Math.min(burnTimeCountdown, MAX_BURN_TIME);
+        validateFireLevel(world, state, pos);
+    }
+
+    public void addBurnTime(BlockState state, ItemStack stack, int iBurnTime) {
+        burnTimeCountdown += iBurnTime * stack.getCount() * CAMPFIRE_BURN_TIME_MULTIPLIER * BASE_BURN_TIME_MULTIPLIER;
         burnTimeCountdown = Math.min(burnTimeCountdown, MAX_BURN_TIME);
         validateFireLevel(world, state, pos);
     }

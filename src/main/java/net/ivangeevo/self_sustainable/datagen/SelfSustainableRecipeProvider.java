@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.datagen;
 
+import btwr.btwr_sl.lib.util.utils.RecipeProviderUtils;
 import btwr.btwr_sl.tag.BTWRConventionalTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -19,7 +20,8 @@ import static net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipe
 import static net.minecraft.data.server.recipe.CookingRecipeJsonBuilder.*;
 
 
-public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
+public class SelfSustainableRecipeProvider extends FabricRecipeProvider implements RecipeProviderUtils
+{
 
     // fcc for short
     private static final String fcc = "_from_campfire_cooking";
@@ -59,6 +61,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider {
 
     private void generateVanillaRecipesOverride(RecipeExporter exporter)
     {
+        disableVanilla(exporter, "torch");
         // Cooking Recipes (we only leave campfire and smoker(until brick oven is added) as viable cooking sources now)
 
         // Smelting (furnace cooking recipes) removal

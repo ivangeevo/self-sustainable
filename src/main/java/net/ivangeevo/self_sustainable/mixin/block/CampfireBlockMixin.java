@@ -23,7 +23,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -36,6 +38,7 @@ import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -94,21 +97,51 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        // Schedule the next tick for this block
+        world.scheduleBlockTick(pos, this, getFireTickDelay(world.random));
+
+        // Check game rules and environmental conditions
+        if (!world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
+            return;
+        }
+        if (!state.canPlaceAt(world, pos)) {
+            world.removeBlock(pos, false);
+            return;
+        }
+
+        // Define the fire age and spreading parameters
+        int age = state.get(FireBlock.AGE);
+        int newAge = Math.min(15, age + random.nextInt(3) / 2);
+        if (age != newAge) {
+            state = state.with(FireBlock.AGE, newAge);
+            world.setBlockState(pos, state, Block.NO_REDRAW);
+        }
+
+        // Utilize FireBlock's trySpreadingFire method to spread fire
+        FireBlock fireBlock = (FireBlock) world.getBlockState(pos).getBlock();
+        fireBlock.trySpreadingFire(world, pos.east(), 300, random, age);
+        fireBlock.trySpreadingFire(world, pos.west(), 300, random, age);
+        fireBlock.trySpreadingFire(world, pos.down(), 250, random, age);
+        fireBlock.trySpreadingFire(world, pos.up(), 250, random, age);
+        fireBlock.trySpreadingFire(world, pos.north(), 300, random, age);
+        fireBlock.trySpreadingFire(world, pos.south(), 300, random, age);
+    }
+
+    private static int getFireTickDelay(Random random) {
+        return 30 + random.nextInt(10);
+    }
+
+
+
+    @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
         boolean isSolidBlockBelow = world.getBlockState(pos.down()).isSolidBlock(world, pos.down());
-        if (!isSolidBlockBelow) {
-            if (state.get(FIRE_LEVEL) == 0 && state.get(FUEL_STATE) == CampfireState.NORMAL) {
-                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), Items.CAMPFIRE.getDefaultStack());
-            } else {
-                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), Items.STICK.getDefaultStack());
-                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), Items.STICK.getDefaultStack());
-            }
 
-            if (state.get(HAS_SPIT)) {
-                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), Items.STICK.getDefaultStack());
-            }
-            world.removeBlock(pos, false);
+        // break block & drop loot when block below is removed
+        if (!isSolidBlockBelow) {
+            world.breakBlock(pos, true);
         }
 
         super.neighborUpdate(state, world, pos, block, fromPos, notify);
@@ -240,17 +273,29 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         if (entity instanceof ItemEntity itemEntity) {
 
             ItemStack stack = itemEntity.getStack();
-            this.fuels = Ingredient.ofStacks(this.getAllowedFuels().stream().filter(item -> item.isEnabled(world.getEnabledFeatures())).map(ItemStack::new));
             if (world.getBlockEntity(pos) instanceof VariableCampfireBE campfireBE) {
                 int itemBurnTime = managerInstance.getItemFuelTime(stack);
-                if (!world.isClient && canBurn) {
-                    if (this.fuels.test(stack)) {
-                        campfireBE.addBurnTime(state, stack, itemBurnTime);
-                        stack.decrement(stack.getCount());
-                    } else {
-                        stack.decrement(stack.getCount());
+
+                if (!world.isClient) {
+                    // burned out doesn't allow items to burn in it, duh
+                    if (state.get(FUEL_STATE) == CampfireState.BURNED_OUT) {
+                        return;
                     }
-                    Ignitable.playLitFX(world, pos);
+                    this.fuels = Ingredient.ofStacks(this.getAllowedFuels().stream().filter(item -> item.isEnabled(world.getEnabledFeatures())).map(ItemStack::new));
+
+
+                    // fuel items can burn at fuel level 1(or higher) or smouldering
+                    if (this.fuels.test(stack)) {
+                        if (state.get(FIRE_LEVEL) > 0 || state.get(FUEL_STATE) == CampfireState.SMOULDERING) {
+                            campfireBE.addBurnTime(state, stack, itemBurnTime);
+                            stack.decrement(stack.getCount());
+                            Ignitable.playLitFX(world, pos);
+                        }
+                        // all other items burn at fuel level higher than 1
+                    } else if (state.get(FIRE_LEVEL) > 1) {
+                        stack.decrement(stack.getCount());
+                        Ignitable.playLitFX(world, pos);
+                    }
                 }
             }
 
@@ -259,6 +304,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         super.onEntityCollision(state, world, pos, entity);
 
         ci.cancel();
+    }
+
+    private boolean canItemAddToFuelTime(World world, BlockState state, ItemStack stack) {
+        // if thrown item is in the fuel time map and also if the campfire is in an appropriate state to accept fuel items
+        return this.fuels.test(stack) && (state.get(FIRE_LEVEL) > 0 || state.get(FUEL_STATE) == CampfireState.SMOULDERING);
     }
 
     protected Set<Item> getAllowedFuels() {

@@ -250,8 +250,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                     } else {
                         stack.decrement(stack.getCount());
                     }
+                    Ignitable.playLitFX(world, pos);
                 }
-                Ignitable.playLitFX(world, pos);
             }
 
         }

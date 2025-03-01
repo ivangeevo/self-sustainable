@@ -230,8 +230,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     private void injectedOnEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci)
     {
-        // Change LIT for FIRE LEVEL greater than 1 when checking to damage entities.
-        if (state.get(FIRE_LEVEL) > 1 && entity instanceof LivingEntity) {
+        boolean canBurn = state.get(FIRE_LEVEL) > 1;
+
+        if (canBurn && entity instanceof LivingEntity) {
             entity.damage(world.getDamageSources().inFire(), this.fireDamage);
         }
 
@@ -242,13 +243,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
             this.fuels = Ingredient.ofStacks(this.getAllowedFuels().stream().filter(item -> item.isEnabled(world.getEnabledFeatures())).map(ItemStack::new));
             if (world.getBlockEntity(pos) instanceof VariableCampfireBE campfireBE) {
                 int itemBurnTime = managerInstance.getItemFuelTime(stack);
-                if (this.fuels.test(stack)) {
-                    if (!world.isClient) {
+                if (!world.isClient && canBurn) {
+                    if (this.fuels.test(stack)) {
                         campfireBE.addBurnTime(state, stack, itemBurnTime);
                         stack.decrement(stack.getCount());
-                    }
-                } else {
-                    if (!world.isClient) {
+                    } else {
                         stack.decrement(stack.getCount());
                     }
                 }

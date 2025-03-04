@@ -143,9 +143,8 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
         return state.get(FUEL_STATE);
     }
 
-    private ItemStack getCookStack(VariableCampfireBE campfireBE)
-    {
-        return campfireBE.getItemsBeingCooked().get(0);
+    private ItemStack getCookStack(VariableCampfireBE campfireBE) {
+        return campfireBE.getItemsBeingCooked().getFirst();
     }
 
     public VoxelShape setCustomShapes(BlockState state) {

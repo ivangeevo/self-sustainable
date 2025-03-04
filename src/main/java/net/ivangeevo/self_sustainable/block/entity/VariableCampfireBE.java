@@ -82,7 +82,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
     private static final float CHANCE_OF_FIRE_SPREAD = 0.05F;
 
     // custom set chance because we don't take into account the fire chance spreading values that btw applies from the fire block logic
-    private static final float MODIFIED_CHANCE_OF_FIRE_SPREAD = 0.0005F;
+    private static final float MODIFIED_CHANCE_OF_FIRE_SPREAD = 0.0045F;
 
     private static final float CHANCE_OF_GOING_OUT_FROM_RAIN = 0.01F;
 

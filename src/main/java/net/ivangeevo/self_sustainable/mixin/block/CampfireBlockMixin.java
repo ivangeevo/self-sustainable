@@ -96,6 +96,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         );
     }
 
+    /**
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         // Schedule the next tick for this block
@@ -105,12 +106,12 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         if (!world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
             return;
         }
+
         if (!state.canPlaceAt(world, pos)) {
             world.removeBlock(pos, false);
             return;
         }
 
-        // Define the fire age and spreading parameters
         int age = state.get(FireBlock.AGE);
         int newAge = Math.min(15, age + random.nextInt(3) / 2);
         if (age != newAge) {
@@ -128,11 +129,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         fireBlock.trySpreadingFire(world, pos.south(), 300, random, age);
     }
 
+    @Unique
     private static int getFireTickDelay(Random random) {
         return 30 + random.nextInt(10);
     }
-
-
+     **/
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)

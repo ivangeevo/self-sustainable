@@ -81,6 +81,20 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.STONE))
     );
 
+    public static final Block WICKER_BASKET = registerWithoutItem("wicker_basket",
+            new WickerBasketBlock(AbstractBlock.Settings.create()
+                    .hardness(0.05F)
+                    .nonOpaque()
+                    .sounds(BlockSoundGroup.GRASS)
+    ));
+
+    public static final Block HAMPER= registerWithoutItem("hamper",
+            new HamperBlock(AbstractBlock.Settings.create()
+                    .hardness(0.05F)
+                    .nonOpaque()
+                    .sounds(BlockSoundGroup.GRASS)
+            ));
+
 
     private static AbstractBlock.Settings initTorchSettings() {
        return AbstractBlock.Settings.create().noCollision().breakInstantly().pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.WOOD);

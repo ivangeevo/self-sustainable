@@ -91,8 +91,11 @@ public class FoodComponentModifier {
 
         if (FabricLoader.getInstance().isModLoaded("bwt")) {
             context.modify(BwtItems.rawEggItem, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addHungerEffect(600, 2), 0.3F).build()));
+            context.modify(BwtItems.wolfChopItem, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(1200, 2), 0.3F).statusEffect(addSlownessEffect(1000, 2), 0.1F).build()));
             context.modify(BwtItems.friedEggItem, builder -> modifyEntry(builder, replaceWith(3).build()));
             context.modify(BwtItems.poachedEggItem, builder -> modifyEntry(builder, replaceWith(3).build()));
+            context.modify(BwtItems.cookedWolfChopItem, builder -> modifyEntry(builder, replaceWith(5).build()));
+            context.modify(BwtItems.donutItem, builder -> modifyEntry(builder, new FoodComponent.Builder().nutrition(1).snack().saturationModifier(0f).build()));
         }
 
     }

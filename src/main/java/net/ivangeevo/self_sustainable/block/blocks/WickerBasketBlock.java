@@ -1,7 +1,7 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
 import com.mojang.serialization.MapCodec;
-import net.ivangeevo.self_sustainable.block.entity.BasketBlockEntity;
+import net.ivangeevo.self_sustainable.block.entity.WickerBasketBE;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +23,6 @@ public class WickerBasketBlock extends BasketBlock
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new BasketBlockEntity(pos, state);
+        return new WickerBasketBE(pos, state);
     }
 }

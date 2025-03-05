@@ -59,26 +59,32 @@ public class ModBlocks {
             new BrickOvenBlock(AbstractBlock.Settings.create()
                     .strength(1.5F,2.0F)
                     .luminance((state) -> state.get(LIT) ? 10 : 0)
-                    .sounds(BlockSoundGroup.STONE)));
+                    .sounds(BlockSoundGroup.STONE)
+            )
+    );
 
     public static final Block SMOKER_BRICK = registerBlock("smoker_brick",
             new SmokerOvenBlock(AbstractBlock.Settings.create()
                     .strength(1.5F,2.0F)
                     .luminance((state) -> state.get(LIT) ? 10 : 0)
-                    .sounds(BlockSoundGroup.STONE)));
+                    .sounds(BlockSoundGroup.STONE)
+            )
+    );
 
     public static final Block BRICK_UNFIRED = registerWithoutItem("brick_unfired",
             new UnfiredBrickBlock(AbstractBlock.Settings.create()
                     .breakInstantly()
                     .nonOpaque()
-                    .sounds(BlockSoundGroup.STONE))
+                    .sounds(BlockSoundGroup.STONE)
+            )
     );
 
     public static final Block BRICK = registerWithoutItem("brick",
             new BrickBlock(AbstractBlock.Settings.create()
                     .breakInstantly()
                     .nonOpaque()
-                    .sounds(BlockSoundGroup.STONE))
+                    .sounds(BlockSoundGroup.STONE)
+            )
     );
 
     public static final Block WICKER_BASKET = registerWithoutItem("wicker_basket",
@@ -86,15 +92,16 @@ public class ModBlocks {
                     .hardness(0.05F)
                     .nonOpaque()
                     .sounds(BlockSoundGroup.GRASS)
-    ));
+            )
+    );
 
-    public static final Block HAMPER= registerWithoutItem("hamper",
+    public static final Block HAMPER = registerWithoutItem("hamper",
             new HamperBlock(AbstractBlock.Settings.create()
                     .hardness(0.05F)
                     .nonOpaque()
                     .sounds(BlockSoundGroup.GRASS)
-            ));
-
+            )
+    );
 
     private static AbstractBlock.Settings initTorchSettings() {
        return AbstractBlock.Settings.create().noCollision().breakInstantly().pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.WOOD);

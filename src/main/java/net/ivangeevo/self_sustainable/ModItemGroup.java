@@ -1,6 +1,7 @@
 package net.ivangeevo.self_sustainable;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,8 @@ public class ModItemGroup {
                         entries.add(ModItems.TORCH_UNLIT);
 
                         // Blocks
+                        entries.add(ModBlocks.WICKER_BASKET);
+                        entries.add(ModBlocks.HAMPER);
 
                         // TO ADD:
                         //entries.add(ModBlocks.SMOKER_BRICK);
@@ -38,10 +41,8 @@ public class ModItemGroup {
 
                     }).build());
 
-    public static void registerItemGroups()
-    {
+    public static void registerItemGroups() {
         SelfSustainableMod.LOGGER.info("Registering Item Groups for " + SelfSustainableMod.MOD_ID);
-
     }
 
 

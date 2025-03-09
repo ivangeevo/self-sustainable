@@ -48,5 +48,6 @@ public class SelfSustainableClient implements ClientModInitializer {
 
         EntityModelLayerRegistry.registerModelLayer(ModEntityModelLayers.WICKER_BASKET, WickerBERenderer::getTexturedModelData);
 
+
     }
 }

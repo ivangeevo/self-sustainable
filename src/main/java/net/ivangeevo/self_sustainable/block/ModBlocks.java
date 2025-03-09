@@ -87,7 +87,7 @@ public class ModBlocks {
             )
     );
 
-    public static final Block WICKER_BASKET = registerWithoutItem("wicker_basket",
+    public static final Block WICKER_BASKET = registerBlock("wicker_basket",
             new WickerBasketBlock(AbstractBlock.Settings.create()
                     .hardness(0.05F)
                     .nonOpaque()
@@ -95,7 +95,7 @@ public class ModBlocks {
             )
     );
 
-    public static final Block HAMPER = registerWithoutItem("hamper",
+    public static final Block HAMPER = registerBlock("hamper",
             new HamperBlock(AbstractBlock.Settings.create()
                     .hardness(0.05F)
                     .nonOpaque()

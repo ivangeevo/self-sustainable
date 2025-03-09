@@ -2,11 +2,12 @@ package net.ivangeevo.self_sustainable.block.entity.renderer;
 
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.blocks.BasketBlock;
+import net.ivangeevo.self_sustainable.block.blocks.WickerBasketBlock;
 import net.ivangeevo.self_sustainable.block.entity.WickerBasketBE;
+import net.ivangeevo.self_sustainable.client.render.ModTexturedRenderLayers;
 import net.minecraft.block.*;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -73,7 +74,7 @@ public class WickerBERenderer implements BlockEntityRenderer<WickerBasketBE> {
         lidProgress = 1.0f - lidProgress;
         lidProgress = 1.0f - lidProgress * lidProgress * lidProgress;
 
-        SpriteIdentifier texture = TexturedRenderLayers.getChestTextureId(entity, false);
+        SpriteIdentifier texture = ModTexturedRenderLayers.WICKER_BASKET;
         VertexConsumer vertexConsumer = texture.getVertexConsumer(vertexConsumers, RenderLayer::getEntityCutout);
 
         this.render(matrices, vertexConsumer, this.lid, this.lidBase, this.handle, this.basketBase, lidProgress, light, overlay);
@@ -88,4 +89,6 @@ public class WickerBERenderer implements BlockEntityRenderer<WickerBasketBE> {
         latch.render(matrices, vertices, light, overlay);
         base.render(matrices, vertices, light, overlay);
     }
+
+
 }

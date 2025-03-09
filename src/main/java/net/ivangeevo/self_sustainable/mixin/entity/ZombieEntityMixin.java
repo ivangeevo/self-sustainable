@@ -40,7 +40,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
 
         // Set a faster attack speed
         ZombieAttackGoal fasterAttackGoal =
-                new ZombieAttackGoal((ZombieEntity)(Object)this, 1.4, false);
+                new ZombieAttackGoal((ZombieEntity)(Object)this, 1.5, false);
 
         this.goalSelector.add(2, fasterAttackGoal);
     }

@@ -30,7 +30,8 @@ public abstract class MobEntityMixin extends LivingEntity
 
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-    @Inject(method = "initEquipment", at = @At(value = "HEAD"), cancellable = true)
+    // Lowers the chances of mobs spawning with equipment - keep disabled for now and re-test how everything works
+    //@Inject(method = "initEquipment", at = @At(value = "HEAD"), cancellable = true)
     private void modifiedInitEqupment(Random random, LocalDifficulty localDifficulty, CallbackInfo ci)
     {
         if (random.nextFloat() < 0.15F * localDifficulty.getClampedLocalDifficulty()) {
@@ -72,7 +73,8 @@ public abstract class MobEntityMixin extends LivingEntity
 
     }
 
-    @Inject(method = "getEquipmentForSlot", at = @At(value = "HEAD"), cancellable = true)
+    // Makes mobs have less equipment they can have on to make fighting them more balanced
+    //@Inject(method = "getEquipmentForSlot", at = @At(value = "HEAD"), cancellable = true)
     private static void customGetEquipmentForSlot(EquipmentSlot equipmentSlot, int equipmentLevel, CallbackInfoReturnable<Item> cir)
     {
         switch (equipmentSlot) {

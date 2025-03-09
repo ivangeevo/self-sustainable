@@ -27,7 +27,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 
     @Shadow public abstract void addExhaustion(float exhaustion);
 
-    @Unique private final boolean runningImMovens = FabricLoader.getInstance().isModLoaded("im_movens");
+    @Unique private final boolean isLoadedModImMovens = FabricLoader.getInstance().isModLoaded("im_movens");
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -52,7 +52,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
     @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     private void onJump(CallbackInfo ci)
     {
-        if (!runningImMovens)
+        if (!isLoadedModImMovens)
         {
             super.jump();
             this.incrementStat(Stats.JUMP);
@@ -67,39 +67,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 
     }
 
-/**
-    //Modify food exhaustion values for jumping and jump sprinting 1/3 of what i'm movens values are
-    // Sprint jumping
-    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.2f))
-    private float modifySprintJump(float constant)
-    {
-        if (!runningImMovens)
-        {
-            return 0.33f;
-        }
-
-        return constant;
-    }
-
-    // Regular jumping
-    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.05f))
-    private float modifyJump(float constant)
-    {
-        constant = 0.05f;
-
-        if (!runningImMovens)
-        {
-            constant = 0.12f;
-        }
-
-        return constant;
-    }
-    **/
-
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)
     {
-        if (!runningImMovens)
+        if (!isLoadedModImMovens)
         {
             PlayerEntity player = (PlayerEntity) (Object) this;
 

@@ -33,6 +33,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     @Unique private static Random random = new Random();
 
+    // Tick torches in the inventory
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
         if (!this.getWorld().isClient) {

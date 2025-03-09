@@ -19,7 +19,7 @@
     "entity.OGHungerManagerMixin",
     "entity.PlayerEntityMixin",
     "entity.ServerPlayerEntityMixin",
-    "entity.ZombieVillagerEntityMixin",
+    "entity.ZombieEntityMixin",
     "item.FlintAndSteelItemMixin",
     "item.ItemMixin",
     "item.ItemStackMixin",

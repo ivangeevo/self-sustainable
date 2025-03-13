@@ -23,6 +23,38 @@ import static net.minecraft.state.property.Properties.LIT;
 
 
 public class ModBlocks {
+
+    public static final Block WICKER_BASKET = registerBlock("wicker_basket",
+            new WickerBasketBlock(AbstractBlock.Settings.create()
+                    .hardness(0.05F)
+                    .nonOpaque()
+                    .sounds(BlockSoundGroup.GRASS)
+            )
+    );
+
+    public static final Block HAMPER = registerBlock("hamper",
+            new HamperBlock(AbstractBlock.Settings.create()
+                    .hardness(0.05F)
+                    .nonOpaque()
+                    .sounds(BlockSoundGroup.GRASS)
+            )
+    );
+
+    public static final Block OVEN_BRICK = registerBlock("oven_brick",
+            new BrickOvenBlock(AbstractBlock.Settings.create()
+                    .strength(1.5F,2.0F)
+                    .luminance((state) -> state.get(LIT) ? 10 : 0)
+                    .sounds(BlockSoundGroup.STONE)
+            )
+    );
+
+    public static final Block SMOKER_BRICK = registerBlock("smoker_brick",
+            new SmokerOvenBlock(AbstractBlock.Settings.create()
+                    .strength(1.5F,2.0F)
+                    .luminance((state) -> state.get(LIT) ? 10 : 0)
+                    .sounds(BlockSoundGroup.STONE)
+            )
+    );
     
     public static final Block CRUDE_TORCH_UNLIT = registerWithoutItem("crude_torch_unlit",
             new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings(), TorchFireState.UNLIT));
@@ -55,22 +87,6 @@ public class ModBlocks {
             new WallTorchBlock(ParticleTypes.FLAME, initTorchSettings()));
 
 
-    public static final Block OVEN_BRICK = registerBlock("oven_brick",
-            new BrickOvenBlock(AbstractBlock.Settings.create()
-                    .strength(1.5F,2.0F)
-                    .luminance((state) -> state.get(LIT) ? 10 : 0)
-                    .sounds(BlockSoundGroup.STONE)
-            )
-    );
-
-    public static final Block SMOKER_BRICK = registerBlock("smoker_brick",
-            new SmokerOvenBlock(AbstractBlock.Settings.create()
-                    .strength(1.5F,2.0F)
-                    .luminance((state) -> state.get(LIT) ? 10 : 0)
-                    .sounds(BlockSoundGroup.STONE)
-            )
-    );
-
     public static final Block BRICK_UNFIRED = registerWithoutItem("brick_unfired",
             new UnfiredBrickBlock(AbstractBlock.Settings.create()
                     .breakInstantly()
@@ -87,21 +103,6 @@ public class ModBlocks {
             )
     );
 
-    public static final Block WICKER_BASKET = registerBlock("wicker_basket",
-            new WickerBasketBlock(AbstractBlock.Settings.create()
-                    .hardness(0.05F)
-                    .nonOpaque()
-                    .sounds(BlockSoundGroup.GRASS)
-            )
-    );
-
-    public static final Block HAMPER = registerBlock("hamper",
-            new HamperBlock(AbstractBlock.Settings.create()
-                    .hardness(0.05F)
-                    .nonOpaque()
-                    .sounds(BlockSoundGroup.GRASS)
-            )
-    );
 
     private static AbstractBlock.Settings initTorchSettings() {
        return AbstractBlock.Settings.create().noCollision().breakInstantly().pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.WOOD);

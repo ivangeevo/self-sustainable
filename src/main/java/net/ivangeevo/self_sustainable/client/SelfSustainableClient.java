@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.entity.WickerBasketBE;
 import net.ivangeevo.self_sustainable.block.entity.renderer.*;
+import net.ivangeevo.self_sustainable.client.render.ModTexturedRenderLayers;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -43,7 +44,7 @@ public class SelfSustainableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TORCH_UNLIT, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WALL_TORCH_UNLIT, RenderLayer.getCutout());
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WICKER_BASKET, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WICKER_BASKET, RenderLayer.getEntityCutout(ModTexturedRenderLayers.WICKER_BASKET_ATLAS_TEXTURE));
         BlockEntityRendererFactories.register(ModBlockEntities.WICKER_BASKET, WickerBERenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(ModEntityModelLayers.WICKER_BASKET, WickerBERenderer::getTexturedModelData);

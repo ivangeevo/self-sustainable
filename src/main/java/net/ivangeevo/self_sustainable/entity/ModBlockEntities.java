@@ -18,6 +18,8 @@ public class ModBlockEntities {
     public static BlockEntityType<VariableCampfireBE> CAMPFIRE;
     public static BlockEntityType<UnfiredBrickBE> BRICK_UNFIRED;
     public static BlockEntityType<TorchBE> TORCH;
+    public static BlockEntityType<WickerBasketBE> WICKER_BASKET;
+    public static BlockEntityType<HamperBlockEntity> HAMPER;
 
     private static final Block[] torchesArray = new Block[] {
         ModBlocks.CRUDE_TORCH_LIT,
@@ -42,7 +44,7 @@ public class ModBlockEntities {
                 Registries.BLOCK_ENTITY_TYPE,
                 Identifier.of(SelfSustainableMod.MOD_ID, "smoker_brick_block_entity"),
                 BlockEntityType.Builder.create(SmokerOvenBE::new,
-                ModBlocks.SMOKER_BRICK).build(null)
+                        ModBlocks.SMOKER_BRICK).build(null)
         );
 
         CAMPFIRE = Registry.register(
@@ -63,15 +65,19 @@ public class ModBlockEntities {
                 BlockEntityType.Builder.create(TorchBE::new, torchesArray).build()
         );
 
-        /**
-        CRUDE_TORCH = Registry.register(
+        WICKER_BASKET = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(SelfSustainableMod.MOD_ID, "crude_torch"),
-                BlockEntityType.Builder.create(CrudeTorchBlockEntity::new, ModBlocks.CRUDE_TORCH, ModBlocks.WALL_CRUDE_TORCH).build(null)
+                Identifier.of(SelfSustainableMod.MOD_ID, "wicker_basket_block_entity"),
+                BlockEntityType.Builder.create(WickerBasketBE::new, ModBlocks.WICKER_BASKET).build()
         );
-         **/
 
-        }
+        HAMPER = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                Identifier.of(SelfSustainableMod.MOD_ID, "hamper_block_entity"),
+                BlockEntityType.Builder.create(HamperBlockEntity::new, ModBlocks.HAMPER).build()
+        );
+
+    }
 
 
 }

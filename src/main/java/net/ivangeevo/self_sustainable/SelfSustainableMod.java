@@ -51,6 +51,9 @@ public class SelfSustainableMod implements ModInitializer {
         // Also, some additional negative effects to certain ones.
         FoodComponentModifier.register();
 
+        // added by granular hunger mod
+        // probably too hardcore to add by this mod itself anyway
+        /**
         // Register an event that blocks the player from eating if he has food poisoning (hunger)
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (player.hasStatusEffect(StatusEffects.HUNGER) && !player.isCreative() && !player.isSpectator()) {
@@ -63,6 +66,7 @@ public class SelfSustainableMod implements ModInitializer {
             // Allow the use of non-food items or if the player isn't hungry
             return TypedActionResult.pass(player.getStackInHand(hand));
         });
+         **/
 
         ModBlocks.registerModBlocks();
         ModBlocks.registerItemsPlaceableAsBlocks();

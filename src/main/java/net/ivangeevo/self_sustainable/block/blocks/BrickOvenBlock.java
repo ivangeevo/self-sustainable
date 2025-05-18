@@ -44,7 +44,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(LIT,false)
                 .with(FUEL_LEVEL, 0)
-                .with(FACING, Direction.NORTH));
+                .with(FACING, Direction.NORTH)
+        );
     }
 
     @Override
@@ -63,21 +64,16 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
-    {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(LIT, FACING, FUEL_LEVEL);
     }
 
     @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos)
-    {
+    public boolean setOnFireDirectly(World world, BlockPos pos) {
 
-        if ( !world.getBlockState(pos).get(LIT) && world.getBlockState(pos).get(FUEL_LEVEL) > 0)
-        {
-            if (world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE)
-            {
-                if ( ovenBE.attemptToLight() )
-                {
+        if (!world.getBlockState(pos).get(LIT) && world.getBlockState(pos).get(FUEL_LEVEL) > 0) {
+            if (world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE) {
+                if (ovenBE.attemptToLight()) {
                     BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
                     world.playSound(null, soundPos , SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS ,1F, world.random.nextFloat() * 0.4F + 0.8F);
                     return true;
@@ -92,14 +88,10 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos)
-    {
-        if ( !blockAccess.getBlockState(pos).get(LIT) )
-        {
+    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
+        if (!blockAccess.getBlockState(pos).get(LIT)) {
             BrickOvenBE ovenBE = (BrickOvenBE) blockAccess.getBlockEntity( pos );
-
             // uses the visual fuel level rather than the actualy fuel level so this will work on the client
-
             assert ovenBE != null;
 
             return ovenBE.getVisualFuelLevel() > 0;
@@ -110,52 +102,38 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit)
-    {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack heldStack = player.getStackInHand(player.getActiveHand());
         BlockEntity blockEntity = world.getBlockEntity(pos);
         Item item = heldStack.getItem();
 
         double relativeClickY = hit.getPos().getY() - pos.getY();
 
-        if (hit.getSide() != state.get(FACING))
-        {
+        if (hit.getSide() != state.get(FACING)) {
             return ActionResult.FAIL;
         }
 
-
-        if (blockEntity instanceof BrickOvenBE ovenBE)
-        {
+        if (blockEntity instanceof BrickOvenBE ovenBE) {
             Optional<RecipeEntry<OvenCookingRecipe>> optional;
 
-            if (relativeClickY > clickYTopPortion)
-            {
+            if (relativeClickY > clickYTopPortion) {
 
-                if (!ovenBE.getCookStack().isEmpty())
-                {
+                if (!ovenBE.getCookStack().isEmpty()) {
                     ovenBE.retrieveItem(world, player);
-
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
                     return ActionResult.SUCCESS;
-                }
-                else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() )
-                {
-                    if ( !world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
+                } else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() ) {
+                    if (!world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
                             player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime()))
                     {
-
                         return ActionResult.SUCCESS;
                     }
                 }
 
                 return ActionResult.SUCCESS;
-            }
-            else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
-            {
+            } else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
 
-                if ( item.getCanBeFedDirectlyIntoBrickOven(heldStack) )
-                {
-
+                if (item.getCanBeFedDirectlyIntoBrickOven(heldStack)) {
                     if (!world.isClient) {
                         int iItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
 

@@ -12,10 +12,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShovelItem;
+import net.minecraft.item.*;
 import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.sound.SoundCategory;
@@ -103,6 +100,11 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
             if (state.get(FIRE_LEVEL) > 0 || getFuelState(world, pos) == CampfireState.SMOULDERING) {
                 int itemBurnTime = getItemFuelTime(heldStack);
 
+                // Disallow using whole blocks as fuel (this doesn't disallow normal block placing while right-clicking on it though)
+                if (heldStack.getItem() instanceof BlockItem) {
+                    return ActionResult.PASS;
+                }
+
                 if (heldStack.getItem().getCanBeFedDirectlyIntoCampfire(heldStack)) {
                     if (!world.isClient) {
                         Ignitable.playLitFX(world, pos);
@@ -117,7 +119,6 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
 
         return ActionResult.PASS;
     }
-
 
     private boolean isIgnitableItem(ItemStack stack) {
         return stack.isIn(ModTags.Items.DIRECT_IGNITERS)

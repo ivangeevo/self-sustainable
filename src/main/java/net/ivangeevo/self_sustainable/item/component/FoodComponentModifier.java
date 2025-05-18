@@ -14,14 +14,14 @@ import org.ivangeevo.vegehenna.item.ModItems;
 
 public class FoodComponentModifier {
 
-   private static final boolean isGranularHungerLoaded = FabricLoader.getInstance().isModLoaded("granular-hunger");
+   private static final boolean isBTWRDSLoaded = FabricLoader.getInstance().isModLoaded("btwr_ds");
 
     /**
      * Registers a listener to modify the food components of food items.
      */
     public static void register() {
         // BTWR: DS does its own food modifications, so don't apply if it's present
-        if (!FabricLoader.getInstance().isModLoaded("btwr_ds")) {
+        if (!isBTWRDSLoaded) {
             DefaultItemComponentEvents.MODIFY.register(FoodComponentModifier::modifyFoodComponents);
         }
     }

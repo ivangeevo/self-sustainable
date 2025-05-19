@@ -79,8 +79,7 @@ public class SmokerOvenBE extends AbstractOvenBE
     }
 
 
-    public static void clientTick(World world, BlockPos pos, BlockState state, SmokerOvenBE ovenBE)
-    {
+    public static void clientTick(World world, BlockPos pos, BlockState state, SmokerOvenBE ovenBE) {
         setParticles(world, pos, state);
     }
 

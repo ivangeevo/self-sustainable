@@ -6,14 +6,12 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Unique;
 
 public interface Ignitable {
 
     BooleanProperty LIT = Properties.LIT;
 
-    static void playLitFX(World world, BlockPos pos)
-    {
+    static void playLitFX(World world, BlockPos pos) {
         BlockPos soundPos = new BlockPos(
                 (int) ((double) pos.getX() + 0.5D),
                 (int) ((double) pos.getY() + 0.5D),
@@ -24,8 +22,7 @@ public interface Ignitable {
 
     }
 
-    static void playExtinguishSound(World world, BlockPos pos, boolean isQuiet)
-    {
+    static void playExtinguishSound(World world, BlockPos pos, boolean isQuiet) {
         float fizzVolume = 0.5F;
         float fizzPitch = 2.6F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.8F;
 
@@ -34,7 +31,7 @@ public interface Ignitable {
             fizzPitch = 1F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.2F;
         }
 
-        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS,fizzVolume, fizzPitch);
+        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, fizzVolume, fizzPitch);
 
     }
 }

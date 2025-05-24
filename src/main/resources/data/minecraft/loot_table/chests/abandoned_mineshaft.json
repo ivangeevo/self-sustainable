@@ -293,22 +293,6 @@
               "add": false
             }
           ]
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 15,
-          "name": "minecraft:torch",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1,
-                "max": 6
-              },
-              "add": false
-            }
-          ]
         }
       ]
     }

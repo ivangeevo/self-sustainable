@@ -30,12 +30,14 @@ public class ModItemGroup {
                         entries.add(ModItems.TORCH_UNLIT);
 
                         // Blocks
-                        entries.add(ModBlocks.WICKER_BASKET);
-                        entries.add(ModBlocks.HAMPER);
+                        entries.add(ModBlocks.OVEN_BRICK);
+
+
+                        //entries.add(ModBlocks.WICKER_BASKET);
+                        //entries.add(ModBlocks.HAMPER);
 
                         // TO ADD:
                         //entries.add(ModBlocks.SMOKER_BRICK);
-                        //entries.add(ModBlocks.OVEN_BRICK);
                         //entries.add(ModItems.WICKER_PANE);
                         //entries.add(ModItems.KNITTING_NEEDLES);
 

@@ -3,6 +3,7 @@ package net.ivangeevo.self_sustainable.datagen;
 import btwr.core.BTWRMod;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.minecraft.registry.RegistryWrapper;
 
@@ -24,7 +25,7 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
     }
 
     private void addBlockTranslations(TranslationBuilder tb) {
-
+        tb.add(ModBlocks.OVEN_BRICK, "Brick Oven");
     }
 
     private void addItemTranslations(TranslationBuilder tb) {

@@ -211,44 +211,35 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 
         if (state.get(LIT)) {
-            BrickOvenBE ovenBE = (BrickOvenBE) world.getBlockEntity( pos );
+            BrickOvenBE ovenBE = (BrickOvenBE) world.getBlockEntity(pos);
+            assert ovenBE != null;
             int iFuelLevel = ovenBE.getVisualFuelLevel();
 
-            if ( iFuelLevel == 1 )
-            {
-                Direction iFacing = world.getBlockState( pos ).get(FACING);
+            if (iFuelLevel == 1) {
+                Direction facing = world.getBlockState(pos).get(FACING);
 
-                float fX = (float)iFacing.getId() + 0.5F;
-                float fY = (float)iFacing.getId() + 0.0F + random.nextFloat() * 6.0F / 16.0F;
-                float fZ = (float)iFacing.getId() + 0.5F;
+                float fX = (float)facing.getId() + 0.5F;
+                float fY = (float)facing.getId() + 0.0F + random.nextFloat() * 6.0F / 16.0F;
+                float fZ = (float)facing.getId() + 0.5F;
 
                 float fFacingOffset = 0.52F;
                 float fRandOffset = random.nextFloat() * 0.6F - 0.3F;
 
-                if ( iFacing.getId() == 4 )
-                {
+                if (facing == Direction.WEST) {
                     world.addParticle(ParticleTypes.LARGE_SMOKE, fX - fFacingOffset, fY, fZ + fRandOffset, 0.0D, 0.0D, 0.0D );
-                }
-                else if ( iFacing.getId() == 5 )
-                {
+                } else if (facing == Direction.EAST) {
                     world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fFacingOffset, fY, fZ + fRandOffset, 0.0D, 0.0D, 0.0D );
-                }
-                else if ( iFacing.getId() == 2 )
-                {
+                } else if (facing == Direction.NORTH) {
                     world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fRandOffset, fY, fZ - fFacingOffset, 0.0D, 0.0D, 0.0D );
-                }
-                else if ( iFacing.getId() == 3 )
-                {
+                } else if (facing == Direction.SOUTH) {
                     world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fRandOffset, fY, fZ + fFacingOffset, 0.0D, 0.0D, 0.0D );
                 }
             }
 
             ItemStack cookStack = ovenBE.getCookStack();
 
-            if ( cookStack != null && ovenBE.getRecipeFor(cookStack).isPresent() )
-            {
-                for ( int iTempCount = 0; iTempCount < 1; ++iTempCount )
-                {
+            if (cookStack != null && ovenBE.getRecipeFor(cookStack).isPresent()) {
+                for (int iTempCount = 0; iTempCount < 1; ++iTempCount) {
                     float fX = pos.getX() + 0.375F + random.nextFloat() * 0.25F;
                     float fY = pos.getY() + 0.45F + random.nextFloat() * 0.1F;
                     float fZ = pos.getZ() + 0.375F + random.nextFloat() * 0.25F;
@@ -259,7 +250,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         }
 
         super.randomDisplayTick( state, world, pos, random );
-
     }
 
     @Override

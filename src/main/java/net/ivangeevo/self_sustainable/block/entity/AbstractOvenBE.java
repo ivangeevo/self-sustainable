@@ -235,16 +235,14 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         return this.fuelBurnTime > 0;
     }
 
-    public void setVisualFuelLevel(int visualFuelLevel)
-    {
+    public void setVisualFuelLevel(int visualFuelLevel) {
         assert this.world != null;
         this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(SmokerOvenBlock.FUEL_LEVEL, visualFuelLevel), Block.NOTIFY_ALL);
         this.visualFuelLevel = visualFuelLevel;
         markDirty();
     }
 
-    public boolean addItem(Entity user, ItemStack stack, int cookTime)
-    {
+    public boolean addItem(Entity user, ItemStack stack, int cookTime) {
         this.cookTimeTotal = cookTime;
         this.cookTime = 0;
         this.cookStack = stack.split(1);
@@ -254,8 +252,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         return true;
     }
 
-    private void updateListeners()
-    {
+    private void updateListeners() {
         this.markDirty();
         this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
     }

@@ -190,7 +190,6 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
 
                 return ActionResult.SUCCESS;
             }
-
         }
 
         return ActionResult.PASS;

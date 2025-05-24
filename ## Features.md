@@ -20,7 +20,7 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 ### 🍖 Food changes
 
 - **Saturation changes** 🍖 – All food items now provide **less hunger and no saturation**.
-- **Raw food penalties** 🤮 - Eating raw foods/unintended has a high change of giving the player the hunger effect(renamed to food poisoning) and making him unable to eat again until the effect passes.
+- **Raw food penalties** 🤮 - Eating raw foods/unintended has a high change of giving the player the hunger effect(renamed to food poisoning).
 
 ---
 
@@ -46,11 +46,11 @@ Self-Sustainable overhauls Minecraft’s survival mechanics to create a more cha
 - **New Campfire Recipe** – Crafted in a **2x2** pattern, making it easier to craft but requiring a **firestarter** to ignite.
 
 ---
-
-## ♨️ Furnace Overhaul
-- **One slot cooking** - You can cook only a single item per furnace/smoker.
-- **Fuel slot overhaul** - You can have only 1 inserted fuel item, besides what is already burning.
-- **Furnace Recipe Changed** 🏗️ – Now requires bricks to craft. (temporary until ovens are added, then furnaces are removed)
+### 🏺 The "Oven" System (New Furnaces & Smokers)
+- **Replacing Furnaces, Blast Furnaces & Smokers** – New blocks called **"Ovens"** will replace them.
+Initially only the Brick Oven will be available, but later on new blocks for the Smoker and Blast Furnace oven variants will be added.
+- **Completely GUI-less cooking** 🔥 – Ovens will use an **interactive, realistic system**.
+- **Unique functionality per Oven Type** – Specific mechanics to make each oven type **more engaging and useful**.
 
 ---
 

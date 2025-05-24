@@ -43,7 +43,6 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
                 .addTag(ModTags.Items.DIRECT_IGNITERS)
                 .add(Items.FLINT_AND_STEEL);
 
-
         getOrCreateTagBuilder(ModTags.Items.PRIMITIVE_FIRESTARTERS)
                 .add(ModItems.FIRESTARTER_STICKS)
                 .add(ModItems.FIRESTARTER_BOW);

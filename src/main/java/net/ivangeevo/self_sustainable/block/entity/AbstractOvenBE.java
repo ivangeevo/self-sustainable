@@ -81,11 +81,9 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         }
     }
 
-    public int attemptToAddFuel(ItemStack stack)
-    {
+    public int attemptToAddFuel(ItemStack stack) {
         // Check if the item is present in the FUEL_TIME_MAP
-        if (!FUEL_TIME_MAP.containsKey(stack.getItem()))
-        {
+        if (!FUEL_TIME_MAP.containsKey(stack.getItem())) {
             return 0; // Return 0 to indicate that no items were burned
         }
 
@@ -96,21 +94,17 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         // Get the burn time for the item from the fuel map
         int itemBurnTime = FUEL_TIME_MAP.get(stack.getItem());
 
-        if (deltaBurnTime > 0)
-        {
+        if (deltaBurnTime > 0) {
             // Calculate the maximum number of items that can be burned based on fuel ticks
             numItemsBurned = deltaBurnTime / itemBurnTime;
 
-            if (numItemsBurned == 0 && this.getVisualFuelLevel() <= 2)
-            {
+            if (numItemsBurned == 0 && this.getVisualFuelLevel() <= 2) {
                 // Once the fuel level hits the bottom visual stage, you can jam anything in
                 numItemsBurned = 1;
             }
 
-            if (numItemsBurned > 0)
-            {
-                if (numItemsBurned > stack.getCount())
-                {
+            if (numItemsBurned > 0) {
+                if (numItemsBurned > stack.getCount()) {
                     numItemsBurned = stack.getCount();
                 }
 
@@ -123,33 +117,24 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         return numItemsBurned;
     }
 
-    public boolean attemptToLight()
-    {
-        if (unlitFuelBurnTime > 0 )
-        {
+    public boolean attemptToLight() {
+        if (unlitFuelBurnTime > 0 ) {
             // lighting has to be done on update to prevent funkiness with tile entity removal on block being set
             lightOnNextUpdate = true;
-
-
             return true;
         }
 
         return false;
     }
 
-    void updateVisualFuelLevel()
-    {
+    void updateVisualFuelLevel() {
         int iTotalBurnTime = unlitFuelBurnTime + this.fuelBurnTime;
         int iNewFuelLevel = 0;
 
-        if ( iTotalBurnTime > 0 )
-        {
-            if (iTotalBurnTime < visualSputterFuelLevel)
-            {
+        if (iTotalBurnTime > 0) {
+            if (iTotalBurnTime < visualSputterFuelLevel) {
                 iNewFuelLevel = 1;
-            }
-            else
-            {
+            } else {
                 int increments = (iTotalBurnTime - visualSputterFuelLevel) / visualFuelLevelIncrement;
                 iNewFuelLevel = Math.min(increments + 2, 8);
             }
@@ -180,7 +165,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
             world.addParticle(ParticleTypes.FLAME, d + i, e + j, f + k, 0.0, 0.0, 0.0);
         }
     }
-
 
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
@@ -226,7 +210,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         }
     }
 
-
     public int getVisualFuelLevel() {
         return visualFuelLevel;
     }
@@ -260,11 +243,9 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
     public void retrieveItem(World world, PlayerEntity player) {
         ItemStack cookStack = getCookStack();
 
-        if (!cookStack.isEmpty() && !world.isClient())
-        {
+        if (!cookStack.isEmpty() && !world.isClient()) {
                 boolean addedToInventory = player.giveItemStack(cookStack);
-                if (!addedToInventory)
-                {
+                if (!addedToInventory) {
                     player.dropItem(cookStack, false);
                 }
                 setStack(ItemStack.EMPTY);
@@ -277,18 +258,22 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
     public boolean isEmpty() {
         return cookStack.isEmpty();
     }
+
     @Override
     public ItemStack getCookStack() {
         return cookStack;
     }
+
     @Override
     public ItemStack removeStack() {
         return cookStack = ItemStack.EMPTY;
     }
+
     @Override
     public void setStack(ItemStack newStack) {
         cookStack = newStack;
     }
+
     @Override
     public boolean canPlayerUse(PlayerEntity var1) {
         return true;

@@ -54,8 +54,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         );
     }
 
-
-
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
@@ -83,8 +81,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                 }
 
             }
-
-
         }
 
         return false;
@@ -168,19 +164,15 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
         world.playSound(null, soundPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS,
                 0.25F, (world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F);
-
     }
 
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        if (world.isClient)
-        {
+        if (world.isClient) {
             return BrickOvenBlock.validateTicker(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::clientTick);
-        }
-        else
-        {
+        } else {
             return BrickOvenBlock.validateTicker(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::serverTick);
         }
     }

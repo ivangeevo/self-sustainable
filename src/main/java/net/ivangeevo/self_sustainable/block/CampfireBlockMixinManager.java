@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -100,8 +101,8 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
             if (state.get(FIRE_LEVEL) > 0 || getFuelState(world, pos) == CampfireState.SMOULDERING) {
                 int itemBurnTime = getItemFuelTime(heldStack);
 
-                // Disallow using whole blocks as fuel (this doesn't disallow normal block placing while right-clicking on it though)
-                if (heldStack.getItem() instanceof BlockItem) {
+                // Disallow using log blocks as fuel (this doesn't disallow normal block placing while right-clicking on it though)
+                if (heldStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock().getDefaultState().isIn(BlockTags.LOGS)) {
                     return ActionResult.PASS;
                 }
 

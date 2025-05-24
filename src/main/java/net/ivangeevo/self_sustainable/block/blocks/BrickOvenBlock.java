@@ -31,8 +31,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class BrickOvenBlock extends BlockWithEntity implements Ignitable
-{
+public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
+
+    public static final MapCodec<BrickOvenBlock> CODEC = createCodec(BrickOvenBlock::new);
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return CODEC;
+    }
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
@@ -48,10 +54,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
         );
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return null;
-    }
+
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {
@@ -60,7 +63,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
     @Override @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new BrickOvenBE( pos, state );
+        return new BrickOvenBE(pos, state);
     }
 
     @Override
@@ -150,50 +153,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
 
                     return ActionResult.SUCCESS;
                 }
-
-
-
-
-                // keep just in case. for now...
-                /**
-                // Try to ignite
-                if (heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS)) {
-                    /**
-                    if (state.get(FUEL_LEVEL) > 0) {
-                        if (!state.get(LIT)) {
-                            world.setBlockState(pos, state.with(LIT, true));
-                            Ignitable.playLitFX(world, pos);
-                            heldStack.damage(1, player,
-                                    (p) -> p.sendToolBreakStatus(player.getActiveHand()));
-                        }
-
-                        return ActionResult.SUCCESS;
-                    } else {
-                        Ignitable.playExtinguishSound(world, pos, false);
-                    }
-
-                }
-                // try to add fuel
-                else
-                {
-                    if (!world.isClient)
-                    {
-                        // Use the attemptToAddFuel method to try and add fuel
-                        int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
-
-                        if (numItemsConsumed > 0) {
-                            if (state.get(LIT)) {
-                                Ignitable.playLitFX(world, pos);
-                            } else {
-                                this.playPopSound(world, pos);
-                            }
-
-                            heldStack.split(numItemsConsumed);
-                        }
-                    }
-                }
-                **/
-
             }
 
         }
@@ -227,23 +186,20 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx)
-    {
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
 
-        if (state.isOf(newState.getBlock()))
-        {
+        if (state.isOf(newState.getBlock())) {
             return;
         }
 
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof BrickOvenBE ovenBE)
-        {
+        if (blockEntity instanceof BrickOvenBE ovenBE) {
             // Drops the contents inside when the block is destroyed
             ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getCookStack());
         }
@@ -254,8 +210,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 
-        if ( state.get(LIT) )
-        {
+        if (state.get(LIT)) {
             BrickOvenBE ovenBE = (BrickOvenBE) world.getBlockEntity( pos );
             int iFuelLevel = ovenBE.getVisualFuelLevel();
 
@@ -308,31 +263,24 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable
     }
 
     @Override
-    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile)
-    {
-        BlockPos blockPos = hit.getBlockPos();
+    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+        BlockPos pos = hit.getBlockPos();
 
-        double relativeClickY = hit.getPos().getY() - blockPos.getY();
-
-        // Allow projectile interaction only from the facing side
-        if (hit.getSide() == state.get(FACING) && canLightUp(state) && relativeClickY < clickYBottomPortion)
-        {
-            if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, blockPos) && !state.get(LIT))
-            {
-                world.setBlockState(blockPos, state.with(Properties.LIT, true),
-                        Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-
-                Ignitable.playLitFX(world, blockPos);
-
-            }
-
-
+        if (!canLightUp(hit, pos, state)) return;
+        
+        if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, pos)) {
+            world.setBlockState(pos, state.with(Properties.LIT, true), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+            Ignitable.playLitFX(world, pos);
         }
+
     }
 
-    public boolean canLightUp(BlockState state)
-    {
-        return state.get(FUEL_LEVEL) > 0;
+    public boolean canLightUp(BlockHitResult hit, BlockPos pos, BlockState state) {
+        double relativeClickY = hit.getPos().getY() - pos.getY();
+        return state.get(FUEL_LEVEL) > 0
+                && hit.getSide() == state.get(FACING)
+                && relativeClickY < clickYBottomPortion
+                && !state.get(LIT);
     }
 
 

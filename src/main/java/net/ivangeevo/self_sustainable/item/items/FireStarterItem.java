@@ -79,7 +79,7 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
     {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if ( targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos) )
+        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos))
         {
             return targetBlock.setOnFireDirectly(world, pos);
         }

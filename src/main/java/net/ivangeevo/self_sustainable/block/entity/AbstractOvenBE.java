@@ -17,11 +17,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -35,8 +38,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, CustomSingleStackInventory
-{
+public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, CustomSingleStackInventory {
 
     public int unlitFuelBurnTime;
     public int fuelBurnTime;
@@ -63,8 +65,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         super(type, pos, state);
     }
 
-    public Optional<RecipeEntry<OvenCookingRecipe>> getRecipeFor(ItemStack stack)
-    {
+    public Optional<RecipeEntry<OvenCookingRecipe>> getRecipeFor(ItemStack stack) {
         if (stack.isEmpty()) {
             return Optional.empty();
         }
@@ -157,19 +158,14 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         setVisualFuelLevel(iNewFuelLevel);
     }
 
-    static void setParticles(World world, BlockPos pos, BlockState state)
-    {
-        if (!state.get(LIT))
-        {
-            return;
-        }
+    static void setParticles(World world, BlockPos pos, BlockState state) {
+        if (!state.get(LIT)) return;
 
         double d = (double) pos.getX() + 0.5;
         double e = pos.getY();
         double f = (double) pos.getZ() + 0.5;
 
-        if (world.getRandom().nextDouble() < 0.05)
-        {
+        if (world.getRandom().nextDouble() < 0.05) {
             world.playSound(d, e, f, SoundEvents.BLOCK_FIRE_AMBIENT,
                     SoundCategory.BLOCKS, 0.25F + world.random.nextFloat() * 0.25F,
                     0.5F + world.random.nextFloat() * 0.25F, false );
@@ -192,10 +188,13 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         this.cookStack = ItemStack.EMPTY;
         this.visualFuelLevel = nbt.getInt("VisualFuelLevel");
 
-        if (nbt.contains("CookStack"))
-        {
-            cookStack = ItemStack.fromNbt(registryLookup, nbt.getCompound("CookStack")).get();
+        super.readNbt(nbt, registryLookup);
+        if (nbt.contains("CookStack", 10)) {
+            cookStack = ItemStack.CODEC.parse(registryLookup.getOps(NbtOps.INSTANCE), nbt.getCompound("CookStack"))
+                    .result()
+                    .orElse(ItemStack.EMPTY);
         }
+
         this.unlitFuelBurnTime = nbt.getShort("UnlitFuelBurnTime");
         this.fuelBurnTime = nbt.getShort("FuelBurnTime");
         this.cookTime = nbt.getShort("CookTime");
@@ -207,7 +206,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         }
     }
 
-
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
@@ -216,32 +214,18 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         nbt.putShort("FuelBurnTime", (short) this.fuelBurnTime);
         nbt.putShort("CookTime", (short) this.cookTime);
         nbt.putShort("CookTimeTotal", (short) this.cookTimeTotal);
-        this.writeCookStackNbt(nbt, this.cookStack);
+        this.writeCookStackNbt(nbt, this.cookStack, registryLookup);
         NbtCompound nbtCompound = new NbtCompound();
         this.recipesUsed.forEach((identifier, count) -> nbtCompound.putInt(identifier.toString(), count));
         nbt.put("RecipesUsed", nbtCompound);
     }
 
-
-    private void writeCookStackNbt(NbtCompound nbt, ItemStack stack) {
-        NbtCompound stackNbt = new NbtCompound();
-
+    private void writeCookStackNbt(NbtCompound nbt, ItemStack stack, RegistryWrapper.WrapperLookup registryLookup) {
         if (!stack.isEmpty()) {
-            nbt.put("CookStack", stackNbt);
-        } else {
-            nbt.put("CookStack", new NbtCompound()); // Empty compound to indicate empty ItemStack
+            nbt.put("CookStack", cookStack.encode(registryLookup, new NbtCompound()));
         }
-        NbtComponent component = NbtComponent.of(stackNbt);
-        stack.set(DataComponentTypes.BLOCK_ENTITY_DATA, component);
-
     }
 
-
-
-    @Override
-    public BlockEntityUpdateS2CPacket toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
-    }
 
     public int getVisualFuelLevel() {
         return visualFuelLevel;
@@ -276,8 +260,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
     }
 
-    public void retrieveItem(World world, PlayerEntity player)
-    {
+    public void retrieveItem(World world, PlayerEntity player) {
         ItemStack cookStack = getCookStack();
 
         if (!cookStack.isEmpty() && !world.isClient())
@@ -302,13 +285,11 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         return cookStack;
     }
     @Override
-    public ItemStack removeStack()
-    {
+    public ItemStack removeStack() {
         return cookStack = ItemStack.EMPTY;
     }
     @Override
-    public void setStack(ItemStack newStack)
-    {
+    public void setStack(ItemStack newStack) {
         cookStack = newStack;
     }
     @Override
@@ -316,20 +297,19 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         return true;
     }
 
-    /**
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
         NbtCompound nbtCompound = new NbtCompound();
-        writeCookStackNbt(nbtCompound, this.cookStack);
+        writeCookStackNbt(nbtCompound, this.cookStack, registryLookup);
         return nbtCompound;
     }
-     **/
 
     @Override
-    public void clear() {
-
+    public BlockEntityUpdateS2CPacket toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
     }
 
-
+    @Override
+    public void clear() {}
 
 }

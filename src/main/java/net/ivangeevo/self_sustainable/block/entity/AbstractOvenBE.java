@@ -231,19 +231,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         markDirty();
     }
 
-    public boolean retrieveItemBoolean(PlayerEntity player) {
-        ItemStack cookStack = getCookStack();
-
-        boolean addedToInventory = player.giveItemStack(cookStack);
-        if (!addedToInventory) {
-            player.dropItem(cookStack, false);
-        }
-        this.setStack(ItemStack.EMPTY);
-        this.getWorld().emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(player, this.getCachedState()));
-        this.updateListeners();
-        return true;
-    }
-
     public boolean addItem(Entity user, ItemStack stack, int cookTime) {
         this.cookTimeTotal = cookTime;
         this.cookTime = 0;

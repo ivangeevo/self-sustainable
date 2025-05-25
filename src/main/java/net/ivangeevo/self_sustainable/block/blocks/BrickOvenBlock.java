@@ -101,6 +101,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         return false;
     }
 
+    /**
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack heldStack = player.getStackInHand(player.getActiveHand());
@@ -132,31 +134,12 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                 return ActionResult.SUCCESS;
             } else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
 
-                /**
-                if (item.getCanBeFedDirectlyIntoBrickOven(heldStack)) {
-                    if (!world.isClient) {
-                        int iItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
-
-                        if (iItemsConsumed > 0) {
-                            if (state.get(LIT)) {
-                                Ignitable.playLitFX(world, pos);
-                            } else {
-                                this.playPopSound(world, pos);
-                            }
-
-                            heldStack.setCount(heldStack.getCount() - iItemsConsumed);
-                        }
-                    }
-
-                    return ActionResult.SUCCESS;
-                }
-                 **/
                 Hand hand = player.getActiveHand();
 
                 // Try to ignite
-                if ( heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS) )
+                if (heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS))
                 {
-                    if ( state.get(FUEL_LEVEL) > 0 )
+                    if (state.get(FUEL_LEVEL) > 0)
                     {
                         if (!state.get(LIT))
                         {
@@ -167,10 +150,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
                         return ActionResult.SUCCESS;
                     }
-                    else
-                    {
-                        Ignitable.playExtinguishSound(world, pos, false);
-                    }
+
                 }
                 // try to add fuel
                 else
@@ -198,6 +178,57 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
         return ActionResult.PASS;
     }
+    **/
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        ItemStack heldStack = player.getStackInHand(player.getActiveHand());
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+
+        double relativeClickY = hit.getPos().getY() - pos.getY();
+
+        if (hit.getSide() != state.get(FACING)) {
+            return ActionResult.FAIL;
+        }
+
+        if (blockEntity instanceof BrickOvenBE ovenBE) {
+            Optional<RecipeEntry<OvenCookingRecipe>> optional;
+
+            if (relativeClickY > clickYTopPortion) {
+
+                if (!ovenBE.getCookStack().isEmpty()) {
+                    ovenBE.retrieveItem(player);
+                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
+                    return ActionResult.SUCCESS;
+                } else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() ) {
+                    if (!world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
+                            player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime()))
+                    {
+                        return ActionResult.SUCCESS;
+                    }
+                }
+
+                return ActionResult.SUCCESS;
+            } else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
+                // Use the attemptToAddFuel method to try and add fuel
+                int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
+
+                if (numItemsConsumed > 0) {
+                    if (state.get(LIT)) {
+                        Ignitable.playLitFX(world, pos);
+                    } else {
+                        this.playPopSound(world, pos);
+                    }
+                    heldStack.split(numItemsConsumed);
+                    return ActionResult.SUCCESS;
+                }
+            }
+
+        }
+
+        return ActionResult.PASS;
+    }
+
 
     private void playPopSound(World world, BlockPos pos) {
         BlockPos soundPos = new BlockPos(

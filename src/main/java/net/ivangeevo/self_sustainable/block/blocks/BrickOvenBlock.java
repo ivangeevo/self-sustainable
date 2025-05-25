@@ -74,7 +74,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
     @Override
     public boolean setOnFireDirectly(World world, BlockPos pos) {
-
         if (!world.getBlockState(pos).get(LIT) && world.getBlockState(pos).get(FUEL_LEVEL) > 0) {
             if (world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE) {
                 if (ovenBE.attemptToLight()) {
@@ -106,7 +105,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack heldStack = player.getStackInHand(player.getActiveHand());
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        Item item = heldStack.getItem();
 
         double relativeClickY = hit.getPos().getY() - pos.getY();
 

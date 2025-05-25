@@ -122,7 +122,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
     }
 
     private boolean isIgnitableItem(ItemStack stack) {
-        return stack.isIn(ModTags.Items.DIRECT_IGNITERS)
+        return     stack.isIn(ModTags.Items.DIRECT_IGNITERS)
                 || stack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)
                 || stack.getItem() == Items.FLINT_AND_STEEL;
     }

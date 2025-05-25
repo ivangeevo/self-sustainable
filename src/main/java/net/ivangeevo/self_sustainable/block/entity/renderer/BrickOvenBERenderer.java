@@ -11,8 +11,11 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.world.LightType;
+import net.minecraft.world.World;
 
 public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE>
 {
@@ -49,8 +52,17 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE>
         // Scale the item
         matrices.scale(0.35f, 0.35f, 0.35f);
 
+        // Get the BlockPos in front of the oven
+        BlockPos blockPos = ovenBE.getPos().offset(facing);
+        World world = ovenBE.getWorld();
+
+        assert world != null;
+        int blockLight = world.getLightLevel(LightType.BLOCK, blockPos);
+        int skyLight = world.getLightLevel(LightType.SKY, blockPos);
+        int lightPacked = LightmapTextureManager.pack(blockLight, skyLight);
+
         this.itemRenderer.renderItem(cookStack, ModelTransformationMode.GUI,
-                LightmapTextureManager.pack(8, 15), OverlayTexture.DEFAULT_UV,
+                lightPacked, OverlayTexture.DEFAULT_UV,
                 matrices, vertexConsumers, ovenBE.getWorld(), 1);
 
         matrices.pop();

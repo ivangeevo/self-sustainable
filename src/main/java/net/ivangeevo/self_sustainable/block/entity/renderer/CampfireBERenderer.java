@@ -17,8 +17,11 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.world.LightType;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Unique;
 
 @Environment(value=EnvType.CLIENT)
@@ -53,9 +56,19 @@ public class CampfireBERenderer
             // Scale the item to an appropriate size
             matrixStack.scale(0.5f, 0.5f, 0.5f);
 
+            // Get the BlockPos at the campfire
+            BlockPos blockPos = campfireBE.getPos();
+            World world = campfireBE.getWorld();
+
+            assert world != null;
+            int blockLight = world.getLightLevel(LightType.BLOCK, blockPos);
+            int skyLight = world.getLightLevel(LightType.SKY, blockPos);
+
+            int lightPacked = LightmapTextureManager.pack(blockLight, skyLight);
+
             // Use the itemRenderer to render the item
             this.itemRenderer.renderItem(cookStack, ModelTransformationMode.GUI,
-                    LightmapTextureManager.pack(8, 15), OverlayTexture.DEFAULT_UV,
+                    lightPacked, OverlayTexture.DEFAULT_UV,
                     matrixStack, vertexConsumerProvider, campfireBE.getWorld(), 1);
 
             matrixStack.pop();

@@ -3,6 +3,7 @@
     "minecraft:torch",
     "minecraft:soul_torch",
     "self_sustainable:crude_torch_lit",
-    "self_sustainable:crude_torch_smoulder"
+    "self_sustainable:crude_torch_smoulder",
+    "minecraft:fire_charge"
   ]
 }

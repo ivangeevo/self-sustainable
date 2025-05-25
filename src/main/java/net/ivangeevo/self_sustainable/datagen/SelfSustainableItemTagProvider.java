@@ -34,7 +34,6 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
 
     private void addToModTags() {
 
-
         getOrCreateTagBuilder(ModTags.Items.EXTINGUISH_TORCHES_ON_USE)
                 .forceAddTag(ItemTags.SHOVELS);
 
@@ -51,6 +50,8 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
                 .add(Items.TORCH)
                 .add(Items.SOUL_TORCH)
                 .add(ModItems.CRUDE_TORCH_LIT)
-                .add(ModItems.CRUDE_TORCH_SMOULDER);
+                .add(ModItems.CRUDE_TORCH_SMOULDER)
+                .add(Items.FIRE_CHARGE)
+        ;
     }
 }

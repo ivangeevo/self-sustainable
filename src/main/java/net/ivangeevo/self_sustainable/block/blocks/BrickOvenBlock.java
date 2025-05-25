@@ -102,7 +102,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         return false;
     }
 
-
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack heldStack = player.getStackInHand(player.getActiveHand());
@@ -121,7 +120,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
             if (relativeClickY > clickYTopPortion) {
 
                 if (!ovenBE.getCookStack().isEmpty()) {
-                    ovenBE.retrieveItem(world, player);
+                    ovenBE.retrieveItem(player);
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
                     return ActionResult.SUCCESS;
                 } else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() ) {

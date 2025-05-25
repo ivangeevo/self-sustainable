@@ -125,52 +125,36 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
         {
             Optional<RecipeEntry<OvenCookingRecipe>> optional;
 
-            if (relativeClickY > clickYTopPortion)
-            {
-
-                if (!ovenBE.getCookStack().isEmpty())
-                {
-                    ovenBE.retrieveItem(world, player);
-
+            if (relativeClickY > clickYTopPortion) {
+                if (!ovenBE.getCookStack().isEmpty()) {
+                    ovenBE.retrieveItem(player);
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
                     return ActionResult.SUCCESS;
-                }
-                else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() )
-                {
-                    if ( !world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
+                } else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
+                    if (!world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
                             player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime()))
                     {
-
                         return ActionResult.SUCCESS;
                     }
                 }
 
                 return ActionResult.SUCCESS;
-            }
-            else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty())
-            {
+            } else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
                 // Try to ignite
-                if ( heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS) )
+                if (heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS))
                 {
-                    if ( state.get(FUEL_LEVEL) > 0 )
-                    {
-                        if (!state.get(LIT))
-                        {
+                    if (state.get(FUEL_LEVEL) > 0) {
+                        if (!state.get(LIT)) {
                             world.setBlockState(pos, state.with(LIT, true));
                             Ignitable.playLitFX(world, pos);
                             heldStack.damage(1, player, EquipmentSlot.MAINHAND);
                         }
 
                         return ActionResult.SUCCESS;
-                    }
-                    else
-                    {
+                    } else {
                         Ignitable.playExtinguishSound(world, pos, false);
                     }
-                }
-                // try to add fuel
-                else
-                {
+                } else { // try to add fuel
 
                     // Use the attemptToAddFuel method to try and add fuel
                     int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
@@ -181,13 +165,9 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                         } else {
                             this.playPopSound(world, pos);
                         }
-
                         heldStack.split(numItemsConsumed);
-
-
                     }
                 }
-
                 return ActionResult.SUCCESS;
             }
         }
@@ -210,34 +190,28 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        if (world.isClient)
-        {
+        if (world.isClient) {
             return SmokerOvenBlock.validateTicker(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::clientTick);
-        }
-        else
-        {
+        } else {
             return SmokerOvenBlock.validateTicker(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::serverTick);
         }
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx)
-    {
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
 
-        if (state.isOf(newState.getBlock()))
-        {
+        if (state.isOf(newState.getBlock())) {
             return;
         }
 
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (blockEntity instanceof SmokerOvenBE ovenBE)
-        {
+        if (blockEntity instanceof SmokerOvenBE ovenBE) {
             // Drops the contents inside when the block is destroyed
             ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getCookStack());
         }
@@ -248,13 +222,12 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 
-        if ( state.get(LIT) )
-        {
+        if (state.get(LIT)) {
             SmokerOvenBE ovenBE = (SmokerOvenBE) world.getBlockEntity( pos );
+            assert ovenBE != null;
             int iFuelLevel = ovenBE.getVisualFuelLevel();
 
-            if ( iFuelLevel == 1 )
-            {
+            if (iFuelLevel == 1) {
                 Direction iFacing = world.getBlockState( pos ).get(FACING);
 
                 float fX = (float)iFacing.getId() + 0.5F;

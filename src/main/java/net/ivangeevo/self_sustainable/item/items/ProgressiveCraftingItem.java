@@ -42,31 +42,23 @@ public class ProgressiveCraftingItem extends Item
 
 
     @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks)
-    {
+    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         int iUseCount = user.getItemUseTimeLeft();
 
-        if ( getMaxUseTime( stack, user ) - iUseCount > getItemUseWarmupDuration() )
-        {
-            if ( iUseCount % 4 == 0 )
-            {
+        if (getMaxUseTime( stack, user ) - iUseCount > getItemUseWarmupDuration()) {
+            if (iUseCount % 4 == 0) {
                 playCraftingFX(stack, world, user);
             }
 
-            if ( !world.isClient && iUseCount % PROGRESS_TIME_INTERVAL == 0 )
-            {
+            if (!world.isClient && iUseCount % PROGRESS_TIME_INTERVAL == 0) {
                 int iDamage = stack.getDamage();
 
                 iDamage -= 1;
 
-                if ( iDamage > 0 )
-                {
+                if (iDamage > 0) {
                     stack.setDamage( iDamage );
-                }
-                else
-                {
+                } else {
                     // set item usage to immediately complete
-
                     user.setItemUseTime(1);
                 }
             }

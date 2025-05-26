@@ -229,7 +229,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         return ActionResult.PASS;
     }
 
-
     private void playPopSound(World world, BlockPos pos) {
         BlockPos soundPos = new BlockPos(
                 (int) ((double) pos.getX() + 0.5D),

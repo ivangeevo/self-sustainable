@@ -14,7 +14,8 @@ import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.CookingRecipeCategory;
 
 public class OvenCookingRecipe extends AbstractCookingRecipe {
-    public OvenCookingRecipe(String group, CookingRecipeCategory category, Ingredient input, ItemStack output, float experience, int cookTime) {
+    public OvenCookingRecipe(String group, CookingRecipeCategory category, Ingredient input,
+                             ItemStack output, float experience, int cookTime) {
         super(Type.INSTANCE, group, category, input, output, experience, cookTime);
     }
 
@@ -32,13 +33,13 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
         return Type.INSTANCE;
     }
 
-    public static class Type implements RecipeType<OvenCookingRecipe>
-    {
+    public static class Type implements RecipeType<OvenCookingRecipe> {
         public static final Type INSTANCE = new Type();
         public static final String ID = "oven_cooking";
     }
-    public static class Serializer implements RecipeSerializer<OvenCookingRecipe>
-    {
+
+    public static class Serializer implements RecipeSerializer<OvenCookingRecipe> {
+
         private static final MapCodec<OvenCookingRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
                                 Codec.STRING
@@ -64,6 +65,7 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
                         )
                         .apply(instance, OvenCookingRecipe::new)
         );
+
         public static final PacketCodec<RegistryByteBuf, OvenCookingRecipe> PACKET_CODEC = PacketCodec.ofStatic(
                 OvenCookingRecipe.Serializer::write, OvenCookingRecipe.Serializer::read
         );
@@ -81,8 +83,7 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
         public static final String ID = "oven_cooking";
 
 
-        private static OvenCookingRecipe read(RegistryByteBuf buf)
-        {
+        private static OvenCookingRecipe read(RegistryByteBuf buf) {
             String string = buf.readString();
             CookingRecipeCategory craftingRecipeCategory = buf.readEnumConstant(CookingRecipeCategory.class);
             Ingredient input = Ingredient.PACKET_CODEC.decode(buf);
@@ -93,11 +94,10 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
         }
 
 
-        public static void write(RegistryByteBuf buf, OvenCookingRecipe recipe)
-        {
+        public static void write(RegistryByteBuf buf, OvenCookingRecipe recipe) {
             buf.writeString(recipe.group);
             buf.writeEnumConstant(recipe.category);
-            Ingredient.PACKET_CODEC.encode(buf, recipe.getIngredients().get(0));
+            Ingredient.PACKET_CODEC.encode(buf, recipe.getIngredients().getFirst());
             ItemStack.PACKET_CODEC.encode(buf, recipe.result);
             buf.writeFloat(recipe.experience);
             buf.writeVarInt(recipe.cookingTime);
@@ -105,7 +105,8 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
 
     }
 
-    public OvenCookingRecipe create(String group, CookingRecipeCategory category, Ingredient ingredient, ItemStack result, float experience, int cookingTime) {
+    public OvenCookingRecipe create(String group, CookingRecipeCategory category, Ingredient ingredient,
+                                    ItemStack result, float experience, int cookingTime) {
         return new OvenCookingRecipe(group, category, ingredient, result, experience, cookingTime);
     }
 

@@ -1,7 +1,7 @@
 {
   "type": "self_sustainable:oven_cooking",
   "category": "food",
-  "cookingTime": 6000,
+  "cookingTime": 1600,
   "experience": 0.15,
   "ingredient": {
     "item": "minecraft:beef"

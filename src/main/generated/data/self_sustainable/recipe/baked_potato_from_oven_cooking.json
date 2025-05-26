@@ -1,7 +1,7 @@
 {
   "type": "self_sustainable:oven_cooking",
   "category": "food",
-  "cookingTime": 5200,
+  "cookingTime": 1600,
   "experience": 0.25,
   "ingredient": {
     "item": "minecraft:potato"

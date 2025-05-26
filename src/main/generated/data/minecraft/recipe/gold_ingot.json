@@ -1,7 +1,7 @@
 {
   "type": "self_sustainable:oven_cooking",
   "category": "misc",
-  "cookingTime": 12000,
+  "cookingTime": 12800,
   "experience": 0.35,
   "ingredient": {
     "item": "minecraft:raw_gold"

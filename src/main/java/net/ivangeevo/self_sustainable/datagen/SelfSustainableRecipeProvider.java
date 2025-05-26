@@ -49,7 +49,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
     private void generateModRecipes(RecipeExporter exporter)
     {
         // Oven Recipes
-        this.ovenCooking(exporter);
+        this.createOvenCooking(exporter);
 
         // Shapeless Recipes
         this.moddedShapeless(exporter);
@@ -195,30 +195,23 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
 
     }
 
-    private void ovenCooking(RecipeExporter exporter)
-    {
+    private void createOvenCooking(RecipeExporter exporter) {
         // Food
-        offerOvenCooking(Items.BAKED_POTATO, RecipeCategory.FOOD, Ingredient.ofItems(Items.POTATO), 0.25f, 5200).criterion("has_potato", RecipeProvider.conditionsFromItem(Items.POTATO)).offerTo(exporter, Identifier.of("self_sustainable", "baked_potato" + foc));
-        offerOvenCooking(Items.COOKED_CHICKEN, RecipeCategory.FOOD, Ingredient.ofItems(Items.CHICKEN), 0.15f, 6000).criterion("has_chicken", RecipeProvider.conditionsFromItem(Items.CHICKEN)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_chicken" + foc));
-        offerOvenCooking(Items.COOKED_BEEF, RecipeCategory.FOOD, Ingredient.ofItems(Items.BEEF), 0.15f, 6000).criterion("has_beef", RecipeProvider.conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_beef" + foc));
-        offerOvenCooking(Items.COOKED_PORKCHOP, RecipeCategory.FOOD, Ingredient.ofItems(Items.PORKCHOP), 0.15f, 6000).criterion("has_porkchop", RecipeProvider.conditionsFromItem(Items.PORKCHOP)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_porkchop" + foc));
-        offerOvenCooking(Items.COOKED_MUTTON, RecipeCategory.FOOD, Ingredient.ofItems(Items.MUTTON), 0.15f, 6000).criterion("has_mutton", RecipeProvider.conditionsFromItem(Items.MUTTON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_mutton" + foc));
-        offerOvenCooking(Items.COOKED_RABBIT, RecipeCategory.FOOD, Ingredient.ofItems(Items.RABBIT), 0.10f, 5800).criterion("has_rabbit", RecipeProvider.conditionsFromItem(Items.RABBIT)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_rabbit" + foc));
-        offerOvenCooking(Items.COOKED_COD, RecipeCategory.FOOD, Ingredient.ofItems(Items.COD), 0.10f, 5600).criterion("has_cod", RecipeProvider.conditionsFromItem(Items.COD)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_cod" + foc));
-        offerOvenCooking(Items.COOKED_SALMON, RecipeCategory.FOOD, Ingredient.ofItems(Items.SALMON), 0.10f, 5600).criterion("has_salmon", RecipeProvider.conditionsFromItem(Items.SALMON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_salmon" + foc));
+        offerOvenCooking(Items.BAKED_POTATO, RecipeCategory.FOOD, Ingredient.ofItems(Items.POTATO), 0.25f, 1600).criterion("has_potato", RecipeProvider.conditionsFromItem(Items.POTATO)).offerTo(exporter, Identifier.of("self_sustainable", "baked_potato" + foc));
+        offerOvenCooking(Items.COOKED_CHICKEN, RecipeCategory.FOOD, Ingredient.ofItems(Items.CHICKEN), 0.15f, 1600).criterion("has_chicken", RecipeProvider.conditionsFromItem(Items.CHICKEN)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_chicken" + foc));
+        offerOvenCooking(Items.COOKED_BEEF, RecipeCategory.FOOD, Ingredient.ofItems(Items.BEEF), 0.15f, 1600).criterion("has_beef", RecipeProvider.conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_beef" + foc));
+        offerOvenCooking(Items.COOKED_PORKCHOP, RecipeCategory.FOOD, Ingredient.ofItems(Items.PORKCHOP), 0.15f, 1600).criterion("has_porkchop", RecipeProvider.conditionsFromItem(Items.PORKCHOP)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_porkchop" + foc));
+        offerOvenCooking(Items.COOKED_MUTTON, RecipeCategory.FOOD, Ingredient.ofItems(Items.MUTTON), 0.15f, 1600).criterion("has_mutton", RecipeProvider.conditionsFromItem(Items.MUTTON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_mutton" + foc));
+        offerOvenCooking(Items.COOKED_RABBIT, RecipeCategory.FOOD, Ingredient.ofItems(Items.RABBIT), 0.10f, 1600).criterion("has_rabbit", RecipeProvider.conditionsFromItem(Items.RABBIT)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_rabbit" + foc));
+        offerOvenCooking(Items.COOKED_COD, RecipeCategory.FOOD, Ingredient.ofItems(Items.COD), 0.10f, 1600).criterion("has_cod", RecipeProvider.conditionsFromItem(Items.COD)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_cod" + foc));
+        offerOvenCooking(Items.COOKED_SALMON, RecipeCategory.FOOD, Ingredient.ofItems(Items.SALMON), 0.10f, 1600).criterion("has_salmon", RecipeProvider.conditionsFromItem(Items.SALMON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_salmon" + foc));
         
 
         // Ores
-        offerOvenCooking(Items.IRON_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_IRON), 0.25f, 12000).criterion("has_raw_iron", RecipeProvider.conditionsFromItem(Items.RAW_IRON)).offerTo(exporter);
-        offerOvenCooking(Items.GOLD_INGOT , RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_GOLD), 0.35f, 12000).criterion("has_raw_gold", RecipeProvider.conditionsFromItem(Items.RAW_GOLD)).offerTo(exporter);
+        offerOvenCooking(Items.IRON_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_IRON), 0.25f, 12800).criterion("has_raw_iron", RecipeProvider.conditionsFromItem(Items.RAW_IRON)).offerTo(exporter);
+        offerOvenCooking(Items.GOLD_INGOT , RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_GOLD), 0.35f, 12800).criterion("has_raw_gold", RecipeProvider.conditionsFromItem(Items.RAW_GOLD)).offerTo(exporter);
         offerOvenCooking(Items.COPPER_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_COPPER), 0.20f, 10000).criterion("has_raw_copper", RecipeProvider.conditionsFromItem(Items.RAW_COPPER)).offerTo(exporter);
 
-    }
-
-    private void removeRecipeEntry(RecipeExporter exporter, Identifier id)
-    {
-        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, Items.BEDROCK).input(Items.BEDROCK)
-                .criterion("has_bedrock", RecipeProvider.conditionsFromItem(Items.BEDROCK)).offerTo(exporter, id);
     }
 
     /**

@@ -93,8 +93,9 @@ public class UnfiredBrickBlock extends BlockWithEntity {
         if (state.isOf(newState.getBlock())) {
             return;
         }
-
-        world.playSound(null, pos, SoundEvents.ENTITY_SLIME_ATTACK, SoundCategory.BLOCKS, ( 0.5F + 1.0F ) / 2.0F, 0.1F * 0.8F );
+        if (newState.getBlock() != ModBlocks.BRICK) {
+            world.playSound(null, pos, SoundEvents.ENTITY_SLIME_ATTACK, SoundCategory.BLOCKS, (0.5F + 1.0F) / 2.0F, 0.1F * 0.8F );
+        }
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 

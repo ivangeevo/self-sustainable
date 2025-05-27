@@ -166,9 +166,9 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                             this.playPopSound(world, pos);
                         }
                         heldStack.split(numItemsConsumed);
+                        return ActionResult.SUCCESS;
                     }
                 }
-                return ActionResult.SUCCESS;
             }
         }
 

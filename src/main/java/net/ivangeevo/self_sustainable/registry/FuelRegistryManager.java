@@ -22,8 +22,8 @@ public class FuelRegistryManager
         modifyEntry(Items.COAL_BLOCK, 14400);
         modifyEntry(Items.BLAZE_ROD, 12800);
         modifyEntry(ItemTags.BAMBOO_BLOCKS, 100);
-        modifyEntry(Items.STICK, 50);
-        modifyEntry(ItemTags.SAPLINGS, 15);
+        modifyEntry(Items.STICK, 400);
+        modifyEntry(ItemTags.SAPLINGS, 100);
 
         // And then we manually remove and add what is not directly modifiable.
         removeFuelItems();

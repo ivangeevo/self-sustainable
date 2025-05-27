@@ -75,12 +75,10 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
     }
 
     @Override
-    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing)
-    {
+    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos))
-        {
+        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos)) {
             return targetBlock.setOnFireDirectly(world, pos);
         }
 

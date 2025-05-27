@@ -65,8 +65,7 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
     }
 
     @Override
-    public void performUseEffects(ItemUsageContext context)
-    {
+    public void performUseEffects(ItemUsageContext context) {
         PlayerEntity player = context.getPlayer();
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
@@ -75,10 +74,8 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
         world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
 
 
-        if (!player.getWorld().isClient())
-        {
-            for (int var3 = 0; var3 < 5; ++var3)
-            {
+        if (!player.getWorld().isClient()) {
+            for (int var3 = 0; var3 < 5; ++var3) {
                 Vec3d var4 = new Vec3d((player.getRandom().nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0);
 
                 var4 = var4.rotateX(-player.getPitch() * (float)Math.PI / 180.0f);
@@ -100,17 +97,15 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
     @Override
     public boolean checkChanceOfStart(ItemStack stack, Random rand)
     {
-        return rand.nextInt( 4 ) == 0;
+        return rand.nextInt(4) == 0;
     }
 
 
     @Override
-    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing)
-    {
+    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if ( targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos) )
-        {
+        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos)) {
             return targetBlock.setOnFireDirectly(world, pos);
         }
 

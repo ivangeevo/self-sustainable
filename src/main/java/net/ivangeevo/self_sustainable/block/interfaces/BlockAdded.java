@@ -5,8 +5,8 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-public interface BlockAdded
-{
+public interface BlockAdded {
+    /** This a general check that returns whether the item can set this block on fire.**/
     default boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
         return false;
     }
@@ -19,8 +19,5 @@ public interface BlockAdded
     default int getChanceOfFireSpreadingDirectlyTo(WorldAccess blockAccess, BlockPos pos) {
         return 0;
     }
-
     default void checkForFireSpreadFromLocation(World world, BlockPos pos, Random random, int iSourceFireAge) {}
-
-
 }

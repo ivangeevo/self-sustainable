@@ -113,7 +113,7 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
     }
 
     public boolean attemptToLight() {
-        if (unlitFuelBurnTime > 0 ) {
+        if (unlitFuelBurnTime > 0) {
             // lighting has to be done on update to prevent funkiness with tile entity removal on block being set
             lightOnNextUpdate = true;
             return true;

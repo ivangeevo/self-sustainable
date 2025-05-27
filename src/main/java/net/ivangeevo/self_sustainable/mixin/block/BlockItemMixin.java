@@ -54,7 +54,6 @@ public abstract class BlockItemMixin extends Item implements Ignitable
      }
      **/
 
-
     // TODO: Find a way to make this less hardcoded.
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     private void injectedOnUse(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {

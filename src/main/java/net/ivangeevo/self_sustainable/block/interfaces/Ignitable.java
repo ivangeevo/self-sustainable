@@ -19,7 +19,6 @@ public interface Ignitable {
 
         world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS,
                 0.2F + world.random.nextFloat() * 0.1F, world.random.nextFloat() * 0.25F + 1.25F);
-
     }
 
     static void playExtinguishSound(World world, BlockPos pos, boolean isQuiet) {
@@ -32,6 +31,5 @@ public interface Ignitable {
         }
 
         world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, fizzVolume, fizzPitch);
-
     }
 }

@@ -35,17 +35,14 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractModTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock {
+public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock {
 
     public ParticleEffect particle;
-
     public TorchFireState fireState;
-
     public ModTorchHandler handler;
-
     protected static final VoxelShape SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
 
-    public AbstractModTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel) {
+    public AbstractExtinguishingTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel) {
         super(settings);
         this.particle = particle;
         this.fireState = fireLevel;

@@ -1,7 +1,7 @@
 package net.ivangeevo.self_sustainable.item.items;
 
 import net.fabricmc.fabric.api.item.v1.FabricItem;
-import net.ivangeevo.self_sustainable.block.blocks.AbstractModTorchBlock;
+import net.ivangeevo.self_sustainable.block.blocks.AbstractExtinguishingTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
@@ -14,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -112,7 +111,7 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         ItemStack outputStack = ItemStack.EMPTY;
 
         if (inputStack.getItem() instanceof BlockItem && inputStack.getItem() instanceof CrudeTorchItem) {
-            AbstractModTorchBlock newBlock = (AbstractModTorchBlock) ((BlockItem)inputStack.getItem()).getBlock();
+            AbstractExtinguishingTorchBlock newBlock = (AbstractExtinguishingTorchBlock) ((BlockItem)inputStack.getItem()).getBlock();
             CrudeTorchItem newItem = (CrudeTorchItem) newBlock.handler.getStandingTorch(newState).asItem();
 
             outputStack = changedCopy(inputStack, newItem);
@@ -156,7 +155,6 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
         if (stack.getItem() instanceof CrudeTorchItem torchItem && !world.isClient) {
             int fuel = getFuel(stack);
             if (torchItem.getComponents().contains(ModComponents.TORCH_FUEL_COMPONENT)) {
-                //stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
                 stack.set(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent(fuel));
             }
 

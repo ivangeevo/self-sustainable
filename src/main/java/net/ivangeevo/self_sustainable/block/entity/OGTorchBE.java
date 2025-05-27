@@ -1,6 +1,6 @@
 package net.ivangeevo.self_sustainable.block.entity;
 
-import net.ivangeevo.self_sustainable.block.blocks.AbstractModTorchBlock;
+import net.ivangeevo.self_sustainable.block.blocks.AbstractExtinguishingTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
@@ -21,7 +21,7 @@ public class OGTorchBE extends BlockEntity {
 
     public static void tick(World world, BlockPos pos, BlockState state, OGTorchBE be) {
         if (!world.isClient) {
-            if (!(state.getBlock() instanceof AbstractModTorchBlock torchBlock)) return;
+            if (!(state.getBlock() instanceof AbstractExtinguishingTorchBlock torchBlock)) return;
             if (torchBlock.getFireState() == TorchFireState.LIT) {
                 tickLit(world, pos, state, be);
             } else if (torchBlock.getFireState() == TorchFireState.SMOULDER) {
@@ -35,7 +35,7 @@ public class OGTorchBE extends BlockEntity {
         // Extinguish in rain
         if (world.hasRain(pos)) {
             if (random.nextInt(200) == 0) {
-                ((AbstractModTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, true);
+                ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, true);
             }
         }
 
@@ -44,7 +44,7 @@ public class OGTorchBE extends BlockEntity {
             be.fuel--;
 
             if (be.fuel <= 0) {
-                ((AbstractModTorchBlock) world.getBlockState(pos).getBlock()).outOfFuel(world, pos, state, false);
+                ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).outOfFuel(world, pos, state, false);
             }
         }
 
@@ -59,7 +59,7 @@ public class OGTorchBE extends BlockEntity {
                 be.fuel--;
 
                 if (be.fuel <= 0) {
-                    ((AbstractModTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
+                    ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
                 }
             }
         }

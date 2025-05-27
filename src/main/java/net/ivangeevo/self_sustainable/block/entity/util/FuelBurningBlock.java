@@ -16,7 +16,4 @@ public interface FuelBurningBlock {
         return stack.isIn(torches);
     }
 
-    default boolean isValidItem(ItemStack stack, TagKey torches) {
-        return stack.isIn(torches);
-    }
 }

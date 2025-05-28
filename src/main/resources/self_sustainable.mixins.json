@@ -14,6 +14,7 @@
     "block.CampfireBlockMixin",
     "block.TorchBlockMixin",
     "block.WallTorchBlockMixin",
+    "entity.ItemEntityMixin",
     "entity.LivingEntityMixin",
     "entity.MobEntityMixin",
     "entity.OGHungerManagerMixin",

@@ -34,7 +34,7 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
 
     private void addToModTags() {
 
-        getOrCreateTagBuilder(ModTags.Items.EXTINGUISH_TORCHES_ON_USE)
+        getOrCreateTagBuilder(ModTags.Items.TORCH_EXTINGUISHERS)
                 .forceAddTag(ItemTags.SHOVELS);
 
         getOrCreateTagBuilder(ModTags.Items.CAN_START_FIRE_ON_USE)

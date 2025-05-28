@@ -14,6 +14,9 @@ import java.util.Random;
 
 public class TorchBE extends BlockEntity {
 
+    static public final int MAX_BURN_TIME = 24000; // full day
+    static public final int SPUTTER_TIME = 30 * 20; // 30 seconds
+
     protected static Random random = new Random();
 
     public TorchBE(BlockPos pos, BlockState state) {
@@ -23,15 +26,12 @@ public class TorchBE extends BlockEntity {
     public static void tick(World world, BlockPos pos, BlockState state, TorchBE be) {
         TorchFuelComponent fuelComponent = be.getComponents().getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent());
 
-        if (!world.isClient) {
-            if (!(state.getBlock() instanceof AbstractExtinguishingTorchBlock torchBlock)) return;
-            if (torchBlock.getFireState() == TorchFireState.LIT) {
-                tickLit(world, pos, state, be, fuelComponent);
-            } else if (torchBlock.getFireState() == TorchFireState.SMOULDER) {
-                tickSmoldering(world, pos, state, be, fuelComponent);
-            }
-
-
+        if (world.isClient) return;
+        if (!(state.getBlock() instanceof AbstractExtinguishingTorchBlock torchBlock)) return;
+        if (torchBlock.getFireState() == TorchFireState.LIT) {
+            tickLit(world, pos, state, be, fuelComponent);
+        } else if (torchBlock.getFireState() == TorchFireState.SMOULDER) {
+               tickSmoldering(world, pos, state, be, fuelComponent);
         }
     }
 
@@ -48,11 +48,15 @@ public class TorchBE extends BlockEntity {
 
         // Burn out
         if (fuel > 0) {
+            if (fuel < SPUTTER_TIME) {
+                if (world.getBlockState(pos).getBlock() instanceof AbstractExtinguishingTorchBlock) {
+                    ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).smoulder(world, pos, state);
+                }
+            }
             fuelComponent.decrement();
         } else {
-            // Ensure it only applies to torches placed in the world
             if (world.getBlockState(pos).getBlock() instanceof AbstractExtinguishingTorchBlock) {
-                ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).outOfFuel(world, pos, state, false);
+                ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
             }
         }
 

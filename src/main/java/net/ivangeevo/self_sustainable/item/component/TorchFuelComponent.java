@@ -3,6 +3,7 @@ package net.ivangeevo.self_sustainable.item.component;
 import com.mojang.serialization.Codec;
 
 public class TorchFuelComponent {
+
     private int fuel;
     public static int MAX_FUEL = 24000;
 

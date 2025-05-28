@@ -79,56 +79,29 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
         Hand hand = player.getActiveHand();
         ItemStack stack = player.getStackInHand(hand);
 
-        if (fireState == TorchFireState.LIT) {
-            if (tryUse(ModTags.Items.EXTINGUISH_TORCHES_ON_USE, stack, player, hand)) {
-                extinguish(world, pos, state);
-                player.swingHand(hand);
-                return ActionResult.SUCCESS;
-            }
-
-            if (tryUse(ModTags.Items.EXTINGUISH_TORCHES_ON_USE, stack, player, hand)) {
-                doSmoulder(world, pos, state);
+        if (fireState == TorchFireState.LIT || fireState == TorchFireState.SMOULDER) {
+            if (tryUse(ModTags.Items.TORCH_EXTINGUISHERS, stack)) {
+                this.extinguish(world, pos, state);
                 player.swingHand(hand);
                 return ActionResult.SUCCESS;
             }
         }
-
-        /**
-        if (fireState == TorchFireState.UNLIT) {
-            if (tryUse(ModTags.Items.CAN_START_FIRE_ON_USE, stack, player, hand)) {
-                light(world, pos, state);
-                player.swingHand(hand);
-                return ActionResult.SUCCESS;
-            }
-        }
-         **/
 
         return ActionResult.PASS;
     }
-
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
         super.onPlaced(world, pos, state, placer, itemStack);
-
-        if (world.getBlockEntity(pos) instanceof TorchBE be && itemStack.getItem() instanceof CrudeTorchItem) {
-
-            TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
-
-            if (fuelComponent == null) {
-                // Handle the case where fuelComponent is null
-                return;
+        if (world.getBlockEntity(pos) instanceof TorchBE be) {
+            if (itemStack.getItem() instanceof CrudeTorchItem) {
+                TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
+                if (fuelComponent == null) return;
+                int fuel = fuelComponent.getFuel();
+                fuelComponent.setFuel(fuel);
             }
-
-            int fuel = fuelComponent.getFuel();
-            fuelComponent.setFuel(fuel);
         }
-    }
-
-    @Override
-    public void outOfFuel(World world, BlockPos pos, BlockState state, boolean playSound) {
-        burnOut(world, pos, state, playSound);
     }
 
     @Override
@@ -150,7 +123,7 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
             }
 
             if (!world.hasRain(pos)) {
-                changeTorch(world, pos, world.getBlockState(pos), TorchFireState.LIT);
+                this.changeTorch(world, pos, world.getBlockState(pos), TorchFireState.LIT);
                 Ignitable.playLitFX(world, pos);
 
                 // Ensure the block entity has the required component
@@ -162,8 +135,6 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
                     be.setComponents(updatedComponents);
                 }
                 be.markDirty();
-
-
             } else {
                 Ignitable.playExtinguishSound(world, pos, false);
             }
@@ -190,28 +161,24 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
                 || state.isOf(ModBlocks.CRUDE_WALL_TORCH_SMOULDER);
     }
 
-    public void doSmoulder(World world, BlockPos pos, BlockState state) {
-        if (!world.isClient) {
-            world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            this.displaySharedParticles(state, world, pos);
-            changeTorch(world, pos, state, TorchFireState.SMOULDER);
-        }
+    public void smoulder(World world, BlockPos pos, BlockState state) {
+        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
+        this.displaySharedParticles(state, world, pos);
+        changeTorch(world, pos, state, TorchFireState.SMOULDER);
     }
 
     public void extinguish(World world, BlockPos pos, BlockState state) {
-        if (!world.isClient) {
-            world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            this.displaySharedParticles(state, world, pos);
-            changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
-        }
+        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
+        this.displaySharedParticles(state, world, pos);
+        changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
     }
 
     public void burnOut(World world, BlockPos pos, BlockState state, boolean playSound) {
-        if (!world.isClient) {
-            if (playSound) world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
-            this.displaySharedParticles(state, world, pos);
-            changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
+        if (playSound) {
+            world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f);
         }
+        this.displaySharedParticles(state, world, pos);
+        changeTorch(world, pos, state, TorchFireState.BURNED_OUT);
     }
 
     public void light(World world, BlockPos pos, BlockState state) {
@@ -233,29 +200,22 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
 
     public abstract boolean isWallTorch();
 
-    public TorchFireState getFireState()
-    {
+    public TorchFireState getFireState() {
         return fireState;
     }
 
     public void changeTorch(World world, BlockPos pos, BlockState oldState, TorchFireState newType) {
-
         // Change the block state
         BlockState newState = isWallTorch()
                 ? handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(CrudeWallTorchBlock.FACING))
                 : handler.getStandingTorch(newType).getDefaultState();
 
-        // TODO: Fix items set on fire initially don't have the torch fuel component set
+        if (world.isClient) return;
         world.setBlockState(pos, newState);
         if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TorchBE be) {
             TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
-            if (fuelComponent == null) {
-                return;
-            }
-
-            //((TorchBE) Objects.requireNonNull(world.getBlockEntity(pos))).setFuel(0);
+            if (fuelComponent == null) return;
             fuelComponent.setFuel(0);
-
         }
     }
 

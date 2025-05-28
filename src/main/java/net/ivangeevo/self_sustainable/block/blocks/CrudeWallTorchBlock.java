@@ -81,8 +81,8 @@ public class CrudeWallTorchBlock extends AbstractExtinguishingTorchBlock
     }
 
     @Override
-    public void doSmoulder(World world, BlockPos pos, BlockState state) {
-        super.doSmoulder(world, pos, state);
+    public void smoulder(World world, BlockPos pos, BlockState state) {
+        super.smoulder(world, pos, state);
 
         CrudeWallTorchBlock newTorch;
         newTorch = handler.getWallTorch(TorchFireState.SMOULDER);

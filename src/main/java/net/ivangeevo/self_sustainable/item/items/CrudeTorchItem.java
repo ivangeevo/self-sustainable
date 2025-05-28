@@ -2,6 +2,7 @@ package net.ivangeevo.self_sustainable.item.items;
 
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.ivangeevo.self_sustainable.block.blocks.AbstractExtinguishingTorchBlock;
+import net.ivangeevo.self_sustainable.block.entity.TorchBE;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
@@ -27,6 +28,9 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
     ModTorchHandler handler;
     private static final int FUEL_TIME = 24000;
     int maxFuel = FUEL_TIME;
+
+    static public final int MAX_DAMAGE = 32; // Setting this low helps reduce SMP updates
+    static public final float DAMAGE_TO_BURN_TIME_RATIO = (float) MAX_DAMAGE / (float) TorchBE.MAX_BURN_TIME;
 
     public CrudeTorchItem(Block standingBlock, Block wallBlock, Item.Settings settings, TorchFireState torchState, ModTorchHandler group) {
         super(standingBlock, wallBlock, settings, Direction.DOWN);

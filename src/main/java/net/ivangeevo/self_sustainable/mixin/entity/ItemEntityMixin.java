@@ -26,18 +26,18 @@ public abstract class ItemEntityMixin extends Entity
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;getWorld()Lnet/minecraft/world/World;", ordinal = 5))
     private void onTick(CallbackInfo ci) {
         ItemStack thisStack = this.getStack();
-        if (thisStack.getItem() instanceof CrudeTorchItem) {
-            TorchFuelComponent fuelComponent = thisStack.get(ModComponents.TORCH_FUEL_COMPONENT);
-            assert fuelComponent != null;
-            // keep decrementing the fuel for the dropped torch
-            if (this.isOnGround() && this.isAlive()) {
-                fuelComponent.decrement();
-            }
-            // remove the entity when fuel runs out
-            if (fuelComponent.getFuel() == 0) {
-                this.discard();
-            }
+        if (!(thisStack.getItem() instanceof CrudeTorchItem)) return;
+        TorchFuelComponent fuelComponent = thisStack.get(ModComponents.TORCH_FUEL_COMPONENT);
+        assert fuelComponent != null;
+        // keep decrementing the fuel for the dropped torch
+        if (this.isOnGround() && this.isAlive()) {
+            fuelComponent.decrement();
         }
+        // remove the entity when fuel runs out
+        if (fuelComponent.getFuel() == 0) {
+            this.discard();
+        }
+
     }
 
 

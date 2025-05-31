@@ -72,6 +72,9 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         builder.add(LIT, FACING, FUEL_LEVEL);
     }
 
+
+
+    /**
     @Override
     public boolean setOnFireDirectly(World world, BlockPos pos) {
         if (!world.getBlockState(pos).get(LIT) && world.getBlockState(pos).get(FUEL_LEVEL) > 0) {
@@ -87,18 +90,25 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
         return false;
     }
+     **/
+
+    @Override
+    public boolean setOnFireDirectly(World world, BlockPos pos) {
+        if (!this.getCanBeSetOnFireDirectly(world, pos)) return false;
+        if (!(world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE)) return false;
+        if (!ovenBE.attemptToLight()) return false;
+        BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
+        world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS ,1F, world.random.nextFloat() * 0.4F + 0.8F);
+        return true;
+    }
 
     @Override
     public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
-        if (!blockAccess.getBlockState(pos).get(LIT)) {
-            BrickOvenBE ovenBE = (BrickOvenBE) blockAccess.getBlockEntity(pos);
-            // uses the visual fuel level rather than the actualy fuel level so this will work on the client
-            assert ovenBE != null;
-
-            return ovenBE.getVisualFuelLevel() > 0;
-        }
-
-        return false;
+        if (blockAccess.getBlockState(pos).get(LIT)) return false;
+        BrickOvenBE ovenBE = (BrickOvenBE) blockAccess.getBlockEntity(pos);
+        // uses the visual fuel level rather than the actualy fuel level so this will work on the client
+        assert ovenBE != null;
+        return ovenBE.getVisualFuelLevel() > 0;
     }
 
     @Override
@@ -153,27 +163,13 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                             this.playPopSound(world, pos);
                         }
                         heldStack.split(numItemsConsumed);
-                        return ActionResult.SUCCESS;
                     }
-                }
-
-               /**
-                // Use the attemptToAddFuel method to try and add fuel
-                int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
-
-                if (numItemsConsumed > 0) {
-                    if (state.get(LIT)) {
-                        Ignitable.playLitFX(world, pos);
-                    } else {
-                        this.playPopSound(world, pos);
+                    if (heldStack.getItem() instanceof FlintAndSteelItem || heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)) {
+                        return ActionResult.PASS;
                     }
-                    heldStack.split(numItemsConsumed);
                     return ActionResult.SUCCESS;
                 }
-                **/
             }
-
-
         }
 
         return ActionResult.PASS;

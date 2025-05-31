@@ -27,8 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(FlintAndSteelItem.class)
 public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgnitingItem
 {
-    @Unique private final float exhaustionPerUse = 0.01F;
-
     public FlintAndSteelItemMixin(Settings settings) {
         super(settings);
     }
@@ -40,28 +38,25 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
         PlayerEntity player = context.getPlayer();
         BlockPos pos = context.getBlockPos();
 
-        if (world.canPlayerModifyAt(player, pos))
-        {
-            performUseEffects(context);
+        if (world.canPlayerModifyAt(player, pos)) {
+            this.performUseEffects(context);
 
-            if (!world.isClient)
-            {
+            if (!world.isClient) {
                 //notifyNearbyAnimalsOfAttempt(player);
 
-                if (checkChanceOfStart(context.getStack(), world.random))
-                {
-                    attemptToLightBlock(context.getStack(), world, pos, context.getSide());
+                if (checkChanceOfStart(context.getStack(), world.random)) {
+                    this.attemptToLightBlock(context.getStack(), world, pos, context.getSide());
                 }
             }
 
             assert player != null;
+            float exhaustionPerUse = 0.01F;
             player.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
             context.getStack().damage(1, player, EquipmentSlot.MAINHAND);
-            cir.setReturnValue( ActionResult.SUCCESS ) ;
+            cir.setReturnValue(ActionResult.SUCCESS) ;
         }
 
-        cir.setReturnValue( ActionResult.FAIL );
-
+        cir.setReturnValue(ActionResult.FAIL);
     }
 
     @Override
@@ -93,13 +88,10 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
         }
     }
 
-
     @Override
-    public boolean checkChanceOfStart(ItemStack stack, Random rand)
-    {
+    public boolean checkChanceOfStart(ItemStack stack, Random rand) {
         return rand.nextInt(4) == 0;
     }
-
 
     @Override
     public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {

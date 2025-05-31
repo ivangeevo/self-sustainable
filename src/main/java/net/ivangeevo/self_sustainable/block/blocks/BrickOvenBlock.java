@@ -130,12 +130,13 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                 if (!ovenBE.getCookStack().isEmpty()) {
                     ovenBE.retrieveItem(player);
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
-                    return ActionResult.SUCCESS;
-                } else if ( !heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent() ) {
-                    if (!world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
-                            player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime()))
-                    {
-                        return ActionResult.SUCCESS;
+                } else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
+                    if (!world.isClient() && ovenBE.getCookStack().isEmpty()) {
+                        ovenBE.addItem(player,
+                                player.getAbilities().creativeMode
+                                        ? heldStack.copy()
+                                        : heldStack, optional.get().value().getCookingTime()
+                        );
                     }
                 }
 
@@ -147,9 +148,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                         if (!state.get(LIT)) {
                             world.setBlockState(pos, state.with(LIT, true));
                             Ignitable.playLitFX(world, pos);
-                            heldStack.damage(1, player, EquipmentSlot.MAINHAND);
+                            //heldStack.damage(1, player, EquipmentSlot.MAINHAND);
                         }
-                        return ActionResult.SUCCESS;
                     }
                 } else { // try to add fuel
 
@@ -167,8 +167,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                     if (heldStack.getItem() instanceof FlintAndSteelItem || heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)) {
                         return ActionResult.PASS;
                     }
-                    return ActionResult.SUCCESS;
                 }
+                return ActionResult.SUCCESS;
             }
         }
 

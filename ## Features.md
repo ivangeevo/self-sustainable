@@ -67,7 +67,6 @@ Initially only the Brick Oven will be available, but later on new blocks for the
 
 ###  ️🌲🔥 Burn Time Adjustments
 - Logs are now the primary fuel source and many fuel item times have been changed.
-
 ---
 
 ### 🏚️ World Generation & Structure Changes
@@ -87,12 +86,6 @@ Initially only the Brick Oven will be available, but later on new blocks for the
 ---
 
 ## 🔮 Planned Features
-
-### 🏺 The "Oven" System (New Furnaces & Smokers)
-- **Replacing Furnaces, Blast Furnaces & Smokers** – New blocks called **"Ovens"** will replace them.
-- **Completely GUI-less cooking** 🔥 – Ovens will use an **interactive, realistic system**.
-- **Unique functionality per Oven Type** – Specific mechanics to make each oven type **more engaging and useful**.
-
 
 ## 📝 Miscellaneous Changes
 - **Wooden blocks (besides logs)** will **break into sticks** if mined with an axe lower than Iron (Planned Feature).

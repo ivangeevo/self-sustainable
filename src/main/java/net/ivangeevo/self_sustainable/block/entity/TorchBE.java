@@ -31,12 +31,11 @@ public class TorchBE extends BlockEntity {
         if (torchBlock.getFireState() == TorchFireState.LIT) {
             tickLit(world, pos, state, be, fuelComponent);
         } else if (torchBlock.getFireState() == TorchFireState.SMOULDER) {
-               tickSmoldering(world, pos, state, be, fuelComponent);
+            tickSmoldering(world, pos, state, be, fuelComponent);
         }
     }
 
     private static void tickLit(World world, BlockPos pos, BlockState state, TorchBE be, TorchFuelComponent fuelComponent) {
-
         // Extinguish in rain
         if (world.hasRain(pos)) {
             if (random.nextInt(200) == 0) {

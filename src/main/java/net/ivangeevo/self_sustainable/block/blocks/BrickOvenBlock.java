@@ -1,6 +1,7 @@
 package net.ivangeevo.self_sustainable.block.blocks;
 
 import com.mojang.serialization.MapCodec;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.ivangeevo.self_sustainable.block.entity.BrickOvenBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
@@ -111,6 +112,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         return ovenBE.getVisualFuelLevel() > 0;
     }
 
+    /**
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack heldStack = player.getStackInHand(player.getActiveHand());
@@ -126,7 +128,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
             Optional<RecipeEntry<OvenCookingRecipe>> optional;
 
             if (relativeClickY > clickYTopPortion) {
-
                 if (!ovenBE.getCookStack().isEmpty()) {
                     ovenBE.retrieveItem(player);
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
@@ -148,7 +149,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                         if (!state.get(LIT)) {
                             world.setBlockState(pos, state.with(LIT, true));
                             Ignitable.playLitFX(world, pos);
-                            //heldStack.damage(1, player, EquipmentSlot.MAINHAND);
+                            return ActionResult.SUCCESS;
                         }
                     }
                 } else { // try to add fuel
@@ -163,17 +164,94 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                             this.playPopSound(world, pos);
                         }
                         heldStack.split(numItemsConsumed);
+                        return ActionResult.SUCCESS;
                     }
                     if (heldStack.getItem() instanceof FlintAndSteelItem || heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)) {
                         return ActionResult.PASS;
                     }
                 }
-                return ActionResult.SUCCESS;
             }
         }
 
         return ActionResult.PASS;
     }
+    **/
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        ItemStack heldStack = player.getStackInHand(player.getActiveHand());
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+
+        double relativeClickY = hit.getPos().getY() - pos.getY();
+
+        if (hit.getSide() != state.get(FACING)) {
+            return ActionResult.FAIL;
+        }
+
+        // Prevent shields from messing up interaction with the oven block
+        if (heldStack.isIn(ConventionalItemTags.SHIELD_TOOLS)) {
+            return ActionResult.FAIL;
+        }
+
+        if (blockEntity instanceof BrickOvenBE ovenBE) {
+            Optional<RecipeEntry<OvenCookingRecipe>> optional;
+
+            if (relativeClickY > clickYTopPortion) {
+                if (!ovenBE.getCookStack().isEmpty()) {
+                    ovenBE.retrieveItem(player);
+                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
+                    return ActionResult.SUCCESS;
+
+                } else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
+                    if (!world.isClient && ovenBE.getCookStack().isEmpty()) {
+                        ovenBE.addItem(player,
+                                player.getAbilities().creativeMode
+                                        ? heldStack.copy()
+                                        : heldStack,
+                                optional.get().value().getCookingTime()
+                        );
+                    }
+                    return ActionResult.SUCCESS;
+                }
+
+            } else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
+                if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
+                    if (state.get(FUEL_LEVEL) > 0 && !state.get(LIT)) {
+                        world.setBlockState(pos, state.with(LIT, true));
+                        Ignitable.playLitFX(world, pos);
+                        return ActionResult.SUCCESS;
+                    }
+                } else {
+
+                    int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
+
+                    if (numItemsConsumed > 0) {
+                        if (state.get(LIT)) {
+                            Ignitable.playLitFX(world, pos);
+                        } else {
+                            this.playPopSound(world, pos);
+                        }
+
+                        heldStack.split(numItemsConsumed);
+                        return ActionResult.SUCCESS;
+                    } else {
+                        if (heldStack.getItem() instanceof BlockItem) {
+                            // Valid fuel block, but not accepted due to full oven —> prevent placement
+                            return ActionResult.FAIL;
+                        }
+                    }
+
+                    if (heldStack.getItem() instanceof FlintAndSteelItem || heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)) {
+                        return ActionResult.PASS;
+                    }
+                }
+            }
+        }
+
+        return ActionResult.PASS;
+    }
+
+
 
     private void playPopSound(World world, BlockPos pos) {
         BlockPos soundPos = new BlockPos(

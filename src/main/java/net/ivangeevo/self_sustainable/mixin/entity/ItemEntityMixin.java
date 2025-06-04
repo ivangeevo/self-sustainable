@@ -1,5 +1,6 @@
 package net.ivangeevo.self_sustainable.mixin.entity;
 
+import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,8 +28,8 @@ public abstract class ItemEntityMixin extends Entity
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;getWorld()Lnet/minecraft/world/World;", ordinal = 5))
     private void onTick(CallbackInfo ci) {
         ItemStack thisStack = this.getStack();
-        if (!(thisStack.getItem() instanceof CrudeTorchItem)) return;
-        TorchFuelComponent fuelComponent = thisStack.get(ModComponents.TORCH_FUEL_COMPONENT);
+        if (!(thisStack.getItem() instanceof CrudeTorchItem) && !isFuelHavingTorch(thisStack)) return;
+        TorchFuelComponent fuelComponent = thisStack.getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent());
         assert fuelComponent != null;
         // keep decrementing the fuel for the dropped torch
         if (this.isOnGround() && this.isAlive()) {
@@ -40,6 +42,9 @@ public abstract class ItemEntityMixin extends Entity
 
     }
 
-
+    @Unique
+    private boolean isFuelHavingTorch(ItemStack stack) {
+        return stack.isOf(ModItems.CRUDE_TORCH_LIT) || stack.isOf(ModItems.CRUDE_TORCH_SMOULDER);
+    }
 
 }

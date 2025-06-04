@@ -99,8 +99,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         }
     }
 
-
-
     @Unique
     private void rainTorch(CrudeTorchItem torchItem, ItemStack stack, World world, BlockPos pos) {
         if (isBurning(torchItem)) {

@@ -171,9 +171,7 @@ public class CrudeTorchItem extends VerticallyAttachableBlockItem implements Fab
                 if (fuel > FUEL_TIME) {
                     fuel = FUEL_TIME;
                 }
-                //stack.set(ModComponents.TORCH_FUEL_COMPONENT, fuel);
                 stack.set(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent(fuel));
-
             }
         }
 

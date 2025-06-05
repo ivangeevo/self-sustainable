@@ -28,7 +28,7 @@ public abstract class ItemEntityMixin extends Entity
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;getWorld()Lnet/minecraft/world/World;", ordinal = 5))
     private void onTick(CallbackInfo ci) {
         ItemStack thisStack = this.getStack();
-        if (!(thisStack.getItem() instanceof CrudeTorchItem) && !isFuelHavingTorch(thisStack)) return;
+        if (!isFuelHavingTorch(thisStack)) return;
         TorchFuelComponent fuelComponent = thisStack.getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent());
         assert fuelComponent != null;
         // keep decrementing the fuel for the dropped torch
@@ -44,7 +44,8 @@ public abstract class ItemEntityMixin extends Entity
 
     @Unique
     private boolean isFuelHavingTorch(ItemStack stack) {
-        return stack.isOf(ModItems.CRUDE_TORCH_LIT) || stack.isOf(ModItems.CRUDE_TORCH_SMOULDER);
+        return stack.getItem() instanceof CrudeTorchItem &&
+                stack.isOf(ModItems.CRUDE_TORCH_LIT) || stack.isOf(ModItems.CRUDE_TORCH_SMOULDER);
     }
 
 }

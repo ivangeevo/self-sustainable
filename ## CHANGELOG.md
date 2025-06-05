@@ -1,6 +1,6 @@
 # v0.2(dev)
 + Added EMI support for the Brick Oven (Oven Cooking) recipes.
-+ Fixed/Removed old recipes for cooking with vanilla furnaces that were leftover since adding the Brick Oven.
++ Removed old recipes for cooking with vanilla furnaces that were leftover since adding the Brick Oven.
 
 # v0.1.1
 + Improved logic when right-clicking on a Brick Oven to work much better.

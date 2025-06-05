@@ -14,18 +14,11 @@
   "icon":"assets/self_sustainable/icon.png",
   "environment":"*",
   "entrypoints":{
-    "client":[
-      "net.ivangeevo.self_sustainable.client.SelfSustainableClient"
-    ],
-    "main":[
-      "net.ivangeevo.self_sustainable.SelfSustainableMod"
-    ],
-    "fabric-datagen": [
-      "net.ivangeevo.self_sustainable.SelfSustainableDataGenerator"
-    ],
-    "modmenu": [
-      "net.ivangeevo.self_sustainable.config.SelfSustainableModMenu"
-    ]
+    "client":["net.ivangeevo.self_sustainable.client.SelfSustainableClient"],
+    "main":["net.ivangeevo.self_sustainable.SelfSustainableMod"],
+    "fabric-datagen": ["net.ivangeevo.self_sustainable.SelfSustainableDataGenerator"],
+    "modmenu": ["net.ivangeevo.self_sustainable.config.SelfSustainableModMenu"],
+    "emi": ["net.ivangeevo.self_sustainable.client.emi.SSEmiPlugin"]
   },
   "mixins":[
     "self_sustainable.mixins.json"
@@ -35,6 +28,9 @@
     "fabric":"*",
     "minecraft":"${minecraft_version}",
     "btwr_sl":">=${btwr_sl_version}"
+  },
+  "suggests": {
+    "emi": ">=1.1.22+1.21.1+fabric"
   },
 
   "accessWidener": "self_sustainable.accesswidener",

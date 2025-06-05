@@ -1,18 +1,3 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "minecraft:bricks"
-    }
-  },
-  "pattern": [
-    "###",
-    "# #",
-    "###"
-  ],
-  "result": {
-    "count": 1,
-    "id": "minecraft:furnace"
-  }
+  "type": "btwr_sl:disabled"
 }

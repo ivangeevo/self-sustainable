@@ -21,7 +21,8 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         addItemGroup("ss_group", "Self Sustainable!", tb);
         this.addBlockTranslations(tb);
         this.addItemTranslations(tb);
-        this.addConfigTranslations(tb);
+        //this.addConfigTranslations(tb);
+        this.addEmiNames(tb);
     }
 
     private void addBlockTranslations(TranslationBuilder tb) {
@@ -46,6 +47,14 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         //addConfigCategory("general", "General Options", tb);
         //addConfig("knockbackRestriction", "Knockback Restriction", tb);
 
+    }
+
+    protected void addEmiNames(TranslationBuilder translationBuilder) {
+        addEmiCategory("oven_cooking", "Oven Cooking", translationBuilder);
+    }
+
+    protected void addEmiCategory(String key, String name, TranslationBuilder translationBuilder) {
+        translationBuilder.add("emi.category.self_sustainable." + key, name);
     }
 
     private void addItemGroup(String entryPath, String translation, TranslationBuilder tb) {

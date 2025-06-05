@@ -81,8 +81,13 @@ dependencies {
     modImplementation "maven.modrinth:granular-hunger:${project.granular_hunger_version}"
 
     // EMI
-    modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
+    //modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
+    //modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
+
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}"
     modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
+
+
 
 }
 

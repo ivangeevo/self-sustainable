@@ -61,20 +61,37 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
 
     private void generateVanillaRecipesOverride(RecipeExporter exporter)
     {
+        //
+        // REMOVED RECIPES
+        //
+
+        // REMOVED BLOCKS
+        disableVanilla(exporter, "furnace");
+        disableVanilla(exporter, "blast_furnace");
+
+        // REMOVED ITEMS
         disableVanilla(exporter, "torch");
-        // Cooking Recipes (we only leave campfire and smoker(until brick oven is added) as viable cooking sources now)
 
         // Smelting (furnace cooking recipes) removal
-        /**
-        removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_beef"));
-        removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_chicken"));
-        removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_mutton"));
-        removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_porkchop"));
-        removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_rabbit"));
-        removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_salmon"));
-        removeRecipeEntry(exporter, Identifier.ofVanilla("cooked_cod"));
-        removeRecipeEntry(exporter, Identifier.ofVanilla("baked_potato"));
-         **/
+        disableVanilla(exporter, "cooked_beef");
+        disableVanilla(exporter, "cooked_chicken");
+        disableVanilla(exporter, "cooked_mutton");
+        disableVanilla(exporter, "cooked_porkchop");
+        disableVanilla(exporter, "cooked_rabbit");
+        disableVanilla(exporter, "cooked_salmon");
+        disableVanilla(exporter, "cooked_cod");
+        disableVanilla(exporter, "baked_potato");
+
+        // Smoking (smoker cooking recipes) removal
+        disableVanilla(exporter, "cooked_beef" + fs);
+        disableVanilla(exporter, "cooked_chicken" + fs);
+        disableVanilla(exporter, "cooked_mutton" + fs);
+        disableVanilla(exporter, "cooked_porkchop" + fs);
+        disableVanilla(exporter, "cooked_rabbit" + fs);
+        disableVanilla(exporter, "cooked_salmon" + fs);
+        disableVanilla(exporter, "cooked_cod" + fs);
+        disableVanilla(exporter, "baked_potato" + fs);
+
 
         createCampfireCooking(Ingredient.ofItems(Items.BEEF), RecipeCategory.FOOD, Items.COOKED_BEEF, 0.15f, 6000).criterion("has_beef", conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.ofVanilla("cooked_beef" + fcc));
         createCampfireCooking(Ingredient.ofItems(Items.CHICKEN), RecipeCategory.FOOD, Items.COOKED_CHICKEN, 0.15f, 6000).criterion("has_chicken", conditionsFromItem(Items.CHICKEN)).offerTo(exporter, Identifier.ofVanilla("cooked_chicken" + fcc));
@@ -122,9 +139,6 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .offerTo(exporter, Identifier.ofVanilla("campfire"));
 
 
-        // TODO: We should re-enable this recipe removal for the furnaces after we get the Brick Oven working properly.
-        //removeRecipeEntry(exporter, Identifier.ofVanilla("furnace"));
-        //removeRecipeEntry(exporter, Identifier.ofVanilla("blast_furnace"));
 
     }
 
@@ -212,16 +226,5 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         offerOvenCooking(Items.GOLD_INGOT , RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_GOLD), 0.35f, 12800).criterion("has_raw_gold", RecipeProvider.conditionsFromItem(Items.RAW_GOLD)).offerTo(exporter, ID.ofSS("gold_ingot" + foc));
         offerOvenCooking(Items.COPPER_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_COPPER), 0.20f, 12800).criterion("has_raw_copper", RecipeProvider.conditionsFromItem(Items.RAW_COPPER)).offerTo(exporter, ID.ofSS("copper_ingot" + foc));
     }
-
-    /**
-    public static WickerWeavingRecipeJsonBuilder createWickerWeaving(ItemConvertible output, Ingredient input, int count, RecipeCategory category) {
-        return new WickerWeavingRecipeJsonBuilder(category, output, count);
-    }
-     **/
-
-
-
-
-
-
+    
 }

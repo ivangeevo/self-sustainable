@@ -399,6 +399,12 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
+    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
+        BlockState state = blockAccess.getBlockState(pos);
+        return !state.get(LIT) && state.get(FIRE_LEVEL) == 0;
+    }
+
+    @Override
     public boolean setOnFireDirectly(World world, BlockPos pos) {
         if (this.getCanBeSetOnFireDirectly(world, pos)) {
 

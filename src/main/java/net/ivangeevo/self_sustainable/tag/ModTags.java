@@ -15,10 +15,8 @@ public class ModTags {
 
         public static final TagKey<Block> LOOSE_BLOCKS = createTag("loose_blocks");
 
-        /** Blocks that can be instantly ignited FROM on use(right click). **/
-        public static final TagKey<Block> DIRECTLY_IGNITABLE_FROM_ON_USE = createTag("directly_ignitable_from_on_use");
-
-
+        /** Blocks that can instantly ignite items when used on(right click). **/
+        public static final TagKey<Block> DIRECTLY_IGNITES_ITEM_ON_USE = createTag("directly_ignites_item_on_use");
 
         private static TagKey<Block> createTag (String name) {
             return TagKey.of(RegistryKeys.BLOCK, Identifier.of(SelfSustainableMod.MOD_ID, name));

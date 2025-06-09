@@ -25,23 +25,17 @@ public class SelfSustainableBlockTagProvider extends FabricTagProvider.BlockTagP
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
                 .add(ModBlocks.OVEN_BRICK);
 
-        getOrCreateTagBuilder(ModTags.Blocks.DIRECTLY_IGNITABLE_FROM_ON_USE)
+        getOrCreateTagBuilder(ModTags.Blocks.DIRECTLY_IGNITES_ITEM_ON_USE)
+                // Blocks that can ignite items without any specific properties (like LIT or FIRE_LEVEL)                .add(Blocks.TORCH)
                 .add(Blocks.TORCH)
                 .add(Blocks.SOUL_TORCH)
-                .add(Blocks.CAMPFIRE)
-                .add(Blocks.SOUL_CAMPFIRE)
                 .add(Blocks.LAVA)
-
+                .add(Blocks.FIRE)
+                .add(Blocks.SOUL_FIRE)
                 .add(ModBlocks.CRUDE_TORCH_LIT)
                 .add(ModBlocks.CRUDE_WALL_TORCH_LIT)
                 .add(ModBlocks.CRUDE_TORCH_SMOULDER)
-                .add(ModBlocks.CRUDE_WALL_TORCH_SMOULDER)
-
-                .add(ModBlocks.OVEN_BRICK)
-                .add(ModBlocks.SMOKER_BRICK)
-        ;
-
-
+                .add(ModBlocks.CRUDE_WALL_TORCH_SMOULDER);
 
     }
 }

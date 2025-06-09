@@ -3,7 +3,7 @@ package net.ivangeevo.self_sustainable.mixin.entity;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
-import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
+import net.ivangeevo.self_sustainable.item.items.CrudeTorchBlockItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -44,7 +44,7 @@ public abstract class ItemEntityMixin extends Entity
 
     @Unique
     private boolean isFuelHavingTorch(ItemStack stack) {
-        return stack.getItem() instanceof CrudeTorchItem &&
+        return stack.getItem() instanceof CrudeTorchBlockItem &&
                 stack.isOf(ModItems.CRUDE_TORCH_LIT) || stack.isOf(ModItems.CRUDE_TORCH_SMOULDER);
     }
 

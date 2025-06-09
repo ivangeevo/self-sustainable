@@ -7,7 +7,7 @@ import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.component.ModComponents;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
-import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
+import net.ivangeevo.self_sustainable.item.items.CrudeTorchBlockItem;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.*;
@@ -79,6 +79,7 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
         Hand hand = player.getActiveHand();
         ItemStack stack = player.getStackInHand(hand);
 
+        // Try extinguishing the torch
         if (fireState == TorchFireState.LIT || fireState == TorchFireState.SMOULDER) {
             if (tryUse(ModTags.Items.TORCH_EXTINGUISHERS, stack)) {
                 this.extinguish(world, pos, state);
@@ -95,7 +96,7 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
     {
         super.onPlaced(world, pos, state, placer, itemStack);
         if (world.getBlockEntity(pos) instanceof TorchBE be) {
-            if (itemStack.getItem() instanceof CrudeTorchItem) {
+            if (itemStack.getItem() instanceof CrudeTorchBlockItem) {
                 TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
                 if (fuelComponent == null) return;
                 int fuel = fuelComponent.getFuel();

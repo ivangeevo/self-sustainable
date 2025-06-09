@@ -3,7 +3,7 @@ package net.ivangeevo.self_sustainable.mixin.entity;
 import com.mojang.authlib.GameProfile;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.item.ModItems;
-import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
+import net.ivangeevo.self_sustainable.item.items.CrudeTorchBlockItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -64,7 +64,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             Item item = stack.getItem();
 
             // Torches
-            if (item instanceof CrudeTorchItem torchItem) {
+            if (item instanceof CrudeTorchBlockItem torchItem) {
 
                 // Rain
                 if (isRainingOnTorch && random.nextInt(200) == 0) {
@@ -81,7 +81,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     }
 
     @Unique
-    private void destroyInWater(CrudeTorchItem torchItem, ItemStack stack, ServerPlayerEntity player, BlockPos pos) {
+    private void destroyInWater(CrudeTorchBlockItem torchItem, ItemStack stack, ServerPlayerEntity player, BlockPos pos) {
         if (player.isSubmergedInWater()) {
             if (isBurning(torchItem)) {
                 stack.decrement(1);
@@ -100,7 +100,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     }
 
     @Unique
-    private void rainTorch(CrudeTorchItem torchItem, ItemStack stack, World world, BlockPos pos) {
+    private void rainTorch(CrudeTorchBlockItem torchItem, ItemStack stack, World world, BlockPos pos) {
         if (isBurning(torchItem)) {
             stack.decrement(1);
             world.playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
@@ -109,7 +109,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     /** Lit or Smouldering **/
     @Unique
-    private boolean isBurning(CrudeTorchItem torchItem) {
+    private boolean isBurning(CrudeTorchBlockItem torchItem) {
         return torchItem.getTorchState() == TorchFireState.LIT || torchItem.getTorchState() == TorchFireState.SMOULDER;
     }
 
@@ -117,13 +117,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private void tickTorch(ItemStack stack, int index, DefaultedList<ItemStack> list) {
         Item item = stack.getItem();
 
-        if (item instanceof CrudeTorchItem) {
-            TorchFireState state = ((CrudeTorchItem) item).getTorchState();
+        if (item instanceof CrudeTorchBlockItem) {
+            TorchFireState state = ((CrudeTorchBlockItem) item).getTorchState();
 
             if (state == TorchFireState.LIT) {
-                list.set(index, CrudeTorchItem.addFuel(stack, getWorld(),-1));
+                list.set(index, CrudeTorchBlockItem.addFuel(stack, getWorld(),-1));
             } else if (state == TorchFireState.SMOULDER) {
-                if (random.nextInt(3) == 0) list.set(index, CrudeTorchItem.addFuel(stack, getWorld(),-1));
+                if (random.nextInt(3) == 0) list.set(index, CrudeTorchBlockItem.addFuel(stack, getWorld(),-1));
             }
         }
     }

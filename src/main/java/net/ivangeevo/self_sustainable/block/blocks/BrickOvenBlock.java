@@ -112,6 +112,12 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         return ovenBE.getVisualFuelLevel() > 0;
     }
 
+    @Override
+    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
+        BlockState state = blockAccess.getBlockState(pos);
+        return !state.get(LIT) && state.get(FUEL_LEVEL) != 0;
+    }
+
     /**
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {

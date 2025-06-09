@@ -1,3 +1,6 @@
+# v0.2(dev)
++ Reworked how torches work internally to fix a few bugs related to lighting them/lighting up blocks with them
+
 # v0.1.2
 + Added EMI support for the Brick Oven (Oven Cooking) recipes.
 + Removed old recipes for cooking with vanilla furnaces that were leftover since adding the Brick Oven.

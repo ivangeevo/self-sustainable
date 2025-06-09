@@ -4,8 +4,6 @@ import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.CampfireState;
-import net.ivangeevo.self_sustainable.item.ModItems;
-import net.ivangeevo.self_sustainable.item.items.CrudeTorchItem;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

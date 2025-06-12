@@ -1,5 +1,6 @@
 # v0.2(dev)
 + Reworked how torches work internally to fix a few bugs related to lighting them/lighting up blocks with them
++ Added compatibility for the Brick Oven recipe to work conditionally with Tough Environment. When its loaded it requires Loose Brick Slab, and when it's not it requires normal vanilla Bricks Slab
 
 # v0.1.2
 + Added EMI support for the Brick Oven (Oven Cooking) recipes.

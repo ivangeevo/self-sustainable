@@ -1,4 +1,15 @@
 {
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:not",
+      "value": {
+        "condition": "fabric:all_mods_loaded",
+        "values": [
+          "tough_environment"
+        ]
+      }
+    }
+  ],
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_bricks": {
@@ -13,7 +24,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "self_sustainable:oven_brick"
+        "recipe": "self_sustainable:oven_brick_unmortared"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +37,7 @@
   ],
   "rewards": {
     "recipes": [
-      "self_sustainable:oven_brick"
+      "self_sustainable:oven_brick_unmortared"
     ]
   }
 }

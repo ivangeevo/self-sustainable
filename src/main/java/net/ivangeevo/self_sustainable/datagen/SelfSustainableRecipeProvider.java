@@ -4,16 +4,22 @@ import btwr.btwr_sl.lib.util.utils.RecipeProviderUtils;
 import btwr.btwr_sl.tag.BTWRConventionalTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipeJsonBuilder.offerOvenCooking;
@@ -137,13 +143,28 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .criterion("has_stick", conditionsFromItem(Items.STICK))
                 .offerTo(exporter);
 
+        // Register a conditional recipe for Brick ovens that loads when Tough Environment is not loaded
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK)
                 .input('#', Items.BRICK_SLAB)
                 .pattern("###")
                 .pattern("# #")
                 .pattern("###")
                 .criterion("has_bricks", conditionsFromItem(Blocks.BRICKS))
-                .offerTo(exporter);
+                .offerTo(withConditions(exporter, ResourceConditions.not(ResourceConditions.allModsLoaded("tough_environment"))), ID.ofSS("oven_brick_unmortared"));
+
+        // Register a conditional recipe for Brick ovens that requires Tough Environment to be loaded
+        // Handled by a tag because I couldn't figure out how to use just an item that doesn't exist in the Registry.
+        Identifier looseSlabBricksID = ID.ofTE("slab_bricks_loose");
+        TagKey<Item> fakeTag = TagKey.of(RegistryKeys.ITEM, looseSlabBricksID);
+        Ingredient fallbackIngredient = Ingredient.fromTag(fakeTag);
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK)
+                .input('#', fallbackIngredient)
+                .pattern("###")
+                .pattern("# #")
+                .pattern("###")
+                .criterion("has_slab_bricks_loose", conditionsFromItem(Blocks.BRICKS))
+                .offerTo(withConditions(exporter, ResourceConditions.allModsLoaded("tough_environment")), ID.ofSS("oven_brick_mortared"));
+
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.CRUDE_TORCH_UNLIT, 4)
                 .input('I', Items.STICK)

@@ -43,8 +43,15 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem
             if (heldStack.getItem() instanceof VerticallyAttachableBlockItem && !(heldStack.getItem() instanceof CrudeTorchBlockItem)) {
                 PlayerEntity player = context.getPlayer();
                 if (player != null && !world.isClient && !heldStack.isOf(Items.SOUL_TORCH)) {
-                    player.getInventory().setStack(player.getInventory().selectedSlot, Items.TORCH.getDefaultStack().copyWithCount(heldStack.getCount()));
+                    ItemStack newTorch = Items.TORCH.getDefaultStack().copyWithCount(heldStack.getCount());
+
+                    if (player.getMainHandStack() == heldStack) {
+                        player.getInventory().setStack(player.getInventory().selectedSlot, newTorch);
+                    } else if (player.getOffHandStack() == heldStack) {
+                        player.getInventory().offHand.set(0, newTorch);
+                    }
                 }
+
                 world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
                 return ActionResult.SUCCESS;
             }

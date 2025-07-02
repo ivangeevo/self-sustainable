@@ -53,7 +53,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         }
     }
 
-
     @Unique
     private void checkWaterBehaviour(ServerPlayerEntity player, PlayerInventory inventory) {
         BlockPos pos = player.getBlockPos();
@@ -75,7 +74,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             }
 
             if (item instanceof VerticallyAttachableBlockItem) {
-                extinguishInWater(stack, player, pos);
+                extinguishInWater(stack, player, pos, i);
             }
         }
     }
@@ -91,13 +90,14 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     }
 
     @Unique
-    private void extinguishInWater(ItemStack stack, PlayerEntity player, BlockPos pos) {
+    private void extinguishInWater(ItemStack stack, PlayerEntity player, BlockPos pos, int slot) {
         if (player.isSubmergedInWater() && stack.isOf(Items.TORCH)) {
-            ItemStack unlitTorch = new ItemStack(ModItems.TORCH_UNLIT, stack.getCount()); // Preserve the count
-            player.getInventory().setStack(player.getInventory().getSlotWithStack(stack), unlitTorch); // Replace stack
+            ItemStack unlitTorch = new ItemStack(ModItems.TORCH_UNLIT, stack.getCount());
+            player.getInventory().setStack(slot, unlitTorch);
             player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
         }
     }
+
 
     @Unique
     private void rainTorch(CrudeTorchBlockItem torchItem, ItemStack stack, World world, BlockPos pos) {
@@ -127,6 +127,5 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             }
         }
     }
-
 
 }

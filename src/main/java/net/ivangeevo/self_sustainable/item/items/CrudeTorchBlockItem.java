@@ -54,7 +54,6 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
                         player.setStackInHand(context.getHand(), litTorch);
                     } else {
                         player.giveItemStack(litTorch);
-                        stack.decrement(1);
                     }
                 }
                 world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
@@ -65,6 +64,7 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
 
         return super.useOnBlock(context);
     }
+
 
     private boolean isSpecialLitBlock(BlockState state) {
         boolean lit = state.contains(LIT) && state.get(LIT);

@@ -3,6 +3,7 @@
 + Reworked how torches work internally to fix a few bugs related to lighting them/lighting up blocks with them
 + Fixed a bug related to torches getting extinguished in water that would crash the game sometimes due to checking a non-existing slot in the inventory
 + Fixed a bug with crude torches that would decrement unlit torches twice when trying to light one
++ Updated the mod to Fabric API 0.116.4 & BTWR: Shared Library 0.55
 
 # v0.1.2
 + Added EMI support for the Brick Oven (Oven Cooking) recipes.

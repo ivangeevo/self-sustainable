@@ -75,7 +75,7 @@ dependencies {
     modImplementation "maven.modrinth:btwr-core:${project.btwr_core_version}"
 
     // Vegehenna
-    modImplementation "maven.modrinth:54334vegehenna:${project.vegehenna_version}"
+    modImplementation "maven.modrinth:vegehenna:${project.vegehenna_version}"
 
     // Granular Hunger
     modImplementation "maven.modrinth:granular-hunger:${project.granular_hunger_version}"

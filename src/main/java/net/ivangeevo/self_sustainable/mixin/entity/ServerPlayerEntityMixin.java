@@ -49,12 +49,16 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
                 tickTorch(inventory.main.get(i), i, inventory.main);
             }
 
-            checkWaterBehaviour(player, inventory);
+            checkWaterBehavior(player, inventory);
         }
     }
 
     @Unique
-    private void checkWaterBehaviour(ServerPlayerEntity player, PlayerInventory inventory) {
+    private void checkWaterBehavior(ServerPlayerEntity player, PlayerInventory inventory) {
+
+        // Do not apply water behavior when player is creative or spectator
+        if (player.isCreative() || player.isSpectator()) return;
+
         BlockPos pos = player.getBlockPos();
         boolean isRainingOnTorch =  player.getWorld().hasRain(pos);
 
@@ -62,7 +66,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             ItemStack stack = inventory.getStack(i);
             Item item = stack.getItem();
 
-            // Torches
+            // Crude torches
             if (item instanceof CrudeTorchBlockItem torchItem) {
 
                 // Rain
@@ -73,6 +77,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
                 destroyInWater(torchItem, stack, player, pos);
             }
 
+            // Regular torches
             if (item instanceof VerticallyAttachableBlockItem) {
                 extinguishInWater(stack, player, pos, i);
             }

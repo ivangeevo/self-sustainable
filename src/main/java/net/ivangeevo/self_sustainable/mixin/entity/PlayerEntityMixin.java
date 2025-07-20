@@ -28,8 +28,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 
     @Shadow public abstract void addExhaustion(float exhaustion);
 
-    @Unique private final boolean isLoadedModImMovens = FabricLoader.getInstance().isModLoaded("im_movens");
-
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -53,7 +51,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
     @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     private void onJump(CallbackInfo ci)
     {
-        if (!isLoadedModImMovens)
+        if (!FabricLoader.getInstance().isModLoaded("im_movens"))
         {
             super.jump();
             this.incrementStat(Stats.JUMP);
@@ -71,7 +69,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)
     {
-        if (!isLoadedModImMovens)
+        if (!FabricLoader.getInstance().isModLoaded("im_movens"))
         {
             PlayerEntity player = (PlayerEntity) (Object) this;
 

@@ -1,4 +1,4 @@
-# v0.2(dev)
+# v0.2
 + Added compatibility for the Brick Oven recipe to work conditionally with Tough Environment. When its loaded it requires Loose Brick Slab, and when it's not it requires normal vanilla Bricks Slab
 + Reworked how torches work internally to fix a few bugs related to lighting them/lighting up blocks with them
 + Changed torches in the inventory to not get destroyed by any type of water when the player is in creative or spectator mode

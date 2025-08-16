@@ -32,7 +32,7 @@ public class ModBlockEntities {
                 ModBlocks.CRUDE_WALL_TORCH_BURNED_OUT
     };
 
-    public static void registerBlockEntities() {
+    public static void register() {
 
         OVEN_BRICK = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,

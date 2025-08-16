@@ -1,10 +1,9 @@
 package net.ivangeevo.self_sustainable.block.entity.renderer;
 
 import net.ivangeevo.self_sustainable.block.ModBlocks;
-import net.ivangeevo.self_sustainable.block.blocks.BasketBlock;
 import net.ivangeevo.self_sustainable.block.blocks.WickerBasketBlock;
 import net.ivangeevo.self_sustainable.block.entity.WickerBasketBE;
-import net.ivangeevo.self_sustainable.client.render.ModTexturedRenderLayers;
+import net.ivangeevo.self_sustainable.render.ModTexturedRenderLayers;
 import net.minecraft.block.*;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
@@ -17,7 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
 
-public class WickerBERenderer implements BlockEntityRenderer<WickerBasketBE> {
+public class WickerBasketBERenderer implements BlockEntityRenderer<WickerBasketBE> {
 
     private static final String HANDLE = "handle";
     private static final String LID = "lid";
@@ -33,7 +32,7 @@ public class WickerBERenderer implements BlockEntityRenderer<WickerBasketBE> {
     // the bottom part of the basket
     private final ModelPart basketBase;
 
-    public WickerBERenderer(BlockEntityRendererFactory.Context ctx) {
+    public WickerBasketBERenderer(BlockEntityRendererFactory.Context ctx) {
 
         ModelPart modelPart = ctx.getLayerModelPart(ModEntityModelLayers.WICKER_BASKET);
         this.handle = modelPart.getChild(HANDLE);
@@ -45,10 +44,18 @@ public class WickerBERenderer implements BlockEntityRenderer<WickerBasketBE> {
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
-        modelPartData.addChild(HANDLE, ModelPartBuilder.create().uv(0, 19).cuboid(1.0f, 0.0f, 1.0f, 14.0f, 10.0f, 14.0f), ModelTransform.NONE);
-        modelPartData.addChild(LID, ModelPartBuilder.create().uv(0, 0).cuboid(1.0f, 0.0f, 0.0f, 14.0f, 5.0f, 14.0f), ModelTransform.pivot(0.0f, 9.0f, 1.0f));
-        modelPartData.addChild(LID_BASE, ModelPartBuilder.create().uv(0, 0).cuboid(7.0f, -2.0f, 14.0f, 2.0f, 4.0f, 1.0f), ModelTransform.pivot(0.0f, 9.0f, 1.0f));
-        modelPartData.addChild(BASKET_BASE, ModelPartBuilder.create().uv(0, 0).cuboid(7.0f, -2.0f, 14.0f, 2.0f, 4.0f, 1.0f), ModelTransform.pivot(0.0f, 9.0f, 1.0f));
+        modelPartData.addChild(HANDLE, ModelPartBuilder.create()
+                .uv(0, 19)
+                .cuboid(1.0f, 0.0f, 1.0f, 14.0f, 10.0f, 14.0f), ModelTransform.NONE);
+        modelPartData.addChild(LID, ModelPartBuilder.create()
+                .uv(0, 0)
+                .cuboid(1.0f, 0.0f, 0.0f, 14.0f, 5.0f, 14.0f), ModelTransform.pivot(0.0f, 9.0f, 1.0f));
+        modelPartData.addChild(LID_BASE, ModelPartBuilder.create()
+                .uv(0, 0)
+                .cuboid(7.0f, -2.0f, 14.0f, 2.0f, 4.0f, 1.0f), ModelTransform.pivot(0.0f, 9.0f, 1.0f));
+        modelPartData.addChild(BASKET_BASE, ModelPartBuilder.create()
+                .uv(0, 0)
+                .cuboid(7.0f, -2.0f, 14.0f, 2.0f, 4.0f, 1.0f), ModelTransform.pivot(0.0f, 9.0f, 1.0f));
 
         return TexturedModelData.of(modelData, 64, 64);
     }
@@ -60,11 +67,11 @@ public class WickerBERenderer implements BlockEntityRenderer<WickerBasketBE> {
         BlockState blockState = hasWorld ? entity.getCachedState() : ModBlocks.WICKER_BASKET.getDefaultState();
         Block block = blockState.getBlock();
 
-        if (!(block instanceof BasketBlock)) {
+        if (!(block instanceof WickerBasketBlock)) {
             return;
         }
 
-        float rotation = blockState.get(BasketBlock.FACING).asRotation();
+        float rotation = blockState.get(WickerBasketBlock.FACING).asRotation();
         matrices.push();
         matrices.translate(0.5f, 0.5f, 0.5f);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-rotation));

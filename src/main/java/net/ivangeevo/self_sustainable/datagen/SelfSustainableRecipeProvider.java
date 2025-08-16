@@ -7,19 +7,19 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
+import net.ivangeevo.self_sustainable.item.items.WickerWeavingItem;
+import net.ivangeevo.self_sustainable.recipe.crafting.ShapedRecipeWithDamageJsonBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipeJsonBuilder.offerOvenCooking;
@@ -62,6 +62,9 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
 
         // Shaped Recipes
         this.moddedShaped(exporter);
+
+        // Progressive Crafting Recipes
+        this.createProgressiveCrafting(exporter);
 
     }
 
@@ -135,8 +138,8 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         disableVanilla(exporter, "cooked_cod" + fs);
         disableVanilla(exporter, "baked_potato" + fs);
     }
-    private void moddedShaped(RecipeExporter exporter)
-    {
+
+    private void moddedShaped(RecipeExporter exporter) {
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.FIRESTARTER_STICKS)
                 .input('#', Items.STICK)
                 .pattern("##")
@@ -184,24 +187,10 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .criterion("has_glowstone_dust", conditionsFromItem(Items.GLOWSTONE_DUST))
                 .offerTo(exporter);
 
-        /**
-        WickerWeavingRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.WICKER_WEAVING,1)
-                .input('#', Items.SUGAR_CANE)
-                .pattern("##")
-                .pattern("##")
-                .damage(ProgressiveCraftingItem.DEFAULT_MAX_DAMAGE - 1)
-                .criterion("has_sugar_cane", RecipeProvider.conditionsFromItem(Items.SUGAR_CANE))
-                .offerTo(exporter);
-         **/
-
-
-
-
     }
 
 
-    private void moddedShapeless(RecipeExporter exporter)
-    {
+    private void moddedShapeless(RecipeExporter exporter) {
         ShapelessRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.FIRESTARTER_BOW)
                 .input(Items.STICK)
                 .input(Items.STICK)
@@ -214,6 +203,18 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .criterion("has_clay_ball", conditionsFromItem(Items.CLAY_BALL))
                 .offerTo(exporter);
 
+
+    }
+
+    private void createProgressiveCrafting(RecipeExporter exporter) {
+
+        ShapedRecipeWithDamageJsonBuilder.create(RecipeCategory.MISC, ModItems.WICKER_WEAVING)
+                .input('#', Items.SUGAR_CANE)
+                .pattern("##")
+                .pattern("##")
+                .damage(WickerWeavingItem.WICKER_WEAVING_MAX_DAMAGE - 1)
+                .criterion("has_sugar_cane", conditionsFromItem(Items.SUGAR_CANE))
+                .offerTo(exporter);
 
     }
 

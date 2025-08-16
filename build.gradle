@@ -6,37 +6,19 @@ plugins {
 version = project.mod_version + "-" + project.minecraft_version
 group = project.maven_group
 
-
-def dataOutput = 'src/main/generated'
-
 loom {
-    runs {
-        //
-        // This adds a new gradle task that runs the datagen API: "gradlew runDatagenClient"
-        //
-        datagenClient {
-            inherit client
-            name "Data Generation"
-            vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${file(dataOutput)}"
-            vmArg "-Dfabric-api.datagen.modid=self_sustainable"
+    splitEnvironmentSourceSets()
 
-            runDir "build/datagen"
+    mods {
+        "self_sustainable" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
         }
     }
 }
 
-//
-// Adds the generated files into the jar you distribute to players.
-//
-sourceSets {
-    main {
-        resources {
-            srcDirs += [
-                    'src/main/generated'
-            ]
-        }
-    }
+fabricApi {
+    configureDataGeneration() { modId = "self_sustainable"}
 }
 
 repositories {
@@ -59,7 +41,7 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    // Adding Cloth Config API
+    // Cloth Config API
     modApi "me.shedaniel.cloth:cloth-config-fabric:15.0.140"
 
     // Mod Menu
@@ -69,25 +51,22 @@ dependencies {
     modImplementation "maven.modrinth:btwr-shared-library:${project.btwr_sl_version}"
 
     // Better With Time
-    modImplementation "maven.modrinth:better-with-time:${project.bwt_version}"
+    modCompileOnly "maven.modrinth:better-with-time:${project.bwt_version}"
 
     // BTWR: Core
-    modImplementation "maven.modrinth:btwr-core:${project.btwr_core_version}"
+    modCompileOnly "maven.modrinth:btwr-core:${project.btwr_core_version}"
 
     // Vegehenna
-    modImplementation "maven.modrinth:vegehenna:${project.vegehenna_version}"
+    modCompileOnly "maven.modrinth:vegehenna:${project.vegehenna_version}"
 
     // Granular Hunger
-    modImplementation "maven.modrinth:granular-hunger:${project.granular_hunger_version}"
+    modCompileOnly "maven.modrinth:granular-hunger:${project.granular_hunger_version}"
 
     // EMI
-    //modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
-    //modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
-
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
     modCompileOnly "dev.emi:emi-fabric:${emi_version}"
+
     modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
-
-
 
 }
 

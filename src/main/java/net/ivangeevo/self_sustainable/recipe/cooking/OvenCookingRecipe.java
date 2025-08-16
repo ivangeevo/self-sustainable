@@ -1,7 +1,7 @@
 /*
  * Decompiled with CFR 0.2.1 (FabricMC 53fa44c9).
  */
-package net.ivangeevo.self_sustainable.recipe;
+package net.ivangeevo.self_sustainable.recipe.cooking;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -39,6 +39,9 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<OvenCookingRecipe> {
+
+        public static final Serializer INSTANCE = new Serializer();
+        public static final String ID = "oven_cooking";
 
         private static final MapCodec<OvenCookingRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
@@ -79,9 +82,6 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
         public PacketCodec<RegistryByteBuf, OvenCookingRecipe> packetCodec() {
             return PACKET_CODEC;
         }
-        public static final Serializer INSTANCE = new Serializer();
-        public static final String ID = "oven_cooking";
-
 
         private static OvenCookingRecipe read(RegistryByteBuf buf) {
             String string = buf.readString();
@@ -92,7 +92,6 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
             int i = buf.readVarInt();
             return new OvenCookingRecipe(string, craftingRecipeCategory, input, output, f, i);
         }
-
 
         public static void write(RegistryByteBuf buf, OvenCookingRecipe recipe) {
             buf.writeString(recipe.group);

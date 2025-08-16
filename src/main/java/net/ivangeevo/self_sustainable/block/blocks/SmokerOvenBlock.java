@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.ivangeevo.self_sustainable.block.entity.SmokerOvenBE;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
-import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
+import net.ivangeevo.self_sustainable.recipe.cooking.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.state.property.ModProperties;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;

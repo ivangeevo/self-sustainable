@@ -43,7 +43,7 @@ public class ModItemGroup {
 
                     }).build());
 
-    public static void registerItemGroups() {
+    public static void register() {
         SelfSustainableMod.LOGGER.info("Registering Item Groups for " + SelfSustainableMod.MOD_ID);
     }
 

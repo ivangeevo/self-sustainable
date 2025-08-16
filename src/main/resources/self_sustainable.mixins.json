@@ -4,7 +4,9 @@
   "package": "net.ivangeevo.self_sustainable.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CraftingScreenHandlerMixin",
     "FurnaceFuelSlotMixin",
+    "ShapedRecipeAccessor",
     "block.AbstractBlock$AbstractBlockStateMixin",
     "block.AbstractBlockMixin",
     "block.BlockItemMixin",
@@ -27,11 +29,6 @@
     "item.VerticallyAttachableBlockItemMixin",
     "world.DifficultyMixin",
     "world.SpawnHelperMixin"
-  ],
-  "client": [
-    "client.AbstractFurnaceScreenHandlerMixin",
-    "client.HeldItemRendererMixin",
-    "client.InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

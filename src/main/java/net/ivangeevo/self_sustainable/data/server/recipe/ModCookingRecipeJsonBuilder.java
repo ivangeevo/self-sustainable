@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
+import net.ivangeevo.self_sustainable.recipe.cooking.OvenCookingRecipe;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementCriterion;
 import net.minecraft.advancement.AdvancementRequirements;

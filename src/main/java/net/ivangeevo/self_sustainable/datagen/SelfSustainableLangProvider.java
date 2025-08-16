@@ -38,8 +38,11 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         tb.add(ModItems.CRUDE_TORCH_LIT, "Lit Crude Torch");
         tb.add(ModItems.CRUDE_TORCH_SMOULDER, "Smouldering Crude Torch");
         tb.add(ModItems.CRUDE_TORCH_BURNED_OUT, "Burned Out Crude Torch");
-
         tb.add(ModItems.TORCH_UNLIT, "Unlit Torch");
+
+        tb.add(ModItems.WICKER, "Wicker");
+        tb.add(ModItems.WICKER_WEAVING, "Wicker Weaving");
+
     }
 
     private void addConfigTranslations(TranslationBuilder tb) {

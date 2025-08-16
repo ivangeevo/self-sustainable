@@ -26,17 +26,15 @@ public class FireStarterItemPrimitive extends FireStarterItem
     private final float maxChance;
     private final float chanceIncreasePerUse;
 
-    public FireStarterItemPrimitive(Item.Settings settings, float fExhaustionPerUse, float fBaseChance, float fMaxChance, float fChanceIncreasePerUse )
+    public FireStarterItemPrimitive(Item.Settings settings, float fExhaustionPerUse, float fBaseChance, float fMaxChance, float fChanceIncreasePerUse)
     {
-        super( settings, fExhaustionPerUse );
-        //settings.maxDamage(iMaxUses);
+        super(settings, fExhaustionPerUse);
 
         baseChance = fBaseChance;
         maxChance = fMaxChance;
         chanceIncreasePerUse = fChanceIncreasePerUse;
 
     }
-
 
     @Override
     public boolean checkChanceOfStart(ItemStack stack, Random random) {

@@ -1,4 +1,4 @@
-package net.ivangeevo.self_sustainable.client.render;
+package net.ivangeevo.self_sustainable.render;
 
 import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.minecraft.client.render.RenderLayer;
@@ -8,13 +8,11 @@ import net.minecraft.util.Identifier;
 public class ModTexturedRenderLayers {
 
     public static final Identifier WICKER_BASKET_ATLAS_TEXTURE = Identifier.of(
-            SelfSustainableMod.MOD_ID,
-            "textures/atlas/wicker_basket.png"
+            SelfSustainableMod.MOD_ID, "textures/atlases/wicker_basket.png"
     );
 
     public static final Identifier HAMPER_ATLAS_TEXTURE = Identifier.of(
-            SelfSustainableMod.MOD_ID,
-            "textures/atlas/hamper.png"
+            SelfSustainableMod.MOD_ID, "textures/atlases/hamper.png"
     );
 
     private static final RenderLayer WICKER_BASKET_RENDER_LAYER = RenderLayer.getEntityCutout(WICKER_BASKET_ATLAS_TEXTURE);

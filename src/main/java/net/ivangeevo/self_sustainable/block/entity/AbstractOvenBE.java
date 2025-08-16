@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.ivangeevo.self_sustainable.block.blocks.SmokerOvenBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.entity.util.CustomSingleStackInventory;
-import net.ivangeevo.self_sustainable.recipe.OvenCookingRecipe;
+import net.ivangeevo.self_sustainable.recipe.cooking.OvenCookingRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;

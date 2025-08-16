@@ -1,5 +1,3 @@
-// FCMOD
-
 package net.ivangeevo.self_sustainable.item.items;
 
 
@@ -20,29 +18,24 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
 {
     private final float exhaustionPerUse;
 
-    public FireStarterItem(Item.Settings settings, float fExhaustionPerUse )
-    {
+    public FireStarterItem(Item.Settings settings, float fExhaustionPerUse) {
         super( settings );
         exhaustionPerUse = fExhaustionPerUse;
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context)
-    {
+    public ActionResult useOnBlock(ItemUsageContext context) {
         World world = context.getWorld();
         PlayerEntity player = context.getPlayer();
         BlockPos pos = context.getBlockPos();
 
-        if (world.canPlayerModifyAt(player, pos))
-        {
+        if (world.canPlayerModifyAt(player, pos)) {
             performUseEffects(context);
 
-            if (!world.isClient)
-            {
+            if (!world.isClient) {
                 //notifyNearbyAnimalsOfAttempt(player);
 
-                if (checkChanceOfStart(context.getStack(), world.random))
-                {
+                if (checkChanceOfStart(context.getStack(), world.random)) {
                     attemptToLightBlock(context.getStack(), world, pos, context.getSide());
                 }
             }
@@ -54,7 +47,6 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
         }
 
         return ActionResult.FAIL;
-
     }
 
 

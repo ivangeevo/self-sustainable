@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
-import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.ivangeevo.self_sustainable.item.component.ModComponentsTypes;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
@@ -45,7 +45,7 @@ public class SelfSustainableLootTableProvider extends FabricBlockLootTableProvid
                                 .apply(
                                         CopyComponentsLootFunction.builder(
                                                 CopyComponentsLootFunction.Source.BLOCK_ENTITY)
-                                                .include(ModComponents.TORCH_FUEL_COMPONENT)
+                                                .include(ModComponentsTypes.TORCH_FUEL)
                                 )
                         )
 

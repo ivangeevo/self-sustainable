@@ -14,11 +14,11 @@
   "icon":"assets/self_sustainable/icon.png",
   "environment":"*",
   "entrypoints":{
-    "client":["net.ivangeevo.self_sustainable.client.SelfSustainableClient"],
-    "main":["net.ivangeevo.self_sustainable.SelfSustainableMod"],
-    "fabric-datagen": ["net.ivangeevo.self_sustainable.SelfSustainableDataGenerator"],
-    "modmenu": ["net.ivangeevo.self_sustainable.config.SelfSustainableModMenu"],
-    "emi": ["net.ivangeevo.self_sustainable.client.emi.SSEmiPlugin"]
+    "client":[ "net.ivangeevo.self_sustainable.SelfSustainableClient" ],
+    "main":[ "net.ivangeevo.self_sustainable.SelfSustainableMod" ],
+    "fabric-datagen": [ "net.ivangeevo.self_sustainable.SelfSustainableDataGenerator" ],
+    "modmenu": [ "net.ivangeevo.self_sustainable.config.SelfSustainableModMenu" ],
+    "emi": [ "net.ivangeevo.self_sustainable.emi.SSEmiPlugin" ]
   },
   "mixins":[
     "self_sustainable.mixins.json"

@@ -5,7 +5,7 @@ import net.ivangeevo.self_sustainable.block.entity.TorchBE;
 import net.ivangeevo.self_sustainable.block.entity.util.FuelBurningBlock;
 import net.ivangeevo.self_sustainable.block.interfaces.Ignitable;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
-import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.ivangeevo.self_sustainable.item.component.ModComponentsTypes;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.ivangeevo.self_sustainable.item.items.CrudeTorchBlockItem;
 import net.ivangeevo.self_sustainable.tag.ModTags;
@@ -97,7 +97,7 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
         super.onPlaced(world, pos, state, placer, itemStack);
         if (world.getBlockEntity(pos) instanceof TorchBE be) {
             if (itemStack.getItem() instanceof CrudeTorchBlockItem) {
-                TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
+                TorchFuelComponent fuelComponent = be.getComponents().get(ModComponentsTypes.TORCH_FUEL);
                 if (fuelComponent == null) return;
                 int fuel = fuelComponent.getFuel();
                 fuelComponent.setFuel(fuel);
@@ -129,9 +129,9 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
 
                 // Ensure the block entity has the required component
                 ComponentMap components = be.getComponents();
-                if (!components.contains(ModComponents.TORCH_FUEL_COMPONENT)) {
+                if (!components.contains(ModComponentsTypes.TORCH_FUEL)) {
                     ComponentMap updatedComponents = ComponentMap.builder()
-                            .add(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent())
+                            .add(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent())
                             .build();
                     be.setComponents(updatedComponents);
                 }
@@ -214,7 +214,7 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
         if (world.isClient) return;
         world.setBlockState(pos, newState);
         if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TorchBE be) {
-            TorchFuelComponent fuelComponent = be.getComponents().get(ModComponents.TORCH_FUEL_COMPONENT);
+            TorchFuelComponent fuelComponent = be.getComponents().get(ModComponentsTypes.TORCH_FUEL);
             if (fuelComponent == null) return;
             fuelComponent.setFuel(0);
         }

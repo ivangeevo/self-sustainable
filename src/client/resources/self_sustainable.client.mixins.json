@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.ivangeevo.self_sustainable.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "client.HeldItemRendererInvoker",
+    "client.HeldItemRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

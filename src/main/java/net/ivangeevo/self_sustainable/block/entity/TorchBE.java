@@ -3,7 +3,7 @@ package net.ivangeevo.self_sustainable.block.entity;
 import net.ivangeevo.self_sustainable.block.blocks.AbstractExtinguishingTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
-import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.ivangeevo.self_sustainable.item.component.ModComponentsTypes;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -24,7 +24,7 @@ public class TorchBE extends BlockEntity {
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, TorchBE be) {
-        TorchFuelComponent fuelComponent = be.getComponents().getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent());
+        TorchFuelComponent fuelComponent = be.getComponents().getOrDefault(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent());
 
         if (world.isClient) return;
         if (!(state.getBlock() instanceof AbstractExtinguishingTorchBlock torchBlock)) return;

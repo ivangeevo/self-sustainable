@@ -1,22 +1,17 @@
 package net.ivangeevo.self_sustainable;
 
 import com.google.gson.Gson;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.config.SSSettings;
 import net.ivangeevo.self_sustainable.entity.ModBlockEntities;
 import net.ivangeevo.self_sustainable.event.ModLootTableReplacement;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.component.FoodComponentModifier;
-import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.ivangeevo.self_sustainable.item.component.ModComponentsTypes;
 import net.ivangeevo.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import net.ivangeevo.self_sustainable.registry.FuelRegistryManager;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.TypedActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,33 +46,15 @@ public class SelfSustainableMod implements ModInitializer {
         // Also, some additional negative effects to certain ones.
         FoodComponentModifier.register();
 
-        // added by granular hunger mod
-        // probably too hardcore to add by this mod itself anyway
-        /**
-        // Register an event that blocks the player from eating if he has food poisoning (hunger)
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (player.hasStatusEffect(StatusEffects.HUNGER) && !player.isCreative() && !player.isSpectator()) {
-                ItemStack heldItem = player.getMainHandStack();
-                if (heldItem.getComponents().contains(DataComponentTypes.FOOD)) {
-                    return TypedActionResult.fail(heldItem);
-                }
-            }
 
-            // Allow the use of non-food items or if the player isn't hungry
-            return TypedActionResult.pass(player.getStackInHand(hand));
-        });
-         **/
-
-        ModBlocks.registerModBlocks();
+        ModBlocks.registerBlocks();
         ModBlocks.registerItemsPlaceableAsBlocks();
         ModBlocks.registerTorchHandler();
-        ModItems.registerModItems();
-        ModComponents.registerComponents();
-        ModItemGroup.registerItemGroups();
-        ModBlockEntities.registerBlockEntities();
-        ModRecipes.registerRecipes();
-
-        //ModBlocks.registerTorchHandler();
+        ModItems.register();
+        ModComponentsTypes.register();
+        ModItemGroup.register();
+        ModBlockEntities.register();
+        ModRecipes.register();
 
         WorldUtils.init();
 

@@ -22,7 +22,6 @@ public interface ItemAdded {
         return 0;
     }
 
-
     default boolean getCanItemBeSetOnFireOnUse(ItemStack stack) {
         return false;
     }
@@ -66,18 +65,12 @@ public interface ItemAdded {
         return null;
     }
 
-
-    default void updateUsingItem(ItemStack stack, World world, PlayerEntity player) {
-
-    }
-
     default int getItemUseWarmupDuration() {
         return 0;
     }
 
-    default CustomUseAction getCustomUseAction() {
+    default CustomUseAction getCustomUseAction(ItemStack stack) {
         return null;
     }
-
 
 }

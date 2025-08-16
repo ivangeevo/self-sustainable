@@ -1,7 +1,7 @@
 package net.ivangeevo.self_sustainable.mixin.entity;
 
 import net.ivangeevo.self_sustainable.item.ModItems;
-import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.ivangeevo.self_sustainable.item.component.ModComponentsTypes;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.ivangeevo.self_sustainable.item.items.CrudeTorchBlockItem;
 import net.minecraft.entity.Entity;
@@ -29,7 +29,7 @@ public abstract class ItemEntityMixin extends Entity
     private void onTick(CallbackInfo ci) {
         ItemStack thisStack = this.getStack();
         if (!isFuelHavingTorch(thisStack)) return;
-        TorchFuelComponent fuelComponent = thisStack.getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent());
+        TorchFuelComponent fuelComponent = thisStack.getOrDefault(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent());
         assert fuelComponent != null;
         // keep decrementing the fuel for the dropped torch
         if (this.isOnGround() && this.isAlive()) {

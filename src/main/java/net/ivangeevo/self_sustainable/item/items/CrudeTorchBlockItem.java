@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.block.blocks.AbstractExtinguishingTorchBlock;
 import net.ivangeevo.self_sustainable.block.utils.TorchFireState;
-import net.ivangeevo.self_sustainable.item.component.ModComponents;
+import net.ivangeevo.self_sustainable.item.component.ModComponentsTypes;
 import net.ivangeevo.self_sustainable.item.component.TorchFuelComponent;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.ModTorchHandler;
@@ -94,8 +94,8 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
 
     @Override
     public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
-        boolean oldHasFuel = oldStack.getComponents().contains(ModComponents.TORCH_FUEL_COMPONENT);
-        boolean newHasFuel = newStack.getComponents().contains(ModComponents.TORCH_FUEL_COMPONENT);
+        boolean oldHasFuel = oldStack.getComponents().contains(ModComponentsTypes.TORCH_FUEL);
+        boolean newHasFuel = newStack.getComponents().contains(ModComponentsTypes.TORCH_FUEL);
 
         return oldHasFuel != newHasFuel;
     }
@@ -109,14 +109,14 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
             CrudeTorchBlockItem newItem = (CrudeTorchBlockItem) newBlock.handler.getStandingTorch(newState).asItem();
 
             outputStack = changedCopy(inputStack, newItem);
-            if (newState == TorchFireState.BURNED_OUT) outputStack.remove(ModComponents.TORCH_FUEL_COMPONENT);
+            if (newState == TorchFireState.BURNED_OUT) outputStack.remove(ModComponentsTypes.TORCH_FUEL);
         }
 
         return outputStack;
     }
 
     public static int getFuel(ItemStack stack) {
-        return stack.getOrDefault(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent()).getFuel();
+        return stack.getOrDefault(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent()).getFuel();
     }
 
     public TorchFireState getTorchState() {
@@ -146,8 +146,8 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
 
         if (stack.getItem() instanceof CrudeTorchBlockItem torchItem && !world.isClient) {
             int fuel = getFuel(stack);
-            if (torchItem.getComponents().contains(ModComponents.TORCH_FUEL_COMPONENT)) {
-                stack.set(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent(fuel));
+            if (torchItem.getComponents().contains(ModComponentsTypes.TORCH_FUEL)) {
+                stack.set(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent(fuel));
             }
 
             fuel += amount;
@@ -159,7 +159,7 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
                 if (fuel > FUEL_TIME) {
                     fuel = FUEL_TIME;
                 }
-                stack.set(ModComponents.TORCH_FUEL_COMPONENT, new TorchFuelComponent(fuel));
+                stack.set(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent(fuel));
             }
         }
 

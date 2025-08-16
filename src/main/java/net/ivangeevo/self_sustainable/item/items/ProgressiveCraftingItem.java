@@ -15,12 +15,21 @@ public class ProgressiveCraftingItem extends Item
     static public final int PROGRESS_TIME_INTERVAL = 4;
     static public final int DEFAULT_MAX_DAMAGE = (120 * 20 / PROGRESS_TIME_INTERVAL);
 
-    public ProgressiveCraftingItem(Settings settings)
-    {
+    public ProgressiveCraftingItem(Settings settings) {
         super(settings);
-        settings.maxDamage(getProgressiveCraftingMaxDamage());
     }
 
+    @Override
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+        // Stupid large so it's never actually hit in practice
+        return 72000;
+    }
+
+
+    @Override
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.DRINK;
+    }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -28,70 +37,38 @@ public class ProgressiveCraftingItem extends Item
         return TypedActionResult.consume(user.getMainHandStack());
     }
 
-    /**
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
-    {
-        // Maybe try active hand stack instead of the main ?
-        ItemStack stack = user.getActiveItem();
-        stack.setDamage(getMaxUseTime(stack));
-        user.setStackInHand(hand, stack);
-        return TypedActionResult.success(stack,false);
-    }
-     **/
-
-
     @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        int iUseCount = user.getItemUseTimeLeft();
+        int useCount = user.getItemUseTimeLeft();
 
-        if (getMaxUseTime( stack, user ) - iUseCount > getItemUseWarmupDuration()) {
-            if (iUseCount % 4 == 0) {
-                playCraftingFX(stack, world, user);
-            }
+        boolean canUse = getMaxUseTime(stack, user) - useCount > getItemUseWarmupDuration();
 
-            if (!world.isClient && iUseCount % PROGRESS_TIME_INTERVAL == 0) {
-                int iDamage = stack.getDamage();
+        if (!canUse) return;
 
-                iDamage -= 1;
-
-                if (iDamage > 0) {
-                    stack.setDamage( iDamage );
-                } else {
-                    // set item usage to immediately complete
-                    user.setItemUseTime(1);
-                }
-            }
+        if (useCount % 4 == 0) {
+            playCraftingFX(stack, world, user);
         }
-    }
 
+        boolean canContinueUse = !world.isClient && useCount % PROGRESS_TIME_INTERVAL == 0;
 
-    @Override
-    public UseAction getUseAction(ItemStack stack) { return UseAction.NONE; }
+        if (!canContinueUse) return;
 
-    @Override
-    public CustomUseAction getCustomUseAction()
-    {
-        return CustomUseAction.PROGRESSIVE_CRAFT;
-    }
+        int dmg = stack.getDamage();
 
-    @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) { return 72000; }
+        dmg -= 1;
 
-    @Override
-    public void updateUsingItem(ItemStack stack, World world, PlayerEntity player)
-    {
-
+        if (dmg > 0) {
+            stack.setDamage(dmg);
+        } else {
+            // set item usage to immediately complete
+            user.setItemUseTime(1);
+        }
     }
 
     //------------- Class Specific Methods ------------//
 
-    protected void playCraftingFX(ItemStack stack, World world, LivingEntity player)
-    {
+    /** Effects that happen during the progressive crafting process **/
+    protected void playCraftingFX(ItemStack stack, World world, LivingEntity player) {
     }
 
-    protected int getProgressiveCraftingMaxDamage()
-    {
-        return DEFAULT_MAX_DAMAGE;
-    }
 }

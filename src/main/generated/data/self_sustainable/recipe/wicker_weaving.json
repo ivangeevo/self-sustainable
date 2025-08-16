@@ -1,0 +1,17 @@
+{
+  "type": "self_sustainable:crafting_shaped_with_damage",
+  "damage": 299,
+  "key": {
+    "#": {
+      "item": "minecraft:sugar_cane"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "self_sustainable:wicker_weaving"
+  }
+}

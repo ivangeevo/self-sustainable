@@ -12,7 +12,6 @@ public class HamperBlock extends BasketBlock {
 
     public static final MapCodec<HamperBlock> CODEC = HamperBlock.createCodec(HamperBlock::new);
 
-
     public HamperBlock(Settings settings) {
         super(settings);
     }

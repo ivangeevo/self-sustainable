@@ -1,6 +1,7 @@
 package net.ivangeevo.self_sustainable.mixin.item;
 
 import net.ivangeevo.self_sustainable.block.CampfireBlockMixinManager;
+import net.ivangeevo.self_sustainable.item.component.ModComponentsTypes;
 import net.ivangeevo.self_sustainable.item.interfaces.ItemAdded;
 import net.ivangeevo.self_sustainable.tag.ModTags;
 import net.ivangeevo.self_sustainable.util.CustomUseAction;
@@ -11,10 +12,9 @@ import org.spongepowered.asm.mixin.Mixin;
 public abstract class ItemMixin implements ItemAdded
 {
 
-
     @Override
-    public CustomUseAction getCustomUseAction() {
-        return CustomUseAction.NONE;
+    public CustomUseAction getCustomUseAction(ItemStack stack) {
+        return stack.contains(ModComponentsTypes.PROGRESSIVE_CRAFTING) ? CustomUseAction.PROGRESSIVE_CRAFT : CustomUseAction.NONE;
     }
 
     @Override

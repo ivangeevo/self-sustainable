@@ -2,7 +2,6 @@ package net.ivangeevo.self_sustainable.item.items;
 
 import net.ivangeevo.self_sustainable.util.WoolColorsHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.color.item.ItemColorProvider;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;

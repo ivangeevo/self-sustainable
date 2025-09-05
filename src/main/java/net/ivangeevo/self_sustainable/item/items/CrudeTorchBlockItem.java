@@ -47,17 +47,32 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
             if (torchState != TorchFireState.UNLIT) return ActionResult.FAIL;
             if (!world.isClient) {
                 PlayerEntity player = context.getPlayer();
-                ItemStack litTorch = stateStack(stack, TorchFireState.LIT);
 
                 if (player != null) {
-                    if (stack.getCount() == 1) {
+                    // torch you get out of lighting
+                    ItemStack litTorch = stateStack(stack, TorchFireState.LIT);
+
+                    // consume one unlit torch
+                    stack.decrement(1);
+
+                    if (stack.isEmpty()) {
+                        // hand goes empty, replace it with the lit torch
                         player.setStackInHand(context.getHand(), litTorch);
                     } else {
-                        player.giveItemStack(litTorch);
+                        // leave the unlit stack in hand
+                        player.setStackInHand(context.getHand(), stack);
+
+                        // try to add the lit torch to inventory, or drop if full
+                        if (!player.getInventory().insertStack(litTorch)) {
+                            player.dropItem(litTorch, false);
+                        }
                     }
                 }
+
+
                 world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
             }
+
 
             return ActionResult.SUCCESS;
         }
@@ -100,7 +115,6 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         return oldHasFuel != newHasFuel;
     }
 
-
     public static ItemStack stateStack(ItemStack inputStack, TorchFireState newState) {
         ItemStack outputStack = ItemStack.EMPTY;
 
@@ -123,24 +137,18 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         return torchState;
     }
 
-    public ModTorchHandler getHandler() {
-        return handler;
-    }
-
     public static ItemStack changedCopy(ItemStack stack, Item replacementItem) {
-        if (stack.isEmpty()) {
-            return ItemStack.EMPTY;
-        }
         ItemStack itemStack = new ItemStack(replacementItem, 1);
-        stack.decrement(1);
-        if (stack.getComponents() != null) {
-            stack.getComponents().forEach((component) -> {
-                itemStack.getComponents().copy(component.type());
-            });
+
+        // copy TorchFuelComponent if present
+        if (stack.getComponents().contains(ModComponentsTypes.TORCH_FUEL)) {
+            TorchFuelComponent fuel = stack.getOrDefault(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent());
+            itemStack.set(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent(fuel.getFuel()));
         }
 
         return itemStack;
     }
+
 
     public static ItemStack addFuel(ItemStack stack, World world, int amount) {
 

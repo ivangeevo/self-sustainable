@@ -206,19 +206,36 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
     }
 
     public void changeTorch(World world, BlockPos pos, BlockState oldState, TorchFireState newType) {
-        // Change the block state
+        if (world.isClient) return;
+
+        // Grab the old BE's components before the block gets replaced
+        ComponentMap oldComponents = null;
+        if (world.getBlockEntity(pos) instanceof TorchBE oldBE) {
+            oldComponents = oldBE.getComponents();
+        }
+
         BlockState newState = isWallTorch()
                 ? handler.getWallTorch(newType).getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(CrudeWallTorchBlock.FACING))
                 : handler.getStandingTorch(newType).getDefaultState();
 
-        if (world.isClient) return;
+        // Replace the block
         world.setBlockState(pos, newState);
-        if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TorchBE be) {
-            TorchFuelComponent fuelComponent = be.getComponents().get(ModComponentsTypes.TORCH_FUEL);
-            if (fuelComponent == null) return;
-            fuelComponent.setFuel(0);
+
+        // Transfer components (esp. torch fuel) into the new BE
+        if (world.getBlockEntity(pos) instanceof TorchBE newBe && oldComponents != null) {
+            TorchFuelComponent oldFuel = oldComponents.get(ModComponentsTypes.TORCH_FUEL);
+
+            ComponentMap.Builder builder = ComponentMap.builder();
+            if (oldFuel != null) {
+                builder.add(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent(oldFuel.getFuel()));
+            }
+            // add other components here if needed
+
+            newBe.setComponents(builder.build());
+            newBe.markDirty();
         }
     }
+
 
     public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos, float spread)
     {

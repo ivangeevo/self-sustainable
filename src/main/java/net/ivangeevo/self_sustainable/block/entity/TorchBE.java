@@ -59,7 +59,6 @@ public class TorchBE extends BlockEntity {
             }
         }
 
-
         be.markDirty();
     }
 

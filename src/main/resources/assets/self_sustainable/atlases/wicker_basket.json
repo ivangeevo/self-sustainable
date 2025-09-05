@@ -1,9 +1,0 @@
-{
-  "sources": [
-    {
-      "type": "directory",
-      "source": "entity/wicker_basket",
-      "prefix": "entity/wicker_basket/"
-    }
-  ]
-}

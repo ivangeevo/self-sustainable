@@ -1,9 +1,0 @@
-{
-  "sources": [
-    {
-      "type": "directory",
-      "source": "entity/hamper",
-      "prefix": "entity/hamper/"
-    }
-  ]
-}

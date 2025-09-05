@@ -81,7 +81,7 @@ public class WickerBasketBERenderer implements BlockEntityRenderer<WickerBasketB
         lidProgress = 1.0f - lidProgress;
         lidProgress = 1.0f - lidProgress * lidProgress * lidProgress;
 
-        SpriteIdentifier texture = ModTexturedRenderLayers.WICKER_BASKET;
+        SpriteIdentifier texture = ModTexturedRenderLayers.getWickerBasket();
         VertexConsumer vertexConsumer = texture.getVertexConsumer(vertexConsumers, RenderLayer::getEntityCutout);
 
         this.render(matrices, vertexConsumer, this.lid, this.lidBase, this.handle, this.basketBase, lidProgress, light, overlay);

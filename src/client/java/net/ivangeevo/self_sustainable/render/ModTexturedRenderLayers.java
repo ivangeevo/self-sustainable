@@ -7,25 +7,30 @@ import net.minecraft.util.Identifier;
 
 public class ModTexturedRenderLayers {
 
-    public static final Identifier WICKER_BASKET_ATLAS_TEXTURE = Identifier.of(
+    private static final Identifier WICKER_BASKET_ATLAS_TEXTURE = Identifier.of(
             SelfSustainableMod.MOD_ID, "textures/atlases/wicker_basket.png"
     );
 
-    public static final Identifier HAMPER_ATLAS_TEXTURE = Identifier.of(
+    private static final Identifier HAMPER_ATLAS_TEXTURE = Identifier.of(
             SelfSustainableMod.MOD_ID, "textures/atlases/hamper.png"
     );
 
-    private static final RenderLayer WICKER_BASKET_RENDER_LAYER = RenderLayer.getEntityCutout(WICKER_BASKET_ATLAS_TEXTURE);
-    private static final RenderLayer HAMPER_RENDER_LAYER = RenderLayer.getEntityCutout(HAMPER_ATLAS_TEXTURE);
+    public static final RenderLayer WICKER_BASKET_RENDER_LAYER = RenderLayer.getEntityCutout(WICKER_BASKET_ATLAS_TEXTURE);
 
-    public static final SpriteIdentifier WICKER_BASKET = new SpriteIdentifier(
-            WICKER_BASKET_ATLAS_TEXTURE,
-            Identifier.of(SelfSustainableMod.MOD_ID,"entity/wicker_basket/")
-    );
+    public static final RenderLayer HAMPER_RENDER_LAYER = RenderLayer.getEntityCutout(HAMPER_ATLAS_TEXTURE);
 
-    public static final SpriteIdentifier HAMPER = new SpriteIdentifier(
-            HAMPER_ATLAS_TEXTURE, Identifier.of(SelfSustainableMod.MOD_ID,
-            "entity/hamper")
-    );
+    public static SpriteIdentifier getWickerBasket() {
+        return new SpriteIdentifier(
+                WICKER_BASKET_ATLAS_TEXTURE,
+                Identifier.of(SelfSustainableMod.MOD_ID, "entity/wicker_basket")
+        );
+    }
+
+    public static SpriteIdentifier getHamper() {
+        return new SpriteIdentifier(
+                HAMPER_ATLAS_TEXTURE,
+                Identifier.of(SelfSustainableMod.MOD_ID, "entity/hamper")
+        );
+    }
 
 }

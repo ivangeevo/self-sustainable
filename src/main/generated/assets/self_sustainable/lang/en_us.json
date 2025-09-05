@@ -6,6 +6,8 @@
   "block.self_sustainable.oven_brick": "Brick Oven",
   "block.self_sustainable.torch_unlit": "Unlit Torch",
   "emi.category.self_sustainable.oven_cooking": "Oven Cooking",
+  "emi.category.self_sustainable.progressive_crafting": "Progressive Crafting",
+  "emi.progressive_crafting.tooltip": "Hold right click",
   "item.self_sustainable.brick_unfired": "Wet Brick",
   "item.self_sustainable.firestarter_bow": "Bow Drill",
   "item.self_sustainable.firestarter_sticks": "Fire Plough",

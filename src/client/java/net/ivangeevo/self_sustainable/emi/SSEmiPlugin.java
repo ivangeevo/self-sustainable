@@ -5,7 +5,9 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.WidgetHolder;
 import dev.emi.emi.handler.CookingRecipeHandler;
 import dev.emi.emi.handler.CraftingRecipeHandler;
 import dev.emi.emi.recipe.EmiCookingRecipe;
@@ -16,13 +18,18 @@ import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.recipe.cooking.OvenCookingRecipe;
 import net.ivangeevo.self_sustainable.recipe.crafting.ShapedRecipeWithDamage;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.item.Item;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.RecipeInput;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 
@@ -71,11 +78,14 @@ public class SSEmiPlugin implements EmiPlugin
 
         // TODO: Change workstation to have a knitting icon
         registry.addWorkstation(PROGRESSIVE_CRAFTING, EmiStack.of(ModItems.WICKER));
-        registry.addRecipeHandler(ScreenHandlerType.FURNACE, new CookingRecipeHandler<>(OVEN_COOKING));
+        registry.addRecipeHandler(ScreenHandlerType.FURNACE, new CookingRecipeHandler<>(PROGRESSIVE_CRAFTING));
 
+        registerFakeProgression(registry, ModItems.WICKER_WEAVING, ModItems.WICKER);
+        /**
         for (ShapedRecipeWithDamage recipe : getRecipes(registry, ShapedRecipeWithDamage.Type.INSTANCE)) {
             addRecipeSafe(registry, () -> new EmiProgressiveCraftingRecipe(recipe, PROGRESSIVE_CRAFTING), recipe);
         }
+         **/
     }
 
     private static void addRecipeSafe(EmiRegistry registry, Supplier<EmiRecipe> supplier, Recipe<?> recipe) {
@@ -85,6 +95,57 @@ public class SSEmiPlugin implements EmiPlugin
             EmiReloadLog.warn("Exception thrown when parsing vanilla a" + SelfSustainableMod.MOD_ID + "recipe" + EmiPort.getId(recipe));
             EmiReloadLog.error(e);
         }
+    }
+
+    private void registerFakeProgression(EmiRegistry registry, Item inputItem, Item outputItem) {
+        EmiStack input = EmiStack.of(inputItem);
+        EmiStack output = EmiStack.of(outputItem);
+        EmiRecipe fakeRecipe = new EmiRecipe() {
+
+            @Override
+            public EmiRecipeCategory getCategory() {
+                return PROGRESSIVE_CRAFTING;
+            }
+
+            @Override
+            public @Nullable Identifier getId() {
+                return Identifier.of(SelfSustainableMod.MOD_ID, "progression_" + Registries.ITEM.getId(inputItem).getPath());
+            }
+
+            @Override
+            public List<EmiIngredient> getInputs() {
+                return List.of(input);
+            }
+
+            @Override
+            public List<EmiStack> getOutputs() {
+                return List.of(output);
+            }
+
+            @Override
+            public int getDisplayWidth() {
+                return 78;
+            }
+
+            @Override
+            public int getDisplayHeight() {
+                return 22;
+            }
+
+            @Override
+            public void addWidgets(WidgetHolder widgets) {
+                widgets.addFillingArrow(27, 2, 3000 * 20)
+                        .tooltip((mx, my) -> List.of(TooltipComponent.of(
+                                                EmiPort.ordered(EmiPort.translatable("emi.progressive_crafting.tooltip", 200 / 20f))
+                                        )
+                                )
+                        );
+                widgets.addSlot(input, 5, 2);
+                widgets.addSlot(output, 55, 2).recipeContext(this);
+            }
+        };
+
+        registry.addRecipe(fakeRecipe);
     }
 
 

@@ -52,12 +52,18 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
 
     }
 
-    protected void addEmiNames(TranslationBuilder translationBuilder) {
-        addEmiCategory("oven_cooking", "Oven Cooking", translationBuilder);
+    protected void addEmiNames(TranslationBuilder tb) {
+        addEmiCategory("oven_cooking", "Oven Cooking", tb);
+        addEmiCategory("progressive_crafting", "Progressive Crafting", tb);
+        addEmiTooltip("progressive_crafting.tooltip", "Hold right click", tb);
     }
 
-    protected void addEmiCategory(String key, String name, TranslationBuilder translationBuilder) {
-        translationBuilder.add("emi.category.self_sustainable." + key, name);
+    protected void addEmiCategory(String key, String name, TranslationBuilder tb) {
+        tb.add("emi.category.self_sustainable." + key, name);
+    }
+
+    protected void addEmiTooltip(String key, String name, TranslationBuilder tb) {
+        tb.add("emi." + key, name);
     }
 
     private void addItemGroup(String entryPath, String translation, TranslationBuilder tb) {

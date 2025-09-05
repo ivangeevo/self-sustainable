@@ -71,26 +71,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         builder.add(LIT, FACING, FUEL_LEVEL);
     }
 
-
-
-    /**
-    @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos) {
-        if (!world.getBlockState(pos).get(LIT) && world.getBlockState(pos).get(FUEL_LEVEL) > 0) {
-            if (world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE) {
-                if (ovenBE.attemptToLight()) {
-                    BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
-                    world.playSound(null, soundPos , SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS ,1F, world.random.nextFloat() * 0.4F + 0.8F);
-                    return true;
-                }
-
-            }
-        }
-
-        return false;
-    }
-     **/
-
     @Override
     public boolean setOnFireDirectly(World world, BlockPos pos) {
         if (!this.getCanBeSetOnFireDirectly(world, pos)) return false;
@@ -115,71 +95,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         BlockState state = blockAccess.getBlockState(pos);
         return !state.get(LIT) && state.get(FUEL_LEVEL) != 0;
     }
-
-    /**
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        ItemStack heldStack = player.getStackInHand(player.getActiveHand());
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-
-        double relativeClickY = hit.getPos().getY() - pos.getY();
-
-        if (hit.getSide() != state.get(FACING)) {
-            return ActionResult.FAIL;
-        }
-
-        if (blockEntity instanceof BrickOvenBE ovenBE) {
-            Optional<RecipeEntry<OvenCookingRecipe>> optional;
-
-            if (relativeClickY > clickYTopPortion) {
-                if (!ovenBE.getCookStack().isEmpty()) {
-                    ovenBE.retrieveItem(player);
-                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
-                } else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
-                    if (!world.isClient() && ovenBE.getCookStack().isEmpty()) {
-                        ovenBE.addItem(player,
-                                player.getAbilities().creativeMode
-                                        ? heldStack.copy()
-                                        : heldStack, optional.get().value().getCookingTime()
-                        );
-                    }
-                }
-
-                return ActionResult.SUCCESS;
-            } else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
-                // Try to ignite directly (instantly)
-                if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
-                    if (state.get(FUEL_LEVEL) > 0) {
-                        if (!state.get(LIT)) {
-                            world.setBlockState(pos, state.with(LIT, true));
-                            Ignitable.playLitFX(world, pos);
-                            return ActionResult.SUCCESS;
-                        }
-                    }
-                } else { // try to add fuel
-
-                    // Use the attemptToAddFuel method to try and add fuel
-                    int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
-
-                    if (numItemsConsumed > 0) {
-                        if (state.get(LIT)) {
-                            Ignitable.playLitFX(world, pos);
-                        } else {
-                            this.playPopSound(world, pos);
-                        }
-                        heldStack.split(numItemsConsumed);
-                        return ActionResult.SUCCESS;
-                    }
-                    if (heldStack.getItem() instanceof FlintAndSteelItem || heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)) {
-                        return ActionResult.PASS;
-                    }
-                }
-            }
-        }
-
-        return ActionResult.PASS;
-    }
-    **/
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {

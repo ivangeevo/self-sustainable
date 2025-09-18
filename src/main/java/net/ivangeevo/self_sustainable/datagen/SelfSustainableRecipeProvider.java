@@ -4,7 +4,6 @@ import btwr.btwr_sl.lib.util.utils.RecipeProviderUtils;
 import btwr.btwr_sl.tag.BTWRConventionalTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.items.WickerWeavingItem;
@@ -15,9 +14,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
@@ -146,6 +144,24 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .criterion("has_stick", conditionsFromItem(Items.STICK))
                 .offerTo(exporter);
 
+        Item looseBrickSlab = Registries.ITEM.get(Identifier.of("tough_environment", "slab_bricks_loose"));
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK)
+                .input('#', looseBrickSlab)
+                .pattern("###")
+                .pattern("# #")
+                .pattern("###")
+                .criterion("has_slab_bricks_loose", conditionsFromItem(looseBrickSlab))
+                .offerTo(exporter, ID.ofSS("oven_brick_unmortared"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK)
+                .input('#', Items.BRICK_SLAB)
+                .pattern("###")
+                .pattern("# #")
+                .pattern("###")
+                .criterion("has_bricks", conditionsFromItem(Blocks.BRICKS))
+                .offerTo(exporter, ID.ofSS("oven_brick_mortared"));
+
+        /**
         // Register a conditional recipe for Brick ovens that loads when Tough Environment is not loaded
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.OVEN_BRICK)
                 .input('#', Items.BRICK_SLAB)
@@ -167,6 +183,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .pattern("###")
                 .criterion("has_slab_bricks_loose", conditionsFromItem(Blocks.BRICKS))
                 .offerTo(withConditions(exporter, ResourceConditions.allModsLoaded("tough_environment")), ID.ofSS("oven_brick_mortared"));
+         **/
 
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.CRUDE_TORCH_UNLIT, 4)

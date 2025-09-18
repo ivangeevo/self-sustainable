@@ -1,6 +1,7 @@
 # v0.3(dev)
 + Fixed a bug(for real now) with unlit crude torches that would decrement unlit torches twice when trying to light one
-+ (check) Fixed crude torches to properly transition into a smoldered state when there's 30 seconds of fuel left.
++ (check wall & normal torches) Fixed crude torches to properly transition into a smoldered state when there's 30 seconds of fuel left.
++ Fixed recipes for oven to show up properly.
 
 # v0.2
 + Added compatibility for the Brick Oven recipe to work conditionally with Tough Environment. When its loaded it requires Loose Brick Slab, and when it's not it requires normal vanilla Bricks Slab

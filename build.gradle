@@ -49,6 +49,9 @@ dependencies {
     // BTWR Shared Library
     modImplementation "maven.modrinth:btwr-shared-library:${project.btwr_sl_version}"
 
+    // Tough Environment
+    modImplementation "maven.modrinth:tough-environment:${project.tough_environment_version}"
+
     // Better With Time
     modCompileOnly "maven.modrinth:better-with-time:${project.bwt_version}"
 

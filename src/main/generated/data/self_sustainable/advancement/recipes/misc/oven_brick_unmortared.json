@@ -1,22 +1,11 @@
 {
-  "fabric:load_conditions": [
-    {
-      "condition": "fabric:not",
-      "value": {
-        "condition": "fabric:all_mods_loaded",
-        "values": [
-          "tough_environment"
-        ]
-      }
-    }
-  ],
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_bricks": {
+    "has_slab_bricks_loose": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:bricks"
+            "items": "tough_environment:slab_bricks_loose"
           }
         ]
       },
@@ -32,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_bricks"
+      "has_slab_bricks_loose"
     ]
   ],
   "rewards": {

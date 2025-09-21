@@ -2,6 +2,7 @@
 + Fixed a bug(for real now) with unlit crude torches that would decrement unlit torches twice when trying to light one
 + Fixed crude torches to properly transition into a smoldered state when there's 30 seconds of fuel left.
 + Fixed recipes for oven to show up properly.
++ Removed unfinished Wicker Weaving item from having a recipe because it's still unused
 + Updated the mod to Fabric API 0.116.6, Fabric Loader 0.17.2 & BTWR: Shared Library 0.58
 
 # v0.2

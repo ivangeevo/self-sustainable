@@ -40,11 +40,17 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+    // Mod Menu
+    modApi "com.terraformersmc:modmenu:11.0.2"
+
     // Cloth Config API
     modApi "me.shedaniel.cloth:cloth-config-fabric:15.0.140"
 
-    // Mod Menu
-    modApi "com.terraformersmc:modmenu:11.0.2"
+    // EMI
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}"
+
+    modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 
     // BTWR Shared Library
     modImplementation "maven.modrinth:btwr-shared-library:${project.btwr_sl_version}"
@@ -64,11 +70,6 @@ dependencies {
     // Granular Hunger
     modCompileOnly "maven.modrinth:granular-hunger:${project.granular_hunger_version}"
 
-    // EMI
-    modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
-    modCompileOnly "dev.emi:emi-fabric:${emi_version}"
-
-    modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 
 }
 

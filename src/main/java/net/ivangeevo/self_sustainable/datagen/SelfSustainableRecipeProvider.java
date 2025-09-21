@@ -62,7 +62,8 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         this.moddedShaped(exporter);
 
         // Progressive Crafting Recipes
-        this.createProgressiveCrafting(exporter);
+        // Not ready yet for release
+        //this.createProgressiveCrafting(exporter);
 
     }
 

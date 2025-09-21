@@ -1,7 +1,8 @@
-# v0.3(dev)
+# v0.2.1(dev)
 + Fixed a bug(for real now) with unlit crude torches that would decrement unlit torches twice when trying to light one
-+ (check wall & normal torches) Fixed crude torches to properly transition into a smoldered state when there's 30 seconds of fuel left.
++ Fixed crude torches to properly transition into a smoldered state when there's 30 seconds of fuel left.
 + Fixed recipes for oven to show up properly.
++ Updated the mod to Fabric API 0.116.6, Fabric Loader 0.17.2 & BTWR: Shared Library 0.58
 
 # v0.2
 + Added compatibility for the Brick Oven recipe to work conditionally with Tough Environment. When its loaded it requires Loose Brick Slab, and when it's not it requires normal vanilla Bricks Slab

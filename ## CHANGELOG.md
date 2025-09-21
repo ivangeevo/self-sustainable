@@ -1,4 +1,4 @@
-# v0.2.1(dev)
+# v0.2.1
 + Fixed a bug(for real now) with unlit crude torches that would decrement unlit torches twice when trying to light one
 + Fixed crude torches to properly transition into a smoldered state when there's 30 seconds of fuel left.
 + Fixed recipes for oven to show up properly.

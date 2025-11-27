@@ -1,0 +1,92 @@
+package org.btwr.self_sustainable.item.items;
+
+
+import org.btwr.self_sustainable.item.util.DirectlyIgnitingItem;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
+
+public abstract class FireStarterItem extends Item implements DirectlyIgnitingItem {
+
+    private final float exhaustionPerUse;
+
+    public FireStarterItem(Item.Settings settings, float fExhaustionPerUse) {
+        super( settings );
+        exhaustionPerUse = fExhaustionPerUse;
+    }
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        World world = context.getWorld();
+        PlayerEntity player = context.getPlayer();
+        BlockPos pos = context.getBlockPos();
+
+        if (world.canPlayerModifyAt(player, pos)) {
+            performUseEffects(context);
+
+            if (!world.isClient) {
+                //notifyNearbyAnimalsOfAttempt(player);
+
+                if (checkChanceOfStart(context.getStack(), world.random)) {
+                    attemptToLightBlock(context.getStack(), world, pos, context.getSide());
+                }
+            }
+
+            assert player != null;
+            player.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
+            context.getStack().damage(1, player, EquipmentSlot.MAINHAND);
+            return ActionResult.SUCCESS;
+        }
+
+        return ActionResult.FAIL;
+    }
+
+    @Override
+    public boolean getCanItemStartFireOnUse(ItemStack stack)
+    {
+        return true;
+    }
+
+    //------------- Class Specific Methods ------------//
+
+    @Override
+    public abstract boolean checkChanceOfStart(ItemStack stack, Random random);
+
+    @Override
+    public void performUseEffects(ItemUsageContext context) {
+
+    }
+
+    @Override
+    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
+        Block targetBlock = world.getBlockState(pos).getBlock();
+
+        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos)) {
+            return targetBlock.setOnFireDirectly(world, pos);
+        }
+
+        return false;
+    }
+
+/**
+    public void notifyNearbyAnimalsOfAttempt(PlayerEntity player)
+    {
+        List<AnimalEntity> animalList = player.getWorld().getEntitiesByClass( AnimalEntity.class, player.getBoundingBox().expand( 6, 6, 6 ), Predicates.instanceOf(AnimalEntity.class));
+
+        for (AnimalEntity tempAnimal : animalList) {
+            if (!tempAnimal.isDead()) {
+                tempAnimal.onNearbyFireStartAttempt(player);
+            }
+        }
+    }
+ **/
+
+}

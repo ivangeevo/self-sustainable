@@ -1,0 +1,118 @@
+package org.btwr.self_sustainable.item.items;
+
+import org.btwr.self_sustainable.item.interfaces.ItemStackAdded;
+import org.btwr.self_sustainable.util.WorldUtils;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
+
+public class FireStarterItemPrimitive extends FireStarterItem {
+
+    private final float baseChance;
+    private final float maxChance;
+    private final float chanceIncreasePerUse;
+
+    public FireStarterItemPrimitive(Item.Settings settings, float fExhaustionPerUse, float fBaseChance, float fMaxChance, float fChanceIncreasePerUse)
+    {
+        super(settings, fExhaustionPerUse);
+        baseChance = fBaseChance;
+        maxChance = fMaxChance;
+        chanceIncreasePerUse = fChanceIncreasePerUse;
+    }
+
+    @Override
+    public boolean checkChanceOfStart(ItemStack stack, Random random) {
+        boolean returnValue = false;
+
+        // Use this cast to get access to the new variables.
+        ItemStackAdded stackAdded;
+        stackAdded = stack;
+
+        float chance = stackAdded.getAccumulatedChance(baseChance);
+        long currentTime = WorldUtils.getOverworldTimeServerOnly();
+        long lastTime = stackAdded.getTimeOfLastUse();
+
+        if (lastTime > 0) {
+            if (currentTime > lastTime) {
+                long decayTime = ( currentTime - lastTime ) - DELAY_BEFORE_DECAY;
+
+                if (decayTime > 0) {
+                    chance -= (float)decayTime * CHANCE_DECAY_PER_TICK;
+
+                    if (chance < baseChance) {
+                        chance = baseChance;
+                    }
+                }
+            }
+            else if (currentTime < lastTime) {
+                // do not reset chance if currentTime is the same as last time, in case use attempts
+                // stack up on the server
+
+                chance = baseChance;
+            }
+        }
+
+        if (random.nextFloat() <= chance) {
+            returnValue = true;
+        }
+
+        chance += chanceIncreasePerUse;
+
+        if (chance > maxChance) {
+            chance = maxChance;
+        }
+
+        stackAdded.setAccumulatedChance(chance);
+        stackAdded.setTimeOfLastUse(currentTime);
+
+        return returnValue;
+    }
+
+    @Override
+    public void performUseEffects(ItemUsageContext context) {
+        PlayerEntity player = context.getPlayer();;
+
+        assert player != null;
+        player.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5f + 0.5f * (float)player.getRandom().nextInt(2),
+                (player.getRandom().nextFloat() * 0.25f) + 1.75f);
+
+        if (!player.getWorld().isClient()) {
+            for (int var3 = 0; var3 < 5; ++var3) {
+                Vec3d var4 = new Vec3d((player.getRandom().nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0);
+
+                var4 = var4.rotateX(-player.getPitch() * (float)Math.PI / 180.0f);
+                var4 = var4.rotateY(-player.getYaw() * (float)Math.PI / 180.0f);
+
+                Vec3d var5 = new Vec3d((player.getRandom().nextFloat() - 0.5) * 0.3, (-player.getRandom().nextFloat()) * 0.6 - 0.3, 0.6);
+
+                var5 = var5.rotateX(-player.getPitch() * (float)Math.PI / 180.0f);
+                var5 = var5.rotateY(-player.getYaw() * (float)Math.PI / 180.0f);
+
+                var5 = var5.add(player.getX(), player.getY() + player.getEyeHeight(player.getPose()), player.getZ());
+
+                player.getWorld().addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, this.getDefaultStack()), var5.getX(), var5.getY(), var5.getZ(), var4.getX(), var4.getY() + 0.05, var4.getZ());
+            }
+        }
+    }
+
+    @Override
+    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
+        if (super.attemptToLightBlock(stack, world, pos, facing)) {
+            stack.setAccumulatedChance(baseChance);
+
+            return true;
+        }
+
+        return false;
+    }
+
+}

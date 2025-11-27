@@ -14,11 +14,10 @@
   "icon":"assets/self_sustainable/icon.png",
   "environment":"*",
   "entrypoints":{
-    "client":[ "net.ivangeevo.self_sustainable.SelfSustainableClient" ],
-    "main":[ "net.ivangeevo.self_sustainable.SelfSustainableMod" ],
-    "fabric-datagen": [ "net.ivangeevo.self_sustainable.SelfSustainableDataGenerator" ],
-    "modmenu": [ "net.ivangeevo.self_sustainable.config.SelfSustainableModMenu" ],
-    "emi": [ "net.ivangeevo.self_sustainable.emi.SSEmiPlugin" ]
+    "client":[ "org.btwr.self_sustainable.SelfSustainableClient" ],
+    "main":["org.btwr.self_sustainable.SelfSustainableMod"],
+    "fabric-datagen": ["org.btwr.self_sustainable.SelfSustainableDataGenerator"],
+    "emi": [ "org.btwr.self_sustainable.emi.SSEmiPlugin" ]
   },
   "mixins":[
     "self_sustainable.mixins.json"
@@ -32,28 +31,18 @@
   "suggests": {
     "emi": ">=1.1.22+1.21.1+fabric"
   },
-
-  "accessWidener": "self_sustainable.accesswidener",
-
   "custom": {
     "loom:injected_interfaces": {
-
-      "net/minecraft/class_1792": ["net/ivangeevo/self_sustainable/item/interfaces/ItemAdded"],
-      "net/minecraft/class_1799": ["net/ivangeevo/self_sustainable/item/interfaces/ItemStackAdded"],
-      "net/minecraft/class_1827": ["net/ivangeevo/self_sustainable/item/interfaces/TorchAdded"],
-
-      "net/minecraft/class_2248": ["net/ivangeevo/self_sustainable/block/interfaces/BlockAdded"],
-
-      "net/minecraft/class_1309": ["net/ivangeevo/self_sustainable/entity/interfaces/LivingEntityAdded"],
-      "net/minecraft/class_1657": ["net/ivangeevo/self_sustainable/entity/interfaces/PlayerEntityAdded"],
-      "net/minecraft/class_1429": ["net/ivangeevo/self_sustainable/entity/interfaces/AnimalEntityAdded"],
-
-      "net/minecraft/class_1267": ["net/ivangeevo/self_sustainable/world/interfaces/DifficultyAdded"],
-      "net/minecraft/class_2358": ["net/ivangeevo/self_sustainable/block/interfaces/FireBlockAdded"]
-
-
-
+      "net/minecraft/class_1792": ["org/btwr/self_sustainable/item/interfaces/ItemAdded"],
+      "net/minecraft/class_1799": ["org/btwr/self_sustainable/item/interfaces/ItemStackAdded"],
+      "net/minecraft/class_1827": ["org/btwr/self_sustainable/item/interfaces/TorchAdded"],
+      "net/minecraft/class_2248": ["org/btwr/self_sustainable/block/interfaces/BlockAdded"],
+      "net/minecraft/class_1309": ["org/btwr/self_sustainable/entity/interfaces/LivingEntityAdded"],
+      "net/minecraft/class_1657": ["org/btwr/self_sustainable/entity/interfaces/PlayerEntityAdded"],
+      "net/minecraft/class_1429": ["org/btwr/self_sustainable/entity/interfaces/AnimalEntityAdded"],
+      "net/minecraft/class_1267": ["org/btwr/self_sustainable/world/interfaces/DifficultyAdded"],
+      "net/minecraft/class_2358": ["org/btwr/self_sustainable/block/interfaces/FireBlockAdded"]
     }
-  }
-
+  },
+  "accessWidener": "self_sustainable.accesswidener"
 }

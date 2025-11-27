@@ -12,11 +12,8 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 
 public class SelfSustainableClient implements ClientModInitializer {
 
-
     @Override
     public void onInitializeClient() {
-
-
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OVEN_BRICK, RenderLayer.getCutout());
         BlockEntityRendererFactories.register(ModBlockEntities.OVEN_BRICK, BrickOvenBERenderer::new);
 
@@ -48,6 +45,6 @@ public class SelfSustainableClient implements ClientModInitializer {
         BlockEntityRendererFactories.register(ModBlockEntities.WICKER_BASKET, WickerBasketBERenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(ModEntityModelLayers.WICKER_BASKET, WickerBasketBERenderer::getTexturedModelData);
-
     }
+
 }

@@ -1,10 +1,5 @@
-/*
- * Decompiled with CFR 0.2.1 (FabricMC 53fa44c9).
- */
 package net.ivangeevo.self_sustainable.block.entity.renderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.ivangeevo.self_sustainable.block.entity.VariableCampfireBE;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -24,10 +19,9 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Unique;
 
-@Environment(value=EnvType.CLIENT)
 public class CampfireBERenderer
         implements BlockEntityRenderer<VariableCampfireBE> {
-    private static final float SCALE = 0.375f;
+
     private final ItemRenderer itemRenderer;
 
     public CampfireBERenderer(BlockEntityRendererFactory.Context ctx) {
@@ -40,7 +34,7 @@ public class CampfireBERenderer
         DefaultedList<ItemStack> itemsBeingCooked = campfireBE.getItemsBeingCooked();
 
         if (!itemsBeingCooked.isEmpty()) {
-            ItemStack cookStack = itemsBeingCooked.get(0); // Take the first item
+            ItemStack cookStack = itemsBeingCooked.getFirst();
 
             Direction facing = campfireBE.getCachedState().get(CampfireBlock.FACING);
 
@@ -82,4 +76,3 @@ public class CampfireBERenderer
     }
 
 }
-

@@ -41,8 +41,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
-{
+public class SmokerOvenBlock extends BlockWithEntity implements Ignitable {
+
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
     protected final float clickYTopPortion = (6F / 16F);
@@ -72,29 +72,22 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
-    {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(LIT, FACING, FUEL_LEVEL);
     }
 
     @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos)
-    {
+    public boolean setOnFireDirectly(World world, BlockPos pos) {
 
-        if (world.getBlockState(pos) == this.getDefaultState().with(LIT, true))
-        {
-            if (world.getBlockEntity(pos) instanceof SmokerOvenBE ovenBE)
-            {
-                if ( ovenBE.attemptToLight() )
-                {
+        if (world.getBlockState(pos) == this.getDefaultState().with(LIT, true)) {
+            if (world.getBlockEntity(pos) instanceof SmokerOvenBE ovenBE) {
+                if ( ovenBE.attemptToLight() ) {
                     BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
                     world.playSound(null, soundPos , SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS ,1F, world.random.nextFloat() * 0.4F + 0.8F);
+
                     return true;
                 }
-
             }
-
-
         }
 
         return false;
@@ -107,22 +100,19 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
 
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit)
-    {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         Hand hand = player.getActiveHand();
         ItemStack heldStack = player.getStackInHand(hand);
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
         double relativeClickY = hit.getPos().getY() - pos.getY();
 
-        if (hit.getSide() != state.get(FACING))
-        {
+        if (hit.getSide() != state.get(FACING)) {
             return ActionResult.FAIL;
         }
 
 
-        if (blockEntity instanceof SmokerOvenBE ovenBE)
-        {
+        if (blockEntity instanceof SmokerOvenBE ovenBE) {
             Optional<RecipeEntry<OvenCookingRecipe>> optional;
 
             if (relativeClickY > clickYTopPortion) {
@@ -130,7 +120,8 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                     ovenBE.retrieveItem(player);
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
                     return ActionResult.SUCCESS;
-                } else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
+                }
+                else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
                     if (!world.isClient() && ovenBE.getCookStack().isEmpty() && ovenBE.addItem(player,
                             player.getAbilities().creativeMode ? heldStack.copy() : heldStack, optional.get().value().getCookingTime()))
                     {
@@ -139,7 +130,8 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                 }
 
                 return ActionResult.SUCCESS;
-            } else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
+            }
+            else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
                 // Try to ignite
                 if (heldStack.getItem() instanceof FlintAndSteelItem || player.getStackInHand(hand).isIn(ModTags.Items.DIRECT_IGNITERS))
                 {
@@ -151,10 +143,12 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
                         }
 
                         return ActionResult.SUCCESS;
-                    } else {
+                    }
+                    else {
                         Ignitable.playExtinguishSound(world, pos, false);
                     }
-                } else { // try to add fuel
+                }
+                else { // try to add fuel
 
                     // Use the attemptToAddFuel method to try and add fuel
                     int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
@@ -183,7 +177,6 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
 
         world.playSound(null, soundPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS,
                 0.25F, (world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F);
-
     }
 
     @Override
@@ -192,7 +185,8 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
     {
         if (world.isClient) {
             return SmokerOvenBlock.validateTicker(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::clientTick);
-        } else {
+        }
+        else {
             return SmokerOvenBlock.validateTicker(type, ModBlockEntities.SMOKER_BRICK, SmokerOvenBE::serverTick);
         }
     }
@@ -204,7 +198,6 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-
         if (state.isOf(newState.getBlock())) {
             return;
         }
@@ -257,10 +250,8 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
 
             ItemStack cookStack = ovenBE.getCookStack();
 
-            if ( cookStack != null && ovenBE.getRecipeFor(cookStack).isPresent() )
-            {
-                for ( int iTempCount = 0; iTempCount < 1; ++iTempCount )
-                {
+            if (cookStack != null && ovenBE.getRecipeFor(cookStack).isPresent()) {
+                for (int iTempCount = 0; iTempCount < 1; ++iTempCount) {
                     float fX = pos.getX() + 0.375F + random.nextFloat() * 0.25F;
                     float fY = pos.getY() + 0.45F + random.nextFloat() * 0.1F;
                     float fZ = pos.getZ() + 0.375F + random.nextFloat() * 0.25F;
@@ -271,29 +262,23 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
         }
 
         super.randomDisplayTick( state, world, pos, random );
-
     }
 
     @Override
-    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile)
-    {
+    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         BlockPos blockPos = hit.getBlockPos();
 
         double relativeClickY = hit.getPos().getY() - blockPos.getY();
 
         // Allow projectile interaction only from the facing side
-        if (hit.getSide() == state.get(FACING) && canLightUp(state) && relativeClickY < clickYBottomPortion)
-        {
+        if (hit.getSide() == state.get(FACING) && canLightUp(state) && relativeClickY < clickYBottomPortion) {
             if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, blockPos) && !state.get(LIT))
             {
                 world.setBlockState(blockPos, state.with(Properties.LIT, true),
                         Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
 
                 Ignitable.playLitFX(world, blockPos);
-
             }
-
-
         }
     }
 
@@ -301,6 +286,5 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable
     {
         return state.get(FUEL_LEVEL) > 0;
     }
-
 
 }

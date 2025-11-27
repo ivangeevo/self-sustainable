@@ -9,8 +9,7 @@ import net.minecraft.item.*;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Item.class)
-public abstract class ItemMixin implements ItemAdded
-{
+public abstract class ItemMixin implements ItemAdded {
 
     @Override
     public CustomUseAction getCustomUseAction(ItemStack stack) {
@@ -23,21 +22,18 @@ public abstract class ItemMixin implements ItemAdded
     }
 
     @Override
-    public boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack)
-    {
+    public boolean getCanBeFedDirectlyIntoCampfire(ItemStack stack) {
         return !getCanItemBeSetOnFireOnUse(stack) && !getCanItemStartFireOnUse(stack) &&
                 getCampfireBurnTime(stack) > 0;
     }
 
     @Override
-    public int getCampfireBurnTime(ItemStack stack)
-    {
+    public int getCampfireBurnTime(ItemStack stack) {
         return CampfireBlockMixinManager.getInstance().getItemFuelTime(stack);
     }
 
     @Override
     public boolean getCanItemBeSetOnFireOnUse(ItemStack stack) {
-
         return stack.isIn(ModTags.Items.CAN_BE_SET_ON_FIRE_ON_USE);
     }
 
@@ -55,4 +51,5 @@ public abstract class ItemMixin implements ItemAdded
     public int getItemUseWarmupDuration() {
         return 7;
     }
+
 }

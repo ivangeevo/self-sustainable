@@ -68,7 +68,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         return this.matchGetter.getFirstMatch(new SingleStackRecipeInput(stack), this.world);
     }
 
-
     protected static void markDirty(World world, BlockPos pos, BlockState state) {
         world.markDirty(pos);
         if (!state.isAir()) {
@@ -129,7 +128,8 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         if (iTotalBurnTime > 0) {
             if (iTotalBurnTime < visualSputterFuelLevel) {
                 iNewFuelLevel = 1;
-            } else {
+            }
+            else {
                 int increments = (iTotalBurnTime - visualSputterFuelLevel) / visualFuelLevelIncrement;
                 iNewFuelLevel = Math.min(increments + 2, 8);
             }
@@ -258,8 +258,6 @@ public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, C
         this.getWorld().emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(player, this.getCachedState()));
         this.updateListeners();
     }
-
-
 
     @Override
     public boolean isEmpty() {

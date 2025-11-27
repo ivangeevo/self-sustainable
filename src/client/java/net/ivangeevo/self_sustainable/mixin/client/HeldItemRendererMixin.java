@@ -21,13 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HeldItemRenderer.class)
 public abstract class HeldItemRendererMixin {
 
-
     @Shadow public abstract void renderItem(LivingEntity entity, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light);
-
     @Shadow protected abstract void applyEquipOffset(MatrixStack matrices, Arm arm, float equipProgress);
-
     @Shadow protected abstract void applySwingOffset(MatrixStack matrices, Arm arm, float swingProgress);
-
 
     //@Inject(method = "renderFirstPersonItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"), cancellable = true)
     private void injectProgressiveCrafting(
@@ -50,7 +46,8 @@ public abstract class HeldItemRendererMixin {
                         this.applyEquipOffset(matrices, arm, equipProgress);
                         break;
                     }
-                } else {
+                }
+            else {
                     float n = -0.4F * MathHelper.sin(MathHelper.sqrt(swingProgress) * (float) Math.PI);
                     float mxx = 0.2F * MathHelper.sin(MathHelper.sqrt(swingProgress) * (float) (Math.PI * 2));
                     float fxxx = -0.2F * MathHelper.sin(swingProgress * (float) Math.PI);

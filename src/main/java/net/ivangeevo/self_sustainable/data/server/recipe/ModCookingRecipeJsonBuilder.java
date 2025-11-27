@@ -25,8 +25,8 @@ import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder
-{
+public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder {
+
     private final RecipeCategory category;
     private final CookingRecipeCategory cookingCategory;
     private final Item output;
@@ -72,7 +72,6 @@ public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder
         return new ModCookingRecipeJsonBuilder(category, ModCookingRecipeJsonBuilder.getRecipeCategory(output), output, input, experience, cookingTime, OvenCookingRecipe::new);
     }
 
-
     public ModCookingRecipeJsonBuilder criterion(String string, AdvancementCriterion<?> advancementCriterion) {
         this.criteria.put(string, advancementCriterion);
         return this;
@@ -109,8 +108,6 @@ public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder
         }
     }
 
-
-
     private static CookingRecipeCategory getCookingRecipeCategory(RecipeSerializer<? extends AbstractCookingRecipe> serializer, ItemConvertible output) {
         if (serializer == OvenCookingRecipe.Serializer.INSTANCE)
         {
@@ -125,4 +122,5 @@ public class ModCookingRecipeJsonBuilder implements CraftingRecipeJsonBuilder
             throw new IllegalStateException("No way of obtaining recipe " + recipeId);
         }
     }
+
 }

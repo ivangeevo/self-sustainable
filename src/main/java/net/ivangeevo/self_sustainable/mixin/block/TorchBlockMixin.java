@@ -41,7 +41,8 @@ public abstract class TorchBlockMixin extends AbstractTorchBlock {
             if (!world.hasRain(pos)) {
                 changeTorch(world, pos, world.getBlockState(pos));
                 Ignitable.playLitFX(world, pos);
-            } else {
+            }
+            else {
                 Ignitable.playExtinguishSound(world, pos, false);
             }
 
@@ -57,10 +58,12 @@ public abstract class TorchBlockMixin extends AbstractTorchBlock {
 
         if (oldState.isOf(ModBlocks.WALL_TORCH_UNLIT)) {
             newState = Blocks.WALL_TORCH.getDefaultState().with(HorizontalFacingBlock.FACING, oldState.get(CrudeWallTorchBlock.FACING));
-        } else {
+        }
+        else {
             newState = Blocks.TORCH.getDefaultState();
         }
 
         world.setBlockState(pos, newState);
     }
+
 }

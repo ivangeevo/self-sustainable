@@ -55,7 +55,8 @@ public class BrickOvenBE extends AbstractOvenBE {
                 world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
                 world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
             }
-        } else {
+        }
+        else {
             world.setBlockState(pos, state.with(LIT, false));
             ovenBE.cookTime = 0;
         }
@@ -65,12 +66,10 @@ public class BrickOvenBE extends AbstractOvenBE {
         if (bInvChanged) {
             markDirty(world, pos, state);
         }
-
     }
 
     public static void clientTick(World world, BlockPos pos, BlockState state, BrickOvenBE ovenBE) {
         setParticles(world, pos, state);
     }
-
 
 }

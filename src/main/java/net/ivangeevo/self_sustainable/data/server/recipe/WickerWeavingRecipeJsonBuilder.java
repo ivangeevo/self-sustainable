@@ -1,34 +1,5 @@
 package net.ivangeevo.self_sustainable.data.server.recipe;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.AdvancementRewards;
-import net.minecraft.advancement.criterion.CriterionConditions;
-import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
-import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
-
 /**
 public class WickerWeavingRecipeJsonBuilder extends RecipeJsonBuilder implements CraftingRecipeJsonBuilder {
     private final RecipeCategory category;

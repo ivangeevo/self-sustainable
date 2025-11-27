@@ -7,8 +7,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.Set;
 
-public class ModEntityModelLayers
-{
+public class ModEntityModelLayers {
+
     private static final String MAIN = "main";
     private static final Set<EntityModelLayer> LAYERS = Sets.newHashSet();
 
@@ -24,10 +24,12 @@ public class ModEntityModelLayers
         if (!LAYERS.add(entityModelLayer)) {
             throw new IllegalStateException("Duplicate registration for " + entityModelLayer);
         }
+
         return entityModelLayer;
     }
 
     private static EntityModelLayer create(String id, String layer) {
         return new EntityModelLayer(Identifier.of(SelfSustainableMod.MOD_ID, id), layer);
     }
+
 }

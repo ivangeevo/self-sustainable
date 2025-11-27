@@ -1,7 +1,4 @@
-// FCMOD
-
 package net.ivangeevo.self_sustainable.item.items;
-
 
 import net.ivangeevo.self_sustainable.item.interfaces.ItemStackAdded;
 import net.ivangeevo.self_sustainable.util.WorldUtils;
@@ -19,8 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public class FireStarterItemPrimitive extends FireStarterItem
-{
+public class FireStarterItemPrimitive extends FireStarterItem {
 
     private final float baseChance;
     private final float maxChance;
@@ -29,66 +25,57 @@ public class FireStarterItemPrimitive extends FireStarterItem
     public FireStarterItemPrimitive(Item.Settings settings, float fExhaustionPerUse, float fBaseChance, float fMaxChance, float fChanceIncreasePerUse)
     {
         super(settings, fExhaustionPerUse);
-
         baseChance = fBaseChance;
         maxChance = fMaxChance;
         chanceIncreasePerUse = fChanceIncreasePerUse;
-
     }
 
     @Override
     public boolean checkChanceOfStart(ItemStack stack, Random random) {
-        boolean bReturnValue = false;
+        boolean returnValue = false;
 
         // Use this cast to get access to the new variables.
         ItemStackAdded stackAdded;
         stackAdded = stack;
 
-        float fChance = stackAdded.getAccumulatedChance(baseChance);
-        long lCurrentTime = WorldUtils.getOverworldTimeServerOnly();
-        long lLastTime = stackAdded.getTimeOfLastUse();
+        float chance = stackAdded.getAccumulatedChance(baseChance);
+        long currentTime = WorldUtils.getOverworldTimeServerOnly();
+        long lastTime = stackAdded.getTimeOfLastUse();
 
-        if ( lLastTime > 0 )
-        {
-            if ( lCurrentTime > lLastTime )
-            {
-                long lDecayTime = ( lCurrentTime - lLastTime ) - DELAY_BEFORE_DECAY;
+        if (lastTime > 0) {
+            if (currentTime > lastTime) {
+                long decayTime = ( currentTime - lastTime ) - DELAY_BEFORE_DECAY;
 
-                if ( lDecayTime > 0 )
-                {
-                    fChance -= (float)lDecayTime * CHANCE_DECAY_PER_TICK;
+                if (decayTime > 0) {
+                    chance -= (float)decayTime * CHANCE_DECAY_PER_TICK;
 
-                    if (fChance < baseChance)
-                    {
-                        fChance = baseChance;
+                    if (chance < baseChance) {
+                        chance = baseChance;
                     }
                 }
             }
-            else if ( lCurrentTime < lLastTime )
-            {
+            else if (currentTime < lastTime) {
                 // do not reset chance if currentTime is the same as last time, in case use attempts
                 // stack up on the server
 
-                fChance = baseChance;
+                chance = baseChance;
             }
         }
 
-        if ( random.nextFloat() <= fChance )
-        {
-            bReturnValue = true;
+        if (random.nextFloat() <= chance) {
+            returnValue = true;
         }
 
-        fChance += chanceIncreasePerUse;
+        chance += chanceIncreasePerUse;
 
-        if (fChance > maxChance)
-        {
-            fChance = maxChance;
+        if (chance > maxChance) {
+            chance = maxChance;
         }
 
-        stackAdded.setAccumulatedChance(fChance);
-        stackAdded.setTimeOfLastUse(lCurrentTime);
+        stackAdded.setAccumulatedChance(chance);
+        stackAdded.setTimeOfLastUse(currentTime);
 
-        return bReturnValue;
+        return returnValue;
     }
 
     @Override
@@ -119,21 +106,14 @@ public class FireStarterItemPrimitive extends FireStarterItem
     }
 
     @Override
-    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing)
-    {
-        if ( super.attemptToLightBlock(stack, world, pos, facing) )
-        {
-            ((ItemStackAdded)stack).setAccumulatedChance(baseChance);
+    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
+        if (super.attemptToLightBlock(stack, world, pos, facing)) {
+            stack.setAccumulatedChance(baseChance);
 
             return true;
         }
 
         return false;
     }
-
-
-    //------------- Class Specific Methods ------------//
-
-    //----------- Client Side Functionality -----------//
 
 }

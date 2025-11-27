@@ -23,8 +23,7 @@ import static net.ivangeevo.self_sustainable.state.property.ModProperties.FUEL_L
 import static net.minecraft.state.property.Properties.LIT;
 
 @Mixin(VerticallyAttachableBlockItem.class)
-public abstract class VerticallyAttachableBlockItemMixin extends BlockItem
-{
+public abstract class VerticallyAttachableBlockItemMixin extends BlockItem {
 
     public VerticallyAttachableBlockItemMixin(Block block, Settings settings) {
         super(block, settings);
@@ -47,7 +46,8 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem
 
                     if (player.getMainHandStack() == heldStack) {
                         player.getInventory().setStack(player.getInventory().selectedSlot, newTorch);
-                    } else if (player.getOffHandStack() == heldStack) {
+                    }
+                    else if (player.getOffHandStack() == heldStack) {
                         player.getInventory().offHand.set(0, newTorch);
                     }
                 }

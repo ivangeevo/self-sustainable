@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(HeldItemRenderer.class)
 public interface HeldItemRendererInvoker {
 
-    @Invoker("applyEquipOffset")
-    void invokeApplyEquipOffset(MatrixStack matrices, Arm arm, float equipProgress);
+    @Invoker("applyEquipOffset") void invokeApplyEquipOffset(MatrixStack matrices, Arm arm, float equipProgress);
 
 }

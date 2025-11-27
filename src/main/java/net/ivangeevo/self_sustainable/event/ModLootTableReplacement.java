@@ -17,8 +17,7 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 import java.util.Set;
 
-public abstract class ModLootTableReplacement extends BlockLootTableGenerator
-{
+public abstract class ModLootTableReplacement extends BlockLootTableGenerator {
 
     // Condition for MODERN_AXES or ADVANCED_AXES tag check
     private static final LootCondition.Builder WITH_STRONG_AXE = MatchToolLootCondition.builder(
@@ -40,7 +39,6 @@ public abstract class ModLootTableReplacement extends BlockLootTableGenerator
     protected ModLootTableReplacement(Set<Item> explosionImmuneItems, FeatureSet requiredFeatures, RegistryWrapper.WrapperLookup registryLookup) {
         super(explosionImmuneItems, requiredFeatures, registryLookup);
     }
-
 
     // Register loot table replacements
     public static void initialize() {

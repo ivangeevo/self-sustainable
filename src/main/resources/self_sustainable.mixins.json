@@ -19,7 +19,7 @@
     "entity.ItemEntityMixin",
     "entity.LivingEntityMixin",
     "entity.MobEntityMixin",
-    "entity.OGHungerManagerMixin",
+    "entity.HungerManagerMixin",
     "entity.PlayerEntityMixin",
     "entity.ServerPlayerEntityMixin",
     "entity.ZombieEntityMixin",

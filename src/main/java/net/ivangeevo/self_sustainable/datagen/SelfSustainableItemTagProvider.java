@@ -12,28 +12,26 @@ import java.util.concurrent.CompletableFuture;
 
 public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
-
     public SelfSustainableItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg)
-    {
+    protected void configure(RegistryWrapper.WrapperLookup arg) {
         this.addToVanillaTags();
         this.addToConventionalTags();
         this.addToModTags();
     }
-    private void addToVanillaTags()
-    {
+
+    private void addToVanillaTags() {
 
     }
+
     private void addToConventionalTags() {
 
     }
 
     private void addToModTags() {
-
         getOrCreateTagBuilder(ModTags.Items.TORCH_EXTINGUISHERS)
                 .forceAddTag(ItemTags.SHOVELS);
 
@@ -51,7 +49,7 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
                 .add(Items.SOUL_TORCH)
                 .add(ModItems.CRUDE_TORCH_LIT)
                 .add(ModItems.CRUDE_TORCH_SMOULDER)
-                .add(Items.FIRE_CHARGE)
-        ;
+                .add(Items.FIRE_CHARGE);
     }
+
 }

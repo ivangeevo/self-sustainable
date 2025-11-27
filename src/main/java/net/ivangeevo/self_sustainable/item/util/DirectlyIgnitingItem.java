@@ -17,6 +17,5 @@ public interface DirectlyIgnitingItem {
      void performUseEffects(ItemUsageContext context);
 
      boolean checkChanceOfStart(ItemStack stack, Random random);
+
 }
-
-

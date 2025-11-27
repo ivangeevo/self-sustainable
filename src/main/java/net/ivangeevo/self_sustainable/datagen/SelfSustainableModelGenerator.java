@@ -7,7 +7,6 @@ import net.minecraft.data.client.ItemModelGenerator;
 
 public class SelfSustainableModelGenerator extends FabricModelProvider {
 
-
     public SelfSustainableModelGenerator(FabricDataOutput output) {
         super(output);
     }
@@ -17,13 +16,12 @@ public class SelfSustainableModelGenerator extends FabricModelProvider {
 
     }
 
-    // @Override
+    @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-
         //itemModelGenerator.register(SelfSustainable.WOOL_HELM, Models.GENERATED);
         //itemModelGenerator.register(SelfSustainable.WOOL_CHEST, Models.GENERATED);
         //itemModelGenerator.register(SelfSustainable.WOOL_LEGGINGS, Models.GENERATED);
         //itemModelGenerator.register(SelfSustainable.WOOL_BOOTS, Models.GENERATED);
-
     }
+
 }

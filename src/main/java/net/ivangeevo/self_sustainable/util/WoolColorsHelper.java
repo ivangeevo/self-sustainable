@@ -1,8 +1,6 @@
 package net.ivangeevo.self_sustainable.util;
 
-public class WoolColorsHelper
-{
-
+public class WoolColorsHelper {
 
     public static final String[] woolColorNames = new String[]{
             "Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "Light Gray", "Gray", "Pink",
@@ -52,4 +50,5 @@ public class WoolColorsHelper
             default -> WHITE;
         };
     }
+
 }

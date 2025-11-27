@@ -63,9 +63,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Shadow @Final private int fireDamage;
     @Shadow @Final public static BooleanProperty WATERLOGGED;
     @Shadow @Final public static BooleanProperty SIGNAL_FIRE;
-
     @Shadow protected abstract boolean isSignalFireBaseBlock(BlockState state);
-
     @Shadow @Final public static DirectionProperty FACING;
 
     // helper method for easier calling of the campfire block manager class
@@ -75,8 +73,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         super(settings);
     }
 
-    @Unique
-    Ingredient fuels;
+    @Unique Ingredient fuels;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectedConstructorSettings(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
@@ -189,6 +186,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         if (blockEntity instanceof VariableCampfireBE) {
             ItemScatterer.spawn(world, pos, ((VariableCampfireBE)blockEntity).getItemsBeingCooked());
         }
+
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 
@@ -232,7 +230,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         cir.setReturnValue(state.contains(FIRE_LEVEL) && state.isIn(BlockTags.CAMPFIRES) && state.get(FIRE_LEVEL) > 1);
     }
 
-
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void injectedCustomOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir)
     {
@@ -246,7 +243,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-
         if (state.getBlock() == Blocks.CAMPFIRE) {
             return managerInstance.onUse(state, world, pos, player, player.getActiveHand(), hit);
         }
@@ -259,7 +255,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     {
         cir.setReturnValue(ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
     }
-
 
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     private void injectedOnEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci)
@@ -293,7 +288,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                             Ignitable.playLitFX(world, pos);
                         }
                         // all other items burn at fuel level higher than 1
-                    } else if (state.get(FIRE_LEVEL) > 1) {
+                    }
+                    else if (state.get(FIRE_LEVEL) > 1) {
                         stack.decrement(stack.getCount());
                         Ignitable.playLitFX(world, pos);
                     }
@@ -335,7 +331,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
         if (state.get(FIRE_LEVEL) > 0 ) {
 
-            if ( random.nextInt(24) == 0 ) {
+            if (random.nextInt(24) == 0) {
                 float fVolume = (state.get(FIRE_LEVEL) * 0.25F ) + random.nextFloat();
 
                 double d = (double) pos.getX() + 0.5;
@@ -345,7 +341,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                 world.playSound(d, e, f, SoundEvents.BLOCK_FIRE_AMBIENT,
                         SoundCategory.BLOCKS, fVolume,
                         random.nextFloat() * 0.7F + 0.3F, false);
-
             }
         }
 
@@ -367,7 +362,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
             if (state.get(FIRE_LEVEL) > 0) {
                 return validateTicker(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::clientTick);
             }
-        } else {
+        }
+        else {
             if (state.get(FIRE_LEVEL) > 0) {
                 return validateTicker(type, ModBlockEntities.CAMPFIRE, VariableCampfireBE::litServerTick);
             }
@@ -407,7 +403,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Override
     public boolean setOnFireDirectly(World world, BlockPos pos) {
         if (this.getCanBeSetOnFireDirectly(world, pos)) {
-
             if (!isRainingOnCampfire(world, pos)) {
                 changeFireLevel(world, pos, 1);
 
@@ -477,11 +472,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
-    public void extinguishFire(World world, BlockState state, BlockPos pos, boolean bSmoulder) {
-
-        if (bSmoulder) {
+    public void extinguishFire(World world, BlockState state, BlockPos pos, boolean smoulder) {
+        if (smoulder) {
             setFuelState(world, pos, CampfireState.SMOULDERING);
-        } else {
+        }
+        else {
             setFuelState(world, pos, CampfireState.BURNED_OUT);
         }
 

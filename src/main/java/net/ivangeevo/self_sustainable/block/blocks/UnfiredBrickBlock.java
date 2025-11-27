@@ -93,6 +93,7 @@ public class UnfiredBrickBlock extends BlockWithEntity {
         if (state.isOf(newState.getBlock())) {
             return;
         }
+
         if (newState.getBlock() != ModBlocks.BRICK) {
             world.playSound(null, pos, SoundEvents.ENTITY_SLIME_ATTACK, SoundCategory.BLOCKS, (0.5F + 1.0F) / 2.0F, 0.1F * 0.8F );
         }
@@ -154,13 +155,11 @@ public class UnfiredBrickBlock extends BlockWithEntity {
             double e = pos.getY() + 0.5F + world.random.nextFloat() * 0.25F;
             double f = pos.getZ() + 0.25F + world.random.nextFloat() * 0.5F;
 
-            if ( world.random.nextInt( 20 ) == 0 ) {
+            if (world.random.nextInt( 20 ) == 0) {
                 world.addParticle(ParticleTypes.CLOUD, d, e, f, 0.0, 0.0, 0.0);
             }
-
         }
     }
-
 
     public int getDryLevel(WorldAccess blockAccess, BlockPos pos) {
         return getDryLevel(blockAccess.getBlockState(pos));
@@ -186,6 +185,5 @@ public class UnfiredBrickBlock extends BlockWithEntity {
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new UnfiredBrickBE(pos, state);
     }
-
 
 }

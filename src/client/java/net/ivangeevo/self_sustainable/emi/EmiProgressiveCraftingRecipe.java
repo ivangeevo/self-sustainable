@@ -6,13 +6,13 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.ivangeevo.self_sustainable.recipe.crafting.ShapedRecipeWithDamage;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
 
 public class EmiProgressiveCraftingRecipe implements EmiRecipe {
+
     private final Identifier id;
     private final EmiRecipeCategory category;
     private final EmiIngredient input;
@@ -68,4 +68,3 @@ public class EmiProgressiveCraftingRecipe implements EmiRecipe {
     }
 
 }
-

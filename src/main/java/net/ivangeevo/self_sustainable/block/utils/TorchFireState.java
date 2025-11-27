@@ -3,7 +3,6 @@ package net.ivangeevo.self_sustainable.block.utils;
 import net.minecraft.util.StringIdentifiable;
 
 public enum TorchFireState implements StringIdentifiable {
-
     UNLIT("unlit"),
     LIT("lit"),
     SMOULDER("smoulder"),

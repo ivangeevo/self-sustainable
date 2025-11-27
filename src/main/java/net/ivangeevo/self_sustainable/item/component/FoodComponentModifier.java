@@ -102,7 +102,6 @@ public class FoodComponentModifier {
             context.modify(BwtItems.cookedWolfChopItem, builder -> modifyEntry(builder, replaceWith(5).build()));
             context.modify(BwtItems.donutItem, builder -> modifyEntry(builder, new FoodComponent.Builder().nutrition(1).snack().saturationModifier(0f).build()));
         }
-
     }
 
     // Directly modify the builder with access widening the put method (it was reflection before)
@@ -141,4 +140,5 @@ public class FoodComponentModifier {
     private static StatusEffectInstance addPoisonEffect(int dur, int amp) {
         return new StatusEffectInstance(StatusEffects.POISON, dur, amp, false, false, false);
     }
+
 }

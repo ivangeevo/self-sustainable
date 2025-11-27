@@ -16,7 +16,6 @@ import net.ivangeevo.self_sustainable.SelfSustainableMod;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.recipe.cooking.OvenCookingRecipe;
-import net.ivangeevo.self_sustainable.recipe.crafting.ShapedRecipeWithDamage;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.item.Item;
@@ -33,12 +32,11 @@ import java.util.List;
 import java.util.function.Supplier;
 
 
-public class SSEmiPlugin implements EmiPlugin
-{
+public class SSEmiPlugin implements EmiPlugin {
+
     public static EmiRecipeCategory CRAFTING_SHAPED_WITH_DAMAGE = category("crafting_shaped_with_damage", EmiStack.of(Blocks.CRAFTING_TABLE));
     public static EmiRecipeCategory OVEN_COOKING = category("oven_cooking", EmiStack.of(ModBlocks.OVEN_BRICK));
     public static EmiRecipeCategory PROGRESSIVE_CRAFTING = category("progressive_crafting", EmiStack.of(ModItems.WICKER_WEAVING));
-
 
     public static EmiRecipeCategory category(String id, EmiStack icon) {
         return new EmiRecipeCategory(Identifier.of(SelfSustainableMod.MOD_ID, id), icon, icon::render);
@@ -91,7 +89,8 @@ public class SSEmiPlugin implements EmiPlugin
     private static void addRecipeSafe(EmiRegistry registry, Supplier<EmiRecipe> supplier, Recipe<?> recipe) {
         try {
             registry.addRecipe(supplier.get());
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             EmiReloadLog.warn("Exception thrown when parsing vanilla a" + SelfSustainableMod.MOD_ID + "recipe" + EmiPort.getId(recipe));
             EmiReloadLog.error(e);
         }
@@ -148,8 +147,8 @@ public class SSEmiPlugin implements EmiPlugin
         registry.addRecipe(fakeRecipe);
     }
 
-
     private static <C extends RecipeInput, T extends Recipe<C>> Iterable<T> getRecipes(EmiRegistry registry, RecipeType<T> type) {
         return registry.getRecipeManager().listAllOfType(type).stream().map(RecipeEntry::value)::iterator;
     }
+
 }

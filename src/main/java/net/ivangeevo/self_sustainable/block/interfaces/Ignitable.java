@@ -32,4 +32,5 @@ public interface Ignitable {
 
         world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, fizzVolume, fizzPitch);
     }
+
 }

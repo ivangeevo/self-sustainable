@@ -1,8 +1,6 @@
-// WoolType.java
 package net.ivangeevo.self_sustainable.util;
 
-public enum WoolType
-{
+public enum WoolType {
     WHITE,
     ORANGE,
     MAGENTA,
@@ -20,4 +18,3 @@ public enum WoolType
     RED,
     BLACK,
 }
-

@@ -13,8 +13,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.dynamic.Codecs;
 
-public record ProgressiveCraftingComponent(Optional<ItemStack> usingConvertsTo)
-{
+public record ProgressiveCraftingComponent(Optional<ItemStack> usingConvertsTo) {
 
     private static final float DEFAULT_CRAFTING_SECONDS = ProgressiveCraftingItem.DEFAULT_MAX_DAMAGE;
     public static final Codec<ProgressiveCraftingComponent> CODEC = RecordCodecBuilder.create(
@@ -25,6 +24,7 @@ public record ProgressiveCraftingComponent(Optional<ItemStack> usingConvertsTo)
                     )
                     .apply(instance, ProgressiveCraftingComponent::new)
     );
+
     public static final PacketCodec<RegistryByteBuf, ProgressiveCraftingComponent> PACKET_CODEC = PacketCodec.tuple(
             ItemStack.PACKET_CODEC.collect(PacketCodecs::optional),
             ProgressiveCraftingComponent::usingConvertsTo,
@@ -43,4 +43,5 @@ public record ProgressiveCraftingComponent(Optional<ItemStack> usingConvertsTo)
             return new ProgressiveCraftingComponent(this.usingConvertsTo);
         }
     }
+
 }

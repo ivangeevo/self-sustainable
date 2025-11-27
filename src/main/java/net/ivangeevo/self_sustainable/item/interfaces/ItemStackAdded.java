@@ -2,20 +2,16 @@ package net.ivangeevo.self_sustainable.item.interfaces;
 
 import net.ivangeevo.self_sustainable.util.CustomUseAction;
 
-public interface ItemStackAdded
-{
+public interface ItemStackAdded {
 
     long getTimeOfLastUse();
 
+    void setTimeOfLastUse(long lTime);
 
-     void setTimeOfLastUse(long lTime);
+    float getAccumulatedChance(float fDefault);
 
+    void setAccumulatedChance(float fChance);
 
-     float getAccumulatedChance(float fDefault);
-
-
-     void setAccumulatedChance(float fChance);
-
-     CustomUseAction getCustomUseAction();
+    CustomUseAction getCustomUseAction();
 
 }

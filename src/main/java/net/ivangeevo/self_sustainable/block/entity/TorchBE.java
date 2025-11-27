@@ -30,7 +30,8 @@ public class TorchBE extends BlockEntity {
         if (!(state.getBlock() instanceof AbstractExtinguishingTorchBlock torchBlock)) return;
         if (torchBlock.getFireState() == TorchFireState.LIT) {
             tickLit(world, pos, state, be, fuelComponent);
-        } else if (torchBlock.getFireState() == TorchFireState.SMOULDER) {
+        }
+        else if (torchBlock.getFireState() == TorchFireState.SMOULDER) {
             tickSmoldering(world, pos, state, be, fuelComponent);
         }
     }
@@ -53,7 +54,8 @@ public class TorchBE extends BlockEntity {
                 }
             }
             fuelComponent.decrement();
-        } else {
+        }
+        else {
             if (world.getBlockState(pos).getBlock() instanceof AbstractExtinguishingTorchBlock) {
                 ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
             }
@@ -61,7 +63,6 @@ public class TorchBE extends BlockEntity {
 
         be.markDirty();
     }
-
 
     private static void tickSmoldering(World world, BlockPos pos, BlockState state, TorchBE be, TorchFuelComponent fuelComponent) {
         int fuel = fuelComponent.getFuel();
@@ -77,6 +78,5 @@ public class TorchBE extends BlockEntity {
 
         be.markDirty();
     }
-
 
 }

@@ -33,7 +33,6 @@ public class WickerBasketBERenderer implements BlockEntityRenderer<WickerBasketB
     private final ModelPart basketBase;
 
     public WickerBasketBERenderer(BlockEntityRendererFactory.Context ctx) {
-
         ModelPart modelPart = ctx.getLayerModelPart(ModEntityModelLayers.WICKER_BASKET);
         this.handle = modelPart.getChild(HANDLE);
         this.lid = modelPart.getChild(LID);
@@ -96,6 +95,5 @@ public class WickerBasketBERenderer implements BlockEntityRenderer<WickerBasketB
         latch.render(matrices, vertices, light, overlay);
         base.render(matrices, vertices, light, overlay);
     }
-
 
 }

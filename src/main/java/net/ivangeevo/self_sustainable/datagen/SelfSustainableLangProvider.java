@@ -11,7 +11,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class SelfSustainableLangProvider extends FabricLanguageProvider {
 
-
     public SelfSustainableLangProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(dataOutput, registryLookup);
     }
@@ -42,14 +41,12 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
 
         tb.add(ModItems.WICKER, "Wicker");
         tb.add(ModItems.WICKER_WEAVING, "Wicker Weaving");
-
     }
 
     private void addConfigTranslations(TranslationBuilder tb) {
         //addConfigMenuTitle("BTWR: Core Configuration Menu", tb);
         //addConfigCategory("general", "General Options", tb);
         //addConfig("knockbackRestriction", "Knockback Restriction", tb);
-
     }
 
     protected void addEmiNames(TranslationBuilder tb) {
@@ -85,4 +82,5 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
     private void addConfigTooltip(String configPath, String translation, TranslationBuilder tb) {
         tb.add("config." + BTWRMod.MOD_ID + ".tooltip." + configPath, translation);
     }
+
 }

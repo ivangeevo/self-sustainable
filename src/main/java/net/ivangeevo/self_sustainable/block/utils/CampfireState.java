@@ -31,4 +31,5 @@ public enum CampfireState implements StringIdentifiable {
             default -> throw new IllegalArgumentException("Invalid campfire state: " + iCampfireState);
         };
     }
+
 }

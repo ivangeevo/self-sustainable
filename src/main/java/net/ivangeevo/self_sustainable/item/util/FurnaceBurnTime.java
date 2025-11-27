@@ -1,9 +1,6 @@
-// FCMOD
-
 package net.ivangeevo.self_sustainable.item.util;
 
-public enum FurnaceBurnTime
-{
+public enum FurnaceBurnTime {
 	NONE( 0 ),
 	DAMP_VEGETATION( 10 ), // flowers, etc.
 	KINDLING( 25 ), // saw dust, bark, etc.
@@ -28,8 +25,9 @@ public enum FurnaceBurnTime
 	
 	public final int burnTime;
 	
-    private FurnaceBurnTime(int iBurnTime )
+    FurnaceBurnTime(int iBurnTime)
     {
 		burnTime = iBurnTime;
-    }    
+    }
+
 }

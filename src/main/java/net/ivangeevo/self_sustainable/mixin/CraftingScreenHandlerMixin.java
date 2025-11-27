@@ -1,6 +1,5 @@
 package net.ivangeevo.self_sustainable.mixin;
 
-import net.ivangeevo.self_sustainable.recipe.crafting.ShapedRecipeWithDamage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -59,4 +58,5 @@ public abstract class CraftingScreenHandlerMixin {
             }
         }
     }
+
 }

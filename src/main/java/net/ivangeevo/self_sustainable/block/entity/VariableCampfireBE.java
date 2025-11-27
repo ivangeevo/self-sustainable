@@ -41,9 +41,8 @@ import java.util.Optional;
 import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FUEL_STATE;
 
+public class VariableCampfireBE extends BlockEntity implements Clearable {
 
-public class VariableCampfireBE extends BlockEntity implements Clearable
-{
     private final DefaultedList<ItemStack> itemsBeingCooked = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private int cookingTime = 0;
     private int cookingTotalTime = 0;
@@ -83,14 +82,13 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
 
     private static final float CHANCE_OF_GOING_OUT_FROM_RAIN = 0.01F;
 
-    @Unique private ItemStack spitStack = null;
+    private ItemStack spitStack = null;
 
     private int burnTimeCountdown = 0;
     private int burnTimeSinceLit = 0;
     private int cookCounter = 0;
     private int smoulderCounter = 0;
     private int cookBurningCounter = 0;
-
 
     public int getCookTime() {
         return cookingTime;
@@ -116,16 +114,15 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         return burnTimeCountdown;
     }
 
-
     public VariableCampfireBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CAMPFIRE, pos, state);
     }
 
     public static void litServerTick(World world, BlockPos pos, BlockState state, VariableCampfireBE campfireBE) {
 
-        int iCurrentFireLevel = getCurrentFireLevel(state);
+        int currentFireLevel = getCurrentFireLevel(state);
 
-        if ( iCurrentFireLevel > 0 ) {
+        if (currentFireLevel > 0) {
             // allow campfire to turn to fire block if under these blocks
             if (world.getBlockState(pos.down()).isOf(Blocks.NETHERRACK) || world.getBlockState(pos.down()).isOf(Blocks.OBSIDIAN))
             {
@@ -141,7 +138,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
              **/
 
             // New try - lighting adjacent campfires only (no fire spread atm)
-            if (iCurrentFireLevel > 1 && world.random.nextFloat() <= MODIFIED_CHANCE_OF_FIRE_SPREAD) {
+            if (currentFireLevel > 1 && world.random.nextFloat() <= MODIFIED_CHANCE_OF_FIRE_SPREAD) {
                 for (Direction direction : Direction.values()) {
 
                     BlockPos adjacentPos = pos.offset(direction);
@@ -163,15 +160,15 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
             if (campfireBE.burnTimeCountdown > 0 ) {
                 campfireBE.burnTimeCountdown--;
 
-                if ( iCurrentFireLevel == 3 ) {
+                if (currentFireLevel == 3 ) {
                     // blaze burns extra fast
                     campfireBE.burnTimeCountdown--;
                 }
             }
 
-            iCurrentFireLevel = campfireBE.validateFireLevel(world, state, pos);
+            currentFireLevel = campfireBE.validateFireLevel(world, state, pos);
 
-            if ( iCurrentFireLevel > 0 ) {
+            if (currentFireLevel > 0) {
                 boolean bl = false;
 
                 ItemStack itemStack = campfireBE.itemsBeingCooked.getFirst();
@@ -232,7 +229,6 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         }
     }
 
-
     public static void clientTick(World world, BlockPos pos, BlockState state, VariableCampfireBE campfireBE) {
         Random random = world.random;
 
@@ -251,42 +247,44 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         }
     }
 
-
     private static boolean isGoOutFromRainChance(World world, BlockPos pos) {
         return world.random.nextFloat() <= CHANCE_OF_GOING_OUT_FROM_RAIN && isRainingOnCampfire(world, pos);
     }
 
     public int validateFireLevel(World world, BlockState state, BlockPos pos) {
-        int iCurrentFireLevel = getCurrentFireLevel(state);
+        int currentFireLevel = getCurrentFireLevel(state);
 
-        if ( iCurrentFireLevel > 0 ) {
+        if (currentFireLevel > 0) {
             //int iFuelState = FCBetterThanWolves.fcBlockCampfireUnlit.GetFuelState( worldObj, xCoord, yCoord, zCoord );
 
             if (burnTimeCountdown <= 0 ) {
                 extinguishFire(world,state, pos,true);
 
                 return 0;
-            } else {
-                int iDesiredFireLevel = 2;
+            }
+            else {
+                int desiredFireLevel = 2;
 
                 if (burnTimeSinceLit < WARMUP_TIME || burnTimeCountdown < REVERT_TO_SMALL_TIME) {
-                    iDesiredFireLevel = 1;
-                } else if (burnTimeCountdown > BLAZE_TIME) {
-                    iDesiredFireLevel = 3;
+                    desiredFireLevel = 1;
+                }
+                else if (burnTimeCountdown > BLAZE_TIME) {
+                    desiredFireLevel = 3;
                 }
 
-                if ( iDesiredFireLevel != iCurrentFireLevel ) {
-                    changeFireLevel(world, iDesiredFireLevel);
+                if (desiredFireLevel != currentFireLevel) {
+                    changeFireLevel(world, desiredFireLevel);
 
-                    if ( iDesiredFireLevel == 1 && iCurrentFireLevel == 2 ) {
+                    if (desiredFireLevel == 1 && currentFireLevel == 2) {
                         Ignitable.playExtinguishSound(world, pos, false);
                     }
 
-                    return iDesiredFireLevel;
+                    return desiredFireLevel;
                 }
             }
-        // iCurrentFireLevel == 0
-        } else {
+        // currentFireLevel == 0
+        }
+        else {
             if (burnTimeCountdown > 0 && state.get(FUEL_STATE) == CampfireState.SMOULDERING) {
                 relightSmouldering(world, pos);
                 setFuelState(world, pos, CampfireState.NORMAL);
@@ -294,15 +292,13 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
             }
         }
 
-        return iCurrentFireLevel;
+        return currentFireLevel;
     }
 
     // Method to set the fuel state
-
     public void setFuelState(World world, BlockPos pos, CampfireState fuelState) {
         world.setBlockState(pos, world.getBlockState(pos).with(FUEL_STATE, fuelState).with(Properties.WATERLOGGED, false));
     }
-
 
     private void relightSmouldering(World world, BlockPos pos) {
         burnTimeSinceLit = 0;
@@ -311,9 +307,9 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         ((CampfireBlockAdded)block).relightFire(world, pos);
     }
 
-    private void extinguishFire(World world, BlockState state, BlockPos pos, boolean bSmoulder) {
+    private void extinguishFire(World world, BlockState state, BlockPos pos, boolean smoulder) {
 
-        if ( bSmoulder ) {
+        if (smoulder) {
             smoulderCounter = SMOULDER_TIME;
         } else {
             smoulderCounter = 0;
@@ -323,7 +319,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         cookBurningCounter = 0;
 
         CampfireBlock block = (CampfireBlock) state.getBlock();
-        ((CampfireBlockAdded)block).extinguishFire(world, state, pos, bSmoulder);
+        ((CampfireBlockAdded)block).extinguishFire(world, state, pos, smoulder);
     }
 
     private void stopSmouldering(World world, BlockPos pos) {
@@ -426,28 +422,10 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
     }
 
     public void changeFireLevel(World world, int iFireLevel) {
-
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof CampfireBlock block) {
             ((CampfireBlockAdded)block).changeFireLevel(world, pos, iFireLevel);
         }
-
-    }
-
-    public void setSpitStack(ItemStack stack) {
-        if ( stack != null ) {
-            spitStack = stack.copy();
-
-            spitStack.setCount(1);
-        } else {
-            spitStack = null;
-        }
-
-        markDirty();
-    }
-
-    public ItemStack getSpitStack() {
-        return spitStack;
     }
 
     public void addBurnTime(BlockState state, int iBurnTime) {
@@ -466,5 +444,5 @@ public class VariableCampfireBE extends BlockEntity implements Clearable
         burnTimeCountdown = INITIAL_BURN_TIME;
         burnTimeSinceLit = 0;
     }
-}
 
+}

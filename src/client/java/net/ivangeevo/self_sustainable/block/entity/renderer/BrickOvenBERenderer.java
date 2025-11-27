@@ -17,8 +17,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
-public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE>
-{
+public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
 
     private final ItemRenderer itemRenderer;
 

@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.ivangeevo.self_sustainable.block.ModBlocks;
 import net.ivangeevo.self_sustainable.item.ModItems;
 import net.ivangeevo.self_sustainable.item.items.WickerWeavingItem;
-import net.ivangeevo.self_sustainable.recipe.crafting.ShapedRecipeWithDamageJsonBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.*;
 import net.minecraft.item.Item;
@@ -24,8 +23,7 @@ import static net.ivangeevo.self_sustainable.data.server.recipe.ModCookingRecipe
 import static net.minecraft.data.server.recipe.CookingRecipeJsonBuilder.*;
 
 
-public class SelfSustainableRecipeProvider extends FabricRecipeProvider implements RecipeProviderUtils
-{
+public class SelfSustainableRecipeProvider extends FabricRecipeProvider implements RecipeProviderUtils {
 
     // fcc for short
     private static final String fcc = "_from_campfire_cooking";
@@ -50,8 +48,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         return identifier;
     }
 
-    private void generateModRecipes(RecipeExporter exporter)
-    {
+    private void generateModRecipes(RecipeExporter exporter) {
         // Oven Recipes
         this.createOvenCooking(exporter);
 
@@ -64,11 +61,9 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         // Progressive Crafting Recipes
         // Not ready yet for release
         //this.createProgressiveCrafting(exporter);
-
     }
 
-    private void generateVanillaRecipesOverride(RecipeExporter exporter)
-    {
+    private void generateVanillaRecipesOverride(RecipeExporter exporter) {
         this.registerDisabledVanillaRecipes(exporter);
 
         createCampfireCooking(Ingredient.ofItems(Items.BEEF), RecipeCategory.FOOD, Items.COOKED_BEEF, 0.15f, 6000).criterion("has_beef", conditionsFromItem(Items.BEEF)).offerTo(exporter, ID.ofMC("cooked_beef" + fcc));
@@ -186,7 +181,6 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .offerTo(withConditions(exporter, ResourceConditions.allModsLoaded("tough_environment")), ID.ofSS("oven_brick_mortared"));
          **/
 
-
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.CRUDE_TORCH_UNLIT, 4)
                 .input('I', Items.STICK)
                 .input('C', Items.COAL)
@@ -204,7 +198,6 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .pattern("I")
                 .criterion("has_glowstone_dust", conditionsFromItem(Items.GLOWSTONE_DUST))
                 .offerTo(exporter);
-
     }
 
 
@@ -220,12 +213,9 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .input(Items.CLAY_BALL)
                 .criterion("has_clay_ball", conditionsFromItem(Items.CLAY_BALL))
                 .offerTo(exporter);
-
-
     }
 
     private void createProgressiveCrafting(RecipeExporter exporter) {
-
         ShapedRecipeWithDamageJsonBuilder.create(RecipeCategory.MISC, ModItems.WICKER_WEAVING)
                 .input('#', Items.SUGAR_CANE)
                 .pattern("##")
@@ -233,7 +223,6 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .damage(WickerWeavingItem.WICKER_WEAVING_MAX_DAMAGE - 1)
                 .criterion("has_sugar_cane", conditionsFromItem(Items.SUGAR_CANE))
                 .offerTo(exporter);
-
     }
 
     private void createOvenCooking(RecipeExporter exporter) {

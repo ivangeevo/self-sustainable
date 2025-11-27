@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 
 public interface ItemAdded {
 
-
     default boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
         return false;
     }

@@ -21,7 +21,8 @@ public class ModTorchHandler {
     public void addTorch(Block block) {
         if (block instanceof CrudeTorchBlock standingTorch) {
             addStandingTorch(standingTorch);
-        } else if (block instanceof CrudeWallTorchBlock wallTorch) {
+        }
+        else if (block instanceof CrudeWallTorchBlock wallTorch) {
             addWallTorch(wallTorch);
         }
     }
@@ -43,4 +44,5 @@ public class ModTorchHandler {
     public CrudeWallTorchBlock getWallTorch(TorchFireState state) {
         return wallTorches.get(state);
     }
+
 }

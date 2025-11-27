@@ -31,4 +31,5 @@ public class TorchFuelComponent {
             TorchFuelComponent::new,
             TorchFuelComponent::getFuel
     );
+
 }

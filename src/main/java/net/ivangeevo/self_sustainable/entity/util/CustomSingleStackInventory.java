@@ -14,8 +14,7 @@ import net.minecraft.util.Clearable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface CustomSingleStackInventory
-        extends Clearable {
+public interface CustomSingleStackInventory extends Clearable {
 
     boolean isEmpty();
 
@@ -56,7 +55,6 @@ public interface CustomSingleStackInventory
         return true;
     }
 
-
     /**
      * Determines whether this inventory contains any of the given candidate items.
      */
@@ -85,5 +83,5 @@ public interface CustomSingleStackInventory
         }
         return player.squaredDistanceTo((double)blockPos.getX() + 0.5, (double)blockPos.getY() + 0.5, (double)blockPos.getZ() + 0.5) <= (double)(range * range);
     }
-}
 
+}

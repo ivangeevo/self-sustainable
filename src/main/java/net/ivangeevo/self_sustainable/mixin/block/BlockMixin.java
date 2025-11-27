@@ -25,7 +25,4 @@ public abstract class BlockMixin implements BlockAdded {
         return false;
     }
 
-
-
-
 }

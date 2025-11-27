@@ -21,8 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.minecraft.entity.mob.MobEntity.getEquipmentForSlot;
 
 @Mixin(MobEntity.class)
-public abstract class MobEntityMixin extends LivingEntity
-{
+public abstract class MobEntityMixin extends LivingEntity {
 
     protected MobEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -32,8 +31,7 @@ public abstract class MobEntityMixin extends LivingEntity
 
     // Lowers the chances of mobs spawning with equipment - keep disabled for now and re-test how everything works
     //@Inject(method = "initEquipment", at = @At(value = "HEAD"), cancellable = true)
-    private void modifiedInitEqupment(Random random, LocalDifficulty localDifficulty, CallbackInfo ci)
-    {
+    private void modifiedInitEqupment(Random random, LocalDifficulty localDifficulty, CallbackInfo ci) {
         if (random.nextFloat() < 0.15F * localDifficulty.getClampedLocalDifficulty()) {
             int i = random.nextInt(2);
             float f = this.getWorld().getDifficulty() == Difficulty.HARD ? 0.1F : 0.25F;
@@ -70,7 +68,6 @@ public abstract class MobEntityMixin extends LivingEntity
                 }
             }
         }
-
     }
 
     // Makes mobs have less equipment they can have on to make fighting them more balanced
@@ -86,7 +83,6 @@ public abstract class MobEntityMixin extends LivingEntity
                 }
             case CHEST:
                 cir.setReturnValue( null);
-
             case LEGS:
                 if (equipmentLevel == 0) {
                     cir.setReturnValue( Items.LEATHER_LEGGINGS);
@@ -98,6 +94,6 @@ public abstract class MobEntityMixin extends LivingEntity
             default:
                 cir.setReturnValue( null);
         }
-
     }
+
 }

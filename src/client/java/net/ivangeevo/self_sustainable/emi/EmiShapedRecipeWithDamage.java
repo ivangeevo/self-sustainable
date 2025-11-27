@@ -4,6 +4,7 @@ import dev.emi.emi.recipe.EmiShapedRecipe;
 import net.minecraft.recipe.ShapedRecipe;
 
 public class EmiShapedRecipeWithDamage extends EmiShapedRecipe {
+
     protected int damage;
 
     public EmiShapedRecipeWithDamage(ShapedRecipe recipe) {
@@ -13,4 +14,5 @@ public class EmiShapedRecipeWithDamage extends EmiShapedRecipe {
     public int getDamage() {
         return damage;
     }
+
 }

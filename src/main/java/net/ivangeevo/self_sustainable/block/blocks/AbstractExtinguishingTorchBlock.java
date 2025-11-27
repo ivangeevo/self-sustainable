@@ -136,7 +136,8 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
                     be.setComponents(updatedComponents);
                 }
                 be.markDirty();
-            } else {
+            }
+            else {
                 Ignitable.playExtinguishSound(world, pos, false);
             }
 
@@ -250,13 +251,16 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
 
                 if (world instanceof ServerWorld) {
                     ((ServerWorld) world).spawnParticles(particle, d + 0.27 * (double) dir2.getOffsetX(), e + 0.22, f + 0.27 * (double) dir2.getOffsetZ(), 1, 0, 0, 0, 0);
-                } else if (world.isClient) {
+                }
+                else if (world.isClient) {
                     world.addParticle(particle, d + 0.27 * (double) dir2.getOffsetX(), e + 0.22, f + 0.27 * (double) dir2.getOffsetZ(), 0.0, 0.0, 0.0);
                 }
-            } else {
+            }
+            else {
                 if (world instanceof  ServerWorld) {
                     ((ServerWorld) world).spawnParticles(particle, d, e, f, 1, 0, 0, 0, 0);
-                } else if (world.isClient) {
+                }
+                else if (world.isClient) {
                     world.addParticle(particle, d, e, f, 0.0, 0.0, 0.0);
                 }
             }
@@ -266,4 +270,5 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
     public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos) {
         displayParticle(particle, state, world, pos, 0f);
     }
+
 }

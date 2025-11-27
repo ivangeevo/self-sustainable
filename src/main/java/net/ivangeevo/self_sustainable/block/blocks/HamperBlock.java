@@ -25,4 +25,5 @@ public class HamperBlock extends BasketBlock {
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new HamperBlockEntity(pos, state);
     }
+
 }

@@ -23,8 +23,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-public class CrudeWallTorchBlock extends AbstractExtinguishingTorchBlock
-{
+public class CrudeWallTorchBlock extends AbstractExtinguishingTorchBlock {
 
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
@@ -123,4 +122,5 @@ public class CrudeWallTorchBlock extends AbstractExtinguishingTorchBlock
     protected MapCodec<? extends BlockWithEntity> getCodec() {
         return null;
     }
+
 }

@@ -43,5 +43,4 @@ public class ModComponentsTypes {
         Registry.register(registryType, SelfSustainableMod.MOD_ID + ":" + stringName, componentType);
     }
 
-
 }

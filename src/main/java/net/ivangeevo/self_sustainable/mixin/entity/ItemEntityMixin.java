@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
-public abstract class ItemEntityMixin extends Entity
-{
+public abstract class ItemEntityMixin extends Entity {
+
     @Shadow public abstract ItemStack getStack();
 
     public ItemEntityMixin(EntityType<?> type, World world) {
@@ -28,9 +28,12 @@ public abstract class ItemEntityMixin extends Entity
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;getWorld()Lnet/minecraft/world/World;", ordinal = 5))
     private void onTick(CallbackInfo ci) {
         ItemStack thisStack = this.getStack();
+
         if (!isFuelHavingTorch(thisStack)) return;
+
         TorchFuelComponent fuelComponent = thisStack.getOrDefault(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent());
         assert fuelComponent != null;
+
         // keep decrementing the fuel for the dropped torch
         if (this.isOnGround() && this.isAlive()) {
             fuelComponent.decrement();
@@ -39,7 +42,6 @@ public abstract class ItemEntityMixin extends Entity
         if (fuelComponent.getFuel() == 0) {
             this.discard();
         }
-
     }
 
     @Unique

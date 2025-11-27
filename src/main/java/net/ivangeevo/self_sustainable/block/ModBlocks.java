@@ -86,7 +86,6 @@ public class ModBlocks {
     public static final Block WALL_TORCH_UNLIT = registerWithoutItem("wall_torch_unlit",
             new WallTorchBlock(ParticleTypes.FLAME, initTorchSettings()));
 
-
     public static final Block BRICK_UNFIRED = registerWithoutItem("brick_unfired",
             new UnfiredBrickBlock(AbstractBlock.Settings.create()
                     .breakInstantly()
@@ -102,7 +101,6 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.STONE)
             )
     );
-
 
     private static AbstractBlock.Settings initTorchSettings() {
        return AbstractBlock.Settings.create().noCollision().breakInstantly().pistonBehavior(PistonBehavior.DESTROY).sounds(BlockSoundGroup.WOOD);

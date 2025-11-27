@@ -46,4 +46,5 @@ public abstract class ItemStackMixin implements ItemStackAdded {
     public CustomUseAction getCustomUseAction() {
         return this.getItem().getCustomUseAction((ItemStack)(Object)this);
     }
+
 }

@@ -5,8 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
 
-public class KnittingNeedlesItem extends ProgressiveCraftingItem
-{
+public class KnittingNeedlesItem extends ProgressiveCraftingItem {
 
     public KnittingNeedlesItem(Item.Settings group) {
         super(group);
@@ -27,4 +26,5 @@ public class KnittingNeedlesItem extends ProgressiveCraftingItem
     public boolean getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {
         return true;
     }
+
 }

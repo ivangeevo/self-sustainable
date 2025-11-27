@@ -12,14 +12,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 
 @Mixin(HungerManager.class)
-public abstract class OGHungerManagerMixin
-{
+public abstract class HungerManagerMixin {
+
     @Shadow private float saturationLevel;
     @Shadow private int prevFoodLevel = 20;
     @Shadow private float exhaustion;
     @Shadow private int foodLevel = 20;
     @Shadow private int foodTickTimer;
-
 
     @ModifyConstant(method = "<init>", constant = @Constant(floatValue = 5.0f),
             slice = @Slice(

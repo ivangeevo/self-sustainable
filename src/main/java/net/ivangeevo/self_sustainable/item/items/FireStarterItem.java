@@ -14,8 +14,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public abstract class FireStarterItem extends Item implements DirectlyIgnitingItem
-{
+public abstract class FireStarterItem extends Item implements DirectlyIgnitingItem {
+
     private final float exhaustionPerUse;
 
     public FireStarterItem(Item.Settings settings, float fExhaustionPerUse) {
@@ -49,8 +49,6 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
         return ActionResult.FAIL;
     }
 
-
-
     @Override
     public boolean getCanItemStartFireOnUse(ItemStack stack)
     {
@@ -64,6 +62,7 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
 
     @Override
     public void performUseEffects(ItemUsageContext context) {
+
     }
 
     @Override
@@ -76,7 +75,6 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
 
         return false;
     }
-
 
 /**
     public void notifyNearbyAnimalsOfAttempt(PlayerEntity player)
@@ -91,5 +89,4 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
     }
  **/
 
-    //----------- Client Side Functionality -----------//
 }

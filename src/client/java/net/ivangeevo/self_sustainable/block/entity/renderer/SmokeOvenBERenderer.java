@@ -14,16 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 
-public class SmokeOvenBERenderer implements BlockEntityRenderer<SmokerOvenBE>
-{
+public class SmokeOvenBERenderer implements BlockEntityRenderer<SmokerOvenBE> {
 
     private final ItemRenderer itemRenderer;
-
 
     public SmokeOvenBERenderer(BlockEntityRendererFactory.Context ctx) {
         this.itemRenderer = ctx.getItemRenderer();
     }
-
 
     // TODO: Fix the item model orientation.
     // It displays with a wrong orientation for different directions.
@@ -36,7 +33,6 @@ public class SmokeOvenBERenderer implements BlockEntityRenderer<SmokerOvenBE>
 
         // Render the item being in the oven
         this.renderCookItem(entity, matrices, vertexConsumers);
-
     }
 
 

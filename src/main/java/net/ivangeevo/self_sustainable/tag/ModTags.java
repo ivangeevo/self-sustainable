@@ -46,4 +46,5 @@ public class ModTags {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(SelfSustainableMod.MOD_ID, name));
         }
     }
+
 }

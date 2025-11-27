@@ -7,10 +7,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class WickerBasketBlock extends BasketBlock
-{
-    public static final MapCodec<WickerBasketBlock> CODEC = WickerBasketBlock.createCodec(WickerBasketBlock::new);
+public class WickerBasketBlock extends BasketBlock {
 
+    public static final MapCodec<WickerBasketBlock> CODEC = WickerBasketBlock.createCodec(WickerBasketBlock::new);
 
     public WickerBasketBlock(Settings settings) {
         super(settings);
@@ -25,4 +24,5 @@ public class WickerBasketBlock extends BasketBlock
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new WickerBasketBE(pos, state);
     }
+
 }

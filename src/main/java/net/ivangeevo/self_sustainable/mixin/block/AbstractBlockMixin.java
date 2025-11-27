@@ -27,7 +27,6 @@ import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireB
 @Mixin(AbstractBlock.class)
 public abstract class AbstractBlockMixin {
 
-
     @Shadow @Final protected boolean randomTicks;
 
     //@Inject(method = "onBlockAdded", at = @At("HEAD"))
@@ -58,7 +57,6 @@ public abstract class AbstractBlockMixin {
             }
         }
     }
-
 
     //@Inject(method = "hasRandomTicks", at = @At("HEAD"), cancellable = true)
     private void onHasRandomTicks(BlockState state, CallbackInfoReturnable<Boolean> cir) {
@@ -92,7 +90,8 @@ public abstract class AbstractBlockMixin {
                 if (!blockState.blocksMovement()) continue;
                 return;
             }
-        } else {
+        }
+        else {
             for (int k = 0; k < 3; ++k) {
                 BlockPos blockPos2 = pos.add(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
                 if (!world.canSetBlock(blockPos2)) {
@@ -102,8 +101,6 @@ public abstract class AbstractBlockMixin {
                 world.setBlockState(blockPos2.up(), AbstractFireBlock.getState(world, blockPos2));
             }
         }
-
-
     }
 
     @Unique
@@ -122,6 +119,5 @@ public abstract class AbstractBlockMixin {
         }
         return world.getBlockState(pos).isBurnable();
     }
-
 
 }

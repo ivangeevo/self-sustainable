@@ -76,8 +76,6 @@ public class ModBlockEntities {
                 Identifier.of(SelfSustainableMod.MOD_ID, "hamper_block_entity"),
                 BlockEntityType.Builder.create(HamperBlockEntity::new, ModBlocks.HAMPER).build()
         );
-
     }
-
 
 }

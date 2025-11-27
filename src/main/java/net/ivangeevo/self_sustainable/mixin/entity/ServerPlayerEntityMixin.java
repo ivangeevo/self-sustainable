@@ -31,7 +31,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         super(world, pos, yaw, gameProfile);
     }
 
-    @Unique private static Random random = new Random();
 
     // Tick torches in the inventory
     @Inject(at = @At("TAIL"), method = "tick")
@@ -55,7 +54,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     @Unique
     private void checkWaterBehavior(ServerPlayerEntity player, PlayerInventory inventory) {
-
         // Do not apply water behavior when player is creative or spectator
         if (player.isCreative() || player.isSpectator()) return;
 
@@ -102,7 +100,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
         }
     }
-
 
     @Unique
     private void rainTorch(CrudeTorchBlockItem torchItem, ItemStack stack, World world, BlockPos pos) {

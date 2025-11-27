@@ -12,5 +12,4 @@ public class HamperBlockEntity extends BlockEntity {
         super(ModBlockEntities.HAMPER, pos, state);
     }
 
-
 }

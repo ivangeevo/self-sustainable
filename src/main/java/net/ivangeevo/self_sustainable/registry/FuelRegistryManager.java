@@ -12,12 +12,10 @@ import net.minecraft.registry.tag.TagKey;
  *
  * <p>See {@link AbstractFurnaceBlockEntity#createFuelTimeMap()} for the original values of fuel items.
  */
-public class FuelRegistryManager
-{
+public class FuelRegistryManager {
 
     // Register all entries here.
-    public static void initEntries()
-    {
+    public static void initEntries() {
         // First, we try to modify if possible
         modifyEntry(Items.COAL_BLOCK, 14400);
         modifyEntry(Items.BLAZE_ROD, 12800);
@@ -28,11 +26,9 @@ public class FuelRegistryManager
         // And then we manually remove and add what is not directly modifiable.
         removeFuelItems();
         addFuelItems();
-
     }
 
-    private static void removeFuelItems()
-    {
+    private static void removeFuelItems() {
         // Tags
         // we remove tags, because we set a different fuel value for certain wood types.
         FuelRegistry.INSTANCE.remove(ItemTags.LOGS);
@@ -45,12 +41,9 @@ public class FuelRegistryManager
         // Items
         FuelRegistry.INSTANCE.remove(Items.COAL);
         FuelRegistry.INSTANCE.remove(Items.CHARCOAL);
-
-
     }
 
-    private static void addFuelItems()
-    {
+    private static void addFuelItems() {
         // Logs
         FuelRegistry.INSTANCE.add(Items.BIRCH_LOG, 16000);
         FuelRegistry.INSTANCE.add(Items.ACACIA_LOG, 16000);
@@ -95,26 +88,21 @@ public class FuelRegistryManager
         FuelRegistry.INSTANCE.add(Items.JUNGLE_SLAB, 100);
         FuelRegistry.INSTANCE.add(Items.BAMBOO_SLAB, 75);
 
-
         // New added fuel items
         FuelRegistry.INSTANCE.add(Items.FEATHER, 15);
         FuelRegistry.INSTANCE.add(ItemTags.SMALL_FLOWERS, 15);
         FuelRegistry.INSTANCE.add(ItemTags.TALL_FLOWERS, 25);
-
-
     }
 
     // Helper methods to modify items/tags.
-    private static void modifyEntry(Item item, int newValue)
-    {
+    private static void modifyEntry(Item item, int newValue) {
         FuelRegistry.INSTANCE.remove(item);
         FuelRegistry.INSTANCE.add(item, newValue);
     }
-    private static void modifyEntry(TagKey<Item> tag, int newValue)
-    {
+
+    private static void modifyEntry(TagKey<Item> tag, int newValue) {
         FuelRegistry.INSTANCE.remove(tag);
         FuelRegistry.INSTANCE.add(tag, newValue);
     }
-
 
 }

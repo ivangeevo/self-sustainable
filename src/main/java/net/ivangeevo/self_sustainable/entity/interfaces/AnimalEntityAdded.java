@@ -4,6 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public interface AnimalEntityAdded
 {
-
      void onNearbyFireStartAttempt(PlayerEntity player);
+
 }

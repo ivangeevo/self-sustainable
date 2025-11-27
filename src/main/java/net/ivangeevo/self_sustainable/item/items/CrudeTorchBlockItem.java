@@ -25,6 +25,7 @@ import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireB
 import static net.minecraft.state.property.Properties.LIT;
 
 public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implements FabricItem {
+
     TorchFireState torchState;
     ModTorchHandler handler;
     private static final int FUEL_TIME = 24000;
@@ -58,7 +59,8 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
                     if (stack.isEmpty()) {
                         // hand goes empty, replace it with the lit torch
                         player.setStackInHand(context.getHand(), litTorch);
-                    } else {
+                    }
+                    else {
                         // leave the unlit stack in hand
                         player.setStackInHand(context.getHand(), stack);
 
@@ -69,10 +71,8 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
                     }
                 }
 
-
                 world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
             }
-
 
             return ActionResult.SUCCESS;
         }
@@ -80,13 +80,11 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         return super.useOnBlock(context);
     }
 
-
     private boolean isSpecialLitBlock(BlockState state) {
         boolean lit = state.contains(LIT) && state.get(LIT);
         boolean hasFireLevel = state.contains(FIRE_LEVEL) && state.get(FIRE_LEVEL) > 0;
         return (lit && (state.isOf(ModBlocks.OVEN_BRICK) || state.isOf(ModBlocks.SMOKER_BRICK)))
                 || (hasFireLevel && state.getBlock() instanceof CampfireBlock);
-
     }
 
     @Override
@@ -149,7 +147,6 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         return itemStack;
     }
 
-
     public static ItemStack addFuel(ItemStack stack, World world, int amount) {
 
         if (stack.getItem() instanceof CrudeTorchBlockItem torchItem && !world.isClient) {
@@ -163,7 +160,8 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
             // if burned out
             if (fuel <= 0) {
                 stack = stateStack(stack, TorchFireState.BURNED_OUT);
-            } else {
+            }
+            else {
                 if (fuel > FUEL_TIME) {
                     fuel = FUEL_TIME;
                 }
@@ -178,4 +176,5 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
     public boolean getCanItemStartFireOnUse(ItemStack stack) {
         return torchState == TorchFireState.LIT || torchState == TorchFireState.SMOULDER;
     }
+
 }

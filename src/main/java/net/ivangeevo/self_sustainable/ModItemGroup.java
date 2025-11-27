@@ -47,5 +47,4 @@ public class ModItemGroup {
         SelfSustainableMod.LOGGER.info("Registering Item Groups for " + SelfSustainableMod.MOD_ID);
     }
 
-
 }

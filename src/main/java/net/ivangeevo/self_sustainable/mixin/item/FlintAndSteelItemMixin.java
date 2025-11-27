@@ -25,15 +25,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FlintAndSteelItem.class)
-public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgnitingItem
-{
+public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgnitingItem {
+
     public FlintAndSteelItemMixin(Settings settings) {
         super(settings);
     }
 
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
-    private void customUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir)
-    {
+    private void customUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
         World world = context.getWorld();
         PlayerEntity player = context.getPlayer();
         BlockPos pos = context.getBlockPos();
@@ -103,4 +102,5 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
 
         return false;
     }
+
 }

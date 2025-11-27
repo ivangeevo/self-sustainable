@@ -12,8 +12,7 @@ import java.util.function.ToIntFunction;
 import static net.ivangeevo.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 
 @Mixin(Blocks.class)
-public abstract class BlocksMixin
-{
+public abstract class BlocksMixin {
 
     /**
     // TorchBlock's luminance lambda
@@ -34,13 +33,10 @@ public abstract class BlocksMixin
     @Inject(method = "createLightLevelFromLitBlockState", at = @At("HEAD"), cancellable = true)
     private static void injectedLightLevelCampfire(int litLevel, CallbackInfoReturnable<ToIntFunction<BlockState>> cir)
     {
-        cir.setReturnValue(state ->
-        {
+        cir.setReturnValue(state -> {
             // Check if the block is CampfireBlock or its subclass
-            if (state.getBlock() instanceof CampfireBlock)
-            {
-                switch (state.get(FIRE_LEVEL))
-                {
+            if (state.getBlock() instanceof CampfireBlock) {
+                switch (state.get(FIRE_LEVEL)) {
                     case 0: return 0;
                     case 1: return 8;
                     case 2: return 11;

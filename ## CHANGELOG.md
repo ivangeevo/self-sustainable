@@ -1,3 +1,6 @@
+# v0.3(dev)
++ Updated the mod to Fabric API 0.116.7, Fabric Loader 0.17.3 & BTWR: Shared Library 1.0
+
 # v0.2.1
 + Fixed a bug(for real now) with unlit crude torches that would decrement unlit torches twice when trying to light one
 + Fixed crude torches to properly transition into a smoldered state when there's 30 seconds of fuel left.

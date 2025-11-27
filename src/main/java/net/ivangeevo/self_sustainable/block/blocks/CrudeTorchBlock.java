@@ -14,8 +14,7 @@ import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 
-public class CrudeTorchBlock extends AbstractExtinguishingTorchBlock
-{
+public class CrudeTorchBlock extends AbstractExtinguishingTorchBlock {
 
     protected static final MapCodec<SimpleParticleType> PARTICLE_TYPE_CODEC = Registries.PARTICLE_TYPE
             .getCodec()
@@ -59,6 +58,5 @@ public class CrudeTorchBlock extends AbstractExtinguishingTorchBlock
 
     @Override
     public boolean isWallTorch() { return false; }
-
 
 }

@@ -21,10 +21,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
-public abstract class BlockItemMixin extends Item implements Ignitable
-{
-    @Shadow public abstract ActionResult place(ItemPlacementContext context);
+public abstract class BlockItemMixin extends Item implements Ignitable {
 
+    @Shadow public abstract ActionResult place(ItemPlacementContext context);
     @Shadow public abstract ActionResult useOnBlock(ItemUsageContext context);
 
     public BlockItemMixin(Settings settings) {
@@ -109,8 +108,6 @@ public abstract class BlockItemMixin extends Item implements Ignitable
               || block == ModBlocks.CRUDE_WALL_TORCH_UNLIT
               || block == ModBlocks.TORCH_UNLIT
               || block == ModBlocks.WALL_TORCH_UNLIT;
-
-
     }
 
 }

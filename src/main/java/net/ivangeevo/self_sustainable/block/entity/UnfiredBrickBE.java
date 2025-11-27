@@ -14,7 +14,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class UnfiredBrickBE extends BlockEntity {
-   protected int dryingLevel = 0;
+
+    protected int dryingLevel = 0;
 
     private static final int TIME_TO_COOK = (10 * 60 * 20);
     private static final int RAIN_COOK_DECAY = 10;
@@ -23,11 +24,6 @@ public class UnfiredBrickBE extends BlockEntity {
 
     public UnfiredBrickBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BRICK_UNFIRED, pos, state);
-    }
-
-    public int getDryingLevel()
-    {
-        return dryingLevel;
     }
 
     @Override
@@ -52,7 +48,6 @@ public class UnfiredBrickBE extends BlockEntity {
     }
 
     public void updateDrying() {
-
         boolean bNewDrying;
 
         assert world != null;
@@ -76,7 +71,6 @@ public class UnfiredBrickBE extends BlockEntity {
         UnfiredBrickBlock brickBlock = (UnfiredBrickBlock) ModBlocks.BRICK_UNFIRED;
 
         if (isDrying) {
-
             dryingLevel++;
 
             if (dryingLevel >= TIME_TO_COOK) {
@@ -84,7 +78,8 @@ public class UnfiredBrickBE extends BlockEntity {
 
                 return;
             }
-        } else {
+        }
+        else {
             if ( isRainingOnBrick(world, pos) ) {
                 dryingLevel -= RAIN_COOK_DECAY;
 
@@ -94,11 +89,11 @@ public class UnfiredBrickBE extends BlockEntity {
             }
         }
 
-        int iDisplayedDryLevel = brickBlock.getDryLevel(world, pos);
-        int iCurrentDryLevel = computeDryLevel();;
+        int displayedDryLevel = brickBlock.getDryLevel(world, pos);
+        int currentDryLevel = computeDryLevel();
 
-        if ( iDisplayedDryLevel != iCurrentDryLevel ) {
-            UnfiredBrickBlock.setDryingLevel(world, pos, iCurrentDryLevel);
+        if (displayedDryLevel != currentDryLevel) {
+            UnfiredBrickBlock.setDryingLevel(world, pos, currentDryLevel);
         }
     }
 

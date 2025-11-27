@@ -68,7 +68,8 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                     heldStack.decrement(1); // Decrease the heldStack count
                     return ActionResult.SUCCESS;
                 }
-            } else {
+            }
+            else {
 
                 Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
 
@@ -87,7 +88,8 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                     player.giveItemStack(new ItemStack(Items.STICK));
                     playGetItemSound(world, pos, player);
                     return ActionResult.SUCCESS;
-                } else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent()) {
+                }
+                else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent()) {
                     if (getCookStack(campfireBE).isEmpty()) {
                         campfireBE.addItem(player, player.getAbilities().creativeMode ? heldStack.copy() : heldStack,
                                 optional.get().value().getCookingTime());
@@ -171,6 +173,5 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
         world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.2F,
                 ( ( player.getRandom().nextFloat() - player.getRandom().nextFloat() ) * 0.7F + 1F ) * 2F);
     }
-
 
 }

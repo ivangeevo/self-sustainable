@@ -14,11 +14,11 @@ import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.CookingRecipeCategory;
 
 public class OvenCookingRecipe extends AbstractCookingRecipe {
+
     public OvenCookingRecipe(String group, CookingRecipeCategory category, Ingredient input,
                              ItemStack output, float experience, int cookTime) {
         super(Type.INSTANCE, group, category, input, output, experience, cookTime);
     }
-
 
     @Override
     public ItemStack createIcon() {
@@ -101,7 +101,6 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
             buf.writeFloat(recipe.experience);
             buf.writeVarInt(recipe.cookingTime);
         }
-
     }
 
     public OvenCookingRecipe create(String group, CookingRecipeCategory category, Ingredient ingredient,
@@ -110,4 +109,3 @@ public class OvenCookingRecipe extends AbstractCookingRecipe {
     }
 
 }
-

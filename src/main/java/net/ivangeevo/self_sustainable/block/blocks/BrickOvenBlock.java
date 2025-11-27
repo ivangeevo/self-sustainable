@@ -121,7 +121,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
                     return ActionResult.SUCCESS;
 
-                } else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
+                }
+                else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
                     if (!world.isClient && ovenBE.getCookStack().isEmpty()) {
                         ovenBE.addItem(player,
                                 player.getAbilities().creativeMode
@@ -133,15 +134,16 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                     return ActionResult.SUCCESS;
                 }
 
-            } else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
+            }
+            else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
                 if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
                     if (state.get(FUEL_LEVEL) > 0 && !state.get(LIT)) {
                         world.setBlockState(pos, state.with(LIT, true));
                         Ignitable.playLitFX(world, pos);
                         return ActionResult.SUCCESS;
                     }
-                } else {
-
+                }
+                else {
                     int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
 
                     if (numItemsConsumed > 0) {
@@ -153,7 +155,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
                         heldStack.split(numItemsConsumed);
                         return ActionResult.SUCCESS;
-                    } else {
+                    }
+                    else {
                         if (heldStack.getItem() instanceof BlockItem) {
                             // Valid fuel block, but not accepted due to full oven —> prevent placement
                             return ActionResult.FAIL;
@@ -169,8 +172,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
         return ActionResult.PASS;
     }
-
-
 
     private void playPopSound(World world, BlockPos pos) {
         BlockPos soundPos = new BlockPos(
@@ -188,7 +189,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
     {
         if (world.isClient) {
             return BrickOvenBlock.validateTicker(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::clientTick);
-        } else {
+        }
+        else {
             return BrickOvenBlock.validateTicker(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::serverTick);
         }
     }
@@ -200,7 +202,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-
         if (state.isOf(newState.getBlock())) {
             return;
         }
@@ -217,7 +218,6 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-
         if (state.get(LIT)) {
             BrickOvenBE ovenBE = (BrickOvenBE) world.getBlockEntity(pos);
             assert ovenBE != null;
@@ -235,11 +235,14 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
                 if (facing == Direction.WEST) {
                     world.addParticle(ParticleTypes.LARGE_SMOKE, fX - fFacingOffset, fY, fZ + fRandOffset, 0.0D, 0.0D, 0.0D);
-                } else if (facing == Direction.EAST) {
+                }
+                else if (facing == Direction.EAST) {
                     world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fFacingOffset, fY, fZ + fRandOffset, 0.0D, 0.0D, 0.0D );
-                } else if (facing == Direction.NORTH) {
+                }
+                else if (facing == Direction.NORTH) {
                     world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fRandOffset, fY, fZ - fFacingOffset, 0.0D, 0.0D, 0.0D );
-                } else if (facing == Direction.SOUTH) {
+                }
+                else if (facing == Direction.SOUTH) {
                     world.addParticle( ParticleTypes.LARGE_SMOKE, fX + fRandOffset, fY, fZ + fFacingOffset, 0.0D, 0.0D, 0.0D );
                 }
             }

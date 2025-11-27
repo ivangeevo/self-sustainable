@@ -19,13 +19,11 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdded, PlayerEntityAdded
-{
+public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdded, PlayerEntityAdded {
+
     @Shadow public abstract boolean isPlayer();
     @Shadow public abstract void jump();
-
     @Shadow public abstract void incrementStat(Identifier stat);
-
     @Shadow public abstract void addExhaustion(float exhaustion);
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -34,43 +32,36 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
 
     // Injected logic for periodic exhaustion
     @Inject(method = "tickMovement", at = @At("HEAD"))
-    private void injectedTickMovement(CallbackInfo ci)
-    {
+    private void injectedTickMovement(CallbackInfo ci) {
         PlayerEntity player = (PlayerEntity) (Object) this;
         HungerManager hungerManager = player.getHungerManager();
 
-        if (!player.isCreative())
-        {
-            if (player.age % 1000 == 0)
-            {
+        if (!player.isCreative()) {
+            if (player.age % 1000 == 0) {
                 hungerManager.addExhaustion(1.25f);
             }
         }
     }
 
     @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
-    private void onJump(CallbackInfo ci)
-    {
-        if (!FabricLoader.getInstance().isModLoaded("im_movens"))
-        {
+    private void onJump(CallbackInfo ci) {
+        if (!FabricLoader.getInstance().isModLoaded("im_movens")) {
             super.jump();
             this.incrementStat(Stats.JUMP);
             if (this.isSprinting()) {
                 this.addExhaustion(0.33F);
-            } else {
+            }
+            else {
                 this.addExhaustion(0.12F);
             }
 
             ci.cancel();
         }
-
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void injectedTick(CallbackInfo ci)
-    {
-        if (!FabricLoader.getInstance().isModLoaded("im_movens"))
-        {
+    private void injectedTick(CallbackInfo ci) {
+        if (!FabricLoader.getInstance().isModLoaded("im_movens")) {
             PlayerEntity player = (PlayerEntity) (Object) this;
 
             // TODO: Fix? Maybe only serverPlayerEntity should heal?
@@ -93,7 +84,4 @@ public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdd
         }
     }
 
-
-
-    /** --------------------------------------------------------------------- **/
 }

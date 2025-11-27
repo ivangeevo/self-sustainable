@@ -5,8 +5,7 @@ import net.minecraft.block.BlockEntityProvider;
 
 /** A interface class for managing behavior of added entity capabilities
 to torches. **/
-public interface TorchEntityUtils extends BlockEntityProvider, Ignitable
-{
+public interface TorchEntityUtils extends BlockEntityProvider, Ignitable {
 
     boolean lit = false;
     int litTime = 0;

@@ -5,17 +5,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 
-public class KnittingItem extends ProgressiveCraftingItem
-{
+public class KnittingItem extends ProgressiveCraftingItem {
+
     public KnittingItem(Settings settings)
     {
         super(settings);
     }
 
-
     @Override
-    protected void playCraftingFX(ItemStack stack, World world, LivingEntity player)
-    {
+    protected void playCraftingFX(ItemStack stack, World world, LivingEntity player) {
         player.playSound(SoundEvents.BLOCK_WOOD_STEP,
                 0.25F + 0.25F * (float)world.random.nextInt( 2 ),
                 ( world.random.nextFloat() - world.random.nextFloat() ) * 0.25F + 1.75F );
@@ -58,14 +56,10 @@ public class KnittingItem extends ProgressiveCraftingItem
         return new ItemStack(ModItems.KNITTING_NEEDLES);
     }
 
-
-
-    static public void setColor(ItemStack stack, DyeColor iColor)
-    {
+    public static void setColor(ItemStack stack, DyeColor iColor){
         NbtCompound tag = stack.getNbt();
 
-        if ( tag == null )
-        {
+        if (tag == null) {
             tag = new NbtCompound();
             stack.setNbt( tag );
         }
@@ -89,4 +83,5 @@ public class KnittingItem extends ProgressiveCraftingItem
         return 0;
     }
      **/
+
 }

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements  ItemAdded, PlayerEntityAdded {
+public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAdded {
 
     @Shadow public abstract boolean isPlayer();
     @Shadow public abstract void jump();

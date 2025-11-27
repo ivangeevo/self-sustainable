@@ -29,7 +29,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         super(world, pos, yaw, gameProfile);
     }
 
-
     // Tick torches in the inventory
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {

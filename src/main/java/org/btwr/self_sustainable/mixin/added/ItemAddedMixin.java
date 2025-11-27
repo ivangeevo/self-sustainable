@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.mixin.item;
+package org.btwr.self_sustainable.mixin.added;
 
 import org.btwr.self_sustainable.block.CampfireBlockMixinManager;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
@@ -9,7 +9,7 @@ import net.minecraft.item.*;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Item.class)
-public abstract class ItemMixin implements ItemAdded {
+public abstract class ItemAddedMixin implements ItemAdded {
 
     @Override
     public CustomUseAction getCustomUseAction(ItemStack stack) {

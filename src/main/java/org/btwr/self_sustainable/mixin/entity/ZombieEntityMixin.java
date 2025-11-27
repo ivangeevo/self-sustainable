@@ -18,6 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ZombieEntity.class)
 public abstract class ZombieEntityMixin extends HostileEntity {
 
+    @Unique private boolean isZombieVillager() {
+        return (ZombieEntity)(Object)this instanceof ZombieVillagerEntity;
+    }
+
     protected ZombieEntityMixin(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -43,11 +47,6 @@ public abstract class ZombieEntityMixin extends HostileEntity {
                 new ZombieAttackGoal((ZombieEntity)(Object)this, 1.5, false);
 
         this.goalSelector.add(2, fasterAttackGoal);
-    }
-
-    @Unique
-    private boolean isZombieVillager() {
-        return (ZombieEntity)(Object)this instanceof ZombieVillagerEntity;
     }
 
 }

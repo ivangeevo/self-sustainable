@@ -64,14 +64,14 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Shadow protected abstract boolean isSignalFireBaseBlock(BlockState state);
     @Shadow @Final public static DirectionProperty FACING;
 
-    // helper method for easier calling of the campfire block manager class
     @Unique private static final CampfireBlockMixinManager managerInstance = CampfireBlockMixinManager.getInstance();
+
+    @Unique Ingredient fuels;
 
     protected CampfireBlockMixin(Settings settings) {
         super(settings);
     }
 
-    @Unique Ingredient fuels;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectedConstructorSettings(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
@@ -90,45 +90,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                         .with(HAS_SPIT, false)
         );
     }
-
-    /**
-    @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        // Schedule the next tick for this block
-        world.scheduleBlockTick(pos, this, getFireTickDelay(world.random));
-
-        // Check game rules and environmental conditions
-        if (!world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
-            return;
-        }
-
-        if (!state.canPlaceAt(world, pos)) {
-            world.removeBlock(pos, false);
-            return;
-        }
-
-        int age = state.get(FireBlock.AGE);
-        int newAge = Math.min(15, age + random.nextInt(3) / 2);
-        if (age != newAge) {
-            state = state.with(FireBlock.AGE, newAge);
-            world.setBlockState(pos, state, Block.NO_REDRAW);
-        }
-
-        // Utilize FireBlock's trySpreadingFire method to spread fire
-        FireBlock fireBlock = (FireBlock) world.getBlockState(pos).getBlock();
-        fireBlock.trySpreadingFire(world, pos.east(), 300, random, age);
-        fireBlock.trySpreadingFire(world, pos.west(), 300, random, age);
-        fireBlock.trySpreadingFire(world, pos.down(), 250, random, age);
-        fireBlock.trySpreadingFire(world, pos.up(), 250, random, age);
-        fireBlock.trySpreadingFire(world, pos.north(), 300, random, age);
-        fireBlock.trySpreadingFire(world, pos.south(), 300, random, age);
-    }
-
-    @Unique
-    private static int getFireTickDelay(Random random) {
-        return 30 + random.nextInt(10);
-    }
-     **/
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
@@ -297,7 +258,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         }
 
         super.onEntityCollision(state, world, pos, entity);
-
         ci.cancel();
     }
 
@@ -321,8 +281,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
             world.playSound((double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, SoundEvents.BLOCK_CAMPFIRE_CRACKLE, SoundCategory.BLOCKS, 0.5f + random.nextFloat(), random.nextFloat() * 0.7f + 0.6f, false);
         }
         if (this.emitsParticles && random.nextInt(5) == 0) {
-            for (int i = 0; i < random.nextInt(1) + 1; ++i)
-            {
+            for (int i = 0; i < random.nextInt(1) + 1; ++i) {
                 world.addParticle(ParticleTypes.LAVA, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, random.nextFloat() / 2.0f, 5.0E-5, random.nextFloat() / 2.0f);
             }
         }

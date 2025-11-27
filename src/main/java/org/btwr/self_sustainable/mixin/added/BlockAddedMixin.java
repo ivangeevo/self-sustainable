@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.mixin.block;
+package org.btwr.self_sustainable.mixin.added;
 
 import org.btwr.self_sustainable.block.interfaces.BlockAdded;
 import net.minecraft.block.Block;
@@ -8,7 +8,7 @@ import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Block.class)
-public abstract class BlockMixin implements BlockAdded {
+public abstract class BlockAddedMixin implements BlockAdded {
 
     @Override
     public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {

@@ -74,10 +74,12 @@ public abstract class BlockItemMixin extends Item implements Ignitable {
                         attemptToLightBlock(context.getStack(), world, pos, context.getSide());
                     }
                     cir.setReturnValue(ActionResult.SUCCESS);
-                } else {
+                }
+                else {
                     cir.setReturnValue(ActionResult.FAIL);
                 }
-            } else {
+            }
+            else {
                 // Default logic for placing or using the item
                 ActionResult actionResult = this.place(new ItemPlacementContext(context));
                 if (!actionResult.isAccepted() && context.getStack().contains(DataComponentTypes.FOOD)) {

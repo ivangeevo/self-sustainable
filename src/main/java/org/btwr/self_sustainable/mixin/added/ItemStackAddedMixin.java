@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.mixin.item;
+package org.btwr.self_sustainable.mixin.added;
 
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.item.interfaces.ItemStackAdded;
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemStackAdded {
+public abstract class ItemStackAddedMixin implements ItemStackAdded {
 
     @Shadow public abstract Item getItem();
 

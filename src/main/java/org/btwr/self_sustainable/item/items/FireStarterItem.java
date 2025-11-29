@@ -41,7 +41,7 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
             }
 
             assert player != null;
-            player.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
+            player.addExhaustion(exhaustionPerUse * world.getDifficulty().btwr$getHungerIntensiveActionCostMultiplier());
             context.getStack().damage(1, player, EquipmentSlot.MAINHAND);
             return ActionResult.SUCCESS;
         }
@@ -50,7 +50,7 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
     }
 
     @Override
-    public boolean getCanItemStartFireOnUse(ItemStack stack)
+    public boolean btwr$getCanItemStartFireOnUse(ItemStack stack)
     {
         return true;
     }
@@ -69,8 +69,8 @@ public abstract class FireStarterItem extends Item implements DirectlyIgnitingIt
     public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos)) {
-            return targetBlock.setOnFireDirectly(world, pos);
+        if (targetBlock != null && targetBlock.btwr$getCanBeSetOnFireDirectlyByItem(world, pos)) {
+            return targetBlock.btwr$setOnFireDirectly(world, pos);
         }
 
         return false;

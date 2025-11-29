@@ -37,7 +37,7 @@ public abstract class HeldItemRendererMixin {
 
             boolean bl2 = arm == Arm.RIGHT;
             if (player.isUsingItem() && player.getItemUseTimeLeft() > 0 && player.getActiveHand() == hand) {
-                switch (stack.getItem().getCustomUseAction(stack)) {
+                switch (stack.getItem().btwr$getCustomUseAction(stack)) {
                     case NONE:
                         this.applyEquipOffset(matrices, arm, equipProgress);
                         break;

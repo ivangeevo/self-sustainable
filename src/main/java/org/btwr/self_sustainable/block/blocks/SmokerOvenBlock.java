@@ -77,7 +77,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable {
     }
 
     @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos) {
+    public boolean btwr$setOnFireDirectly(World world, BlockPos pos) {
 
         if (world.getBlockState(pos) == this.getDefaultState().with(LIT, true)) {
             if (world.getBlockEntity(pos) instanceof SmokerOvenBE ovenBE) {
@@ -94,7 +94,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable {
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
+    public boolean btwr$getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
         return true;
     }
 

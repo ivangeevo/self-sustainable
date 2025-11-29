@@ -3,7 +3,7 @@
  */
 package org.btwr.self_sustainable.block.entity;
 
-import org.btwr.self_sustainable.block.interfaces.CampfireBlockAdded;
+import org.btwr.self_sustainable.block.interfaces.added.CampfireBlockAdded;
 import org.btwr.self_sustainable.block.interfaces.Ignitable;
 import org.btwr.self_sustainable.block.utils.CampfireState;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
@@ -303,7 +303,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
         burnTimeSinceLit = 0;
         BlockState state = world.getBlockState(pos);
         CampfireBlock block = (CampfireBlock) state.getBlock();
-        ((CampfireBlockAdded)block).relightFire(world, pos);
+        ((CampfireBlockAdded)block).btwr$relightFire(world, pos);
     }
 
     private void extinguishFire(World world, BlockState state, BlockPos pos, boolean smoulder) {
@@ -318,13 +318,13 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
         cookBurningCounter = 0;
 
         CampfireBlock block = (CampfireBlock) state.getBlock();
-        ((CampfireBlockAdded)block).extinguishFire(world, state, pos, smoulder);
+        ((CampfireBlockAdded)block).btwr$extinguishFire(world, state, pos, smoulder);
     }
 
     private void stopSmouldering(World world, BlockPos pos) {
         smoulderCounter = 0;
         CampfireBlock block = (CampfireBlock) world.getBlockState(pos).getBlock();
-        ((CampfireBlockAdded)block).stopSmouldering(world, pos);
+        ((CampfireBlockAdded)block).btwr$stopSmouldering(world, pos);
     }
 
     public static boolean isRainingOnCampfire(World world, BlockPos pos) {
@@ -397,7 +397,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
     }
 
     public void retrieveItem(World world, VariableCampfireBE campfireBE, PlayerEntity player) {
-        ItemStack cookStack = campfireBE.getItemsBeingCooked().get(0);
+        ItemStack cookStack = campfireBE.getItemsBeingCooked().getFirst();
 
         if (!cookStack.isEmpty() && !world.isClient()) {
             boolean addedToInventory = player.giveItemStack(cookStack);
@@ -423,7 +423,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
     public void changeFireLevel(World world, int iFireLevel) {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof CampfireBlock block) {
-            ((CampfireBlockAdded)block).changeFireLevel(world, pos, iFireLevel);
+            ((CampfireBlockAdded)block).btwr$changeFireLevel(world, pos, iFireLevel);
         }
     }
 

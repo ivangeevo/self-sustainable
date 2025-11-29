@@ -106,7 +106,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                     return ActionResult.PASS;
                 }
 
-                if (heldStack.getItem().getCanBeFedDirectlyIntoCampfire(heldStack)) {
+                if (heldStack.getItem().btwr$getCanBeFedDirectlyIntoCampfire(heldStack)) {
                     if (!world.isClient) {
                         Ignitable.playLitFX(world, pos);
                         campfireBE.addBurnTime(state, itemBurnTime);

@@ -71,7 +71,7 @@ public abstract class BlockItemMixin extends Item implements Ignitable {
             if (isLightableFromOnUseBlock(block, heldStack)) {
                 if (world.canPlayerModifyAt(player, pos)) {
                     if (!world.isClient) {
-                        attemptToLightBlock(context.getStack(), world, pos, context.getSide());
+                        btwr$attemptToLightBlock(context.getStack(), world, pos, context.getSide());
                     }
                     cir.setReturnValue(ActionResult.SUCCESS);
                 }
@@ -92,11 +92,11 @@ public abstract class BlockItemMixin extends Item implements Ignitable {
     }
 
     @Override
-    public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
+    public boolean btwr$attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos)) {
-            return targetBlock.setOnFireDirectly(world, pos);
+        if (targetBlock != null && targetBlock.btwr$getCanBeSetOnFireDirectlyByItem(world, pos)) {
+            return targetBlock.btwr$setOnFireDirectly(world, pos);
         }
 
         return false;

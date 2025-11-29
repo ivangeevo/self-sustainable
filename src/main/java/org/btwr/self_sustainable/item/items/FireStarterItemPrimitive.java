@@ -1,6 +1,6 @@
 package org.btwr.self_sustainable.item.items;
 
-import org.btwr.self_sustainable.item.interfaces.ItemStackAdded;
+import org.btwr.self_sustainable.item.interfaces.added.ItemStackAdded;
 import org.btwr.self_sustainable.util.WorldUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -37,9 +37,9 @@ public class FireStarterItemPrimitive extends FireStarterItem {
         ItemStackAdded stackAdded;
         stackAdded = stack;
 
-        float chance = stackAdded.getAccumulatedChance(baseChance);
+        float chance = stackAdded.btwr$getAccumulatedChance(baseChance);
         long currentTime = WorldUtils.getOverworldTimeServerOnly();
-        long lastTime = stackAdded.getTimeOfLastUse();
+        long lastTime = stackAdded.btwr$getTimeOfLastUse();
 
         if (lastTime > 0) {
             if (currentTime > lastTime) {
@@ -71,8 +71,8 @@ public class FireStarterItemPrimitive extends FireStarterItem {
             chance = maxChance;
         }
 
-        stackAdded.setAccumulatedChance(chance);
-        stackAdded.setTimeOfLastUse(currentTime);
+        stackAdded.btwr$setAccumulatedChance(chance);
+        stackAdded.btwr$setTimeOfLastUse(currentTime);
 
         return returnValue;
     }
@@ -107,7 +107,7 @@ public class FireStarterItemPrimitive extends FireStarterItem {
     @Override
     public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
         if (super.attemptToLightBlock(stack, world, pos, facing)) {
-            stack.setAccumulatedChance(baseChance);
+            stack.btwr$setAccumulatedChance(baseChance);
 
             return true;
         }

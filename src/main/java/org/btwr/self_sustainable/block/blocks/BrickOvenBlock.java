@@ -72,8 +72,8 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
     }
 
     @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos) {
-        if (!this.getCanBeSetOnFireDirectly(world, pos)) return false;
+    public boolean btwr$setOnFireDirectly(World world, BlockPos pos) {
+        if (!this.btwr$getCanBeSetOnFireDirectly(world, pos)) return false;
         if (!(world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE)) return false;
         if (!ovenBE.attemptToLight()) return false;
         BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
@@ -82,7 +82,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
+    public boolean btwr$getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
         if (blockAccess.getBlockState(pos).get(LIT)) return false;
         BrickOvenBE ovenBE = (BrickOvenBE) blockAccess.getBlockEntity(pos);
         // uses the visual fuel level rather than the actualy fuel level so this will work on the client
@@ -91,7 +91,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
+    public boolean btwr$getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
         BlockState state = blockAccess.getBlockState(pos);
         return !state.get(LIT) && state.get(FUEL_LEVEL) != 0;
     }

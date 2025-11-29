@@ -29,14 +29,14 @@ public abstract class TorchBlockMixin extends AbstractTorchBlock {
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
+    public boolean btwr$getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
         BlockState state = blockAccess.getBlockState(pos);
         return state.isOf(ModBlocks.TORCH_UNLIT) || state.isOf(ModBlocks.WALL_TORCH_UNLIT);
     }
 
     @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos) {
-        if (this.getCanBeSetOnFireDirectly(world, pos)) {
+    public boolean btwr$setOnFireDirectly(World world, BlockPos pos) {
+        if (this.btwr$getCanBeSetOnFireDirectly(world, pos)) {
 
             if (!world.hasRain(pos)) {
                 changeTorch(world, pos, world.getBlockState(pos));

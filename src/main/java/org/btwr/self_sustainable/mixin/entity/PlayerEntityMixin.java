@@ -1,8 +1,6 @@
 package org.btwr.self_sustainable.mixin.entity;
 
 import net.fabricmc.loader.api.FabricLoader;
-import org.btwr.self_sustainable.entity.interfaces.PlayerEntityAdded;
-import org.btwr.self_sustainable.item.interfaces.ItemAdded;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.HungerManager;
@@ -17,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAdded {
+public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow public abstract boolean isPlayer();
     @Shadow public abstract void jump();

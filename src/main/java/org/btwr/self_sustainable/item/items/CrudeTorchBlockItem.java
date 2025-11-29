@@ -173,7 +173,7 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
     }
 
     @Override
-    public boolean getCanItemStartFireOnUse(ItemStack stack) {
+    public boolean btwr$getCanItemStartFireOnUse(ItemStack stack) {
         return torchState == TorchFireState.LIT || torchState == TorchFireState.SMOULDER;
     }
 

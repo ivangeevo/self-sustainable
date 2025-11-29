@@ -49,7 +49,7 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
 
             assert player != null;
             float exhaustionPerUse = 0.01F;
-            player.addExhaustion(exhaustionPerUse * world.getDifficulty().getHungerIntensiveActionCostMultiplier());
+            player.addExhaustion(exhaustionPerUse * world.getDifficulty().btwr$getHungerIntensiveActionCostMultiplier());
             context.getStack().damage(1, player, EquipmentSlot.MAINHAND);
             cir.setReturnValue(ActionResult.SUCCESS) ;
         }
@@ -95,8 +95,8 @@ public abstract class FlintAndSteelItemMixin extends Item implements DirectlyIgn
     public boolean attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
         Block targetBlock = world.getBlockState(pos).getBlock();
 
-        if (targetBlock != null && targetBlock.getCanBeSetOnFireDirectlyByItem(world, pos)) {
-            return targetBlock.setOnFireDirectly(world, pos);
+        if (targetBlock != null && targetBlock.btwr$getCanBeSetOnFireDirectlyByItem(world, pos)) {
+            return targetBlock.btwr$setOnFireDirectly(world, pos);
         }
 
         return false;

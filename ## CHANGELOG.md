@@ -1,6 +1,6 @@
-# v0.3(dev)
+# v0.3
 + Refactored pretty much the whole code; mainly for readability and cleaning up, but also so it's more in order with other mods from the BTWR project
-+ Updated the mod to Fabric API 0.116.7, Fabric Loader 0.17.3 & BTWR: Shared Library 0.6.4
++ Updated the mod to Fabric API 0.116.7, Fabric Loader 0.17.3 & BTWR: Shared Library 0.6.5
 
 # v0.2.1
 + Fixed a bug(for real now) with unlit crude torches that would decrement unlit torches twice when trying to light one

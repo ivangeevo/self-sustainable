@@ -33,15 +33,13 @@
   },
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_1792": ["org/btwr/self_sustainable/item/interfaces/ItemAdded"],
-      "net/minecraft/class_1799": ["org/btwr/self_sustainable/item/interfaces/ItemStackAdded"],
-      "net/minecraft/class_1827": ["org/btwr/self_sustainable/item/interfaces/TorchAdded"],
-      "net/minecraft/class_2248": ["org/btwr/self_sustainable/block/interfaces/BlockAdded"],
-      "net/minecraft/class_1309": ["org/btwr/self_sustainable/entity/interfaces/LivingEntityAdded"],
-      "net/minecraft/class_1657": ["org/btwr/self_sustainable/entity/interfaces/PlayerEntityAdded"],
-      "net/minecraft/class_1429": ["org/btwr/self_sustainable/entity/interfaces/AnimalEntityAdded"],
-      "net/minecraft/class_1267": ["org/btwr/self_sustainable/world/interfaces/DifficultyAdded"],
-      "net/minecraft/class_2358": ["org/btwr/self_sustainable/block/interfaces/FireBlockAdded"]
+      "net/minecraft/class_1267": ["org/btwr/self_sustainable/world/interfaces/added/DifficultyAdded"],
+      "net/minecraft/class_1309": ["org/btwr/self_sustainable/entity/interfaces/added/LivingEntityAdded"],
+      "net/minecraft/class_1429": ["org/btwr/self_sustainable/entity/interfaces/added/AnimalEntityAdded"],
+      "net/minecraft/class_1792": ["org/btwr/self_sustainable/item/interfaces/added/ItemAdded"],
+      "net/minecraft/class_1799": ["org/btwr/self_sustainable/item/interfaces/added/ItemStackAdded"],
+      "net/minecraft/class_2248": ["org/btwr/self_sustainable/block/interfaces/added/BlockAdded"],
+      "net/minecraft/class_2358": ["org/btwr/self_sustainable/block/interfaces/added/FireBlockAdded"]
     }
   },
   "accessWidener": "self_sustainable.accesswidener"

@@ -2,7 +2,7 @@ package org.btwr.self_sustainable.mixin.block;
 
 import org.btwr.self_sustainable.block.CampfireBlockMixinManager;
 import org.btwr.self_sustainable.block.entity.VariableCampfireBE;
-import org.btwr.self_sustainable.block.interfaces.CampfireBlockAdded;
+import org.btwr.self_sustainable.block.interfaces.added.CampfireBlockAdded;
 import org.btwr.self_sustainable.block.interfaces.IVariableCampfireBlock;
 import org.btwr.self_sustainable.block.interfaces.Ignitable;
 import org.btwr.self_sustainable.block.utils.CampfireState;
@@ -337,8 +337,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
-    public int getChanceOfFireSpreadingDirectlyTo(WorldAccess blockAccess, BlockPos pos) {
-        if (blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && getCampfireState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL)
+    public int btwr$getChanceOfFireSpreadingDirectlyTo(WorldAccess blockAccess, BlockPos pos) {
+        if (blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && btwr$getCampfireState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL)
         {
             return 60; // same chance as leaves and other highly flammable objects
         }
@@ -347,21 +347,21 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectly(@NotNull WorldAccess blockAccess, BlockPos pos) {
-        return blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && getCampfireState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL;
+    public boolean btwr$getCanBeSetOnFireDirectly(@NotNull WorldAccess blockAccess, BlockPos pos) {
+        return blockAccess.getBlockState(pos).get(FIRE_LEVEL) == 0 && btwr$getCampfireState(blockAccess.getBlockState(pos)) == CampfireState.NORMAL;
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
+    public boolean btwr$getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
         BlockState state = blockAccess.getBlockState(pos);
         return !state.get(LIT) && state.get(FIRE_LEVEL) == 0;
     }
 
     @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos) {
-        if (this.getCanBeSetOnFireDirectly(world, pos)) {
+    public boolean btwr$setOnFireDirectly(World world, BlockPos pos) {
+        if (this.btwr$getCanBeSetOnFireDirectly(world, pos)) {
             if (!isRainingOnCampfire(world, pos)) {
-                changeFireLevel(world, pos, 1);
+                btwr$changeFireLevel(world, pos, 1);
 
                 VariableCampfireBE campfireBE = (VariableCampfireBE) world.getBlockEntity(pos);
 
@@ -402,34 +402,34 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
-    public void changeFireLevel(World world, BlockPos pos, int fireLevel) {
+    public void btwr$changeFireLevel(World world, BlockPos pos, int fireLevel) {
         BlockState tempState = world.getBlockState(pos);
         world.setBlockState( pos, tempState.with(FIRE_LEVEL, fireLevel), Block.NOTIFY_ALL);
     }
 
     @Override
-    public CampfireState getCampfireState(BlockState state) {
+    public CampfireState btwr$getCampfireState(BlockState state) {
         return state.get(FUEL_STATE);
     }
 
     @Override
-    public void relightFire(World world, BlockPos pos) {
-        changeFireLevel(world, pos, 1);
+    public void btwr$relightFire(World world, BlockPos pos) {
+        btwr$changeFireLevel(world, pos, 1);
     }
 
     @Override
-    public int getFireLevel(BlockState state) {
+    public int btwr$getFireLevel(BlockState state) {
         return state.get(FIRE_LEVEL);
     }
 
     @Override
-    public BlockState setFireLevel (BlockState state, int newLevel)
+    public BlockState btwr$setFireLevel (BlockState state, int newLevel)
     {
         return state.with(FIRE_LEVEL, newLevel);
     }
 
     @Override
-    public void extinguishFire(World world, BlockState state, BlockPos pos, boolean smoulder) {
+    public void btwr$extinguishFire(World world, BlockState state, BlockPos pos, boolean smoulder) {
         if (smoulder) {
             setFuelState(world, pos, CampfireState.SMOULDERING);
         }
@@ -437,7 +437,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
             setFuelState(world, pos, CampfireState.BURNED_OUT);
         }
 
-        changeFireLevel(world, pos, 0);
+        btwr$changeFireLevel(world, pos, 0);
 
         if (!world.isClient()) {
             Ignitable.playExtinguishSound(world, pos, true);
@@ -445,7 +445,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     @Override
-    public void stopSmouldering(World world, BlockPos pos) {
+    public void btwr$stopSmouldering(World world, BlockPos pos) {
         setFuelState(world, pos, CampfireState.BURNED_OUT);
     }
 
@@ -458,7 +458,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     }
 
     public void relightFire(World world, BlockPos pos, BlockState state) {
-        changeFireLevel(world, pos, 1);
+        btwr$changeFireLevel(world, pos, 1);
     }
 
 

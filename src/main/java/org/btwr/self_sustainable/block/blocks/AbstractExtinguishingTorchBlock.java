@@ -111,13 +111,13 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
     }
 
     @Override
-    public boolean getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
+    public boolean btwr$getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
         return fireState == TorchFireState.UNLIT;
     }
 
     @Override
-    public boolean setOnFireDirectly(World world, BlockPos pos) {
-        if (this.getCanBeSetOnFireDirectly(world, pos)) {
+    public boolean btwr$setOnFireDirectly(World world, BlockPos pos) {
+        if (this.btwr$getCanBeSetOnFireDirectly(world, pos)) {
 
             if (!(world.getBlockEntity(pos) instanceof TorchBE be)) {
                 return false;

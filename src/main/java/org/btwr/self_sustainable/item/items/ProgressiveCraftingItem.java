@@ -39,7 +39,7 @@ public class ProgressiveCraftingItem extends Item {
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         int useCount = user.getItemUseTimeLeft();
 
-        boolean canUse = getMaxUseTime(stack, user) - useCount > getItemUseWarmupDuration();
+        boolean canUse = getMaxUseTime(stack, user) - useCount > btwr$getItemUseWarmupDuration();
 
         if (!canUse) return;
 
@@ -60,7 +60,7 @@ public class ProgressiveCraftingItem extends Item {
         }
         else {
             // set item usage to immediately complete
-            user.setItemUseTime(1);
+            user.btwr$setItemUseTime(1);
         }
     }
 

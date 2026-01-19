@@ -1,3 +1,5 @@
+## v???(dev)
+
 ## v0.3.1
 + Changed the modification for Flint and Steel's firestarter overhaul to be handled with Fabric Events instead of mixins
 + Changed how the mod registers block that are considered lit up blocks. Custom blocks that have the LIT property or any other condition to be considered "lit up" must now be registered with the LitBlockRegistry class. This allows other mods to add their custom blocks to work with the overhauled firestarter/s that Self-Sustainable adds

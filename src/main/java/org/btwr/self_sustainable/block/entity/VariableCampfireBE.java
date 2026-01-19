@@ -1,10 +1,7 @@
-/*
- * Decompiled with CFR 0.2.1 (FabricMC 53fa44c9).
- */
 package org.btwr.self_sustainable.block.entity;
 
 import org.btwr.self_sustainable.block.interfaces.added.CampfireBlockAdded;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.CampfireState;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import org.btwr.self_sustainable.util.MiscUtils;
@@ -148,7 +145,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
                         if (adjacentCampfireBE != null && isAdjacentCampfireLightableFromSpread(adjacentState)) {
                             adjacentCampfireBE.changeFireLevel(world, 1);
                             adjacentCampfireBE.onFirstLit();
-                            Ignitable.playLitFX(world, pos);
+                            IgnitableBlock.playLitFX(world, pos);
                         }
                     }
                 }
@@ -275,7 +272,7 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
                     changeFireLevel(world, desiredFireLevel);
 
                     if (desiredFireLevel == 1 && currentFireLevel == 2) {
-                        Ignitable.playExtinguishSound(world, pos, false);
+                        IgnitableBlock.playExtinguishSound(world, pos, false);
                     }
 
                     return desiredFireLevel;

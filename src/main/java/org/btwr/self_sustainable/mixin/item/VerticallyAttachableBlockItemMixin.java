@@ -14,10 +14,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 
 import static org.btwr.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
-import static net.minecraft.state.property.Properties.LIT;
 
 @Mixin(VerticallyAttachableBlockItem.class)
 public abstract class VerticallyAttachableBlockItemMixin extends BlockItem {
@@ -31,44 +29,44 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem {
         ItemStack heldStack = context.getStack();
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
-        BlockState targetState = world.getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
 
         // Try igniting torch when used on block that's lit up
-        if (targetState.isIn(ModTags.Blocks.DIRECTLY_IGNITES_ITEM_ON_USE) || isSpecialLitUpBlock(targetState)) {
-            if (targetState.isOf(ModBlocks.TORCH_UNLIT)) return ActionResult.FAIL;
-            if (heldStack.getItem() instanceof VerticallyAttachableBlockItem && !(heldStack.getItem() instanceof CrudeTorchBlockItem)) {
-                PlayerEntity player = context.getPlayer();
-                if (player != null && !world.isClient && !heldStack.isOf(Items.SOUL_TORCH)) {
-                    ItemStack newTorch = Items.TORCH.getDefaultStack().copyWithCount(heldStack.getCount());
+        if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITES_ITEM_ON_USE) /**|| isPropertyLitBlock(state)**/) {
+            //if (state.isOf(ModBlocks.TORCH_UNLIT)) return ActionResult.FAIL;
 
-                    if (player.getMainHandStack() == heldStack) {
-                        player.getInventory().setStack(player.getInventory().selectedSlot, newTorch);
-                    }
-                    else if (player.getOffHandStack() == heldStack) {
-                        player.getInventory().offHand.set(0, newTorch);
+            if (!world.isClient) {
+                PlayerEntity player = context.getPlayer();
+
+                if (heldStack.getItem() instanceof VerticallyAttachableBlockItem && !(heldStack.getItem() instanceof CrudeTorchBlockItem)) {
+                    if (state.get(FIRE_LEVEL) <= 0) {
+                        if (player != null && !heldStack.isOf(Items.SOUL_TORCH)) {
+                            ItemStack newTorch = Items.TORCH.getDefaultStack().copyWithCount(heldStack.getCount());
+                            if (player.getMainHandStack() == heldStack) {
+                                player.getInventory().setStack(player.getInventory().selectedSlot, newTorch);
+                            }
+                            else if (player.getOffHandStack() == heldStack) {
+                                player.getInventory().offHand.set(0, newTorch);
+                            }
+                        }
+                        world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
                     }
                 }
 
-                world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
                 return ActionResult.SUCCESS;
             }
         }
 
         // Prevent normal placement on those blocks
-        if (!(targetState.getBlock() instanceof CampfireBlock) || !targetState.isOf(ModBlocks.OVEN_BRICK) || !targetState.isOf(ModBlocks.SMOKER_BRICK))
+        if (!(state.getBlock() instanceof CampfireBlock)
+                || !state.isOf(ModBlocks.OVEN_BRICK)
+                || !state.isOf(ModBlocks.SMOKER_BRICK))
         {
             return super.useOnBlock(context);
         }
 
-        return ActionResult.FAIL;
-    }
 
-    @Unique
-    private boolean isSpecialLitUpBlock(BlockState state) {
-        boolean lit = state.contains(LIT) && state.get(LIT);
-        boolean hasFireLevel = state.contains(FIRE_LEVEL) && state.get(FIRE_LEVEL) > 0;
-        return (lit && (state.isOf(ModBlocks.OVEN_BRICK) || state.isOf(ModBlocks.SMOKER_BRICK)))
-                || (hasFireLevel && state.getBlock() instanceof CampfireBlock);
+        return ActionResult.FAIL;
     }
 
 }

@@ -32,6 +32,16 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
     }
 
     private void addToModTags() {
+        getOrCreateTagBuilder(ModTags.Items.LIT_TORCHES)
+                .add(Items.TORCH)
+                .add(Items.SOUL_TORCH)
+                .add(ModItems.CRUDE_TORCH_LIT)
+                .add(ModItems.CRUDE_TORCH_SMOULDER);
+
+        getOrCreateTagBuilder(ModTags.Items.UNLIT_TORCHES)
+                .add(ModItems.TORCH_UNLIT)
+                .add(ModItems.CRUDE_TORCH_UNLIT);
+
         getOrCreateTagBuilder(ModTags.Items.TORCH_EXTINGUISHERS)
                 .forceAddTag(ItemTags.SHOVELS);
 
@@ -45,10 +55,7 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
                 .add(ModItems.FIRESTARTER_BOW);
 
         getOrCreateTagBuilder(ModTags.Items.DIRECT_IGNITERS)
-                .add(Items.TORCH)
-                .add(Items.SOUL_TORCH)
-                .add(ModItems.CRUDE_TORCH_LIT)
-                .add(ModItems.CRUDE_TORCH_SMOULDER)
+                .addTag(ModTags.Items.LIT_TORCHES)
                 .add(Items.FIRE_CHARGE);
     }
 

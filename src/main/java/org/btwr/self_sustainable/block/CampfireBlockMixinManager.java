@@ -2,7 +2,7 @@ package org.btwr.self_sustainable.block;
 
 import org.btwr.self_sustainable.block.entity.VariableCampfireBE;
 import org.btwr.self_sustainable.block.interfaces.IVariableCampfireBlock;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.CampfireState;
 import org.btwr.self_sustainable.tag.ModTags;
 import net.minecraft.block.Block;
@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import static net.minecraft.block.CampfireBlock.*;
 
-public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBlock {
+public class CampfireBlockMixinManager implements IgnitableBlock, IVariableCampfireBlock {
 
     private static final CampfireBlockMixinManager instance = new CampfireBlockMixinManager();
 
@@ -54,7 +54,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
                     campfireBE.changeFireLevel(world, 0);
                 }
 
-                Ignitable.playExtinguishSound(world, pos, false);
+                IgnitableBlock.playExtinguishSound(world, pos, false);
 
                 return ActionResult.SUCCESS;
             }
@@ -108,7 +108,7 @@ public class CampfireBlockMixinManager implements Ignitable, IVariableCampfireBl
 
                 if (heldStack.getItem().btwr$getCanBeFedDirectlyIntoCampfire(heldStack)) {
                     if (!world.isClient) {
-                        Ignitable.playLitFX(world, pos);
+                        IgnitableBlock.playLitFX(world, pos);
                         campfireBE.addBurnTime(state, itemBurnTime);
                     }
                     heldStack.decrement(1);

@@ -2,7 +2,7 @@ package org.btwr.self_sustainable.mixin.block;
 
 import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.block.blocks.CrudeWallTorchBlock;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -40,10 +40,10 @@ public abstract class TorchBlockMixin extends AbstractTorchBlock {
 
             if (!world.hasRain(pos)) {
                 changeTorch(world, pos, world.getBlockState(pos));
-                Ignitable.playLitFX(world, pos);
+                IgnitableBlock.playLitFX(world, pos);
             }
             else {
-                Ignitable.playExtinguishSound(world, pos, false);
+                IgnitableBlock.playExtinguishSound(world, pos, false);
             }
 
             return true;

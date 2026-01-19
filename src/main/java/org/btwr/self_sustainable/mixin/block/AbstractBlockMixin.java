@@ -1,7 +1,7 @@
 package org.btwr.self_sustainable.mixin.block;
 
 import org.btwr.self_sustainable.block.entity.VariableCampfireBE;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.FluidState;
@@ -49,7 +49,7 @@ public abstract class AbstractBlockMixin {
                     // Try to light *this* campfire from that adjacent fire source
                     campfireBE.changeFireLevel(world, 1);
                     campfireBE.onFirstLit();
-                    Ignitable.playLitFX(world, pos);
+                    IgnitableBlock.playLitFX(world, pos);
                     return; // already lit, no need to continue
                 }
             }

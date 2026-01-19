@@ -2,7 +2,7 @@ package org.btwr.self_sustainable.block.entity;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.btwr.self_sustainable.block.blocks.SmokerOvenBlock;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.entity.util.CustomSingleStackInventory;
 import org.btwr.self_sustainable.recipe.cooking.OvenCookingRecipe;
 import net.minecraft.block.Block;
@@ -33,7 +33,7 @@ import net.minecraft.world.event.GameEvent;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class AbstractOvenBE extends BlockEntity implements Ignitable, CustomSingleStackInventory {
+public abstract class AbstractOvenBE extends BlockEntity implements IgnitableBlock, CustomSingleStackInventory {
 
     public int unlitFuelBurnTime;
     public int fuelBurnTime;

@@ -4,7 +4,7 @@ import org.btwr.self_sustainable.block.CampfireBlockMixinManager;
 import org.btwr.self_sustainable.block.entity.VariableCampfireBE;
 import org.btwr.self_sustainable.block.interfaces.added.CampfireBlockAdded;
 import org.btwr.self_sustainable.block.interfaces.IVariableCampfireBlock;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.CampfireState;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.*;
@@ -55,7 +55,7 @@ import java.util.Set;
 
 // TODO: Make campfire spread fire to neighbouring campfires and also to set fire around like it does in BTW
 @Mixin(CampfireBlock.class)
-public abstract class CampfireBlockMixin extends BlockWithEntity implements Ignitable, CampfireBlockAdded, IVariableCampfireBlock
+public abstract class CampfireBlockMixin extends BlockWithEntity implements IgnitableBlock, CampfireBlockAdded, IVariableCampfireBlock
 {
     @Shadow @Final private boolean emitsParticles;
     @Shadow @Final private int fireDamage;
@@ -244,13 +244,13 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                         if (state.get(FIRE_LEVEL) > 0 || state.get(FUEL_STATE) == CampfireState.SMOULDERING) {
                             campfireBE.addBurnTime(state, stack, itemBurnTime);
                             stack.decrement(stack.getCount());
-                            Ignitable.playLitFX(world, pos);
+                            IgnitableBlock.playLitFX(world, pos);
                         }
                         // all other items burn at fuel level higher than 1
                     }
                     else if (state.get(FIRE_LEVEL) > 1) {
                         stack.decrement(stack.getCount());
-                        Ignitable.playLitFX(world, pos);
+                        IgnitableBlock.playLitFX(world, pos);
                     }
                 }
             }
@@ -392,7 +392,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                 }
                  **/
             } else {
-                Ignitable.playExtinguishSound(world, pos, false);
+                IgnitableBlock.playExtinguishSound(world, pos, false);
             }
 
             return true;
@@ -440,7 +440,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         btwr$changeFireLevel(world, pos, 0);
 
         if (!world.isClient()) {
-            Ignitable.playExtinguishSound(world, pos, true);
+            IgnitableBlock.playExtinguishSound(world, pos, true);
         }
     }
 

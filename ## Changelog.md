@@ -1,15 +1,20 @@
-# v0.3
+## v0.3.1
++ Changed the modification for Flint and Steel's firestarter overhaul to be handled with Fabric Events instead of mixins
++ Changed how the mod registers block that are considered lit up blocks. Custom blocks that have the LIT property or any other condition to be considered "lit up" must now be registered with the LitBlockRegistry class. This allows other mods to add their custom blocks to work with the overhauled firestarter/s that Self-Sustainable adds
++ Updated the mod to BTWR: Shared Library 0.7
+
+## v0.3
 + Refactored pretty much the whole code; mainly for readability and cleaning up, but also so it's more in order with other mods from the BTWR project
 + Updated the mod to Fabric API 0.116.7, Fabric Loader 0.17.3 & BTWR: Shared Library 0.6.5
 
-# v0.2.1
+## v0.2.1
 + Fixed a bug(for real now) with unlit crude torches that would decrement unlit torches twice when trying to light one
 + Fixed crude torches to properly transition into a smoldered state when there's 30 seconds of fuel left.
 + Fixed recipes for oven to show up properly.
 + Removed unfinished Wicker Weaving item from having a recipe because it's still unused
 + Updated the mod to Fabric API 0.116.6, Fabric Loader 0.17.2 & BTWR: Shared Library 0.58
 
-# v0.2
+## v0.2
 + Added compatibility for the Brick Oven recipe to work conditionally with Tough Environment. When its loaded it requires Loose Brick Slab, and when it's not it requires normal vanilla Bricks Slab
 + Reworked how torches work internally to fix a few bugs related to lighting them/lighting up blocks with them
 + Changed torches in the inventory to not get destroyed by any type of water when the player is in creative or spectator mode
@@ -17,15 +22,15 @@
 + Fixed a bug with crude torches that would decrement unlit torches twice when trying to light one
 + Updated the mod to Fabric API 0.116.4 & BTWR: Shared Library 0.56
 
-# v0.1.2
+## v0.1.2
 + Added EMI support for the Brick Oven (Oven Cooking) recipes.
 + Removed old recipes for cooking with vanilla furnaces that were leftover since adding the Brick Oven.
 
-# v0.1.1
+## v0.1.1
 + Improved logic when right-clicking on a Brick Oven to work much better.
 + Fixed a bug that was causing the game to crash when breaking a torch block that had a fuel component, but wasn't initialized properly for it's intended blocks
 + Fixed some bugs related to oven recipes to be more consistent and register as intended.
 + Updated the mod to Fabric API 0.116.1
 
-# v0.1
+## v0.1
 + Initial release

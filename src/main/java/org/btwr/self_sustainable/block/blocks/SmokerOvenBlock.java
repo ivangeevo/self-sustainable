@@ -2,7 +2,7 @@ package org.btwr.self_sustainable.block.blocks;
 
 import com.mojang.serialization.MapCodec;
 import org.btwr.self_sustainable.block.entity.SmokerOvenBE;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import org.btwr.self_sustainable.recipe.cooking.OvenCookingRecipe;
 import org.btwr.self_sustainable.state.property.ModProperties;
@@ -41,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class SmokerOvenBlock extends BlockWithEntity implements Ignitable {
+public class SmokerOvenBlock extends BlockWithEntity implements IgnitableBlock {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
@@ -138,14 +138,14 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable {
                     if (state.get(FUEL_LEVEL) > 0) {
                         if (!state.get(LIT)) {
                             world.setBlockState(pos, state.with(LIT, true));
-                            Ignitable.playLitFX(world, pos);
+                            IgnitableBlock.playLitFX(world, pos);
                             heldStack.damage(1, player, EquipmentSlot.MAINHAND);
                         }
 
                         return ActionResult.SUCCESS;
                     }
                     else {
-                        Ignitable.playExtinguishSound(world, pos, false);
+                        IgnitableBlock.playExtinguishSound(world, pos, false);
                     }
                 }
                 else { // try to add fuel
@@ -155,7 +155,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable {
 
                     if (numItemsConsumed > 0) {
                         if (state.get(LIT)) {
-                            Ignitable.playLitFX(world, pos);
+                            IgnitableBlock.playLitFX(world, pos);
                         } else {
                             this.playPopSound(world, pos);
                         }
@@ -277,7 +277,7 @@ public class SmokerOvenBlock extends BlockWithEntity implements Ignitable {
                 world.setBlockState(blockPos, state.with(Properties.LIT, true),
                         Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
 
-                Ignitable.playLitFX(world, blockPos);
+                IgnitableBlock.playLitFX(world, blockPos);
             }
         }
     }

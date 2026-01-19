@@ -3,7 +3,7 @@ package org.btwr.self_sustainable.block.blocks;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import org.btwr.self_sustainable.block.entity.BrickOvenBE;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import org.btwr.self_sustainable.recipe.cooking.OvenCookingRecipe;
 import org.btwr.self_sustainable.state.property.ModProperties;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
+public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
 
     public static final MapCodec<BrickOvenBlock> CODEC = createCodec(BrickOvenBlock::new);
 
@@ -139,7 +139,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
                 if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
                     if (state.get(FUEL_LEVEL) > 0 && !state.get(LIT)) {
                         world.setBlockState(pos, state.with(LIT, true));
-                        Ignitable.playLitFX(world, pos);
+                        IgnitableBlock.playLitFX(world, pos);
                         return ActionResult.SUCCESS;
                     }
                 }
@@ -148,7 +148,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
 
                     if (numItemsConsumed > 0) {
                         if (state.get(LIT)) {
-                            Ignitable.playLitFX(world, pos);
+                            IgnitableBlock.playLitFX(world, pos);
                         } else {
                             this.playPopSound(world, pos);
                         }
@@ -271,7 +271,7 @@ public class BrickOvenBlock extends BlockWithEntity implements Ignitable {
         
         if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, pos)) {
             world.setBlockState(pos, state.with(Properties.LIT, true), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-            Ignitable.playLitFX(world, pos);
+            IgnitableBlock.playLitFX(world, pos);
         }
 
     }

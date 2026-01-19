@@ -7,7 +7,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public interface DirectlyIgnitingItem {
+public interface IFirestarterItem {
 
      float CHANCE_DECAY_PER_TICK = 0.00025F;
      long DELAY_BEFORE_DECAY = (2 * 20 ); // two seconds

@@ -1,7 +1,7 @@
 package org.btwr.self_sustainable.item.items;
 
 
-import org.btwr.self_sustainable.item.util.DirectlyIgnitingItem;
+import org.btwr.self_sustainable.item.util.IFirestarterItem;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public abstract class FireStarterItem extends Item implements DirectlyIgnitingItem {
+public abstract class FireStarterItem extends Item implements IFirestarterItem {
 
     private final float exhaustionPerUse;
 

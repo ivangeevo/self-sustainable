@@ -3,7 +3,7 @@ package org.btwr.self_sustainable.block.blocks;
 import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.block.entity.TorchBE;
 import org.btwr.self_sustainable.block.entity.util.FuelBurningBlock;
-import org.btwr.self_sustainable.block.interfaces.Ignitable;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.item.component.TorchFuelComponent;
@@ -125,7 +125,7 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
 
             if (!world.hasRain(pos)) {
                 this.changeTorch(world, pos, world.getBlockState(pos), TorchFireState.LIT);
-                Ignitable.playLitFX(world, pos);
+                IgnitableBlock.playLitFX(world, pos);
 
                 // Ensure the block entity has the required component
                 ComponentMap components = be.getComponents();
@@ -138,7 +138,7 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
                 be.markDirty();
             }
             else {
-                Ignitable.playExtinguishSound(world, pos, false);
+                IgnitableBlock.playExtinguishSound(world, pos, false);
             }
 
             return true;
@@ -185,7 +185,7 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
 
     public void light(World world, BlockPos pos, BlockState state) {
         if (!world.isClient) {
-            Ignitable.playLitFX(world, pos);
+            IgnitableBlock.playLitFX(world, pos);
             displayParticle(ParticleTypes.LAVA, state, world, pos);
             displayParticle(ParticleTypes.FLAME, state, world, pos);
             changeTorch(world, pos, state, TorchFireState.LIT);

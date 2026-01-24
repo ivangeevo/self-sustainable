@@ -65,7 +65,6 @@ public abstract class VerticallyAttachableBlockItemMixin extends BlockItem {
             return super.useOnBlock(context);
         }
 
-
         return ActionResult.FAIL;
     }
 

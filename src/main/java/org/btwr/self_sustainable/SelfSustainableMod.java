@@ -23,8 +23,6 @@ public class SelfSustainableMod implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Initializing Self Sustainable.");
 
-        // Default entries for blocks which are considered lit.
-        LitBlockRegistry.registerDefaults();
 
         ModEvents.register();
 
@@ -35,6 +33,10 @@ public class SelfSustainableMod implements ModInitializer {
         ModBlocks.registerBlocks();
         ModBlocks.registerItemsPlaceableAsBlocks();
         ModBlocks.registerTorchHandler();
+
+        // Default entries for blocks which are considered lit.
+        LitBlockRegistry.registerDefaults();
+
         ModItems.register();
         ModComponentsTypes.register();
         ModItemGroup.register();

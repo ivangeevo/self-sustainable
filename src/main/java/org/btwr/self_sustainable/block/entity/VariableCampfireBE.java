@@ -39,6 +39,7 @@ import static org.btwr.self_sustainable.block.interfaces.IVariableCampfireBlock.
 
 public class VariableCampfireBE extends BlockEntity implements Clearable {
 
+    // TODO: Change to a singular itemstack, since this campfire only holds one food item
     private final DefaultedList<ItemStack> itemsBeingCooked = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private int cookingTime = 0;
     private int cookingTotalTime = 0;
@@ -381,6 +382,10 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
     }
 
     public void addItem(@Nullable Entity user, ItemStack stack, int cookTime) {
+        if (this.world == null || this.world.isClient) {
+            return;
+        }
+
         for (ItemStack itemStack : this.itemsBeingCooked) {
             if (!itemStack.isEmpty()) continue;
             setTotalCookTime(cookTime);

@@ -85,7 +85,7 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
     public boolean btwr$getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
         if (blockAccess.getBlockState(pos).get(LIT)) return false;
         BrickOvenBE ovenBE = (BrickOvenBE) blockAccess.getBlockEntity(pos);
-        // uses the visual fuel level rather than the actualy fuel level so this will work on the client
+        // uses the visual fuel level rather than the actual fuel level so this will work on the client
         assert ovenBE != null;
         return ovenBE.getVisualFuelLevel() > 0;
     }

@@ -1,6 +1,6 @@
 package org.btwr.self_sustainable.block.entity;
 
-import org.btwr.self_sustainable.block.blocks.AbstractExtinguishingTorchBlock;
+import org.btwr.self_sustainable.block.blocks.AbstractCrudeTorchBlock;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
@@ -27,7 +27,7 @@ public class TorchBE extends BlockEntity {
         TorchFuelComponent fuelComponent = be.getComponents().getOrDefault(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent());
 
         if (world.isClient) return;
-        if (!(state.getBlock() instanceof AbstractExtinguishingTorchBlock torchBlock)) return;
+        if (!(state.getBlock() instanceof AbstractCrudeTorchBlock torchBlock)) return;
         if (torchBlock.getFireState() == TorchFireState.LIT) {
             tickLit(world, pos, state, be, fuelComponent);
         }
@@ -40,7 +40,7 @@ public class TorchBE extends BlockEntity {
         // Extinguish in rain
         if (world.hasRain(pos)) {
             if (random.nextInt(200) == 0) {
-                ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, true);
+                ((AbstractCrudeTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, true);
             }
         }
 
@@ -49,15 +49,15 @@ public class TorchBE extends BlockEntity {
         // Burn out
         if (fuel > 0) {
             if (fuel < SPUTTER_TIME) {
-                if (world.getBlockState(pos).getBlock() instanceof AbstractExtinguishingTorchBlock) {
-                    ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).smoulder(world, pos, state);
+                if (world.getBlockState(pos).getBlock() instanceof AbstractCrudeTorchBlock) {
+                    ((AbstractCrudeTorchBlock) world.getBlockState(pos).getBlock()).smoulder(world, pos, state);
                 }
             }
             fuelComponent.decrement();
         }
         else {
-            if (world.getBlockState(pos).getBlock() instanceof AbstractExtinguishingTorchBlock) {
-                ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
+            if (world.getBlockState(pos).getBlock() instanceof AbstractCrudeTorchBlock) {
+                ((AbstractCrudeTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
             }
         }
 
@@ -72,7 +72,7 @@ public class TorchBE extends BlockEntity {
             if (fuel > 0) {
                 fuelComponent.decrement();
             } else {
-                ((AbstractExtinguishingTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
+                ((AbstractCrudeTorchBlock) world.getBlockState(pos).getBlock()).burnOut(world, pos, state, false);
             }
         }
 

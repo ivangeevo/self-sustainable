@@ -11,17 +11,14 @@ public interface IgnitableBlock {
 
     BooleanProperty LIT = Properties.LIT;
 
-    default void tryIgnite() { throw new UnsupportedOperationException(); }
-
     static void playLitFX(World world, BlockPos pos) {
-        BlockPos soundPos = new BlockPos(
-                (int) ((double) pos.getX() + 0.5D),
-                (int) ((double) pos.getY() + 0.5D),
-                (int) ((double) pos.getZ() + 0.5D)
+        world.playSound(
+                null,
+                BlockPos.ofFloored(pos.toCenterPos()),
+                SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS,
+                0.2F + world.random.nextFloat() * 0.1F,
+                world.random.nextFloat() * 0.25F + 1.25F
         );
-
-        world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS,
-                0.2F + world.random.nextFloat() * 0.1F, world.random.nextFloat() * 0.25F + 1.25F);
     }
 
     static void playExtinguishSound(World world, BlockPos pos, boolean isQuiet) {

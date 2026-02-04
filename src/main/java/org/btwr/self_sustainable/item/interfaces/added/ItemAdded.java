@@ -4,15 +4,9 @@ import org.btwr.self_sustainable.util.CustomUseAction;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public interface ItemAdded {
-
-    default boolean btwr$attemptToLightBlock(ItemStack stack, World world, BlockPos pos, Direction facing) {
-        throw new UnsupportedOperationException();
-    }
 
     int defaultFurnaceBurnTime = 0;
 

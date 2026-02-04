@@ -422,10 +422,10 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
         this.itemsBeingCooked.clear();
     }
 
-    public void changeFireLevel(World world, int iFireLevel) {
+    public void changeFireLevel(World world, int fireLevel) {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof CampfireBlock block) {
-            ((CampfireBlockAdded)block).btwr$changeFireLevel(world, pos, iFireLevel);
+            ((CampfireBlockAdded)block).btwr$changeFireLevel(world, pos, fireLevel);
         }
     }
 

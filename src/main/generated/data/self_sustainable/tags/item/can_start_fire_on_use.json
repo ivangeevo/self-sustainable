@@ -1,7 +1,6 @@
 {
   "values": [
-    "#self_sustainable:primitive_firestarters",
-    "#self_sustainable:direct_igniters",
-    "minecraft:flint_and_steel"
+    "#self_sustainable:firestarters",
+    "#self_sustainable:direct_igniters"
   ]
 }

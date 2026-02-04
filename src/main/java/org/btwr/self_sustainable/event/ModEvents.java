@@ -2,12 +2,19 @@ package org.btwr.self_sustainable.event;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FlintAndSteelItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.CampfireCookingRecipe;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -17,12 +24,150 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import org.btwr.self_sustainable.block.entity.VariableCampfireBE;
+import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
+import org.btwr.self_sustainable.block.utils.CampfireState;
+import org.btwr.self_sustainable.tag.ModTags;
+
+import java.util.Map;
+import java.util.Optional;
+
+import static org.btwr.self_sustainable.block.interfaces.IVariableCampfireBlock.*;
 
 public class ModEvents {
 
     public static void register() {
-        //UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {});
+        // Campfire block usage modifications
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            BlockPos pos = hitResult.getBlockPos();
+            BlockState state = world.getBlockState(pos);
+            ItemStack heldStack = player.getStackInHand(hand);
 
+            // Cancel food cooking for soul campfire as it's not modified as the normal one in this mod
+            if (state.isOf(Blocks.SOUL_CAMPFIRE))  {
+                // Allow only shovel extinguishing & igniters usages
+                if (!heldStack.isIn(ItemTags.SHOVELS) || !heldStack.isIn(ModTags.Items.CAN_START_FIRE_ON_USE)) {
+                    return ActionResult.FAIL;
+                }
+            }
+
+            // Usage modifications for the normal campfire
+            if (state.isOf(Blocks.CAMPFIRE)) {
+                BlockEntity blockEntity = world.getBlockEntity(pos);
+
+                if (blockEntity instanceof VariableCampfireBE campfireBE) {
+                    // Extinguish with a shovel
+                    if (heldStack.getItem() instanceof ShovelItem && state.get(FIRE_LEVEL) > 0) {
+                        if (!world.isClient) {
+                            campfireBE.changeFireLevel(world, 0);
+                        }
+                        IgnitableBlock.playExtinguishSound(world, pos, false);
+                        return ActionResult.SUCCESS;
+                    }
+
+                    // Igniting
+                    if (state.get(FUEL_STATE) == CampfireState.NORMAL && state.get(FIRE_LEVEL) == 0) {
+                        // Direct ignite (torch/fire charge)
+                        if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
+                            if (!world.isClient) {
+                                state.getBlock().btwr$setOnFireDirectly(world, pos);
+                            }
+                            return ActionResult.SUCCESS;
+                        }
+
+                        // Firestarter ignite — let the item handle it
+                        if (heldStack.isIn(ModTags.Items.FIRESTARTERS)) {
+                            return ActionResult.PASS;
+                        }
+                    }
+
+                    Optional<RecipeEntry<CampfireCookingRecipe>> optional;
+
+                    // Adding a spit
+                    if (!state.get(HAS_SPIT)) {
+                        if (heldStack.isOf(Items.STICK)) {
+                            if (!world.isClient) {
+                                world.setBlockState(pos, state.with(HAS_SPIT, true));
+                                heldStack.decrementUnlessCreative(1, player);
+                            }
+                            return ActionResult.SUCCESS;
+                        }
+                    }
+                    // Adding a cooking item
+                    else {
+                        Map<Item, Integer> fuelMap = AbstractFurnaceBlockEntity.createFuelTimeMap();
+
+                        // The food item that is currently on the campfire
+                        ItemStack cookStack = campfireBE.getItemsBeingCooked().getFirst();
+
+                        // Try adding a food item
+                        if (!cookStack.isEmpty()) {
+                            // Allow retrieval if hand is empty or if the held item is neither ignitable nor fuel
+                            if (heldStack.isEmpty() || (!heldStack.isIn(ModTags.Items.CAN_BE_SET_ON_FIRE_ON_USE) && !fuelMap.containsKey(heldStack.getItem()))) {
+                                campfireBE.retrieveItem(world, campfireBE, player);
+                                world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.2F,
+                                        ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1F ) * 2F);
+                                return ActionResult.SUCCESS;
+                            }
+                        }
+
+                        // Retrieve a placed spit
+                        if (heldStack.isEmpty() && cookStack.isEmpty()) {
+                            if (!world.isClient) {
+                                world.setBlockState(pos, state.with(HAS_SPIT, false));
+                                player.giveItemStack(new ItemStack(Items.STICK));
+                            }
+                            world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.2F,
+                                    ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1F ) * 2F);
+                            return ActionResult.SUCCESS;
+                        }
+                        // Try adding a cook stack
+                        else if ((optional = campfireBE.getRecipeFor(heldStack)).isPresent()) {
+                            if (cookStack.isEmpty()) {
+                                campfireBE.addItem(player,
+                                        player.getAbilities().creativeMode
+                                                ? heldStack.copy()
+                                                : heldStack,
+                                        optional.get().value().getCookingTime()
+                                );
+                                return ActionResult.SUCCESS;
+                            }
+                        }
+
+                        // Try adding fuel
+                        if (state.get(FIRE_LEVEL) > 0 || state.get(FUEL_STATE) == CampfireState.SMOULDERING) {
+                            int itemBurnTime = 0;
+                            if (!heldStack.isEmpty()) {
+                                itemBurnTime = AbstractFurnaceBlockEntity.createFuelTimeMap()
+                                        .getOrDefault(heldStack.getItem(), 0);
+                            }
+
+                            // Disallow using log blocks as fuel (this doesn't disallow normal block placing while right-clicking on it though)
+                            if (heldStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock().getDefaultState().isIn(BlockTags.LOGS)) {
+                                return ActionResult.PASS;
+                            }
+
+                            // Add a valid fuel item to the burn time
+                            if (heldStack.getItem().btwr$getCanBeFedDirectlyIntoCampfire(heldStack)) {
+                                if (!world.isClient) {
+                                    campfireBE.addBurnTime(state, itemBurnTime);
+                                    heldStack.decrementUnlessCreative(1, player);
+                                }
+                                IgnitableBlock.playLitFX(world, pos);
+                                return ActionResult.SUCCESS;
+                            }
+                        }
+                    }
+                }
+
+                // Pass to remove vanilla campfire interactions, but allow others
+                return ActionResult.PASS;
+            }
+
+            return ActionResult.PASS;
+        });
+
+        // Flint and steel modification as a firestarter
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             ItemStack handStack = player.getStackInHand(hand);
             BlockPos pos = hitResult.getBlockPos();
@@ -45,12 +190,13 @@ public class ModEvents {
 
                     return ActionResult.SUCCESS;
                 }
-
+                // Fail to disable normal flint and steel behavior
                 return ActionResult.FAIL;
             }
 
             return ActionResult.PASS;
         });
+
     }
 
     public static void performUseEffects(World world, BlockPos pos, PlayerEntity player, Hand hand) {

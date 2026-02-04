@@ -9,7 +9,6 @@ import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import org.btwr.self_sustainable.registry.FuelRegistryManager;
-import org.btwr.self_sustainable.registry.LitBlockRegistry;
 import org.btwr.self_sustainable.util.WorldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,6 @@ public class SelfSustainableMod implements ModInitializer {
         LOGGER.info("Initializing Self Sustainable.");
 
 
-        ModEvents.register();
 
         // Modifying foods to gave less hunger in general and 0 saturation.
         // Also, some additional negative effects to certain ones.
@@ -33,14 +31,12 @@ public class SelfSustainableMod implements ModInitializer {
         ModBlocks.registerBlocks();
         ModBlocks.registerItemsPlaceableAsBlocks();
         ModBlocks.registerTorchHandler();
-
-        // Default entries for blocks which are considered lit.
-        LitBlockRegistry.registerDefaults();
-
         ModItems.register();
+        ModBlockEntities.register();
         ModComponentsTypes.register();
         ModItemGroup.register();
-        ModBlockEntities.register();
+        ModEvents.register();
+
         ModRecipes.register();
 
         WorldUtils.init();
@@ -48,9 +44,6 @@ public class SelfSustainableMod implements ModInitializer {
         // Modifying fuel items.
         FuelRegistryManager.initEntries();
 
-        // Predicates
-        //ModelPredicateProviderRegistry.register(ModItems.TORCH, new Identifier("Lit"), (stack, world, entity, seed) -> TorchBlockEntity.isLit(stack) ? 1.0f : 0.0f);
-        //ModelPredicateProviderRegistry.register(ModItems.CRUDE_TORCH, new Identifier("Lit"), (stack, world, entity, seed) -> CrudeTorchBlockEntity.isLit(stack) ? 1.0f : 0.0f);
     }
 
 }

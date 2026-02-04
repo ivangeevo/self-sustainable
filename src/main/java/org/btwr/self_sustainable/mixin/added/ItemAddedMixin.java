@@ -32,11 +32,13 @@ public abstract class ItemAddedMixin implements ItemAdded {
         return CampfireBlockMixinManager.getInstance().getItemFuelTime(stack);
     }
 
+    /** Default implementation simply uses any item in the tag **/
     @Override
     public boolean btwr$getCanItemBeSetOnFireOnUse(ItemStack stack) {
         return stack.isIn(ModTags.Items.CAN_BE_SET_ON_FIRE_ON_USE);
     }
 
+    /** Default implementation simply uses any item in the tag **/
     @Override
     public boolean btwr$getCanItemStartFireOnUse(ItemStack stack) {
         return stack.isIn(ModTags.Items.CAN_START_FIRE_ON_USE);

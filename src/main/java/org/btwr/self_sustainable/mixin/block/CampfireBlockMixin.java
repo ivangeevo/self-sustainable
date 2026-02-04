@@ -31,7 +31,6 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.ItemScatterer;
@@ -72,12 +71,10 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         super(settings);
     }
 
-
+    // Makes the campfire not solid (able to walk through)
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void injectedConstructorSettings(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci)
-    {
+    private void injectedConstructorSettings(boolean emitsParticles, int fireDamage, Settings settings, CallbackInfo ci) {
         settings.notSolid();
-
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
@@ -89,6 +86,18 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                         .with(FUEL_STATE, CampfireState.NORMAL)
                         .with(HAS_SPIT, false)
         );
+    }
+
+    // Needed inject to cancel vanilla interactions for the normal campfire while still allowing other item's to interact with the block
+    @Inject(method = "onUseWithItem", at = @At("HEAD"), cancellable = true)
+    private void btwr$overrideOnUse(
+            ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ItemActionResult> cir
+    ) {
+        // If this campfire is managed by your system
+        if (state.isOf(Blocks.CAMPFIRE)) {
+            // Let your UseBlockCallback handle it instead
+            cir.setReturnValue(ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
+        }
     }
 
     @Override
@@ -156,14 +165,13 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         if (!state.get(Properties.WATERLOGGED) && fluidState.getFluid() == Fluids.WATER) {
             int fl = state.get(FIRE_LEVEL);
             if (fl > 0) {
-                if (!world.isClient()) {
-                    world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                }
-
-                CampfireBlock.extinguish(null, world, pos, state);
+                btwr$extinguishFire((World) world, state, pos, false);
             }
 
-            world.setBlockState(pos, state.with(WATERLOGGED, true).with(FIRE_LEVEL, 0), Block.NOTIFY_ALL);
+            world.setBlockState(pos,
+                    world.getBlockState(pos).with(WATERLOGGED, true),
+                    Block.NOTIFY_ALL
+            );
             world.scheduleFluidTick(pos, fluidState.getFluid(), fluidState.getFluid().getTickRate(world));
 
             cir.setReturnValue(true);
@@ -180,7 +188,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         if (!world.isClient && projectile.isOnFire() &&
                 projectile.canModifyAt(world, blockPos) && state.get(FIRE_LEVEL) < 1 && !state.get(WATERLOGGED))
         {
-            world.setBlockState(blockPos, state.with(FIRE_LEVEL, 1), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+            //world.setBlockState(blockPos, state.with(FIRE_LEVEL, 1).with(LIT, true), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+            btwr$changeFireLevel(world, blockPos, 1);
         }
     }
 
@@ -198,21 +207,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return VoxelShapes.empty();
-    }
-
-    @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (state.getBlock() == Blocks.CAMPFIRE) {
-            return managerInstance.onUse(state, world, pos, player, player.getActiveHand(), hit);
-        }
-
-        return super.onUse(state, world, pos, player, hit);
-    }
-
-    @Inject(method = "onUseWithItem", at = @At("HEAD"), cancellable = true)
-    private void cancelOnUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ItemActionResult> cir)
-    {
-        cir.setReturnValue(ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
     }
 
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
@@ -270,7 +264,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         return AbstractFurnaceBlockEntity.createFuelTimeMap().keySet();
     }
 
-
     // Making it randomly display only if the FIRE Level is more than 0, instead of the LIT property.
     @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
     private void injectedRandomDisplayTick(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci) {
@@ -287,7 +280,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         }
 
         if (state.get(FIRE_LEVEL) > 0 ) {
-
             if (random.nextInt(24) == 0) {
                 float fVolume = (state.get(FIRE_LEVEL) * 0.25F ) + random.nextFloat();
 
@@ -304,6 +296,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         ci.cancel();
     }
 
+    @Unique
     private static boolean isRainingOnCampfire(World world, BlockPos pos) {
         return world.isRaining() && world.hasRain(pos);
     }
@@ -353,8 +346,12 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     @Override
     public boolean btwr$getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
+
         BlockState state = blockAccess.getBlockState(pos);
+        /**
         return !state.get(LIT) && state.get(FIRE_LEVEL) == 0;
+         **/
+        return state.get(FIRE_LEVEL) == 0;
     }
 
     @Override
@@ -368,15 +365,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                 assert campfireBE != null;
                 campfireBE.onFirstLit();
 
-                BlockPos soundPos =
-                        new BlockPos(
-                                (int) (pos.getX() + 0.5D),
-                                (int) (pos.getY() + 0.5D),
-                                (int) (pos.getZ() + 0.5D));
+                BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
 
-                world.playSound(null, soundPos,
-                        SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS, 1F,
-                        world.random.nextFloat() * 0.4F + 0.8F);
+                world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS, 1F,
+                        world.random.nextFloat() * 0.4F + 0.8F
+                );
 
                 //TODO?: Add portal creation logic with campfire.
                 /**
@@ -404,7 +397,16 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Override
     public void btwr$changeFireLevel(World world, BlockPos pos, int fireLevel) {
         BlockState tempState = world.getBlockState(pos);
-        world.setBlockState( pos, tempState.with(FIRE_LEVEL, fireLevel), Block.NOTIFY_ALL);
+        if (!world.isClient) {
+            //world.setBlockState(pos, tempState.with(FIRE_LEVEL, fireLevel), Block.NOTIFY_ALL);
+            BlockState state = world.getBlockState(pos);
+
+            world.setBlockState(
+                    pos,
+                    state.with(FIRE_LEVEL, fireLevel).with(LIT, fireLevel > 0),
+                    Block.NOTIFY_ALL
+            );
+        }
     }
 
     @Override
@@ -451,16 +453,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
     // Method to set the fuel state
     public void setFuelState(World world, BlockPos pos, CampfireState fuelState) {
-        world.setBlockState(pos, this.getDefaultState()
-                .with(FUEL_STATE, fuelState)
-                .with(Properties.WATERLOGGED, false)
-                .with(HAS_SPIT, managerInstance.getHasSpit(world, pos)));
+        BlockState state = world.getBlockState(pos);
+        world.setBlockState(pos, state.with(FUEL_STATE, fuelState));
     }
-
-    public void relightFire(World world, BlockPos pos, BlockState state) {
-        btwr$changeFireLevel(world, pos, 1);
-    }
-
 
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {

@@ -14,6 +14,9 @@ public class ModTags {
         /** Blocks that can instantly ignite items when used on(right click). **/
         public static final TagKey<Block> DIRECTLY_IGNITES_ITEM_ON_USE = createTag("directly_ignites_item_on_use");
 
+        /** All vanilla torches which are considered lit **/
+        public static final TagKey<Block> VANILLA_LIT_TORCHES = createTag("vanilla_lit_torches");
+
         public static final TagKey<Block> LIT_TORCHES = createTag("lit_torches");
         public static final TagKey<Block> UNLIT_TORCHES = createTag("unlit_torches");
 
@@ -24,14 +27,13 @@ public class ModTags {
 
     public static class Items {
 
+        public static final TagKey<Item> FIRESTARTERS = createTag("firestarters");
+
         // Items that can start a fire when used on a block
         public static final TagKey<Item> CAN_START_FIRE_ON_USE = createTag("can_start_fire_on_use");
 
-        // Items that can be set on fire on use on a block
+        // Items that can be set on fire when used on a block
         public static final TagKey<Item> CAN_BE_SET_ON_FIRE_ON_USE = createTag("can_be_set_on_fire_on_use");
-
-        // Items that can extinguish torches on use on a block. Only ItemTags.SHOVELS by default
-        public static final TagKey<Item> TORCH_EXTINGUISHERS = createTag("torch_extinguishers");
 
         /** Items that can instantly start a fire on use(right click). **/
         public static final TagKey<Item> DIRECT_IGNITERS = createTag("direct_igniters");
@@ -44,6 +46,10 @@ public class ModTags {
 
         public static final TagKey<Item> LIT_TORCHES = createTag("lit_torches");
         public static final TagKey<Item> UNLIT_TORCHES = createTag("unlit_torches");
+
+        // Items which can be used as a spit for cooking items over campfire. Normally a stick, but the tag is required
+        // for the BTWR modpack so that we can change it to the Tough Environment's wooden chisel
+        public static final TagKey<Item> CAMPFIRE_SPITS = createTag("campfire_spits");
 
         private static TagKey<Item> createTag (String name) {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(SelfSustainableMod.MOD_ID, name));

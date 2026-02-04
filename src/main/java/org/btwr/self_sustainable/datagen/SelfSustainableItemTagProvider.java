@@ -40,23 +40,27 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
 
         getOrCreateTagBuilder(ModTags.Items.UNLIT_TORCHES)
                 .add(ModItems.TORCH_UNLIT)
+                .add(ModItems.SOUL_TORCH_UNLIT)
                 .add(ModItems.CRUDE_TORCH_UNLIT);
-
-        getOrCreateTagBuilder(ModTags.Items.TORCH_EXTINGUISHERS)
-                .forceAddTag(ItemTags.SHOVELS);
-
-        getOrCreateTagBuilder(ModTags.Items.CAN_START_FIRE_ON_USE)
-                .addTag(ModTags.Items.PRIMITIVE_FIRESTARTERS)
-                .addTag(ModTags.Items.DIRECT_IGNITERS)
-                .add(Items.FLINT_AND_STEEL);
 
         getOrCreateTagBuilder(ModTags.Items.PRIMITIVE_FIRESTARTERS)
                 .add(ModItems.FIRESTARTER_STICKS)
                 .add(ModItems.FIRESTARTER_BOW);
 
+        getOrCreateTagBuilder(ModTags.Items.FIRESTARTERS)
+                .addTag(ModTags.Items.PRIMITIVE_FIRESTARTERS)
+                .add(Items.FLINT_AND_STEEL);
+
         getOrCreateTagBuilder(ModTags.Items.DIRECT_IGNITERS)
                 .addTag(ModTags.Items.LIT_TORCHES)
                 .add(Items.FIRE_CHARGE);
+
+        getOrCreateTagBuilder(ModTags.Items.CAN_START_FIRE_ON_USE)
+                .addTag(ModTags.Items.FIRESTARTERS)
+                .addTag(ModTags.Items.DIRECT_IGNITERS);
+
+        getOrCreateTagBuilder(ModTags.Items.CAMPFIRE_SPITS)
+                .add(Items.STICK);
     }
 
 }

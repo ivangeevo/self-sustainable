@@ -28,6 +28,7 @@ public class ModItemGroup {
                         //entries.add(ModItems.CRUDE_TORCH_BURNED_OUT);
 
                         entries.add(ModItems.TORCH_UNLIT);
+                        entries.add(ModItems.SOUL_TORCH_UNLIT);
 
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);

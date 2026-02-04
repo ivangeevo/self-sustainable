@@ -14,7 +14,7 @@ import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 
-public class CrudeTorchBlock extends AbstractExtinguishingTorchBlock {
+public class CrudeTorchBlock extends AbstractCrudeTorchBlock {
 
     protected static final MapCodec<SimpleParticleType> PARTICLE_TYPE_CODEC = Registries.PARTICLE_TYPE
             .getCodec()
@@ -52,7 +52,7 @@ public class CrudeTorchBlock extends AbstractExtinguishingTorchBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return AbstractExtinguishingTorchBlock.validateTicker(type, ModBlockEntities.TORCH, TorchBE::tick);
+        return AbstractCrudeTorchBlock.validateTicker(type, ModBlockEntities.TORCH, TorchBE::tick);
     }
 
 

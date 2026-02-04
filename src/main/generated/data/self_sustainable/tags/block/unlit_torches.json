@@ -1,0 +1,8 @@
+{
+  "values": [
+    "self_sustainable:torch_unlit",
+    "self_sustainable:wall_torch_unlit",
+    "self_sustainable:crude_torch_unlit",
+    "self_sustainable:crude_wall_torch_unlit"
+  ]
+}

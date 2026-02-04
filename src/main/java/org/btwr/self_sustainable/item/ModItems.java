@@ -12,6 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import org.btwr.self_sustainable.item.items.CrudeTorchBlockItem;
 import org.btwr.self_sustainable.item.items.FireStarterItemPrimitive;
+import org.btwr.self_sustainable.item.items.UnlitTorchBlockItem;
 import org.btwr.self_sustainable.item.items.WickerWeavingItem;
 
 import java.util.Optional;
@@ -86,9 +87,18 @@ public class ModItems {
 
     public static final Item TORCH_UNLIT = registerItem(
             "torch_unlit",
-            new VerticallyAttachableBlockItem(
+            new UnlitTorchBlockItem(
                     ModBlocks.TORCH_UNLIT,
                     ModBlocks.WALL_TORCH_UNLIT,
+                    new Item.Settings(),
+                    Direction.DOWN)
+    );
+
+    public static final Item SOUL_TORCH_UNLIT = registerItem(
+            "soul_torch_unlit",
+            new UnlitTorchBlockItem(
+                    ModBlocks.SOUL_TORCH_UNLIT,
+                    ModBlocks.SOUL_WALL_TORCH_UNLIT,
                     new Item.Settings(),
                     Direction.DOWN)
     );

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_torch_wall",
+  "textures": {
+    "torch": "self_sustainable:block/soul_wall_torch_unlit"
+  }
+}

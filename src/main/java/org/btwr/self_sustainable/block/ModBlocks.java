@@ -7,8 +7,6 @@ import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.TorchBlock;
-import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -81,10 +79,16 @@ public class ModBlocks {
             new CrudeWallTorchBlock(initTorchSettings(), ParticleTypes.FLAME, TorchFireState.BURNED_OUT));
 
     public static final Block TORCH_UNLIT = registerWithoutItem("torch_unlit",
-            new TorchBlock(ParticleTypes.FLAME, initTorchSettings()));
+            new UnlitTorchBlock(ParticleTypes.FLAME, initTorchSettings()));
 
     public static final Block WALL_TORCH_UNLIT = registerWithoutItem("wall_torch_unlit",
-            new WallTorchBlock(ParticleTypes.FLAME, initTorchSettings()));
+            new UnlitWallTorchBlock(ParticleTypes.FLAME, initTorchSettings()));
+
+    public static final Block SOUL_TORCH_UNLIT = registerWithoutItem("soul_torch_unlit",
+            new UnlitTorchBlock(ParticleTypes.SOUL_FIRE_FLAME, initTorchSettings()));
+
+    public static final Block SOUL_WALL_TORCH_UNLIT = registerWithoutItem("soul_wall_torch_unlit",
+            new UnlitWallTorchBlock(ParticleTypes.SOUL_FIRE_FLAME, initTorchSettings()));
 
     public static final Block BRICK_UNFIRED = registerWithoutItem("brick_unfired",
             new UnfiredBrickBlock(AbstractBlock.Settings.create()
@@ -139,7 +143,6 @@ public class ModBlocks {
 
     public static void registerBlocks() {
         SelfSustainableMod.LOGGER.debug("Registering ModBlocks for " + SelfSustainableMod.MOD_ID);
-
     }
 
     // Vanilla items that don't have blocks by default; We associate a block with them and make it placeable

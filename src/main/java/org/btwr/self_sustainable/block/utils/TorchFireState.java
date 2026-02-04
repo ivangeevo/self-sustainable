@@ -9,6 +9,7 @@ public enum TorchFireState implements StringIdentifiable {
     BURNED_OUT("burned_out");
 
     private final String name;
+
     TorchFireState(String name) {
         this.name = name;
     }

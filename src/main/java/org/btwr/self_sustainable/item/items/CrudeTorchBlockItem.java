@@ -1,8 +1,7 @@
 package org.btwr.self_sustainable.item.items;
 
 import net.fabricmc.fabric.api.item.v1.FabricItem;
-import org.btwr.self_sustainable.block.ModBlocks;
-import org.btwr.self_sustainable.block.blocks.AbstractExtinguishingTorchBlock;
+import org.btwr.self_sustainable.block.blocks.AbstractCrudeTorchBlock;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.item.component.TorchFuelComponent;
@@ -10,7 +9,6 @@ import org.btwr.self_sustainable.tag.ModTags;
 import org.btwr.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
@@ -21,7 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import static org.btwr.self_sustainable.block.interfaces.IVariableCampfireBlock.FIRE_LEVEL;
 import static net.minecraft.state.property.Properties.LIT;
 
 public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implements FabricItem {
@@ -30,6 +27,7 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
     ModTorchHandler handler;
     private static final int FUEL_TIME = 24000;
     int maxFuel = FUEL_TIME;
+    public static final int SPUTTER_TIME = 30 * 20; // 30 seconds
 
     public CrudeTorchBlockItem(Block standingBlock, Block wallBlock, Item.Settings settings, TorchFireState torchState, ModTorchHandler group) {
         super(standingBlock, wallBlock, settings, Direction.DOWN);
@@ -44,7 +42,7 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         BlockPos pos = context.getBlockPos();
         BlockState state = world.getBlockState(pos);
 
-        if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITES_ITEM_ON_USE) || isSpecialLitBlock(state)) {
+        if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITES_ITEM_ON_USE) || (state.contains(LIT) && state.get(LIT))) {
             if (torchState != TorchFireState.UNLIT) return ActionResult.FAIL;
             if (!world.isClient) {
                 PlayerEntity player = context.getPlayer();
@@ -80,13 +78,6 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         return super.useOnBlock(context);
     }
 
-    private boolean isSpecialLitBlock(BlockState state) {
-        boolean lit = state.contains(LIT) && state.get(LIT);
-        boolean hasFireLevel = state.contains(FIRE_LEVEL) && state.get(FIRE_LEVEL) > 0;
-        return (lit && (state.isOf(ModBlocks.OVEN_BRICK) || state.isOf(ModBlocks.SMOKER_BRICK)))
-                || (hasFireLevel && state.getBlock() instanceof CampfireBlock);
-    }
-
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
         int fuel = getFuel(stack);
@@ -117,7 +108,7 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         ItemStack outputStack = ItemStack.EMPTY;
 
         if (inputStack.getItem() instanceof BlockItem && inputStack.getItem() instanceof CrudeTorchBlockItem) {
-            AbstractExtinguishingTorchBlock newBlock = (AbstractExtinguishingTorchBlock) ((BlockItem)inputStack.getItem()).getBlock();
+            AbstractCrudeTorchBlock newBlock = (AbstractCrudeTorchBlock) ((BlockItem)inputStack.getItem()).getBlock();
             CrudeTorchBlockItem newItem = (CrudeTorchBlockItem) newBlock.handler.getStandingTorch(newState).asItem();
 
             outputStack = changedCopy(inputStack, newItem);
@@ -148,29 +139,32 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
     }
 
     public static ItemStack addFuel(ItemStack stack, World world, int amount) {
-
-        if (stack.getItem() instanceof CrudeTorchBlockItem torchItem && !world.isClient) {
-            int fuel = getFuel(stack);
-            if (torchItem.getComponents().contains(ModComponentsTypes.TORCH_FUEL)) {
-                stack.set(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent(fuel));
-            }
-
-            fuel += amount;
-
-            // if burned out
-            if (fuel <= 0) {
-                stack = stateStack(stack, TorchFireState.BURNED_OUT);
-            }
-            else {
-                if (fuel > FUEL_TIME) {
-                    fuel = FUEL_TIME;
-                }
-                stack.set(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent(fuel));
-            }
+        if (!(stack.getItem() instanceof CrudeTorchBlockItem torchItem) || world.isClient) {
+            return stack;
         }
 
+        int fuel = getFuel(stack);
+        fuel += amount;
+
+        // burnout
+        if (fuel <= 0) {
+            return ItemStack.EMPTY;
+        }
+
+        // transition to smoldering
+        if (fuel <= SPUTTER_TIME && torchItem.getTorchState() == TorchFireState.LIT) {
+            stack = stateStack(stack, TorchFireState.SMOULDER);
+        }
+
+        // clamp + persist fuel
+        if (fuel > FUEL_TIME) {
+            fuel = FUEL_TIME;
+        }
+
+        stack.set(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent(fuel));
         return stack;
     }
+
 
     @Override
     public boolean btwr$getCanItemStartFireOnUse(ItemStack stack) {

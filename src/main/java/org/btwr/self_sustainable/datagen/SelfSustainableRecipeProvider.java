@@ -121,6 +121,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         disableVanilla(exporter, "cooked_salmon");
         disableVanilla(exporter, "cooked_cod");
         disableVanilla(exporter, "baked_potato");
+        disableVanilla(exporter, "brick");
 
         // Smoking (smoker cooking recipes) removal
         disableVanilla(exporter, "cooked_beef" + fs);
@@ -197,6 +198,16 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .pattern("G")
                 .pattern("I")
                 .criterion("has_glowstone_dust", conditionsFromItem(Items.GLOWSTONE_DUST))
+                .offerTo(exporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.SOUL_TORCH_UNLIT, 4)
+                .input('I', Items.STICK)
+                .input('C', Items.COAL)
+                .input('G', Items.SOUL_SAND)
+                .pattern("C")
+                .pattern("G")
+                .pattern("I")
+                .criterion("has_soul_sand", conditionsFromItem(Items.SOUL_SAND))
                 .offerTo(exporter);
     }
 

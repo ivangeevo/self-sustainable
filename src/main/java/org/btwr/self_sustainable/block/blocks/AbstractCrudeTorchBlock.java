@@ -1,8 +1,9 @@
 package org.btwr.self_sustainable.block.blocks;
 
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.util.ItemActionResult;
 import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.block.entity.TorchBE;
-import org.btwr.self_sustainable.block.entity.util.FuelBurningBlock;
 import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
@@ -22,7 +23,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -35,14 +35,14 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity implements BlockEntityProvider, FuelBurningBlock {
+public abstract class AbstractCrudeTorchBlock extends BlockWithEntity implements BlockEntityProvider {
 
     public ParticleEffect particle;
     public TorchFireState fireState;
     public ModTorchHandler handler;
     protected static final VoxelShape SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
 
-    public AbstractExtinguishingTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel) {
+    public AbstractCrudeTorchBlock(AbstractBlock.Settings settings, ParticleEffect particle, TorchFireState fireLevel) {
         super(settings);
         this.particle = particle;
         this.fireState = fireLevel;
@@ -75,20 +75,25 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        Hand hand = player.getActiveHand();
-        ItemStack stack = player.getStackInHand(hand);
-
+    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         // Try extinguishing the torch
         if (fireState == TorchFireState.LIT || fireState == TorchFireState.SMOULDER) {
-            if (tryUse(ModTags.Items.TORCH_EXTINGUISHERS, stack)) {
+            if (stack.isIn(ItemTags.SHOVELS)) {
                 this.extinguish(world, pos, state);
                 player.swingHand(hand);
-                return ActionResult.SUCCESS;
+                return ItemActionResult.SUCCESS;
             }
         }
 
-        return ActionResult.PASS;
+        // Try directly igniting
+        if (stack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
+            if (!world.isClient) {
+                this.btwr$setOnFireDirectly(world, pos);
+            }
+            return ItemActionResult.SUCCESS;
+        }
+
+        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
     }
 
     @Override
@@ -237,7 +242,6 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
         }
     }
 
-
     public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos, float spread)
     {
         double d = (double)pos.getX() + 0.5;
@@ -270,5 +274,4 @@ public abstract class AbstractExtinguishingTorchBlock extends BlockWithEntity im
     public static void displayParticle(ParticleEffect particle, BlockState state, World world, BlockPos pos) {
         displayParticle(particle, state, world, pos, 0f);
     }
-
 }

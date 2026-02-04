@@ -114,16 +114,22 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     @Unique
     private void tickTorch(ItemStack stack, int index, DefaultedList<ItemStack> list) {
-        Item item = stack.getItem();
+        if (!(stack.getItem() instanceof CrudeTorchBlockItem torchItem)) return;
 
-        if (item instanceof CrudeTorchBlockItem) {
-            TorchFireState state = ((CrudeTorchBlockItem) item).getTorchState();
+        TorchFireState state = torchItem.getTorchState();
 
-            if (state == TorchFireState.LIT) {
-                list.set(index, CrudeTorchBlockItem.addFuel(stack, getWorld(),-1));
-            } else if (state == TorchFireState.SMOULDER) {
-                if (random.nextInt(3) == 0) list.set(index, CrudeTorchBlockItem.addFuel(stack, getWorld(),-1));
+        if (state == TorchFireState.LIT) {
+            list.set(index, CrudeTorchBlockItem.addFuel(stack, getWorld(), -1));
+        }
+        else if (state == TorchFireState.SMOULDER) {
+            int drain = -1;
+
+            // smoulder burns faster sometimes
+            if (random.nextInt(3) == 0) {
+                drain = -2;
             }
+
+            list.set(index, CrudeTorchBlockItem.addFuel(stack, getWorld(), drain));
         }
     }
 

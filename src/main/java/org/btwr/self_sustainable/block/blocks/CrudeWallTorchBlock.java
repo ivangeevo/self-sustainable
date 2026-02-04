@@ -23,7 +23,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-public class CrudeWallTorchBlock extends AbstractExtinguishingTorchBlock {
+public class CrudeWallTorchBlock extends AbstractCrudeTorchBlock {
 
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
@@ -75,8 +75,8 @@ public class CrudeWallTorchBlock extends AbstractExtinguishingTorchBlock {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
-        stateManager.add(FACING);
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class CrudeWallTorchBlock extends AbstractExtinguishingTorchBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return AbstractExtinguishingTorchBlock.validateTicker(type, ModBlockEntities.TORCH, TorchBE::tick);
+        return AbstractCrudeTorchBlock.validateTicker(type, ModBlockEntities.TORCH, TorchBE::tick);
     }
 
     @Override

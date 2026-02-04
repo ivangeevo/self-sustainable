@@ -36,6 +36,10 @@ public class SelfSustainableLootTableProvider extends FabricBlockLootTableProvid
 
         this.addDrop(ModBlocks.TORCH_UNLIT, drops(ModItems.TORCH_UNLIT));
         this.addDrop(ModBlocks.WALL_TORCH_UNLIT, drops(ModItems.TORCH_UNLIT));
+
+        this.addDrop(ModBlocks.SOUL_TORCH_UNLIT, drops(ModItems.SOUL_TORCH_UNLIT));
+        this.addDrop(ModBlocks.SOUL_WALL_TORCH_UNLIT, drops(ModItems.SOUL_TORCH_UNLIT));
+
     }
 
     public LootTable.Builder burningFiniteTorchDrops(ItemConvertible drop) {

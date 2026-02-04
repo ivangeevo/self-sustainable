@@ -29,11 +29,14 @@ public class SelfSustainableBlockTagProvider extends FabricTagProvider.BlockTagP
                 .add(Blocks.FIRE)
                 .add(Blocks.SOUL_FIRE);
 
-        getOrCreateTagBuilder(ModTags.Blocks.LIT_TORCHES)
+        getOrCreateTagBuilder(ModTags.Blocks.VANILLA_LIT_TORCHES)
                 .add(Blocks.TORCH)
                 .add(Blocks.WALL_TORCH)
                 .add(Blocks.SOUL_TORCH)
-                .add(Blocks.SOUL_WALL_TORCH)
+                .add(Blocks.SOUL_WALL_TORCH);
+
+        getOrCreateTagBuilder(ModTags.Blocks.LIT_TORCHES)
+                .addTag(ModTags.Blocks.VANILLA_LIT_TORCHES)
                 .add(ModBlocks.CRUDE_TORCH_LIT)
                 .add(ModBlocks.CRUDE_TORCH_SMOULDER)
                 .add(ModBlocks.CRUDE_WALL_TORCH_LIT)

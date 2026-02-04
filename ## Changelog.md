@@ -1,4 +1,27 @@
-## v???(dev)
+## v0.4(dev)
+### WARNING! Game breaking update, proceed with caution.
+#### Torches:
++ Completely changed how torches work internally to make them work better and not cause as many issues in the future
++ Normal unlit torch blocks now have a custom class, so existing unlit torch blocks in your world will get removed
++ Added unlit variant for the soul torch
++ Added the ability to light up torches from fire/lava
++ Fixed crude torches now change to the smoldering item texture in the inventory when they reach the smoldering state
++ Fixed the wooden base in the of unlit torches block texture to match that of the lit one 
++ Fixed a bug that caused lit torches to not be placeable since last update's changes to code
+
+### Tags:
++ Added a new block tag "vanilla_lit_torches"
++ Added a new item tag "firestarters". This bundles all firestarter items from the mod and the flint and steel
++ Added a new item tag "campfire_spits". It's currently unused, but in the future it will allow other mods to specify their custom viable spit items for the campfire
+
+#### Other:
++ Added an EMI world interaction recipe/tooltip for brick sun drying so that it helps the player understand how bricks are supposed to be acquired in the early game
++ Added a recipe for cooking unfired brick in the brick oven
++ Disabled the furnace recipe for cooking brick from clay ball
++ Changed the fuel values for items in the mod. They match BTW values now and this mostly changes planks having much less fuel value than they should've had
++ Completely rewrote how fire related modification like lighting up blocks/lighting items from blocks are handled by mostly using Fabric events instead of mixins. This should generally make things work better and cause less incompatibilities/issues in the future
++ Cleaned up/optimized a bunch of code from CampfireBlock's mixin class
++ Removed the LitBlockRegistry class from last update since it became redundant
 
 ## v0.3.1
 + Changed the modification for Flint and Steel's firestarter overhaul to be handled with Fabric Events instead of mixins

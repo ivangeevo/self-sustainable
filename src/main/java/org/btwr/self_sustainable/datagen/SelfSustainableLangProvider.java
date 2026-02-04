@@ -39,6 +39,7 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         tb.add(ModItems.CRUDE_TORCH_SMOULDER, "Smouldering Crude Torch");
         tb.add(ModItems.CRUDE_TORCH_BURNED_OUT, "Burned Out Crude Torch");
         tb.add(ModItems.TORCH_UNLIT, "Unlit Torch");
+        tb.add(ModItems.SOUL_TORCH_UNLIT, "Unlit Soul Torch");
 
         tb.add(ModItems.WICKER, "Wicker");
         tb.add(ModItems.WICKER_WEAVING, "Wicker Weaving");
@@ -53,7 +54,8 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
     protected void addEmiNames(TranslationBuilder tb) {
         addEmiCategory("oven_cooking", "Oven Cooking", tb);
         addEmiCategory("progressive_crafting", "Progressive Crafting", tb);
-        addEmiTooltip("progressive_crafting.tooltip", "Hold right click", tb);
+        addEmiTooltip("progressive_crafting", "Hold right click", tb);
+        addEmiTooltip("brick_sundrying", "§6Leave in the sun for a full day!", tb);
     }
 
     protected void addEmiCategory(String key, String name, TranslationBuilder tb) {
@@ -61,7 +63,7 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
     }
 
     protected void addEmiTooltip(String key, String name, TranslationBuilder tb) {
-        tb.add("emi." + key, name);
+        tb.add("emi.tooltip.self_sustainable." + key, name);
     }
 
     private void addItemGroup(String entryPath, String translation, TranslationBuilder tb) {

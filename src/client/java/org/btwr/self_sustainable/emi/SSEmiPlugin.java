@@ -5,13 +5,16 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.recipe.EmiWorldInteractionRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import dev.emi.emi.handler.CookingRecipeHandler;
-import dev.emi.emi.handler.CraftingRecipeHandler;
 import dev.emi.emi.recipe.EmiCookingRecipe;
 import dev.emi.emi.runtime.EmiReloadLog;
+import net.minecraft.item.Items;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.text.Text;
 import org.btwr.self_sustainable.SelfSustainableMod;
 import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.item.ModItems;
@@ -26,6 +29,7 @@ import net.minecraft.recipe.input.RecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
+import org.btwr.shared_library.util.utils.IdUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -47,6 +51,7 @@ public class SSEmiPlugin implements EmiPlugin {
         //this.registerCraftingShapedWithDamage(registry);
         this.registerOvenCooking(registry);
         this.registerProgressiveCrafting(registry);
+        this.registerBrickSunDrying(registry);
     }
 
     private void registerOvenCooking(EmiRegistry registry) {
@@ -73,6 +78,16 @@ public class SSEmiPlugin implements EmiPlugin {
             addRecipeSafe(registry, () -> new EmiProgressiveCraftingRecipe(recipe, PROGRESSIVE_CRAFTING), recipe);
         }
          **/
+    }
+
+    private void registerBrickSunDrying(EmiRegistry registry) {
+        registry.addRecipe(EmiWorldInteractionRecipe.builder()
+                .id(Identifier.of("emi", "/world/block_interaction/self_sustainable/brick_sundrying"))
+                .leftInput(EmiIngredient.of(Ingredient.ofItems(ModItems.BRICK_UNFIRED)))
+                .rightInput(EmiIngredient.of(Ingredient.ofItems(Items.CLOCK)), false, sw -> {
+                    sw.appendTooltip(Text.translatable("emi.tooltip.self_sustainable.brick_sundrying"));
+                    return sw;
+                }).output(EmiStack.of(Items.BRICK)).supportsRecipeTree(true).build());
     }
 
     private static void addRecipeSafe(EmiRegistry registry, Supplier<EmiRecipe> supplier, Recipe<?> recipe) {

@@ -1,0 +1,13 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "misc",
+  "cookingTime": 6000,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "self_sustainable:brick_unfired"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:brick"
+  }
+}

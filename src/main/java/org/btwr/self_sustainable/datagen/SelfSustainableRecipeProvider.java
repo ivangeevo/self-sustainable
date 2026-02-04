@@ -244,6 +244,9 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         offerOvenCooking(Items.IRON_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_IRON), 0.25f, 12800).criterion("has_raw_iron", RecipeProvider.conditionsFromItem(Items.RAW_IRON)).offerTo(exporter, IdUtils.ofSS("iron_ingot" + foc));
         offerOvenCooking(Items.GOLD_INGOT , RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_GOLD), 0.35f, 12800).criterion("has_raw_gold", RecipeProvider.conditionsFromItem(Items.RAW_GOLD)).offerTo(exporter, IdUtils.ofSS("gold_ingot" + foc));
         offerOvenCooking(Items.COPPER_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_COPPER), 0.20f, 12800).criterion("has_raw_copper", RecipeProvider.conditionsFromItem(Items.RAW_COPPER)).offerTo(exporter, IdUtils.ofSS("copper_ingot" + foc));
+
+        // Other
+        offerOvenCooking(Items.BRICK, RecipeCategory.MISC, Ingredient.ofItems(ModItems.BRICK_UNFIRED), 0.10f, 6000).criterion("has_brick_unfired", RecipeProvider.conditionsFromItem(ModItems.BRICK_UNFIRED)).offerTo(exporter, IdUtils.ofSS("brick") + foc);
     }
     
 }

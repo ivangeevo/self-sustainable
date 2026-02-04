@@ -1,4 +1,4 @@
-## v0.4(dev)
+## v0.4
 ### WARNING! Game breaking update, proceed with caution.
 #### Torches:
 + Completely changed how torches work internally to make them work better and not cause as many issues in the future

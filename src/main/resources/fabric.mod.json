@@ -37,9 +37,7 @@
       "net/minecraft/class_1309": ["org/btwr/self_sustainable/entity/interfaces/added/LivingEntityAdded"],
       "net/minecraft/class_1429": ["org/btwr/self_sustainable/entity/interfaces/added/AnimalEntityAdded"],
       "net/minecraft/class_1792": ["org/btwr/self_sustainable/item/interfaces/added/ItemAdded"],
-      "net/minecraft/class_1799": ["org/btwr/self_sustainable/item/interfaces/added/ItemStackAdded"],
-      "net/minecraft/class_2248": ["org/btwr/self_sustainable/block/interfaces/added/BlockAdded"],
-      "net/minecraft/class_2358": ["org/btwr/self_sustainable/block/interfaces/added/FireBlockAdded"]
+      "net/minecraft/class_1799": ["org/btwr/self_sustainable/item/interfaces/added/ItemStackAdded"]
     }
   },
   "accessWidener": "self_sustainable.accesswidener"

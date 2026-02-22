@@ -6,7 +6,6 @@
   "mixins": [
     "FurnaceFuelSlotMixin",
     "ShapedRecipeAccessor",
-    "added.BlockAddedMixin",
     "added.DifficultyAddedMixin",
     "added.ItemAddedMixin",
     "added.ItemStackAddedMixin",

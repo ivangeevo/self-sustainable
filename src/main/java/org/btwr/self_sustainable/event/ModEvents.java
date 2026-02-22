@@ -66,6 +66,11 @@ public class ModEvents {
                     }
 
                     // Igniting
+                    // Firestarter ignite — let the item handle it
+                    if (heldStack.isIn(ModTags.Items.FIRESTARTERS)) {
+                        return ActionResult.PASS;
+                    }
+
                     if (state.get(FUEL_STATE) == CampfireState.NORMAL && state.get(FIRE_LEVEL) == 0) {
                         // Direct ignite (torch/fire charge)
                         if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
@@ -73,11 +78,6 @@ public class ModEvents {
                                 state.getBlock().btwr$setOnFireDirectly(world, pos);
                             }
                             return ActionResult.SUCCESS;
-                        }
-
-                        // Firestarter ignite — let the item handle it
-                        if (heldStack.isIn(ModTags.Items.FIRESTARTERS)) {
-                            return ActionResult.PASS;
                         }
                     }
 

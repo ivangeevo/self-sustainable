@@ -1,4 +1,5 @@
 ## v???(dev)
++ Fixed a bug with firestarters removing a placed raw item from the campfire after the campfire has been ignited
 
 ## v0.4
 ### WARNING! Game breaking update, proceed with caution.

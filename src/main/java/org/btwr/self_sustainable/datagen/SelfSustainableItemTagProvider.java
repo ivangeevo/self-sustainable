@@ -24,6 +24,23 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
     }
 
     private void addToVanillaTags() {
+        getOrCreateTagBuilder(ItemTags.HEAD_ARMOR)
+                .add(ModItems.WOOL_HELMET);
+
+        getOrCreateTagBuilder(ItemTags.CHEST_ARMOR)
+                .add(ModItems.WOOL_CHESTPLATE);
+
+        getOrCreateTagBuilder(ItemTags.LEG_ARMOR)
+                .add(ModItems.WOOL_LEGGINGS);
+
+        getOrCreateTagBuilder(ItemTags.FOOT_ARMOR)
+                .add(ModItems.WOOL_BOOTS);
+
+        getOrCreateTagBuilder(ItemTags.DYEABLE)
+                .add(ModItems.WOOL_HELMET)
+                .add(ModItems.WOOL_CHESTPLATE)
+                .add(ModItems.WOOL_LEGGINGS)
+                .add(ModItems.WOOL_BOOTS);
 
     }
 

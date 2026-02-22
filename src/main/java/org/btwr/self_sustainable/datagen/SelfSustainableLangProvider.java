@@ -2,13 +2,15 @@ package org.btwr.self_sustainable.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import org.btwr.core.BTWRMod;
+import net.minecraft.util.DyeColor;
 import org.btwr.self_sustainable.SelfSustainableMod;
 import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.item.ModItems;
 import net.minecraft.registry.RegistryWrapper;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class SelfSustainableLangProvider extends FabricLanguageProvider {
 
@@ -43,6 +45,20 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
 
         tb.add(ModItems.WICKER, "Wicker");
         tb.add(ModItems.WICKER_WEAVING, "Wicker Weaving");
+
+        for (DyeColor color : DyeColor.values()) {
+            String colorName = Arrays.stream(color.getName().split("_"))
+                    .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
+                    .collect(Collectors.joining(" "));
+            String translationKey = "item." + SelfSustainableMod.MOD_ID + "." + color.getName() + "_wool_knit";
+
+            tb.add(translationKey, colorName + " Wool Knit");
+        }
+
+        tb.add(ModItems.WOOL_HELMET, "Tuque");
+        tb.add(ModItems.WOOL_CHESTPLATE, "Wool Jacket");
+        tb.add(ModItems.WOOL_LEGGINGS, "Wool Britches");
+        tb.add(ModItems.WOOL_BOOTS, "Bootsies");
     }
 
     private void addConfigTranslations(TranslationBuilder tb) {

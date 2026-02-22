@@ -30,6 +30,15 @@ public class ModItemGroup {
                         entries.add(ModItems.TORCH_UNLIT);
                         entries.add(ModItems.SOUL_TORCH_UNLIT);
 
+                        ModItems.WOOL_KNITS.forEach((dyeColor, item) -> {
+                            entries.add(item);
+                        });
+
+                        entries.add(ModItems.WOOL_HELMET);
+                        entries.add(ModItems.WOOL_CHESTPLATE);
+                        entries.add(ModItems.WOOL_LEGGINGS);
+                        entries.add(ModItems.WOOL_BOOTS);
+
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);
 

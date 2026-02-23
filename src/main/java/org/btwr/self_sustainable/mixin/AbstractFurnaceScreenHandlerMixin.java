@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.mixin.client;
+package org.btwr.self_sustainable.mixin;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;

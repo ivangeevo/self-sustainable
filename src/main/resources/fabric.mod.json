@@ -20,7 +20,11 @@
     "emi": ["org.btwr.self_sustainable.emi.SSEmiPlugin"]
   },
   "mixins":[
-    "self_sustainable.mixins.json"
+    "self_sustainable.mixins.json",
+    {
+      "config": "self_sustainable.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends":{
     "fabricloader":">=${loader_version}",

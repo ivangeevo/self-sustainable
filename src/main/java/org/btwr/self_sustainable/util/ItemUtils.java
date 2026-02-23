@@ -178,7 +178,7 @@ public class ItemUtils {
     static public void givePlayerStackOrEjectFromTowardsFacing(PlayerEntity player, BlockState state, ItemStack stack, BlockPos pos, Direction direction)
     {
         if (player.getInventory().insertStack(stack)) {
-            player.getWorld().playSoundFromEntity( player,null,SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.2F,
+            player.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F,
                     ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
         }
         else if (!player.getWorld().isClient) {
@@ -186,12 +186,11 @@ public class ItemUtils {
         }
     }
 
-    static public void givePlayerStackOrEjectFavorEmptyHand(PlayerEntity player, ItemStack stack,BlockPos pos)
-    {
+    static public void givePlayerStackOrEjectFavorEmptyHand(PlayerEntity player, ItemStack stack,BlockPos pos) {
         if (player.giveItemStack(stack)) {
             BlockPos thisPos = player.getBlockPos();
             float pitchChance = (((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            player.getWorld().playSound( player, thisPos, SoundEvents.BLOCK_LAVA_POP,SoundCategory.PLAYERS, 0.2F, pitchChance);
+            player.playSound(SoundEvents.BLOCK_LAVA_POP, 0.2F, pitchChance);
 
         }
         else {
@@ -211,8 +210,7 @@ public class ItemUtils {
 
     static public void givePlayerStackOrEject(PlayerEntity player, ItemStack stack) {
         if (player.getInventory().insertStack(stack)) {
-            player.getWorld().playSoundFromEntity( player, null, SoundEvents.BLOCK_LAVA_POP,SoundCategory.BLOCKS, 0.2F,
-                    1f);
+            player.playSound(SoundEvents.BLOCK_LAVA_POP, 0.2F, 1f);
         }
         else if (!player.getWorld().isClient()) {
             ItemUtils.ejectStackWithRandomVelocity(player.getWorld(), player.getX(), player.getY(), player.getZ(), stack);

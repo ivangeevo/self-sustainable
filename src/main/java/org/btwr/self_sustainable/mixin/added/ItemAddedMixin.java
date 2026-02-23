@@ -1,7 +1,6 @@
 package org.btwr.self_sustainable.mixin.added;
 
 import org.btwr.self_sustainable.block.CampfireBlockMixinManager;
-import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.item.interfaces.added.ItemAdded;
 import org.btwr.self_sustainable.tag.ModTags;
 import org.btwr.self_sustainable.util.CustomUseAction;
@@ -13,7 +12,7 @@ public abstract class ItemAddedMixin implements ItemAdded {
 
     @Override
     public CustomUseAction btwr$getCustomUseAction(ItemStack stack) {
-        return stack.contains(ModComponentsTypes.PROGRESSIVE_CRAFTING) ? CustomUseAction.PROGRESSIVE_CRAFT : CustomUseAction.NONE;
+        return CustomUseAction.NONE;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package org.btwr.self_sustainable.item.interfaces.added;
 
-import org.btwr.self_sustainable.util.CustomUseAction;
-
 public interface ItemStackAdded {
 
     default long btwr$getTimeOfLastUse() {
@@ -17,10 +15,6 @@ public interface ItemStackAdded {
     }
 
     default void btwr$setAccumulatedChance(float fChance) {
-        throw new UnsupportedOperationException();
-    }
-
-    default CustomUseAction btwr$getCustomUseAction() {
         throw new UnsupportedOperationException();
     }
 

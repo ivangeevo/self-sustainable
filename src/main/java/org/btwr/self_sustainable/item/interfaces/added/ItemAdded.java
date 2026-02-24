@@ -1,6 +1,5 @@
 package org.btwr.self_sustainable.item.interfaces.added;
 
-import org.btwr.self_sustainable.util.CustomUseAction;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

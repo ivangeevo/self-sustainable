@@ -64,10 +64,26 @@ public class SelfSustainableClient implements ClientModInitializer {
             return 0xFF000000 | color.getFireworkColor();
         }, ModItems.WOOL_KNITS.values().toArray(new Item[0]));
 
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
+            DyeColor color = ModItems.WOOLS.entrySet().stream()
+                    .filter(e -> e.getValue() == stack.getItem())
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(DyeColor.WHITE);
+            return 0xFF000000 | color.getFireworkColor();
+        }, ModItems.WOOLS.values().toArray(new Item[0]));
+
         ColorProviderRegistry.ITEM.register(((stack, tintIndex) -> {
             DyedColorComponent dyedColor = stack.get(DataComponentTypes.DYED_COLOR);
             return dyedColor != null ? 0xFF000000 | dyedColor.rgb() : 0xFFFFFFFF;
         }), ModItems.WOOL_HELMET, ModItems.WOOL_CHESTPLATE, ModItems.WOOL_LEGGINGS, ModItems.WOOL_BOOTS);
+
+
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
+            if (tintIndex != 1) return -1;
+            DyedColorComponent dyed = stack.get(DataComponentTypes.DYED_COLOR);
+            return dyed != null ? 0xFF000000 | dyed.rgb() : 0xFF000000 | DyeColor.WHITE.getFireworkColor();
+        }, ModItems.KNITTING);
 
     }
 }

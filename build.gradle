@@ -50,7 +50,8 @@ dependencies {
     modLocalRuntime "dev.emi:emi-fabric:${project.emi_version}"
 
     // BTWR Shared Library
-    modImplementation "maven.modrinth:btwr-shared-library:${project.btwr_sl_version}"
+    //modImplementation "maven.modrinth:btwr-shared-library:${project.btwr_sl_version}"
+    modImplementation files("libs/btwr-shared-library-${project.btwr_sl_version}.jar")
 
     // Tough Environment
     modImplementation "maven.modrinth:tough-environment:${project.tough_environment_version}"
@@ -106,6 +107,10 @@ java {
     // if it is present.
     // If you remove this line, sources will not be generated.
     withSourcesJar()
+}
+
+compileJava {
+    options.incremental = false
 }
 
 jar {

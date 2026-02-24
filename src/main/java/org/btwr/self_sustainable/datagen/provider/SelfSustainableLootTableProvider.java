@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.datagen;
+package org.btwr.self_sustainable.datagen.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;

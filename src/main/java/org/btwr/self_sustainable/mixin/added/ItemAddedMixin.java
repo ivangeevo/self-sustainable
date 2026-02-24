@@ -3,17 +3,11 @@ package org.btwr.self_sustainable.mixin.added;
 import org.btwr.self_sustainable.block.CampfireBlockMixinManager;
 import org.btwr.self_sustainable.item.interfaces.added.ItemAdded;
 import org.btwr.self_sustainable.tag.ModTags;
-import org.btwr.self_sustainable.util.CustomUseAction;
 import net.minecraft.item.*;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Item.class)
 public abstract class ItemAddedMixin implements ItemAdded {
-
-    @Override
-    public CustomUseAction btwr$getCustomUseAction(ItemStack stack) {
-        return CustomUseAction.NONE;
-    }
 
     @Override
     public boolean btwr$getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {
@@ -46,11 +40,6 @@ public abstract class ItemAddedMixin implements ItemAdded {
     @Override
     public int btwr$getOvenBurnTime(ItemStack stack) {
         return defaultFurnaceBurnTime;
-    }
-
-    @Override
-    public int btwr$getItemUseWarmupDuration() {
-        return 7;
     }
 
 }

@@ -29,7 +29,6 @@ import net.minecraft.recipe.input.RecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import org.btwr.shared_library.util.utils.IdUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -73,6 +72,13 @@ public class SSEmiPlugin implements EmiPlugin {
         registry.addRecipeHandler(ScreenHandlerType.FURNACE, new CookingRecipeHandler<>(PROGRESSIVE_CRAFTING));
 
         registerFakeProgression(registry, ModItems.WICKER_WEAVING, ModItems.WICKER);
+
+        /**
+        for (Item item : ModItems.WOOL_KNITS.values()) {
+            registerFakeProgression(registry, ModItems.KNITTING, item);
+        }
+         **/
+
         /**
         for (ShapedRecipeWithDamage recipe : getRecipes(registry, ShapedRecipeWithDamage.Type.INSTANCE)) {
             addRecipeSafe(registry, () -> new EmiProgressiveCraftingRecipe(recipe, PROGRESSIVE_CRAFTING), recipe);

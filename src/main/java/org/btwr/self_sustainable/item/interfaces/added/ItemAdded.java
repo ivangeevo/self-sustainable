@@ -57,12 +57,4 @@ public interface ItemAdded {
         throw new UnsupportedOperationException();
     }
 
-    default int btwr$getItemUseWarmupDuration() {
-        throw new UnsupportedOperationException();
-    }
-
-    default CustomUseAction btwr$getCustomUseAction(ItemStack stack) {
-        throw new UnsupportedOperationException();
-    }
-
 }

@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.datagen;
+package org.btwr.self_sustainable.datagen.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -24,7 +24,7 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         this.addBlockTranslations(tb);
         this.addItemTranslations(tb);
         //this.addConfigTranslations(tb);
-        this.addEmiNames(tb);
+        this.addEmiTranslations(tb);
     }
 
     private void addBlockTranslations(TranslationBuilder tb) {
@@ -46,13 +46,20 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         tb.add(ModItems.WICKER, "Wicker");
         tb.add(ModItems.WICKER_WEAVING, "Wicker Weaving");
 
+        tb.add(ModItems.KNITTING_NEEDLES, "Knitting Needles");
+        tb.add(ModItems.KNITTING, "Knitting");
+
+        // Translation keys for wool knit/wool items
         for (DyeColor color : DyeColor.values()) {
             String colorName = Arrays.stream(color.getName().split("_"))
                     .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
                     .collect(Collectors.joining(" "));
-            String translationKey = "item." + SelfSustainableMod.MOD_ID + "." + color.getName() + "_wool_knit";
 
-            tb.add(translationKey, colorName + " Wool Knit");
+            String woolKnitKey = "item." + SelfSustainableMod.MOD_ID + "." + color.getName() + "_wool_knit";
+            tb.add(woolKnitKey, colorName + " Wool Knit");
+
+            String woolKey = "item." + SelfSustainableMod.MOD_ID + "." + color.getName() + "_wool";
+            tb.add(woolKey, colorName + " Wool");
         }
 
         tb.add(ModItems.WOOL_HELMET, "Tuque");
@@ -62,12 +69,12 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
     }
 
     private void addConfigTranslations(TranslationBuilder tb) {
-        //addConfigMenuTitle("BTWR: Core Configuration Menu", tb);
+        //addConfigMenuTitle("Self Sustainable Configuration Menu", tb);
         //addConfigCategory("general", "General Options", tb);
-        //addConfig("knockbackRestriction", "Knockback Restriction", tb);
+        //addConfig("exampleConfigOption", "Example config option", tb);
     }
 
-    protected void addEmiNames(TranslationBuilder tb) {
+    protected void addEmiTranslations(TranslationBuilder tb) {
         addEmiCategory("oven_cooking", "Oven Cooking", tb);
         addEmiCategory("progressive_crafting", "Progressive Crafting", tb);
         addEmiTooltip("progressive_crafting", "Hold right click", tb);

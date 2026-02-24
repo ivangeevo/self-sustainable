@@ -28,8 +28,8 @@ public class SelfSustainableArmorMaterials {
                     SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
                     () -> Ingredient.ofItems(ModItems.WOOL_KNITS.values().toArray(new Item[0])),
                     List.of(
-                            new ArmorMaterial.Layer(Identifier.of(SelfSustainableMod.MOD_ID, "wool")),
-                            new ArmorMaterial.Layer(Identifier.of(SelfSustainableMod.MOD_ID, "wool"), "_overlay", true)
+                            new ArmorMaterial.Layer(Identifier.of(SelfSustainableMod.MOD_ID, "wool"), "", true),
+                            new ArmorMaterial.Layer(Identifier.of(SelfSustainableMod.MOD_ID, "wool"), "_overlay", false)
                     ),
                     0,
                     0

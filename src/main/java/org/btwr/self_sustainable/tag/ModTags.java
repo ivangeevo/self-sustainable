@@ -42,7 +42,11 @@ public class ModTags {
         public static final TagKey<Item> PRIMITIVE_FIRESTARTERS = createTag("primitive_firestarters");
 
         public static final TagKey<Item> WOOL_ITEMS = createTag("wool_items");
+
         public static final TagKey<Item> WOOL_KNIT_ITEMS = createTag("wool_knit_items");
+
+        /** items that can be used in combining colors for knitting needles wool knit creation **/
+        public static final TagKey<Item> KNITTING_INGREDIENTS = createTag("knitting_ingredients");
 
         public static final TagKey<Item> LIT_TORCHES = createTag("lit_torches");
         public static final TagKey<Item> UNLIT_TORCHES = createTag("unlit_torches");

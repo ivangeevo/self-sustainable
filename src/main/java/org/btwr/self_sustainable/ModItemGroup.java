@@ -34,10 +34,16 @@ public class ModItemGroup {
                             entries.add(item);
                         });
 
+                        ModItems.WOOLS.forEach((dyeColor, item) -> {
+                            entries.add(item);
+                        });
+
                         entries.add(ModItems.WOOL_HELMET);
                         entries.add(ModItems.WOOL_CHESTPLATE);
                         entries.add(ModItems.WOOL_LEGGINGS);
                         entries.add(ModItems.WOOL_BOOTS);
+
+                        entries.add(ModItems.KNITTING_NEEDLES);
 
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);
@@ -49,7 +55,6 @@ public class ModItemGroup {
                         // TO ADD:
                         //entries.add(ModBlocks.SMOKER_BRICK);
                         //entries.add(ModItems.WICKER_PANE);
-                        //entries.add(ModItems.KNITTING_NEEDLES);
 
                     }).build());
 

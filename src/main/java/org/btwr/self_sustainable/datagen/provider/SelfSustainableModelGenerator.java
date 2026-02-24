@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.datagen;
+package org.btwr.self_sustainable.datagen.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -25,16 +25,19 @@ public class SelfSustainableModelGenerator extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-        //itemModelGenerator.register(SelfSustainable.WOOL_HELM, Models.GENERATED);
-        //itemModelGenerator.register(SelfSustainable.WOOL_CHEST, Models.GENERATED);
-        //itemModelGenerator.register(SelfSustainable.WOOL_LEGGINGS, Models.GENERATED);
-        //itemModelGenerator.register(SelfSustainable.WOOL_BOOTS, Models.GENERATED);
-
         for (DyeColor color : DyeColor.values()) {
             itemModelGenerator.register(
                     ModItems.WOOL_KNITS.get(color),
                     new Model(
                             Optional.of(Identifier.of(SelfSustainableMod.MOD_ID, "item/wool_knit")),
+                            Optional.empty()
+                    )
+            );
+
+            itemModelGenerator.register(
+                    ModItems.WOOLS.get(color),
+                    new Model(
+                            Optional.of(Identifier.of(SelfSustainableMod.MOD_ID, "item/wool")),
                             Optional.empty()
                     )
             );

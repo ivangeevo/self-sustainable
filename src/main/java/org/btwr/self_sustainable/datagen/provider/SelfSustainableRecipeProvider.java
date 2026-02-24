@@ -1,7 +1,9 @@
-package org.btwr.self_sustainable.datagen;
+package org.btwr.self_sustainable.datagen.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.util.DyeColor;
+import org.btwr.self_sustainable.SelfSustainableMod;
 import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.item.ModItems;
 import net.minecraft.block.Blocks;
@@ -13,6 +15,8 @@ import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
+import org.btwr.self_sustainable.recipe.KnittingRecipe;
+import org.btwr.self_sustainable.recipe.WickerWeavingRecipe;
 import org.btwr.shared_library.api.tag.BTWRConventionalTags;
 import org.btwr.shared_library.util.utils.IdUtils;
 import org.btwr.shared_library.util.utils.RecipeUtils;
@@ -59,8 +63,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         this.moddedShaped(exporter);
 
         // Progressive Crafting Recipes
-        // Not ready yet for release
-        //this.createProgressiveCrafting(exporter);
+        this.createProgressiveCrafting(exporter);
     }
 
     private void generateVanillaRecipesOverride(RecipeExporter exporter) {
@@ -209,6 +212,28 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .pattern("I")
                 .criterion("has_soul_sand", conditionsFromItem(Items.SOUL_SAND))
                 .offerTo(exporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.KNITTING_NEEDLES)
+                .input('#', Items.STICK)
+                .pattern("#")
+                .pattern("#")
+                .criterion(hasItem(Items.STICK), conditionsFromItem(Items.STICK))
+                .offerTo(exporter);
+
+        // Wool item to wool block recipes
+        for (DyeColor color : DyeColor.values()) {
+            String baseId = color.getName() + "_wool";
+            Item woolItem = Registries.ITEM.get(IdUtils.ofSS(baseId));
+            Item woolBlock = Registries.ITEM.get(IdUtils.ofMC(baseId));
+
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, woolBlock)
+                    .input('#', woolItem)
+                    .pattern("##")
+                    .pattern("##")
+                    .criterion(hasItem(woolItem), conditionsFromItem(woolItem))
+                    .offerTo(exporter, IdUtils.ofSS(baseId + "_block"));
+        }
+
     }
 
 
@@ -227,6 +252,15 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
     }
 
     private void createProgressiveCrafting(RecipeExporter exporter) {
+        // Knitting
+        KnittingRecipe.JsonBuilder.create(RecipeCategory.MISC)
+                .criterion("has_knitting_needles", conditionsFromItem(ModItems.KNITTING_NEEDLES))
+                .offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "knitting"));
+
+        // Wicker weaving
+        WickerWeavingRecipe.JsonBuilder.create()
+                .criterion(hasItem(Items.SUGAR_CANE), conditionsFromItem(Items.SUGAR_CANE))
+                .offerTo(exporter);
     }
 
     private void createOvenCooking(RecipeExporter exporter) {

@@ -22,16 +22,11 @@ public class ModComponentsTypes {
             .codec(TorchFuelComponent.CODEC)
             .build();
 
-    public static final ComponentType<ProgressiveCraftingComponent> PROGRESSIVE_CRAFTING = ComponentType.<ProgressiveCraftingComponent>builder()
-            .codec(ProgressiveCraftingComponent.CODEC)
-            .build();
-
     // Register method, to be called in the mod initialization
     public static void register() {
         registerDataComponent(LAST_USE, "last_use");
         registerDataComponent(ACCUMULATED_CHANCE, "accumulated_chance");
         registerDataComponent(TORCH_FUEL, "torch_fuel");
-        registerDataComponent(PROGRESSIVE_CRAFTING, "progressive_crafting");
     }
 
     private static void registerDataComponent(ComponentType<?> componentType, String stringName) {

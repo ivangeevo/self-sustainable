@@ -1,6 +1,8 @@
 package org.btwr.self_sustainable.event;
 
+import com.google.common.collect.ImmutableList;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -9,16 +11,24 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -28,13 +38,20 @@ import org.btwr.self_sustainable.block.entity.VariableCampfireBE;
 import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.CampfireState;
 import org.btwr.self_sustainable.tag.ModTags;
+import org.btwr.shared_library.mixin.accessors.ItemEntryAccessor;
+import org.btwr.shared_library.mixin.accessors.LootPoolBuilderAccessor;
+import org.btwr.shared_library.util.utils.IdUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.btwr.self_sustainable.block.interfaces.IVariableCampfireBlock.*;
 
 public class ModEvents {
+
+    private static final String BASE_SHEEP_LOOT_TABLE = "entities/sheep/";
 
     public static void register() {
         // Campfire block usage modifications
@@ -197,6 +214,22 @@ public class ModEvents {
             return ActionResult.PASS;
         });
 
+        LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
+            // Replaces sheep wool block drops with the mod wool items
+            for (DyeColor color : DyeColor.values()) {
+                Identifier sheepLootTableId = Identifier.ofVanilla(BASE_SHEEP_LOOT_TABLE + color.getName());
+                RegistryKey<LootTable> SHEEP_LOOT_TABLE = RegistryKey.of(RegistryKeys.LOOT_TABLE, sheepLootTableId);
+
+                String baseId = color.getName() + "_wool";
+                Item woolItem = Registries.ITEM.get(IdUtils.ofSS(baseId));
+                Item woolBlock = Registries.ITEM.get(IdUtils.ofMC(baseId));
+
+                if (SHEEP_LOOT_TABLE.equals(key)) {
+                    replaceItemsInPools(tableBuilder, woolBlock, woolItem);
+                }
+            }
+        });
+
     }
 
     public static void performUseEffects(World world, BlockPos pos, PlayerEntity player, Hand hand) {
@@ -233,5 +266,18 @@ public class ModEvents {
         }
 
         return false;
+    }
+
+    private static void replaceItemsInPools(LootTable.Builder tableBuilder, Item target, Item replacement) {
+        tableBuilder.modifyPools(poolBuilder -> {
+            List<LootPoolEntry> entries = new ArrayList<>(((LootPoolBuilderAccessor) poolBuilder).getEntries().build());
+            entries.replaceAll(entry -> {
+                if (!(entry instanceof ItemEntry itemEntry)) return entry;
+                if (((ItemEntryAccessor) itemEntry).getItem().value() != target) return entry;
+                ((ItemEntryAccessor) entry).setItem(Registries.ITEM.getEntry(replacement));
+                return entry;
+            });
+            ((LootPoolBuilderAccessor) poolBuilder).setEntries(ImmutableList.<LootPoolEntry>builder().addAll(entries));
+        });
     }
 }

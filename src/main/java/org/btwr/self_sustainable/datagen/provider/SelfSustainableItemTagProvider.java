@@ -1,7 +1,8 @@
-package org.btwr.self_sustainable.datagen;
+package org.btwr.self_sustainable.datagen.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.item.Item;
 import org.btwr.self_sustainable.item.ModItems;
 import org.btwr.self_sustainable.tag.ModTags;
 import net.minecraft.item.Items;
@@ -78,6 +79,19 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
 
         getOrCreateTagBuilder(ModTags.Items.CAMPFIRE_SPITS)
                 .add(Items.STICK);
+
+        getOrCreateTagBuilder(ModTags.Items.KNITTING_INGREDIENTS)
+                .forceAddTag(ModTags.Items.WOOL_ITEMS);
+
+        for (Item item : ModItems.WOOLS.values()) {
+            getOrCreateTagBuilder(ModTags.Items.WOOL_ITEMS)
+                    .add(item);
+        }
+
+        for (Item item : ModItems.WOOL_KNITS.values()) {
+            getOrCreateTagBuilder(ModTags.Items.WOOL_KNIT_ITEMS)
+                    .add(item);
+        }
     }
 
 }

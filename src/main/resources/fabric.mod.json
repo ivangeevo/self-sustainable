@@ -16,7 +16,7 @@
   "entrypoints":{
     "client":[ "org.btwr.self_sustainable.SelfSustainableClient" ],
     "main":["org.btwr.self_sustainable.SelfSustainableMod"],
-    "fabric-datagen": ["org.btwr.self_sustainable.SelfSustainableDataGenerator"],
+    "fabric-datagen": ["org.btwr.self_sustainable.datagen.SelfSustainableDataGenerator"],
     "emi": ["org.btwr.self_sustainable.emi.SSEmiPlugin"]
   },
   "mixins":[
@@ -38,7 +38,6 @@
   "custom": {
     "loom:injected_interfaces": {
       "net/minecraft/class_1267": ["org/btwr/self_sustainable/world/interfaces/added/DifficultyAdded"],
-      "net/minecraft/class_1309": ["org/btwr/self_sustainable/entity/interfaces/added/LivingEntityAdded"],
       "net/minecraft/class_1429": ["org/btwr/self_sustainable/entity/interfaces/added/AnimalEntityAdded"],
       "net/minecraft/class_1792": ["org/btwr/self_sustainable/item/interfaces/added/ItemAdded"],
       "net/minecraft/class_1799": ["org/btwr/self_sustainable/item/interfaces/added/ItemStackAdded"]

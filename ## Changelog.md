@@ -1,5 +1,13 @@
 ## v???(dev)
++ Added wicker weaving!
++ Added knitting!
++ Added knitting needles (Crafted from two sticks placed vertically)
++ Added wool knits (Made from knitting)
++ Added wool items (By default, they craft into a full block from four wool items in the crafting grid)
++ Added wool armor (It's dyeable!)
++ Changed sheep to drop the new wool
 + Fixed a bug with firestarters removing a placed raw item from the campfire after the campfire has been ignited
++ Moved the ProgressiveCraftingItem class to the BTWR: Shared Library mod since some other progressive crafting items will be used in other mods and not this one
 
 ## v0.4
 ### WARNING! Game breaking update, proceed with caution.

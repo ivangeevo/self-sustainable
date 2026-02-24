@@ -215,8 +215,8 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.KNITTING_NEEDLES)
                 .input('#', Items.STICK)
-                .pattern("#")
-                .pattern("#")
+                .pattern("# ")
+                .pattern(" #")
                 .criterion(hasItem(Items.STICK), conditionsFromItem(Items.STICK))
                 .offerTo(exporter);
 

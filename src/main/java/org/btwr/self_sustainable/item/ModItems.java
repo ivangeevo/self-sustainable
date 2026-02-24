@@ -118,7 +118,7 @@ public class ModItems {
     public static final Item WICKER = registerItem("wicker", new Item(new Item.Settings()));
 
     public static final Item WICKER_WEAVING = registerItem("wicker_weaving",
-            new WickerWeavingItem(new Item.Settings())
+            new WickerWeavingItem(new Item.Settings().maxDamage(WickerWeavingItem.WICKER_WEAVING_MAX_DAMAGE))
     );
 
     public static final Item WOOL_HELMET = registerItem("wool_helmet", new ArmorItem(

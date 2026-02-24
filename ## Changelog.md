@@ -1,7 +1,7 @@
 ## v???(dev)
 + Added wicker weaving!
 + Added knitting!
-+ Added knitting needles (Crafted from two sticks placed vertically)
++ Added knitting needles (Crafted from two sticks placed diagonally)
 + Added wool knits (Made from knitting)
 + Added wool items (By default, they craft into a full block from four wool items in the crafting grid)
 + Added wool armor (It's dyeable!)

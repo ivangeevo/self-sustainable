@@ -16,9 +16,7 @@ public class WickerWeavingItem extends ProgressiveCraftingItem {
     public static final int WICKER_WEAVING_MAX_DAMAGE = (60 * 20 / PROGRESS_TIME_INTERVAL);
 
     public WickerWeavingItem(Settings settings ) {
-        super(settings
-                .maxDamage(WickerWeavingItem.WICKER_WEAVING_MAX_DAMAGE)
-        );
+        super(settings);
     }
 
     @Override

@@ -53,5 +53,15 @@
   "item.self_sustainable.wool_leggings": "Wool Britches",
   "item.self_sustainable.yellow_wool": "Yellow Wool",
   "item.self_sustainable.yellow_wool_knit": "Yellow Wool Knit",
-  "itemgroup.ss_group": "Self Sustainable!"
+  "itemgroup.ss_group": "Self Sustainable!",
+  "tag.item.self_sustainable.campfire_spits": "Campfire spits",
+  "tag.item.self_sustainable.can_start_fire_on_use": "Can start fire on use",
+  "tag.item.self_sustainable.direct_igniters": "Direct Igniters",
+  "tag.item.self_sustainable.firestarters": "Firestarters",
+  "tag.item.self_sustainable.knitting_ingredients": "Knitting Ingredients",
+  "tag.item.self_sustainable.lit_torches": "Lit Torches",
+  "tag.item.self_sustainable.primitive_firestarters": "Primitive Firestarters",
+  "tag.item.self_sustainable.unlit_torches": "Unlit Torches",
+  "tag.item.self_sustainable.wool_items": "Wool Items",
+  "tag.item.self_sustainable.wool_knit_items": "Wool Knits"
 }

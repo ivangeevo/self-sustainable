@@ -163,7 +163,7 @@ public class ModItems {
     }
 
     public static void register() {
-        SelfSustainableMod.LOGGER.info("Registering Mod Items for " + SelfSustainableMod.MOD_ID);
+        SelfSustainableMod.LOGGER.info("Registering mod items for " + SelfSustainableMod.MOD_ID);
 
         for (DyeColor color : DyeColor.values()) {
             // Register wool knits/wool items to the registry

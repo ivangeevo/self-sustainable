@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.block.entity.renderer;
+package org.btwr.self_sustainable.block.entity.render;
 
 import org.btwr.self_sustainable.block.entity.VariableCampfireBE;
 import net.minecraft.block.CampfireBlock;

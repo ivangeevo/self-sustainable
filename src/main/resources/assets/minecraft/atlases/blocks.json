@@ -1,6 +1,10 @@
 {
   "sources": [
-    { "type": "single", "resource": "self_sustainable:wicker_basket" },
-    { "type": "single", "resource": "self_sustainable:hamper" }
+    {
+      "type": "single", "resource": "self_sustainable:entity/wicker_basket"
+    },
+    {
+      "type": "single", "resource": "self_sustainable:entity/hamper"
+    }
   ]
 }

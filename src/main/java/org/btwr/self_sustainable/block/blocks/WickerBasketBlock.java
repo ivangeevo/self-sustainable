@@ -24,7 +24,7 @@ public class WickerBasketBlock extends AbstractPrimitiveStorageBlock {
     public static final MapCodec<WickerBasketBlock> CODEC = WickerBasketBlock.createCodec(WickerBasketBlock::new);
 
     private static final float BASKET_HEIGHT = 0.5F;
-    private static final float BASKET_OPEN_HEIGHT = 0.75F;
+    private static final float BASKET_OPEN_HEIGHT = 0.56F;
     private static final float BASKET_RIM_WIDTH = 1F / 16F;
     private static final float BASKET_WIDTH_LIP = 0F / 16F;
     private static final float BASKET_DEPTH_LIP = 1F / 16F;
@@ -33,7 +33,7 @@ public class WickerBasketBlock extends AbstractPrimitiveStorageBlock {
     private static final double LID_OPEN_LIP_HEIGHT = 1D / 16D;
     private static final double LID_OPEN_LIP_Y_POS = 1D - LID_OPEN_LIP_HEIGHT;
     private static final double LID_OPEN_LIP_WIDTH = 2D / 16D;
-    private static final double LID_OPEN_LIP_HORIZONTAL_OFFSET = 5D / 16D;
+    private static final double LID_OPEN_LIP_HORIZONTAL_OFFSET = 3.5D / 16D;
 
     private static final Map<Direction, VoxelShape> SHAPES_CLOSED = new EnumMap<>(Direction.class);
     private static final Map<Direction, VoxelShape> SHAPES_OPEN = new EnumMap<>(Direction.class);

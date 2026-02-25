@@ -46,7 +46,7 @@ public class WickerBasketBERenderer implements BlockEntityRenderer<WickerBasketB
         Direction direction = entity.getHorizontalFacing();
         matrices.translate(0.5F, 0.0F, 0.5F);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-direction.asRotation()));
-        float maxAngle = (float) Math.toRadians(45);
+        float maxAngle = (float) Math.toRadians(38);
         ModelPart lid = this.model.getLid();
 
         float g = entity.getAnimationProgress(tickDelta);

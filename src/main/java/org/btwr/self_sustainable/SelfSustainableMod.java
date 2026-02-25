@@ -1,11 +1,13 @@
 package org.btwr.self_sustainable;
 
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import org.btwr.self_sustainable.event.ModEvents;
 import org.btwr.self_sustainable.item.ModItems;
 import org.btwr.self_sustainable.item.component.FoodComponentModifier;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
+import org.btwr.self_sustainable.network.SyncWickerBasketS2C;
 import org.btwr.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import org.btwr.self_sustainable.registry.FuelRegistryManager;
@@ -43,6 +45,9 @@ public class SelfSustainableMod implements ModInitializer {
 
         // Modifying fuel items.
         FuelRegistryManager.initEntries();
+
+        // register wicker basket S2C payload
+        PayloadTypeRegistry.playS2C().register(SyncWickerBasketS2C.ID, SyncWickerBasketS2C.CODEC);
 
     }
 

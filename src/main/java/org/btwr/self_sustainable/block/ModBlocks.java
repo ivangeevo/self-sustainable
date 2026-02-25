@@ -27,6 +27,7 @@ public class ModBlocks {
                     .hardness(0.05F)
                     .nonOpaque()
                     .sounds(BlockSoundGroup.GRASS)
+                    .dynamicBounds()
             )
     );
 

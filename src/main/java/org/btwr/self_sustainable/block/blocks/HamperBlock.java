@@ -8,7 +8,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class HamperBlock extends BasketBlock {
+public class HamperBlock extends AbstractPrimitiveStorageBlock {
 
     public static final MapCodec<HamperBlock> CODEC = HamperBlock.createCodec(HamperBlock::new);
 

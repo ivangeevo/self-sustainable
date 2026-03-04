@@ -20,6 +20,18 @@ import org.btwr.self_sustainable.block.entity.render.model.WickerBasketModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapted directly from Primitive Storage (CC0).
+ *
+ * <p>Original project:
+ * <a href="https://github.com/jeffinitup/primitive-storage/">
+ * https://github.com/jeffinitup/primitive-storage/
+ * </a>
+ *
+ * <p>Original author:
+ * JeffyJamzHD
+ *
+ */
 public class WickerBasketBERenderer implements BlockEntityRenderer<WickerBasketBE> {
 
     private static final List<ItemTransformation> TRANSFORMATIONS = new ArrayList<>();
@@ -45,17 +57,20 @@ public class WickerBasketBERenderer implements BlockEntityRenderer<WickerBasketB
 
         Direction direction = entity.getHorizontalFacing();
         matrices.translate(0.5F, 0.0F, 0.5F);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-direction.asRotation()));
-        float maxAngle = (float) Math.toRadians(38);
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180F - direction.asRotation()));
+
+        float maxAngle = (float) Math.toRadians(-37.5D);
+
         ModelPart lid = this.model.getLid();
 
         float g = entity.getAnimationProgress(tickDelta);
+
         g = 1F - g;
         g = 1F - g * g * g;
 
-        lid.pitch = -g * maxAngle;
+        lid.pitch = g * maxAngle;
 
-        if (lid.pitch > 0.01D) {
+        if (g > 0.05F) {
             DefaultedList<ItemStack> inventory = entity.getHeldStacks();
             World world = entity.getWorld();
 
@@ -65,18 +80,21 @@ public class WickerBasketBERenderer implements BlockEntityRenderer<WickerBasketB
 
             for (ItemStack stack : inventory) {
                 boolean isBlock = stack.getItem() instanceof BlockItem;
-                float scale = isBlock ? 0.5F : 0.4F;
+                float scale = isBlock ? 0.4F : 0.3F;
                 int duplicates = Math.clamp(stack.getCount() / Math.max(stack.getMaxCount() / 4, 1) + 1, 1, 4);
 
                 matrices.push();
-                matrices.translate(x, 0.25F + 0.15F * (lid.pitch / maxAngle), z);
+
+                float itemY = 0.45F  * (lid.pitch / maxAngle);
+
+                matrices.translate(x, itemY, z);
                 matrices.scale(scale, scale, scale);
 
                 for (int count = 0; count < duplicates; count++) {
                     if (stack.isEmpty()) continue;
 
                     matrices.push();
-                    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(25F));
+                    //matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(25F));
                     matrices.translate(TRANSFORMATIONS.get(count).x, TRANSFORMATIONS.get(count).y, TRANSFORMATIONS.get(count).z);
 
                     this.context.getItemRenderer().renderItem(

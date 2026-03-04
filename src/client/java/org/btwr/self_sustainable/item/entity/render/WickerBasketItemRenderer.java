@@ -22,10 +22,10 @@ public class WickerBasketItemRenderer implements BuiltinItemRendererRegistry.Dyn
     public void render(ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
 
-        matrices.translate(0.5, 0.5, 0.5);
+        matrices.translate(0.5, 0.0, 0.5);
 
-        VertexConsumer vertices = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(WickerBasketModel.TEXTURE_LOCATION));
-        wickerBasket.render(matrices, vertices, light, overlay);
+        VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(WickerBasketModel.TEXTURE_LOCATION));
+        wickerBasket.render(matrices, buffer, light, overlay);
 
         matrices.pop();
     }

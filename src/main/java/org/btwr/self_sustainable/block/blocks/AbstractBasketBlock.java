@@ -46,15 +46,13 @@ import org.btwr.self_sustainable.network.SyncWickerBasketS2C;
  * JeffyJamzHD
  *
  */
-public abstract class AbstractPrimitiveStorageBlock extends BlockWithEntity {
+public abstract class AbstractBasketBlock extends BlockWithEntity {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final BooleanProperty OPEN = Properties.OPEN;
     public static final BooleanProperty CRUSHED = BooleanProperty.of("crushed");
 
-    public static final float BASKET_OPEN_HEIGHT = 0.75F;
-
-    public AbstractPrimitiveStorageBlock(Settings settings) {
+    public AbstractBasketBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.getStateManager()
                 .getDefaultState()
@@ -69,10 +67,10 @@ public abstract class AbstractPrimitiveStorageBlock extends BlockWithEntity {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {
-            BlockEntity be = world.getBlockEntity(pos);
-            if (be instanceof AbstractPrimitiveStorageBE basketBE) {
-                basketBE.updateOpen(state, pos, hit);
-                basketBE.markDirty();
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof AbstractPrimitiveStorageBE be) {
+                be.updateOpen(state, pos, hit);
+                be.markDirty();
 
                 world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
                 PiglinBrain.onGuardedBlockInteracted(player, true);
@@ -101,7 +99,7 @@ public abstract class AbstractPrimitiveStorageBlock extends BlockWithEntity {
     @Override
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         BlockState stateBelow = world.getBlockState(pos.down());
-        return !stateBelow.isOf(this) && stateBelow.isSolidBlock(world, pos);
+        return !stateBelow.isOf(this) && stateBelow.isSideSolidFullSquare(world, pos, Direction.UP);
     }
 
     @Override

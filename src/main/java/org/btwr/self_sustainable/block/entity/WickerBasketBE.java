@@ -1,9 +1,12 @@
 package org.btwr.self_sustainable.block.entity;
 
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.MathHelper;
-import org.btwr.self_sustainable.block.blocks.AbstractPrimitiveStorageBlock;
+import net.minecraft.util.math.Vec3d;
+import org.btwr.self_sustainable.block.blocks.WickerBasketBlock;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -18,15 +21,12 @@ public class WickerBasketBE extends AbstractPrimitiveStorageBE {
 
     @Override
     public void updateOpen(BlockState state, BlockPos pos, BlockHitResult hit) {
-        double relativeClickY = hit.getPos().getY() - pos.getY();
-        boolean isClickingLid = relativeClickY > AbstractPrimitiveStorageBlock.BASKET_OPEN_HEIGHT;
-
         if (!state.get(OPEN)) {
             this.setOpen(state, true);
-            this.playOpeningSound(state);
-        } else if (isClickingLid) {
+            this.playSoftSound(state);
+        } else if (WickerBasketBlock.isClickingLid(hit)) {
             this.setOpen(state, false);
-            this.playClosingSound(state);
+            this.playHarshSound(state);
         }
     }
 
@@ -36,7 +36,7 @@ public class WickerBasketBE extends AbstractPrimitiveStorageBE {
     }
 
     @Override
-    protected void playOpeningSound(BlockState state) {
+    public void playSoftSound(BlockState state) {
         if (this.world == null) return;
         this.playSoundTowardsFacing(
                 this.world,
@@ -48,7 +48,7 @@ public class WickerBasketBE extends AbstractPrimitiveStorageBE {
     }
 
     @Override
-    protected void playClosingSound(BlockState state) {
+    public void playHarshSound(BlockState state) {
         if (this.world == null) return;
         this.playSoundTowardsFacing(
                 this.world,
@@ -69,6 +69,18 @@ public class WickerBasketBE extends AbstractPrimitiveStorageBE {
                 this.animationAngle += isOpen ? 0.1F : -0.2F;
                 this.animationAngle = MathHelper.clamp(this.animationAngle, 0, 1F);
             }
+        }
+    }
+
+    public void dropStack(ItemStack stack, float yOffset) {
+        if (this.world != null) {
+            Vec3d pos = this.getPos().toCenterPos();
+            ItemEntity itemEntity = new ItemEntity(
+                    this.world, pos.getX(),
+                    pos.getY() + yOffset, pos.getZ(),
+                    stack);
+            itemEntity.setToDefaultPickupDelay();
+            this.world.spawnEntity(itemEntity);
         }
     }
 }

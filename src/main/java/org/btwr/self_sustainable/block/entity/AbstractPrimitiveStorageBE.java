@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -22,7 +23,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import org.btwr.self_sustainable.block.blocks.AbstractPrimitiveStorageBlock;
+import org.btwr.self_sustainable.block.blocks.AbstractBasketBlock;
 import org.btwr.self_sustainable.util.TickableBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +50,18 @@ public abstract class AbstractPrimitiveStorageBE extends BlockEntity implements 
 
     public AbstractPrimitiveStorageBE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+    }
+
+    @Override
+    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
+        Inventories.writeNbt(nbt, this.getHeldStacks(), registryLookup);
+    }
+
+    @Override
+    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
+        Inventories.readNbt(nbt, this.getHeldStacks(), registryLookup);
     }
 
     @Override
@@ -138,7 +151,7 @@ public abstract class AbstractPrimitiveStorageBE extends BlockEntity implements 
 
     public void syncInventory() {
         if (this.getWorld() != null && !this.getWorld().isClient()) {
-            AbstractPrimitiveStorageBlock.sendSyncPacket(this.getWorld(), this.getPos(), this.getInventory());
+            AbstractBasketBlock.sendSyncPacket(this.getWorld(), this.getPos(), this.getInventory());
         }
     }
 
@@ -157,7 +170,7 @@ public abstract class AbstractPrimitiveStorageBE extends BlockEntity implements 
     }
 
     protected void playSoundTowardsFacing(World world, BlockState state, SoundEvent soundEvent, float volume, float pitch) {
-        Vec3i vec3i = (state.get(AbstractPrimitiveStorageBlock.FACING)).getVector();
+        Vec3i vec3i = (state.get(AbstractBasketBlock.FACING)).getVector();
 
         double d = this.pos.getX() + 0.5 + vec3i.getX() / 2.0;
         double e = this.pos.getY() + 0.5 + vec3i.getY() / 2.0;
@@ -172,9 +185,9 @@ public abstract class AbstractPrimitiveStorageBE extends BlockEntity implements 
 
     protected abstract int getInventorySize();
 
-    /** Play opening sound based on a direction **/
-    protected abstract void playOpeningSound(BlockState state);
+    /** Play opening/insert item in sound based on a direction **/
+    public abstract void playSoftSound(BlockState state);
 
-    /** Play closing sound based on a direction **/
-    protected abstract void playClosingSound(BlockState state);
+    /** Play closing/taken item out sound based on a direction **/
+    public abstract void playHarshSound(BlockState state);
 }

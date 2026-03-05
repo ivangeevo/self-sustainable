@@ -229,7 +229,6 @@ public class ModEvents {
                 }
             }
         });
-
     }
 
     public static void performUseEffects(World world, BlockPos pos, PlayerEntity player, Hand hand) {

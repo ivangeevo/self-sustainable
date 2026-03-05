@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 
 import static net.minecraft.state.property.Properties.OPEN;
 
-public class WickerBasketBE extends AbstractPrimitiveStorageBE {
+public class WickerBasketBE extends AbstractBasketBE {
 
     public WickerBasketBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.WICKER_BASKET, pos, state);

@@ -2,6 +2,7 @@ package org.btwr.self_sustainable.datagen.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.DyeColor;
 import org.btwr.self_sustainable.SelfSustainableMod;
 import org.btwr.self_sustainable.block.ModBlocks;
@@ -104,6 +105,16 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .criterion("has_stick", RecipeProvider.conditionsFromItem(Items.STICK))
                 .showNotification(true)
                 .offerTo(exporter, IdUtils.ofMC("campfire"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.CHEST)
+                .input('#', ItemTags.PLANKS)
+                .input('B', ModBlocks.HAMPER)
+                .input('I', Items.IRON_INGOT)
+                .pattern("###")
+                .pattern("#B#")
+                .pattern("#I#")
+                .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
+                .offerTo(exporter);
     }
 
     private void registerDisabledVanillaRecipes(RecipeExporter exporter) {
@@ -234,6 +245,21 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                     .offerTo(exporter, IdUtils.ofSS(baseId + "_block"));
         }
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.WICKER_BASKET)
+                .input('#', ModItems.WICKER)
+                .pattern("##")
+                .pattern("##")
+                .criterion(hasItem(ModItems.WICKER), conditionsFromItem(ModItems.WICKER))
+                .offerTo(exporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.HAMPER)
+                .input('#', ModItems.WICKER)
+                .input('B', ModBlocks.WICKER_BASKET)
+                .pattern("###")
+                .pattern("#B#")
+                .pattern("###")
+                .criterion(hasItem(ModItems.WICKER), conditionsFromItem(ModItems.WICKER))
+                .offerTo(exporter);
     }
 
 

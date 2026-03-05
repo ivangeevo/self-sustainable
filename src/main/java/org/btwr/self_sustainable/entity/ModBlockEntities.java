@@ -18,7 +18,7 @@ public class ModBlockEntities {
     public static BlockEntityType<UnfiredBrickBE> BRICK_UNFIRED;
     public static BlockEntityType<TorchBE> TORCH;
     public static BlockEntityType<WickerBasketBE> WICKER_BASKET;
-    public static BlockEntityType<HamperBlockEntity> HAMPER;
+    public static BlockEntityType<HamperBE> HAMPER;
 
     private static final Block[] torchesArray = new Block[] {
         ModBlocks.CRUDE_TORCH_LIT,
@@ -73,7 +73,7 @@ public class ModBlockEntities {
         HAMPER = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
                 Identifier.of(SelfSustainableMod.MOD_ID, "hamper_block_entity"),
-                BlockEntityType.Builder.create(HamperBlockEntity::new, ModBlocks.HAMPER).build()
+                BlockEntityType.Builder.create(HamperBE::new, ModBlocks.HAMPER).build()
         );
     }
 

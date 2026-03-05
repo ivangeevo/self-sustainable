@@ -28,10 +28,15 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         this.addTagTranslations(tb);
         //this.addConfigTranslations(tb);
         this.addEmiTranslations(tb);
+
+        tb.add("container.hamper", "Hamper");
     }
 
     private void addBlockTranslations(TranslationBuilder tb) {
         tb.add(ModBlocks.OVEN_BRICK, "Brick Oven");
+        tb.add(ModBlocks.WICKER_BASKET, "Wicker Basket");
+        tb.add(ModBlocks.HAMPER, "Hamper");
+
     }
 
     private void addItemTranslations(TranslationBuilder tb) {

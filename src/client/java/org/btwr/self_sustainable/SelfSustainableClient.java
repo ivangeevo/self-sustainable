@@ -14,6 +14,7 @@ import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.block.entity.WickerBasketBE;
 import org.btwr.self_sustainable.block.entity.render.*;
 import org.btwr.self_sustainable.item.ModItems;
+import org.btwr.self_sustainable.item.entity.render.HamperItemRenderer;
 import org.btwr.self_sustainable.item.entity.render.WickerBasketItemRenderer;
 import org.btwr.self_sustainable.network.SyncWickerBasketS2C;
 import org.btwr.self_sustainable.render.ModTexturedRenderLayers;
@@ -68,10 +69,13 @@ public class SelfSustainableClient implements ClientModInitializer {
         BlockEntityRendererFactories.register(ModBlockEntities.SMOKER_BRICK, SmokeOvenBERenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.CAMPFIRE, CampfireBERenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.WICKER_BASKET, WickerBasketBERenderer::new);
+        BlockEntityRendererFactories.register(ModBlockEntities.HAMPER, HamperBERenderer::new);
+
     }
 
     private void registerItemRenderers() {
         BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.WICKER_BASKET, new WickerBasketItemRenderer());
+        BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.HAMPER, new HamperItemRenderer());
     }
 
     private void registerColorProviders() {

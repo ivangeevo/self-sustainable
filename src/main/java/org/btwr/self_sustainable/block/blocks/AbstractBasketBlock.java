@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.event.GameEvent;
-import org.btwr.self_sustainable.block.entity.AbstractPrimitiveStorageBE;
+import org.btwr.self_sustainable.block.entity.AbstractBasketBE;
 import org.btwr.self_sustainable.network.SyncWickerBasketS2C;
 
 /**
@@ -68,7 +68,7 @@ public abstract class AbstractBasketBlock extends BlockWithEntity {
             return ActionResult.SUCCESS;
         } else {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof AbstractPrimitiveStorageBE be) {
+            if (blockEntity instanceof AbstractBasketBE be) {
                 be.updateOpen(state, pos, hit);
                 be.markDirty();
 
@@ -125,7 +125,7 @@ public abstract class AbstractBasketBlock extends BlockWithEntity {
 
     @Override
     protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (world.getBlockEntity(pos) instanceof AbstractPrimitiveStorageBE be) {
+        if (world.getBlockEntity(pos) instanceof AbstractBasketBE be) {
             be.scheduledTick();
         }
 

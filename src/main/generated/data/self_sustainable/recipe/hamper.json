@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "self_sustainable:wicker"
+    },
+    "B": {
+      "item": "self_sustainable:wicker_basket"
+    }
+  },
+  "pattern": [
+    "###",
+    "#B#",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "self_sustainable:hamper"
+  }
+}

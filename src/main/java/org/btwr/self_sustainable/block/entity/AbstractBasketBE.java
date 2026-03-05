@@ -42,13 +42,13 @@ import static net.minecraft.state.property.Properties.OPEN;
  * JeffyJamzHD
  *
  */
-public abstract class AbstractPrimitiveStorageBE extends BlockEntity implements Inventory, TickableBlockEntity {
+public abstract class AbstractBasketBE extends BlockEntity implements Inventory, TickableBlockEntity {
 
     private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(getInventorySize(), ItemStack.EMPTY);
 
     protected float animationAngle, lastAnimationAngle;
 
-    public AbstractPrimitiveStorageBE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public AbstractBasketBE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 

@@ -5,6 +5,9 @@
 + Added wool knits (Made from knitting)
 + Added wool items (By default, they craft into a full block from four wool items in the crafting grid)
 + Added wool armor (It's dyeable!)
++ Added wicker basket!
++ Added hamper! Recipe is slightly tweaked from original BTW recipe to require a wicker basket in the middle instead of a plank
++ Changed the recipe for chest to require a hamper and an iron ingot. This is necessary also for progression reasons
 + Changed sheep to drop the new wool items instead of the vanilla wool blocks
 + Fixed firestarters removing a placed raw item from the campfire after the campfire has been ignited when being held down
 + Fixed/added translations(proper names) for all tags from the mod

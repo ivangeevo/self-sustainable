@@ -107,7 +107,7 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
     }
 
     protected void addEmiTooltip(String key, String name, TranslationBuilder tb) {
-        tb.add("emi.tooltip.self_sustainable." + key, name);
+        tb.add("emi." + key + ".tooltip", name);
     }
 
     private void addItemGroup(String entryPath, String translation, TranslationBuilder tb) {

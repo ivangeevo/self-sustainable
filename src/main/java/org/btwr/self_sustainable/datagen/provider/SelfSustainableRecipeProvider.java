@@ -284,7 +284,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "knitting"));
 
         // Wicker weaving
-        WickerWeavingRecipe.JsonBuilder.create()
+        WickerWeavingRecipe.JsonBuilder.create(RecipeCategory.MISC)
                 .criterion(hasItem(Items.SUGAR_CANE), conditionsFromItem(Items.SUGAR_CANE))
                 .offerTo(exporter);
     }

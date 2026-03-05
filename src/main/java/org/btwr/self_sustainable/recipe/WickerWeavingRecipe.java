@@ -11,7 +11,6 @@ import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.RegistryByteBuf;
@@ -24,15 +23,16 @@ import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import org.btwr.self_sustainable.item.ModItems;
 import org.btwr.self_sustainable.item.items.WickerWeavingItem;
-import org.btwr.self_sustainable.tag.ModTags;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class WickerWeavingRecipe implements CraftingRecipe {
 
@@ -61,6 +61,16 @@ public class WickerWeavingRecipe implements CraftingRecipe {
         }
 
         return wickerIngredientCount == 4;
+    }
+
+    @Override
+    public DefaultedList<Ingredient> getIngredients() {
+        DefaultedList<Ingredient> ingredients = DefaultedList.of();
+        ingredients.add(Ingredient.ofItems(Items.SUGAR_CANE));
+        ingredients.add(Ingredient.ofItems(Items.SUGAR_CANE));
+        ingredients.add(Ingredient.ofItems(Items.SUGAR_CANE));
+        ingredients.add(Ingredient.ofItems(Items.SUGAR_CANE));
+        return ingredients;
     }
 
     @Override

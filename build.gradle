@@ -109,10 +109,6 @@ java {
     withSourcesJar()
 }
 
-compileJava {
-    options.incremental = false
-}
-
 jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}"}

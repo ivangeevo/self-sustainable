@@ -24,8 +24,6 @@ public class SelfSustainableMod implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Initializing Self Sustainable.");
 
-
-
         // Modifying foods to gave less hunger in general and 0 saturation.
         // Also, some additional negative effects to certain ones.
         FoodComponentModifier.register();
@@ -48,7 +46,6 @@ public class SelfSustainableMod implements ModInitializer {
 
         // register wicker basket S2C payload
         PayloadTypeRegistry.playS2C().register(SyncWickerBasketS2C.ID, SyncWickerBasketS2C.CODEC);
-
     }
 
 }

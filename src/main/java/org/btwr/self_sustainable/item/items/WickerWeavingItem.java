@@ -40,12 +40,4 @@ public class WickerWeavingItem extends ProgressiveCraftingItem {
         return new ItemStack(ModItems.WICKER);
     }
 
-    /**
-    @Override
-    public int getItemBarColor(ItemStack stack) {
-        // Hue=120 degrees, full saturation and brightness (full green)
-        return MathHelper.hsvToRgb(1.0F / 3.0F, 1.0F, 1.0F);
-    }
-    **/
-
 }

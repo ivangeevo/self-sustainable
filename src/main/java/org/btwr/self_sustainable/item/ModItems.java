@@ -171,13 +171,13 @@ public class ModItems {
                     Registries.ITEM,
                     Identifier.of(SelfSustainableMod.MOD_ID, color.getName() + "_wool_knit"),
                     new Item(new Item.Settings()
-                            .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xFFFFFFFF, true)))
+                            .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xFFFFFFFF, false)))
             ));
             WOOLS.put(color, Registry.register(
                     Registries.ITEM,
                     Identifier.of(SelfSustainableMod.MOD_ID, color.getName() + "_wool"),
                     new Item(new Item.Settings()
-                            .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xFFFFFFFF, true)))
+                            .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xFFFFFFFF, false)))
             ));
 
             // Register wool items to the knitting registry

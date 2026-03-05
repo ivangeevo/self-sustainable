@@ -4,8 +4,8 @@
   "package": "org.btwr.self_sustainable.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "FurnaceFuelSlotMixin",
     "CraftingScreenHandlerMixin",
+    "FurnaceFuelSlotMixin",
     "ShapedRecipeAccessor",
     "added.DifficultyAddedMixin",
     "added.ItemAddedMixin",
@@ -19,6 +19,7 @@
     "entity.MobEntityMixin",
     "entity.PlayerEntityMixin",
     "entity.ServerPlayerEntityMixin",
+    "entity.SheepEntityMixin",
     "entity.ZombieEntityMixin",
     "item.BlockItemMixin",
     "item.FlintAndSteelItemMixin",

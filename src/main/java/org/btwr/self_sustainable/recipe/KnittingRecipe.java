@@ -93,7 +93,7 @@ public class KnittingRecipe implements CraftingRecipe {
         DyeColor resultColor = color1 == color2 ? color1 : blendColors(color1, color2);
 
         ItemStack result = new ItemStack(ModItems.KNITTING);
-        result.setDamage(ProgressiveCraftingItem.DEFAULT_MAX_DAMAGE - 1); // just above 0 so the durability bar appears
+        result.setDamage(KnittingItem.DEFAULT_MAX_DAMAGE - 1); // just above 0 so the durability bar appears
         KnittingItem.setColor(result, resultColor);
         return result;
     }

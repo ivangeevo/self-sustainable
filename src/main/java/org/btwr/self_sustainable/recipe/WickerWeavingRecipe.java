@@ -76,7 +76,7 @@ public class WickerWeavingRecipe implements CraftingRecipe {
     @Override
     public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
         ItemStack result = new ItemStack(ModItems.WICKER_WEAVING);
-        result.setDamage(WickerWeavingItem.DEFAULT_MAX_DAMAGE - 1);
+        result.setDamage(WickerWeavingItem.WICKER_WEAVING_MAX_DAMAGE - 1);
         return result;
     }
 

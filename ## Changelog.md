@@ -12,6 +12,7 @@
 + Fixed firestarters removing a placed raw item from the campfire after the campfire has been ignited when being held down
 + Fixed/added translations(proper names) for all tags from the mod
 + Moved the ProgressiveCraftingItem class to the BTWR: Shared Library mod since some other progressive crafting items will be used in other mods as well
++ Updated the mod to BTWR: Shared Library 0.8.1
 
 ## v0.4
 ### WARNING! Game breaking update, proceed with caution.

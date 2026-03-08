@@ -9,10 +9,11 @@
 + Added hamper! Recipe is slightly tweaked from original BTW recipe to require a wicker basket in the middle instead of a plank
 + Changed the recipe for chest to require a hamper and an iron ingot. This is necessary also for progression reasons
 + Changed sheep to drop the new wool items instead of the vanilla wool blocks
++ Changed brick ovens to have one light level higher to get somewhat closer to the BTW CE luminance look. Also made them non-opaque blocks internally
 + Fixed firestarters removing a placed raw item from the campfire after the campfire has been ignited when being held down
 + Fixed/added translations(proper names) for all tags from the mod
 + Moved the ProgressiveCraftingItem class to the BTWR: Shared Library mod since some other progressive crafting items will be used in other mods as well
-+ Updated the mod to BTWR: Shared Library 0.8.1
++ Updated the mod to Fabric API 0.116.9, Fabric Loader 0.18.14 BTWR: Shared Library 0.8.1
 
 ## v0.4
 ### WARNING! Game breaking update, proceed with caution.

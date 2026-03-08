@@ -42,16 +42,18 @@ public class ModBlocks {
     public static final Block OVEN_BRICK = registerBlock("oven_brick",
             new BrickOvenBlock(AbstractBlock.Settings.create()
                     .strength(1.5F,2.0F)
-                    .luminance((state) -> state.get(LIT) ? 7 : 0)
+                    .luminance((state) -> state.get(LIT) ? 8 : 0)
                     .sounds(BlockSoundGroup.STONE)
+                    .nonOpaque()
             )
     );
 
     public static final Block SMOKER_BRICK = registerBlock("smoker_brick",
             new SmokerOvenBlock(AbstractBlock.Settings.create()
                     .strength(1.5F,2.0F)
-                    .luminance((state) -> state.get(LIT) ? 7 : 0)
+                    .luminance((state) -> state.get(LIT) ? 8 : 0)
                     .sounds(BlockSoundGroup.STONE)
+                    .nonOpaque()
             )
     );
     

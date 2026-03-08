@@ -159,12 +159,10 @@ public class WickerBasketBlock extends AbstractBasketBlock {
                 be.playHarshSound(state);
             } else if (stack.isOf(inv.getItem()) && inv.getCount() < inv.getMaxCount()) {
                 int maxCount = inv.getMaxCount();
-                boolean overflow = stack.getCount() + inv.getCount() < inv.getMaxCount();
-                int remainder = overflow ? (stack.getCount() + inv.getCount()) & maxCount : 0;
-
-                inv.setCount(Math.min(stack.getCount() + inv.getCount(), maxCount));
+                int total = stack.getCount() + inv.getCount();
+                inv.setCount(Math.min(total, maxCount));
                 be.playHarshSound(state);
-                stack.setCount(remainder);
+                stack.setCount(Math.max(0, total - maxCount));
             } else {
                 ItemStack taken = inv.copy();
                 be.setStack(slot, ItemStack.EMPTY);

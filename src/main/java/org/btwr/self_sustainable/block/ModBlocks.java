@@ -64,7 +64,7 @@ public class ModBlocks {
             new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings().luminance(state -> 14), TorchFireState.LIT));
 
     public static final Block CRUDE_TORCH_SMOULDER = registerWithoutItem("crude_torch_smoulder",
-            new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings().luminance(state -> 3), TorchFireState.SMOULDER));
+            new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings().luminance(state -> 14), TorchFireState.SMOULDER));
 
     public static final Block CRUDE_TORCH_BURNED_OUT = registerWithoutItem("crude_torch_burned_out",
             new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings(), TorchFireState.BURNED_OUT));

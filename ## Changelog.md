@@ -1,4 +1,5 @@
 ## v???(dev)
++ Changed the light value for smoldering torches to be the same as a lit torch
 
 ## v0.5
 + Added wicker weaving!

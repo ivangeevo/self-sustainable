@@ -1,4 +1,4 @@
-## v???(dev)
+## v0.5
 + Added wicker weaving!
 + Added knitting!
 + Added knitting needles (Crafted from two sticks placed diagonally)

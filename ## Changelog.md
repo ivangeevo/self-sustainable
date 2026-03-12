@@ -1,4 +1,5 @@
-## v???(dev)
+## v0.5.1(dev)
++ Fixed a bug with crafting the wicker weaving item that caused a dupe of the ingredients
 + Changed the light value for smoldering torches to be the same as a lit torch
 
 ## v0.5

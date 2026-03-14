@@ -1,6 +1,7 @@
 ## v0.5.2
 + Fixed crafting the knitting item causing a dupe of the ingredients
 + Fixed wool armor items not being craftable from different wool knits
++ Updated the mod to BTWR: Shared Library 0.8.2
 
 ## v0.5.1
 + Fixed a bug with crafting the wicker weaving item that caused a dupe of the ingredients

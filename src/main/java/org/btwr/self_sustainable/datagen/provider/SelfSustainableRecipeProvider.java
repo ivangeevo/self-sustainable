@@ -2,14 +2,7 @@ package org.btwr.self_sustainable.datagen.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.AdvancementRequirements;
-import net.minecraft.advancement.AdvancementRewards;
-import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RawShapedRecipe;
-import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.DyeColor;
 import org.btwr.self_sustainable.SelfSustainableMod;
@@ -26,13 +19,12 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import org.btwr.self_sustainable.item.items.WickerWeavingItem;
 import org.btwr.self_sustainable.recipe.KnittingRecipe;
-import org.btwr.self_sustainable.recipe.WickerWeavingRecipe;
+import org.btwr.self_sustainable.recipe.WoolArmorRecipe;
 import org.btwr.shared_library.api.tag.BTWRConventionalTags;
+import org.btwr.shared_library.recipe.util.ShapedRecipeWithStackJsonBuilder;
 import org.btwr.shared_library.util.utils.IdUtils;
 import org.btwr.shared_library.util.utils.RecipeUtils;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static org.btwr.self_sustainable.data.server.recipe.ModCookingRecipeJsonBuilder.offerOvenCooking;
@@ -271,8 +263,9 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .pattern("###")
                 .criterion(hasItem(ModItems.WICKER), conditionsFromItem(ModItems.WICKER))
                 .offerTo(exporter);
-    }
 
+        this.generateWoolArmorRecipes(exporter);
+    }
 
     private void moddedShapeless(RecipeExporter exporter) {
         ShapelessRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.FIRESTARTER_BOW)
@@ -295,36 +288,15 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "knitting"));
 
         // Wicker weaving
-        //WickerWeavingRecipe.JsonBuilder.create(RecipeCategory.MISC)
-                //.criterion(hasItem(Items.SUGAR_CANE), conditionsFromItem(Items.SUGAR_CANE))
-                //.offerTo(exporter);
+        ItemStack wickerResult = new ItemStack(ModItems.WICKER_WEAVING);
+        wickerResult.setDamage(WickerWeavingItem.WICKER_WEAVING_MAX_DAMAGE - 1);
 
-        Identifier recipeId = IdUtils.ofSS("wicker_weaving");
-        RawShapedRecipe raw = RawShapedRecipe.create(
-                Map.of('S', Ingredient.ofItems(Items.SUGAR_CANE)),
-                List.of("SS", "SS")
-        );
-
-        ItemStack result = new ItemStack(ModItems.WICKER_WEAVING);
-        result.setDamage(WickerWeavingItem.WICKER_WEAVING_MAX_DAMAGE - 1);
-
-        ShapedRecipe recipe = new ShapedRecipe(
-                "",
-                CraftingRecipeCategory.MISC,
-                raw,
-                result,
-                true
-        );
-
-        Advancement.Builder advancement = exporter.getAdvancementBuilder()
-                .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
-                .rewards(AdvancementRewards.Builder.recipe(recipeId))
-                .criteriaMerger(AdvancementRequirements.CriterionMerger.OR)
-                .criterion("has_sugar_cane", conditionsFromItem(Items.SUGAR_CANE));
-
-        exporter.accept(recipeId, recipe, advancement.build(
-                recipeId.withPrefixedPath("recipes/misc/")
-        ));
+        ShapedRecipeWithStackJsonBuilder.create(wickerResult)
+                .input('S', Items.SUGAR_CANE)
+                .pattern("SS")
+                .pattern("SS")
+                .criterion(hasItem(Items.SUGAR_CANE), conditionsFromItem(Items.SUGAR_CANE))
+                .offerTo(exporter, IdUtils.ofSS("wicker_weaving"));
     }
 
     private void createOvenCooking(RecipeExporter exporter) {
@@ -346,5 +318,25 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         // Other
         offerOvenCooking(Items.BRICK, RecipeCategory.MISC, Ingredient.ofItems(ModItems.BRICK_UNFIRED), 0.10f, 6000).criterion("has_brick_unfired", RecipeProvider.conditionsFromItem(ModItems.BRICK_UNFIRED)).offerTo(exporter, IdUtils.ofSS("brick") + foc);
     }
-    
+
+    private void generateWoolArmorRecipes(RecipeExporter exporter) {
+        createWoolArmor(exporter, ModItems.WOOL_HELMET, "wool_helmet", "##");
+        createWoolArmor(exporter, ModItems.WOOL_CHESTPLATE, "wool_chestplate", "##", "##");
+        createWoolArmor(exporter, ModItems.WOOL_LEGGINGS, "wool_leggings", " #", "##");
+        createWoolArmor(exporter, ModItems.WOOL_BOOTS, "wool_boots", "#", "#");
+    }
+
+    private void createWoolArmor(RecipeExporter exporter, Item resultItem, String name, String... pattern) {
+        Ingredient woolKnits = Ingredient.ofItems(ModItems.WOOL_KNITS.values().toArray(new Item[0]));
+
+        WoolArmorRecipe.JsonBuilder builder = WoolArmorRecipe.JsonBuilder.create(RecipeCategory.COMBAT, new ItemStack(resultItem))
+                .input('#', woolKnits)
+                .criterion("has_wool_knit", conditionsFromItem(ModItems.WOOL_KNITS.values().iterator().next()));
+
+        for (String row : pattern) {
+            builder.pattern(row);
+        }
+
+        builder.offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, name));
+    }
 }

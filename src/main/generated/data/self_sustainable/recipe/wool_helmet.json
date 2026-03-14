@@ -1,0 +1,63 @@
+{
+  "type": "self_sustainable:wool_armor",
+  "category": "equipment",
+  "key": {
+    "#": [
+      {
+        "item": "self_sustainable:white_wool_knit"
+      },
+      {
+        "item": "self_sustainable:orange_wool_knit"
+      },
+      {
+        "item": "self_sustainable:magenta_wool_knit"
+      },
+      {
+        "item": "self_sustainable:light_blue_wool_knit"
+      },
+      {
+        "item": "self_sustainable:yellow_wool_knit"
+      },
+      {
+        "item": "self_sustainable:lime_wool_knit"
+      },
+      {
+        "item": "self_sustainable:pink_wool_knit"
+      },
+      {
+        "item": "self_sustainable:gray_wool_knit"
+      },
+      {
+        "item": "self_sustainable:light_gray_wool_knit"
+      },
+      {
+        "item": "self_sustainable:cyan_wool_knit"
+      },
+      {
+        "item": "self_sustainable:purple_wool_knit"
+      },
+      {
+        "item": "self_sustainable:blue_wool_knit"
+      },
+      {
+        "item": "self_sustainable:brown_wool_knit"
+      },
+      {
+        "item": "self_sustainable:green_wool_knit"
+      },
+      {
+        "item": "self_sustainable:red_wool_knit"
+      },
+      {
+        "item": "self_sustainable:black_wool_knit"
+      }
+    ]
+  },
+  "output": {
+    "count": 1,
+    "id": "self_sustainable:wool_helmet"
+  },
+  "pattern": [
+    "##"
+  ]
+}

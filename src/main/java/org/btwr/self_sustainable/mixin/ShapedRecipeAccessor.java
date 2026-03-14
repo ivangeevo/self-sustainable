@@ -10,4 +10,6 @@ public interface ShapedRecipeAccessor {
 
     @Accessor("raw") RawShapedRecipe getRaw();
 
+    @Accessor("showNotification") boolean getShowNotification();
+
 }

@@ -14,8 +14,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
-import org.btwr.self_sustainable.recipe.KnittingRecipe;
-import org.btwr.self_sustainable.recipe.WickerWeavingRecipe;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,8 +39,7 @@ public abstract class CraftingScreenHandlerMixin {
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 
         // Add compatibility for these recipe types
-        addCompatFor(KnittingRecipe.Type.INSTANCE, input, world, handler, resultInventory, serverPlayer, server);
-        addCompatFor(WickerWeavingRecipe.Type.INSTANCE, input, world, handler, resultInventory, serverPlayer, server);
+        //addCompatFor(KnittingRecipe.Type.INSTANCE, input, world, handler, resultInventory, serverPlayer, server);
     }
 
     @Unique

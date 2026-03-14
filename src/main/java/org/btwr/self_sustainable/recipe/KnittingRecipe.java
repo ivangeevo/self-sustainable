@@ -143,16 +143,6 @@ public class KnittingRecipe implements CraftingRecipe {
         return Serializer.INSTANCE;
     }
 
-    @Override
-    public RecipeType<?> getType() {
-        return Type.INSTANCE;
-    }
-
-    public static class Type implements RecipeType<KnittingRecipe> {
-        public static final KnittingRecipe.Type INSTANCE = new KnittingRecipe.Type();
-        public static final String ID = "knitting";
-    }
-
     public static class Serializer implements RecipeSerializer<KnittingRecipe> {
         public static final KnittingRecipe.Serializer INSTANCE = new KnittingRecipe.Serializer();
         public static final String ID = "knitting";

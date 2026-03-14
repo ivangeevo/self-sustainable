@@ -11,19 +11,15 @@ import dev.emi.emi.handler.CookingRecipeHandler;
 import dev.emi.emi.recipe.EmiCookingRecipe;
 import dev.emi.emi.recipe.special.EmiRepairItemRecipe;
 import dev.emi.emi.runtime.EmiReloadLog;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
 import org.btwr.self_sustainable.SelfSustainableMod;
 import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.item.ModItems;
-import org.btwr.self_sustainable.recipe.KnittingRecipe;
-import org.btwr.self_sustainable.recipe.WickerWeavingRecipe;
 import org.btwr.self_sustainable.recipe.cooking.OvenCookingRecipe;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.item.Item;
@@ -34,7 +30,6 @@ import net.minecraft.recipe.input.RecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import org.btwr.self_sustainable.tag.ModTags;
 import org.btwr.shared_library.util.utils.IdUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,10 +41,6 @@ public class SSEmiPlugin implements EmiPlugin {
 
     public static EmiRecipeCategory OVEN_COOKING = category("oven_cooking", EmiStack.of(ModBlocks.OVEN_BRICK));
     public static EmiRecipeCategory PROGRESSIVE_CRAFTING = category("progressive_crafting", EmiStack.of(ModItems.KNITTING));
-
-    // Separate recipes for WICKER WEAVING & KNITTING, since they are custom recipes. This is so their crafting recipes can show in EMI
-    public static EmiRecipeCategory KNITTING = category("knitting", EmiStack.of(Items.CRAFTING_TABLE));
-    public static EmiRecipeCategory WICKER_WEAVING = category("wicker_weaving", EmiStack.of(Items.CRAFTING_TABLE));
 
     public static EmiRecipeCategory category(String id, EmiStack icon) {
         return new EmiRecipeCategory(Identifier.of(SelfSustainableMod.MOD_ID, id), icon, icon);
@@ -87,22 +78,6 @@ public class SSEmiPlugin implements EmiPlugin {
 
     private void addWickerWeaving(EmiRegistry registry) {
         registerFakeProgression(registry, EmiStack.of(ModItems.WICKER_WEAVING), EmiStack.of(ModItems.WICKER));
-
-        for (WickerWeavingRecipe recipe : getRecipes(registry, WickerWeavingRecipe.Type.INSTANCE)) {
-            addRecipeSafe(registry, () -> {
-                DefaultedList<EmiIngredient> grid = DefaultedList.ofSize(9, EmiIngredient.of(Ingredient.empty()));
-                grid.set(0, EmiIngredient.of(Ingredient.ofItems(Items.SUGAR_CANE)));
-                grid.set(1, EmiIngredient.of(Ingredient.ofItems(Items.SUGAR_CANE)));
-                grid.set(3, EmiIngredient.of(Ingredient.ofItems(Items.SUGAR_CANE)));
-                grid.set(4, EmiIngredient.of(Ingredient.ofItems(Items.SUGAR_CANE)));
-                return new EmiCraftingRecipe(
-                        grid,
-                        EmiStack.of(recipe.getResult(MinecraftClient.getInstance().world.getRegistryManager())),
-                        EmiPort.getId(recipe),
-                        false
-                );
-            }, recipe);
-        }
     }
 
     private void addKnitting(EmiRegistry registry) {
@@ -112,21 +87,6 @@ public class SSEmiPlugin implements EmiPlugin {
             knittingStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(color.getEntityColor(), false));
             registerFakeProgression(registry, EmiStack.of(knittingStack), EmiStack.of(woolKnitItem));
         }));
-
-        for (KnittingRecipe recipe : getRecipes(registry, KnittingRecipe.Type.INSTANCE)) {
-            addRecipeSafe(registry, () -> {
-                DefaultedList<EmiIngredient> grid = DefaultedList.ofSize(9, EmiIngredient.of(Ingredient.empty()));
-                grid.set(3, EmiIngredient.of(Ingredient.ofItems(ModItems.KNITTING_NEEDLES)));
-                grid.set(1, EmiIngredient.of(Ingredient.fromTag(ModTags.Items.KNITTING_INGREDIENTS)));
-                grid.set(4, EmiIngredient.of(Ingredient.fromTag(ModTags.Items.KNITTING_INGREDIENTS)));
-                return new EmiCraftingRecipe(
-                        grid,
-                        EmiStack.of(recipe.getResult(MinecraftClient.getInstance().world.getRegistryManager())),
-                        EmiPort.getId(recipe),
-                        false
-                );
-            }, recipe);
-        }
     }
 
     private void registerBrickSunDrying(EmiRegistry registry) {

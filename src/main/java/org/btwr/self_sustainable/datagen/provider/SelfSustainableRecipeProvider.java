@@ -2,6 +2,7 @@ package org.btwr.self_sustainable.datagen.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.DyeColor;
@@ -271,8 +272,8 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         ShapelessRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.FIRESTARTER_BOW)
                 .input(Items.STICK)
                 .input(Items.STICK)
-                .input(BTWRConventionalTags.Items.STRING_TOOL_MATERIALS)
-                .criterion("has_string", RecipeProvider.conditionsFromItem(Items.STRING))
+                .input(ConventionalItemTags.STRINGS)
+                .criterion("has_string", RecipeProvider.conditionsFromTag(ConventionalItemTags.STRINGS))
                 .offerTo(exporter);
 
         ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.BRICK_UNFIRED)

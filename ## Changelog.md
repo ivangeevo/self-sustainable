@@ -1,4 +1,5 @@
 ## v???(dev)
++ Changed the bow drill to be craftable with other string items from the Fabric conventional "strings" item tag instead of just string
 
 ## v0.5.2
 + Fixed crafting the knitting item causing a dupe of the ingredients

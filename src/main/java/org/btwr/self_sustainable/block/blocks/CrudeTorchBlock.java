@@ -16,6 +16,9 @@ import net.minecraft.world.World;
 
 public class CrudeTorchBlock extends AbstractCrudeTorchBlock {
 
+    public static final int LIT_LUMINANCE = 14;
+    public static final int SMOULDERING_LUMINANCE = 10;
+
     protected static final MapCodec<SimpleParticleType> PARTICLE_TYPE_CODEC = Registries.PARTICLE_TYPE
             .getCodec()
             .comapFlatMap(

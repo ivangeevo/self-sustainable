@@ -28,7 +28,6 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
     private static final int FUEL_TIME = 24000;
     int maxFuel = FUEL_TIME;
     public static final int SPUTTER_TIME = 30 * 20; // 30 seconds
-
     public CrudeTorchBlockItem(Block standingBlock, Block wallBlock, Item.Settings settings, TorchFireState torchState, ModTorchHandler group) {
         super(standingBlock, wallBlock, settings, Direction.DOWN);
         this.torchState = torchState;

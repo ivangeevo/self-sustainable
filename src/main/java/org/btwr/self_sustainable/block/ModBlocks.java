@@ -61,10 +61,10 @@ public class ModBlocks {
             new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings(), TorchFireState.UNLIT));
 
     public static final Block CRUDE_TORCH_LIT = registerWithoutItem("crude_torch_lit",
-            new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings().luminance(state -> 14), TorchFireState.LIT));
+            new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings().luminance(state -> CrudeTorchBlock.LIT_LUMINANCE), TorchFireState.LIT));
 
     public static final Block CRUDE_TORCH_SMOULDER = registerWithoutItem("crude_torch_smoulder",
-            new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings().luminance(state -> 14), TorchFireState.SMOULDER));
+            new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings().luminance(state -> CrudeTorchBlock.SMOULDERING_LUMINANCE), TorchFireState.SMOULDER));
 
     public static final Block CRUDE_TORCH_BURNED_OUT = registerWithoutItem("crude_torch_burned_out",
             new CrudeTorchBlock(ParticleTypes.FLAME, initTorchSettings(), TorchFireState.BURNED_OUT));
@@ -73,10 +73,10 @@ public class ModBlocks {
             new CrudeWallTorchBlock(initTorchSettings(), ParticleTypes.FLAME, TorchFireState.UNLIT));
 
     public static final Block CRUDE_WALL_TORCH_LIT = registerWithoutItem("crude_wall_torch_lit",
-            new CrudeWallTorchBlock(initTorchSettings().luminance(state -> 14), ParticleTypes.FLAME, TorchFireState.LIT));
+            new CrudeWallTorchBlock(initTorchSettings().luminance(state -> CrudeTorchBlock.LIT_LUMINANCE), ParticleTypes.FLAME, TorchFireState.LIT));
 
     public static final Block CRUDE_WALL_TORCH_SMOULDER = registerWithoutItem("crude_wall_torch_smoulder",
-            new CrudeWallTorchBlock(initTorchSettings().luminance(state -> 3), ParticleTypes.SMOKE, TorchFireState.SMOULDER));
+            new CrudeWallTorchBlock(initTorchSettings().luminance(state -> CrudeTorchBlock.SMOULDERING_LUMINANCE), ParticleTypes.SMOKE, TorchFireState.SMOULDER));
 
     public static final Block CRUDE_WALL_TORCH_BURNED_OUT = registerWithoutItem("crude_wall_torch_burned_out",
             new CrudeWallTorchBlock(initTorchSettings(), ParticleTypes.FLAME, TorchFireState.BURNED_OUT));

@@ -16,6 +16,7 @@ public class SelfSustainableDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(SelfSustainableLootTableProvider::new);
         pack.addProvider(SelfSustainableLangProvider::new);
         pack.addProvider(SelfSustainableModelGenerator::new);
+        pack.addProvider(SelfSustainableLambDynamicLightsProvider::register);
     }
 
 }

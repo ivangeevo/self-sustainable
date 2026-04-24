@@ -17,7 +17,8 @@
     "client":[ "org.btwr.self_sustainable.SelfSustainableClient" ],
     "main":["org.btwr.self_sustainable.SelfSustainableMod"],
     "fabric-datagen": ["org.btwr.self_sustainable.datagen.SelfSustainableDataGenerator"],
-    "emi": ["org.btwr.self_sustainable.emi.SSEmiPlugin"]
+    "emi": ["org.btwr.self_sustainable.emi.SSEmiPlugin"],
+    "lambdynlights:initializer": ["org.btwr.self_sustainable.compat.LambDynamicLightsCompat"]
   },
   "mixins":[
     "self_sustainable.mixins.json",

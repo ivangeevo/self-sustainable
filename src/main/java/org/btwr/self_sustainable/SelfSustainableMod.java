@@ -28,9 +28,7 @@ public class SelfSustainableMod implements ModInitializer {
         // Also, some additional negative effects to certain ones.
         FoodComponentModifier.register();
 
-        ModBlocks.registerBlocks();
-        ModBlocks.registerItemsPlaceableAsBlocks();
-        ModBlocks.registerTorchHandler();
+        ModBlocks.register();
         ModItems.register();
         ModBlockEntities.register();
         ModComponentsTypes.register();

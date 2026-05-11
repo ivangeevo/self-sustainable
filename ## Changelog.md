@@ -1,4 +1,4 @@
-## v???(dev)
+## v0.5.3
 + Added LambDynamicLights compatibility for the crude torch items
 + Changed the bow drill to be craftable with other string items from the Fabric conventional "strings" item tag instead of just string
 + Updated the mod to Fabric Loader 0.116.11, Fabric Loader 0.19.2 & BTWR: Shared Library 0.8.4

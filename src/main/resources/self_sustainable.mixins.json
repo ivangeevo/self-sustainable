@@ -14,6 +14,7 @@
     "block.BlocksMixin",
     "block.CakeBlockMixin",
     "block.CampfireBlockMixin",
+    "block.AbstractBlock$AbstractBlockStateMixin",
     "entity.HungerManagerMixin",
     "entity.ItemEntityMixin",
     "entity.MobEntityMixin",

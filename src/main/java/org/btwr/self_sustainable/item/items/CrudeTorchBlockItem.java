@@ -1,11 +1,10 @@
 package org.btwr.self_sustainable.item.items;
 
-import net.fabricmc.fabric.api.item.v1.FabricItem;
+import net.minecraft.util.TypedActionResult;
 import org.btwr.self_sustainable.block.blocks.AbstractCrudeTorchBlock;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.item.component.TorchFuelComponent;
-import org.btwr.self_sustainable.tag.ModTags;
 import org.btwr.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,15 +18,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import static net.minecraft.state.property.Properties.LIT;
-
-public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implements FabricItem {
+public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implements IgnitableTorchItem {
 
     TorchFireState torchState;
     ModTorchHandler handler;
     private static final int FUEL_TIME = 24000;
     int maxFuel = FUEL_TIME;
     public static final int SPUTTER_TIME = 30 * 20; // 30 seconds
+
     public CrudeTorchBlockItem(Block standingBlock, Block wallBlock, Item.Settings settings, TorchFireState torchState, ModTorchHandler group) {
         super(standingBlock, wallBlock, settings, Direction.DOWN);
         this.torchState = torchState;
@@ -40,37 +38,25 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
         BlockState state = world.getBlockState(pos);
+        PlayerEntity player = context.getPlayer();
+        Hand hand = context.getHand();
 
-        if (state.isIn(ModTags.Blocks.DIRECTLY_IGNITES_ITEM_ON_USE) || (state.contains(LIT) && state.get(LIT))) {
-            if (torchState != TorchFireState.UNLIT) return ActionResult.FAIL;
-            if (!world.isClient) {
-                PlayerEntity player = context.getPlayer();
-
-                if (player != null) {
-                    // torch you get out of lighting
-                    ItemStack litTorch = stateStack(stack, TorchFireState.LIT);
-
-                    // consume one unlit torch
-                    stack.decrement(1);
-
-                    if (stack.isEmpty()) {
-                        // hand goes empty, replace it with the lit torch
-                        player.setStackInHand(context.getHand(), litTorch);
-                    }
-                    else {
-                        // leave the unlit stack in hand
-                        player.setStackInHand(context.getHand(), stack);
-
-                        // try to add the lit torch to inventory, or drop if full
-                        if (!player.getInventory().insertStack(litTorch)) {
-                            player.dropItem(litTorch, false);
-                        }
-                    }
+        if (torchState == TorchFireState.UNLIT && player != null) {
+            BlockPos firePos = findFireInSight(player, world);
+            if (firePos != null) {
+                if (!world.isClient) {
+                    lightTorch(stack, world, firePos, player, hand);
                 }
-
-                world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
+                return ActionResult.SUCCESS;
             }
+        }
 
+        // Direct hit on an ignition source (campfire, lit block, etc.)
+        if (isIgnitionSource(state)) {
+            if (torchState != TorchFireState.UNLIT) return ActionResult.FAIL;
+            if (!world.isClient && player != null) {
+                lightTorch(stack, world, pos, player, hand);
+            }
             return ActionResult.SUCCESS;
         }
 
@@ -78,9 +64,48 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
     }
 
     @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        ItemStack stack = user.getStackInHand(hand);
+
+        // Handles right-click in air while looking at fire
+        if (torchState == TorchFireState.UNLIT) {
+            BlockPos firePos = findFireInSight(user, world);
+            if (firePos != null) {
+                if (!world.isClient) {
+                    lightTorch(stack, world, firePos, user, hand);
+                }
+                return TypedActionResult.success(user.getStackInHand(hand));
+            }
+        }
+
+        return super.use(world, user, hand);
+    }
+
+    @Override
+    public void lightTorch(ItemStack stack, World world, BlockPos soundPos, PlayerEntity player, Hand hand) {
+        ItemStack litTorch = stateStack(stack, TorchFireState.LIT);
+        stack.decrement(1);
+
+        if (stack.isEmpty()) {
+            player.setStackInHand(hand, litTorch);
+        } else {
+            player.setStackInHand(hand, stack);
+            if (!player.getInventory().insertStack(litTorch)) {
+                player.dropItem(litTorch, false);
+            }
+        }
+
+        world.playSound(null, soundPos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
+    }
+
+    @Override
+    public boolean btwr$getCanItemStartFireOnUse(ItemStack stack) {
+        return torchState == TorchFireState.LIT || torchState == TorchFireState.SMOULDER;
+    }
+
+    @Override
     public boolean isItemBarVisible(ItemStack stack) {
         int fuel = getFuel(stack);
-
         return fuel > 0 && fuel < maxFuel;
     }
 
@@ -162,12 +187,6 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
 
         stack.set(ModComponentsTypes.TORCH_FUEL, new TorchFuelComponent(fuel));
         return stack;
-    }
-
-
-    @Override
-    public boolean btwr$getCanItemStartFireOnUse(ItemStack stack) {
-        return torchState == TorchFireState.LIT || torchState == TorchFireState.SMOULDER;
     }
 
 }

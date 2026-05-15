@@ -34,14 +34,17 @@ public abstract class BlockItemMixin extends Item {
     private void onPlace(ItemPlacementContext context, BlockState state, CallbackInfoReturnable<Boolean> cir) {
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
-        BlockState stateAtPos = context.getWorld().getBlockState(pos);
         PlayerEntity player = context.getPlayer();
         Hand hand = context.getHand();
         ItemStack stack = context.getStack();
 
+        // The block the player clicked on
+        BlockPos clickedPos = context.getBlockPos().offset(context.getSide().getOpposite());
+        BlockState clickedState = world.getBlockState(clickedPos);
+
         // Allow normal placing over the lava if the player is sneaking for consistency with other similar behavior
         if (player != null && !player.isSneaking()) {
-            if (!stateAtPos.getFluidState().isEmpty() && stateAtPos.getFluidState().isIn(FluidTags.LAVA)) {
+            if (!clickedState.getFluidState().isEmpty() && clickedState.getFluidState().isIn(FluidTags.LAVA)) {
                 if (stack.isOf(ModItems.TORCH_UNLIT) || stack.isOf(ModItems.SOUL_TORCH_UNLIT)) {
                     Item litTorch = stack.isOf(ModItems.SOUL_TORCH_UNLIT) ? Items.SOUL_TORCH : Items.TORCH;
                     TorchIgnitionHelper.lightInfiniteTorch(litTorch, world, pos, player, hand, stack);

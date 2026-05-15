@@ -36,14 +36,13 @@ import java.util.Optional;
 public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
 
     public static final MapCodec<BrickOvenBlock> CODEC = createCodec(BrickOvenBlock::new);
-
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
+    @Override protected MapCodec<? extends BlockWithEntity> getCodec() {
         return CODEC;
     }
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
+
     protected final float clickYTopPortion = (6F / 16F);
     protected final float clickYBottomPortion = (6F / 16F);
 
@@ -76,8 +75,10 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
         if (!this.btwr$getCanBeSetOnFireDirectly(world, pos)) return false;
         if (!(world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE)) return false;
         if (!ovenBE.attemptToLight()) return false;
-        BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
-        world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS ,1F, world.random.nextFloat() * 0.4F + 0.8F);
+        world.playSound(null, pos.toCenterPos().x, pos.toCenterPos().y, pos.toCenterPos().z,
+                SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS,
+                1F, world.random.nextFloat() * 0.4F + 0.8F
+        );
         return true;
     }
 
@@ -174,13 +175,10 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
     }
 
     private void playPopSound(World world, BlockPos pos) {
-        BlockPos soundPos = new BlockPos(
-                (int) ((double) pos.getX() + 0.5D),
-                (int) ((double) pos.getY() + 0.5D),
-                (int) ((double) pos.getZ() + 0.5D));
-
-        world.playSound(null, soundPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS,
-                0.25F, (world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F);
+        world.playSound(null, pos.toCenterPos().x, pos.toCenterPos().y, pos.toCenterPos().z,
+                SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS,
+                0.25F, (world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F
+        );
     }
 
     @Override

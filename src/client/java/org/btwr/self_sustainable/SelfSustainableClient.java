@@ -17,7 +17,6 @@ import org.btwr.self_sustainable.item.ModItems;
 import org.btwr.self_sustainable.item.entity.render.HamperItemRenderer;
 import org.btwr.self_sustainable.item.entity.render.WickerBasketItemRenderer;
 import org.btwr.self_sustainable.network.SyncWickerBasketS2C;
-import org.btwr.self_sustainable.render.ModTexturedRenderLayers;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -59,7 +58,6 @@ public class SelfSustainableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WALL_TORCH_UNLIT, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SOUL_TORCH_UNLIT, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SOUL_WALL_TORCH_UNLIT, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WICKER_BASKET, ModTexturedRenderLayers.WICKER_BASKET_RENDER_LAYER);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OVEN_BRICK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMOKER_BRICK, RenderLayer.getCutout());
     }

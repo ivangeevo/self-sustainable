@@ -1,4 +1,4 @@
-package org.btwr.self_sustainable.item.items;
+package org.btwr.self_sustainable.item.interfaces;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

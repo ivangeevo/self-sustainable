@@ -5,6 +5,7 @@ import org.btwr.self_sustainable.block.blocks.AbstractCrudeTorchBlock;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.item.component.TorchFuelComponent;
+import org.btwr.self_sustainable.item.interfaces.IgnitableTorchItem;
 import org.btwr.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

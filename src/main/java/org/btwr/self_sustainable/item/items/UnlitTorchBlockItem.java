@@ -11,10 +11,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.btwr.self_sustainable.item.ModItems;
-import org.btwr.self_sustainable.tag.ModTags;
+import org.btwr.self_sustainable.item.interfaces.IgnitableTorchItem;
 import org.btwr.self_sustainable.util.TorchIgnitionHelper;
-
-import static net.minecraft.state.property.Properties.LIT;
 
 public class UnlitTorchBlockItem extends VerticallyAttachableBlockItem implements IgnitableTorchItem {
 

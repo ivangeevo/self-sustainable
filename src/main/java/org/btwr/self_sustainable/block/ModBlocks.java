@@ -44,7 +44,15 @@ public class ModBlocks {
                     .strength(1.5F,2.0F)
                     .luminance((state) -> state.get(LIT) ? 8 : 0)
                     .sounds(BlockSoundGroup.STONE)
-                    .nonOpaque()
+                    .nonOpaque(), false
+            )
+    );
+
+    public static final Block OVEN_BRICK_MORTARED = registerBlock("oven_brick_mortared",
+            new BrickOvenBlock(AbstractBlock.Settings.create()
+                    .strength(1.5F,2.0F)
+                    .luminance((state) -> state.get(LIT) ? 8 : 0)
+                    .sounds(BlockSoundGroup.STONE), true
             )
     );
 
@@ -53,7 +61,15 @@ public class ModBlocks {
                     .strength(1.5F,2.0F)
                     .luminance((state) -> state.get(LIT) ? 8 : 0)
                     .sounds(BlockSoundGroup.STONE)
-                    .nonOpaque()
+                    .nonOpaque(), false
+            )
+    );
+
+    public static final Block SMOKER_BRICK_MORTARED = registerBlock("smoker_brick_mortared",
+            new SmokerOvenBlock(AbstractBlock.Settings.create()
+                    .strength(1.5F,2.0F)
+                    .luminance((state) -> state.get(LIT) ? 8 : 0)
+                    .sounds(BlockSoundGroup.STONE), true
             )
     );
     

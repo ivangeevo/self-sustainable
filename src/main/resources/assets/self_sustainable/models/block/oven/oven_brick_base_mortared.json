@@ -3,9 +3,9 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/cube_all",
 	"textures": {
-		"1": "self_sustainable:block/oven_brick/oven_brick_side",
-		"particle": "self_sustainable:block/oven_brick/oven_brick_side",
-		"front": "self_sustainable:block/oven_brick/oven_brick_front"
+		"1": "self_sustainable:block/oven_brick/oven_brick_side_mortared",
+		"particle": "self_sustainable:block/oven_brick/oven_brick_side_mortared",
+		"front": "self_sustainable:block/oven_brick/oven_brick_front_mortared"
 	},
 	"elements": [
 		{

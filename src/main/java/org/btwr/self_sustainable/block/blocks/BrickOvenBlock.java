@@ -1,41 +1,49 @@
 package org.btwr.self_sustainable.block.blocks;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.recipe.input.SingleStackRecipeInput;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.*;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.WorldView;
+import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.block.entity.BrickOvenBE;
 import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
-import org.btwr.self_sustainable.entity.ModBlockEntities;
 import org.btwr.self_sustainable.recipe.cooking.OvenCookingRecipe;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.state.property.ModProperties;
-import org.btwr.self_sustainable.tag.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.btwr.self_sustainable.tag.ModTags;
+import org.btwr.self_sustainable.util.TickableBlockEntity;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
 
-    public static final MapCodec<BrickOvenBlock> CODEC = createCodec(BrickOvenBlock::new);
+    public static final MapCodec<BrickOvenBlock> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                    createSettingsCodec(),
+                    Codec.BOOL.fieldOf("is_mortared").forGetter(BrickOvenBlock::isMortared)
+            ).apply(instance, BrickOvenBlock::new)
+    );
     @Override protected MapCodec<? extends BlockWithEntity> getCodec() {
         return CODEC;
     }
@@ -43,26 +51,19 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final IntProperty FUEL_LEVEL = ModProperties.FUEL_LEVEL;
 
-    protected final float clickYTopPortion = (6F / 16F);
-    protected final float clickYBottomPortion = (6F / 16F);
+    public static final float CLICK_Y_TOP_PORTION = 6f / 16f;
+    public static final float CLICK_Y_BOTTOM_PORTION = 6f / 16f;
 
-    public BrickOvenBlock(Settings settings) {
+    private final boolean isMortared;
+
+    public boolean isMortared() {
+        return isMortared;
+    }
+
+    public BrickOvenBlock(Settings settings, boolean isMortared) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState()
-                .with(LIT,false)
-                .with(FUEL_LEVEL, 0)
-                .with(FACING, Direction.NORTH)
-        );
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
-
-    @Override @Nullable
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new BrickOvenBE(pos, state);
+        this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH).with(LIT, false));
+        this.isMortared = isMortared;
     }
 
     @Override
@@ -71,126 +72,249 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
     }
 
     @Override
-    public boolean btwr$setOnFireDirectly(World world, BlockPos pos) {
-        if (!this.btwr$getCanBeSetOnFireDirectly(world, pos)) return false;
-        if (!(world.getBlockEntity(pos) instanceof BrickOvenBE ovenBE)) return false;
-        if (!ovenBE.attemptToLight()) return false;
-        world.playSound(null, pos.toCenterPos().x, pos.toCenterPos().y, pos.toCenterPos().z,
-                SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS,
-                1F, world.random.nextFloat() * 0.4F + 0.8F
-        );
-        return true;
-    }
-
-    @Override
-    public boolean btwr$getCanBeSetOnFireDirectly(WorldAccess blockAccess, BlockPos pos) {
-        if (blockAccess.getBlockState(pos).get(LIT)) return false;
-        BrickOvenBE ovenBE = (BrickOvenBE) blockAccess.getBlockEntity(pos);
-        // uses the visual fuel level rather than the actual fuel level so this will work on the client
-        assert ovenBE != null;
-        return ovenBE.getVisualFuelLevel() > 0;
-    }
-
-    @Override
-    public boolean btwr$getCanBeSetOnFireDirectlyByItem(WorldAccess blockAccess, BlockPos pos) {
-        BlockState state = blockAccess.getBlockState(pos);
-        return !state.get(LIT) && state.get(FUEL_LEVEL) != 0;
-    }
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        ItemStack heldStack = player.getStackInHand(player.getActiveHand());
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-
-        double relativeClickY = hit.getPos().getY() - pos.getY();
+    public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world,
+                                          BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 
         if (hit.getSide() != state.get(FACING)) {
-            return ActionResult.FAIL;
+            return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
         }
 
-        // Prevent shields from messing up interaction with the oven block
-        if (heldStack.isIn(ConventionalItemTags.SHIELD_TOOLS)) {
-            return ActionResult.FAIL;
-        }
+        if (stack.getItem() instanceof BlockItem blockItem) {
+            Block b = blockItem.getBlock();
 
-        if (blockEntity instanceof BrickOvenBE ovenBE) {
-            Optional<RecipeEntry<OvenCookingRecipe>> optional;
+            if (stack.getItem() instanceof VerticallyAttachableBlockItem) {
+                boolean isWallAttachable = b instanceof WallTorchBlock
+                        || b instanceof UnlitWallTorchBlock
+                        || b instanceof WallMountedBlock
+                        || b instanceof AbstractBannerBlock
+                        || b instanceof WallSignBlock
+                        || b instanceof WallHangingSignBlock;
 
-            if (relativeClickY > clickYTopPortion) {
-                if (!ovenBE.getCookStack().isEmpty()) {
-                    ovenBE.retrieveItem(player);
-                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS);
-                    return ActionResult.SUCCESS;
-
+                if (isWallAttachable) {
+                    // Block placement, but still let onUse() fire
+                    // so bottom-portion igniter logic still works
+                    return ItemActionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
                 }
-                else if (!heldStack.isEmpty() && (optional = ovenBE.getRecipeFor(heldStack)).isPresent()) {
-                    if (!world.isClient && ovenBE.getCookStack().isEmpty()) {
-                        ovenBE.addItem(player,
-                                player.getAbilities().creativeMode
-                                        ? heldStack.copy()
-                                        : heldStack,
-                                optional.get().value().getCookingTime()
-                        );
-                    }
-                    return ActionResult.SUCCESS;
-                }
-
             }
-            else if (relativeClickY < clickYBottomPortion && !heldStack.isEmpty()) {
-                if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
-                    if (state.get(FUEL_LEVEL) > 0 && !state.get(LIT)) {
-                        world.setBlockState(pos, state.with(LIT, true));
-                        IgnitableBlock.playLitFX(world, pos);
-                        return ActionResult.SUCCESS;
-                    }
-                }
-                else {
-                    int numItemsConsumed = ovenBE.attemptToAddFuel(heldStack);
+        }
 
-                    if (numItemsConsumed > 0) {
+        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+    }
+
+    @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        // Only accessible from the front face
+        if (state.get(FACING) != hit.getSide()) {
+            return ActionResult.FAIL;
+        }
+
+        BrickOvenBE be = getBlockEntity(world, pos);
+        if (be == null) return ActionResult.PASS;
+
+        ItemStack heldStack = player.getMainHandStack();
+        ItemStack cookStack = be.getCookStack();
+
+        if (isTopPortionClick(hit, pos)) {
+            // --- Cook slot interaction ---
+            if (!cookStack.isEmpty()) {
+                // Trigger achievement equivalent
+                // AchievementEventDispatcher.triggerEvent(AchievementEvents.ItemEvent.class, player, cookStack);
+                be.givePlayerCookStack(world, player, hit.getSide());
+                return ActionResult.SUCCESS;
+            } else {
+                if (!heldStack.isEmpty() && isValidCookItem(world, heldStack)) {
+                    if (!world.isClient) {
+                        be.addCookStack(heldStack.copyWithCount(1));
+                    }
+                    if (!player.getAbilities().creativeMode) {
+                        heldStack.decrement(1);
+                    }
+                    return ActionResult.SUCCESS;
+                }
+            }
+        } else if (isBottomPortionClick(hit, pos) && !heldStack.isEmpty()) {
+            // Handle fuel here
+            Item item = heldStack.getItem();
+
+            if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
+                if (!state.get(LIT)) {
+                    state.getBlock().btwr$setOnFireDirectly(world, pos);
+                    return ActionResult.SUCCESS;
+                }
+                return ActionResult.CONSUME_PARTIAL;
+            }
+
+            if (item.btwr$getCanBeFedDirectlyIntoBrickOven(heldStack)) {
+                if (!world.isClient) {
+                    int consumed = be.attemptToAddFuel(heldStack);
+
+                    if (consumed > 0) {
                         if (state.get(LIT)) {
-                            IgnitableBlock.playLitFX(world, pos);
+                            world.playSound(
+                                    null,
+                                    pos,
+                                    SoundEvents.ENTITY_GHAST_SHOOT,
+                                    SoundCategory.BLOCKS,
+                                    0.25f,
+                                    ((world.random.nextFloat() - world.random.nextFloat()) * 0.7f + 1.0f) * 2.0f
+                            );
                         } else {
-                            this.playPopSound(world, pos);
+                            world.playSound(
+                                    null,
+                                    pos,
+                                    SoundEvents.ENTITY_ITEM_PICKUP,
+                                    SoundCategory.BLOCKS,
+                                    0.25f,
+                                    ((world.random.nextFloat() - world.random.nextFloat()) * 0.7f + 1.0f) * 2.0f
+                            );
                         }
 
-                        heldStack.split(numItemsConsumed);
-                        return ActionResult.SUCCESS;
-                    }
-                    else {
-                        if (heldStack.getItem() instanceof BlockItem) {
-                            // Valid fuel block, but not accepted due to full oven —> prevent placement
-                            return ActionResult.FAIL;
+                        if (!player.getAbilities().creativeMode) {
+                            heldStack.decrement(consumed);
                         }
-                    }
-
-                    if (heldStack.getItem() instanceof FlintAndSteelItem || heldStack.isIn(ModTags.Items.PRIMITIVE_FIRESTARTERS)) {
-                        return ActionResult.PASS;
                     }
                 }
+
+                return ActionResult.SUCCESS;
             }
         }
 
         return ActionResult.PASS;
     }
 
-    private void playPopSound(World world, BlockPos pos) {
-        world.playSound(null, pos.toCenterPos().x, pos.toCenterPos().y, pos.toCenterPos().z,
-                SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS,
-                0.25F, (world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F
-        );
+    @Override
+    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+        super.onBlockAdded(state, world, pos, oldState, notify);
+
+        if (isMortared()) return;
+
+        if (btwr$hasNeighborWithMortarInContact(world, pos)) {
+            world.addSyncedBlockEvent(pos, this, 0, 0);
+            world.scheduleBlockTick(pos, this, 40);
+        } else {
+            world.scheduleBlockTick(pos, this, 10);
+        }
     }
 
     @Override
-    @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-    {
+    public boolean btwr$onMortarApplied(World world, BlockPos pos) {
         if (world.isClient) {
-            return BrickOvenBlock.validateTicker(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::clientTick);
+            return !isMortared();
         }
-        else {
-            return BrickOvenBlock.validateTicker(type, ModBlockEntities.OVEN_BRICK, BrickOvenBE::serverTick);
+
+        BlockEntity be = world.getBlockEntity(pos);
+        if (be instanceof BrickOvenBE ovenBE && !isMortared()) {
+            return ovenBE.applyMortar();
         }
+        return false;
+    }
+
+    @Override
+    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        if (!isMortared()) {
+            // Loose oven requires solid surface below
+            BlockState below = world.getBlockState(pos.down());
+
+            if (!below.isSideSolidFullSquare(world, pos.down(), Direction.UP)) {
+                return false;
+            }
+        }
+        return super.canPlaceAt(state, world, pos);
+    }
+
+    @Override
+    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+        if (!isMortared() && !world.isClient) {
+            BlockState below = world.getBlockState(pos.down());
+            if (!below.isSideSolidFullSquare(world, pos.down(), Direction.UP)) {
+                dropStacks(state, world, pos);
+                world.removeBlock(pos, false);
+            }
+        }
+    }
+
+    @Override
+    public boolean btwr$hasLargeCenterHardPointToFacing(WorldAccess world, BlockPos pos, Direction facing, boolean ignoreTransparency) {
+        Direction blockFacing = world.getBlockState(pos).get(FACING);
+        return blockFacing != facing;
+    }
+
+    public void updateOvenBlockState(boolean burning, ServerWorld world, BlockPos pos) {
+        BlockState current = world.getBlockState(pos);
+
+        if (!(world.getBlockEntity(pos) instanceof BrickOvenBE oven)) return;
+
+        boolean mortared = oven.mortarOnNextUpdate || current.getBlock() instanceof BrickOvenBlock b && b.isMortared();
+
+        Block targetBlock = mortared ? ModBlocks.OVEN_BRICK_MORTARED : ModBlocks.OVEN_BRICK;
+
+        BlockState newState = targetBlock.getDefaultState()
+                .with(BrickOvenBlock.FACING, current.get(BrickOvenBlock.FACING))
+                .with(BrickOvenBlock.FUEL_LEVEL, current.get(FUEL_LEVEL))
+                .with(BrickOvenBlock.LIT, burning);
+
+        if (current.getBlock() != targetBlock) {
+            world.setBlockState(pos, newState, Block.NOTIFY_ALL);
+
+            if (world.getBlockEntity(pos) instanceof BrickOvenBE newOven) {
+                newOven.cancelRemoval();
+                if (oven.mortarOnNextUpdate) {
+                    oven.mortarOnNextUpdate = false;
+                }
+            }
+        } else {
+            world.setBlockState(pos, newState, Block.NOTIFY_ALL);
+        }
+    }
+
+    @Override
+    public boolean btwr$getCanBlockLightItemOnFire(WorldAccess world, BlockPos pos) {
+        return world.getBlockState(pos).get(LIT);
+    }
+
+    @Override
+    public boolean btwr$getCanBeSetOnFireDirectly(WorldAccess world, BlockPos pos) {
+        if (!world.getBlockState(pos).get(LIT)) {
+            BrickOvenBE be = getBlockEntity(world, pos);
+
+            // uses the visual fuel level rather than the actual fuel level, so this will work on the client
+            return be != null && be.getVisualFuelLevel() > 0;
+        }
+
+        return false;
+    }
+
+
+    @Override
+    public boolean btwr$setOnFireDirectly(World world, BlockPos pos) {
+        if (!world.getBlockState(pos).get(LIT)) {
+            BrickOvenBE be = getBlockEntity(world, pos);
+            if (be != null && be.attemptToLight()) {
+                world.playSound(
+                        null,
+                        BlockPos.ofFloored(pos.toCenterPos()),
+                        ModSoundEvents.OVEN_IGNITE,
+                        SoundCategory.BLOCKS,
+                        1F,
+                        world.random.nextFloat() * 0.4F + 0.8F
+                );
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int btwr$getChanceOfFireSpreadingDirectlyTo(WorldAccess world, BlockPos pos) {
+        if (world.getBlockState(pos).get(LIT)) return 0;
+
+        BrickOvenBE be = getBlockEntity(world, pos);
+        if (be != null && be.hasValidFuel()) {
+            return 60;
+        }
+        return 0;
     }
 
     @Override
@@ -216,7 +340,34 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (state.get(LIT)) {
+        if (!state.get(LIT)) return;
+
+        double d = (double) pos.getX() + 0.5;
+        double e = pos.getY();
+        double f = (double) pos.getZ() + 0.5;
+
+        if (world.getRandom().nextDouble() < 0.05) {
+            world.playSound(
+                    d, e, f,
+                    SoundEvents.BLOCK_FIRE_AMBIENT,
+                    SoundCategory.BLOCKS,
+                    0.25F + world.random.nextFloat() * 0.25F,
+                    0.5F + world.random.nextFloat() * 0.25F, false
+            );
+
+            Direction direction = state.get(BrickOvenBlock.FACING);
+            Direction.Axis axis = direction.getAxis();
+
+            double g = 0.52;
+            double h = world.getRandom().nextDouble() * 0.6 - 0.3;
+            double i = axis == Direction.Axis.X ? (double) direction.getOffsetX() * 0.52 : h;
+            double j = world.getRandom().nextDouble() * 6.0 / 16.0;
+            double k = axis == Direction.Axis.Z ? (double) direction.getOffsetZ() * 0.52 : h;
+
+            world.addParticle(ParticleTypes.SMOKE, d + i, e + j, f + k, 0.0, 0.0, 0.0);
+            world.addParticle(ParticleTypes.FLAME, d + i, e + j, f + k, 0.0, 0.0, 0.0);
+        }
+
             BrickOvenBE ovenBE = (BrickOvenBE) world.getBlockEntity(pos);
             assert ovenBE != null;
             int iFuelLevel = ovenBE.getVisualFuelLevel();
@@ -256,30 +407,82 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
                     world.addParticle( ParticleTypes.CLOUD, fX, fY, fZ, 0D, 0D, 0D );
                 }
             }
-        }
+    }
 
-        super.randomDisplayTick( state, world, pos, random );
+    @Override
+    protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+        BrickOvenBE be = getBlockEntity(world, pos);
+        return be != null ? BrickOvenBE.calcRedstoneFromOven(be) : 0;
+    }
+
+    @Override
+    protected boolean isTransparent(BlockState state, BlockView world, BlockPos pos) {
+        return !isMortared();
+    }
+
+    @Nullable
+    private static BrickOvenBE getBlockEntity(BlockView world, BlockPos pos) {
+        return world.getBlockEntity(pos) instanceof BrickOvenBE o ? o : null;
+    }
+
+    public boolean isValidCookItem(World world, ItemStack stack) {
+        SingleStackRecipeInput singleStackRecipeInput = new SingleStackRecipeInput(stack);
+        return world.getRecipeManager()
+                .getFirstMatch(OvenCookingRecipe.Type.INSTANCE, singleStackRecipeInput, world)
+                .isPresent();
+    }
+
+    @Override
+    public boolean btwr$hasMortar(WorldAccess world, BlockPos pos) {
+        return isMortared();
     }
 
     @Override
     public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
         BlockPos pos = hit.getBlockPos();
 
-        if (!canLightUp(hit, pos, state)) return;
+        if (!canProjectileLightUp(hit, pos, state, world)) return;
         
         if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, pos)) {
             world.setBlockState(pos, state.with(Properties.LIT, true), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
             IgnitableBlock.playLitFX(world, pos);
         }
-
     }
 
-    public boolean canLightUp(BlockHitResult hit, BlockPos pos, BlockState state) {
+    @Override @Nullable
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new BrickOvenBE(pos, state);
+    }
+
+
+    @Override
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return TickableBlockEntity.getTicker();
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+
+    public boolean canProjectileLightUp(BlockHitResult hit, BlockPos pos, BlockState state, World world) {
+        if (state.get(LIT)) return false;
+        if (hit.getSide() != state.get(FACING)) return false;
+
+        if (!isBottomPortionClick(hit, pos)) return false;
+
+        BrickOvenBE be = getBlockEntity(world, pos);
+        return be != null && be.hasValidFuel();
+    }
+
+    public boolean isBottomPortionClick(BlockHitResult hit, BlockPos pos) {
         double relativeClickY = hit.getPos().getY() - pos.getY();
-        return state.get(FUEL_LEVEL) > 0
-                && hit.getSide() == state.get(FACING)
-                && relativeClickY < clickYBottomPortion
-                && !state.get(LIT);
+        return relativeClickY < CLICK_Y_BOTTOM_PORTION;
+    }
+
+    public boolean isTopPortionClick(BlockHitResult hit, BlockPos pos) {
+        double relativeClickY = hit.getPos().getY() - pos.getY();
+        return relativeClickY > CLICK_Y_TOP_PORTION;
     }
 
 }

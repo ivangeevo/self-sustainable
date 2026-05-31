@@ -36,7 +36,11 @@ public class ModBlockEntities {
         OVEN_BRICK = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
                 Identifier.of(SelfSustainableMod.MOD_ID, "oven_brick_block_entity"),
-                BlockEntityType.Builder.create(BrickOvenBE::new, ModBlocks.OVEN_BRICK).build(null)
+                BlockEntityType.Builder.create(
+                        BrickOvenBE::new,
+                        ModBlocks.OVEN_BRICK,
+                        ModBlocks.OVEN_BRICK_MORTARED
+                ).build(null)
         );
 
         SMOKER_BRICK = Registry.register(

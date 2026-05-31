@@ -11,7 +11,10 @@ public abstract class ItemAddedMixin implements ItemAdded {
 
     @Override
     public boolean btwr$getCanBeFedDirectlyIntoBrickOven(ItemStack stack) {
-        return !btwr$getCanItemBeSetOnFireOnUse(stack) && !btwr$getCanItemStartFireOnUse(stack);
+        int itemFuelTime = CampfireBlockMixinManager.getInstance().getItemFuelTime(stack);
+
+        return !btwr$getCanItemBeSetOnFireOnUse(stack) && !btwr$getCanItemStartFireOnUse(stack) &&
+                itemFuelTime > 0;
     }
 
     @Override

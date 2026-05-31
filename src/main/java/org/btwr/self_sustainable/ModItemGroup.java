@@ -48,6 +48,7 @@ public class ModItemGroup {
 
                         // Blocks
                         entries.add(ModBlocks.OVEN_BRICK);
+                        entries.add(ModBlocks.OVEN_BRICK_MORTARED);
                         entries.add(ModBlocks.WICKER_BASKET);
                         entries.add(ModBlocks.HAMPER);
 

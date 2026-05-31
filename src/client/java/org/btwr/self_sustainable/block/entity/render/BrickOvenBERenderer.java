@@ -1,8 +1,8 @@
 package org.btwr.self_sustainable.block.entity.render;
 
+import net.minecraft.client.render.WorldRenderer;
 import org.btwr.self_sustainable.block.blocks.BrickOvenBlock;
 import org.btwr.self_sustainable.block.entity.BrickOvenBE;
-import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -14,8 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
 
@@ -31,7 +31,7 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
         this.renderCookItem(entity, matrices, vertexConsumers);
     }
 
-    private void renderCookItem(BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void renderCookItem(@NotNull BrickOvenBE ovenBE, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         ItemStack cookStack = ovenBE.getCookStack();
         Direction facing = ovenBE.getCachedState().get(BrickOvenBlock.FACING);
 
@@ -52,16 +52,16 @@ public class BrickOvenBERenderer implements BlockEntityRenderer<BrickOvenBE> {
         matrices.scale(0.35f, 0.35f, 0.35f);
 
         // Get the BlockPos in front of the oven
-        BlockPos blockPos = ovenBE.getPos().offset(facing);
         World world = ovenBE.getWorld();
 
         assert world != null;
-        int blockLight = world.getLightLevel(LightType.BLOCK, blockPos);
-        int skyLight = world.getLightLevel(LightType.SKY, blockPos);
-        int lightPacked = LightmapTextureManager.pack(blockLight, skyLight);
+
+        // Sample lighting from the oven opening.
+        BlockPos lightPos = ovenBE.getPos().offset(facing);
+        int mixedLight = WorldRenderer.getLightmapCoordinates(world, lightPos);
 
         this.itemRenderer.renderItem(cookStack, ModelTransformationMode.GUI,
-                lightPacked, OverlayTexture.DEFAULT_UV,
+                mixedLight, OverlayTexture.DEFAULT_UV,
                 matrices, vertexConsumers, ovenBE.getWorld(), 1);
 
         matrices.pop();

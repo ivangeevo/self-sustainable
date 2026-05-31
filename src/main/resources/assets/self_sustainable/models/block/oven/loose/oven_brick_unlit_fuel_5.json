@@ -1,0 +1,6 @@
+{
+	"parent": "self_sustainable:block/oven/oven_brick_base",
+	"textures": {
+		"front": "self_sustainable:block/oven_brick/front/oven_brick_front_unlit_fuel_5"
+	}
+}

@@ -59,6 +59,7 @@ public class SelfSustainableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SOUL_TORCH_UNLIT, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SOUL_WALL_TORCH_UNLIT, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OVEN_BRICK, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OVEN_BRICK_MORTARED, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SMOKER_BRICK, RenderLayer.getCutout());
     }
 
@@ -68,7 +69,6 @@ public class SelfSustainableClient implements ClientModInitializer {
         BlockEntityRendererFactories.register(ModBlockEntities.CAMPFIRE, CampfireBERenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.WICKER_BASKET, WickerBasketBERenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.HAMPER, HamperBERenderer::new);
-
     }
 
     private void registerItemRenderers() {

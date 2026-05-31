@@ -77,6 +77,9 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
                 .addTag(ModTags.Items.FIRESTARTERS)
                 .addTag(ModTags.Items.DIRECT_IGNITERS);
 
+        getOrCreateTagBuilder(ModTags.Items.CAN_BE_SET_ON_FIRE_ON_USE)
+                .addTag(ModTags.Items.UNLIT_TORCHES);
+
         getOrCreateTagBuilder(ModTags.Items.CAMPFIRE_SPITS)
                 .add(Items.STICK);
 

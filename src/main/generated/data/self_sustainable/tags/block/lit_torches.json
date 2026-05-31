@@ -1,9 +1,6 @@
 {
   "values": [
     "#self_sustainable:vanilla_lit_torches",
-    "self_sustainable:crude_torch_lit",
-    "self_sustainable:crude_torch_smoulder",
-    "self_sustainable:crude_wall_torch_lit",
-    "self_sustainable:crude_wall_torch_smoulder"
+    "#self_sustainable:crude_lit_torches"
   ]
 }

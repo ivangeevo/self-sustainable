@@ -2,7 +2,6 @@ package org.btwr.self_sustainable.block.blocks;
 
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.ItemActionResult;
-import org.btwr.self_sustainable.block.ModBlocks;
 import org.btwr.self_sustainable.block.entity.TorchBE;
 import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
@@ -168,18 +167,11 @@ public abstract class AbstractCrudeTorchBlock extends BlockWithEntity implements
 
     @Override
     protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.getBlock() != newState.getBlock() && isFuelHavingTorchBlock(newState)) {
+        if (state.getBlock() != newState.getBlock() && newState.isIn(ModTags.Blocks.CRUDE_LIT_TORCHES)) {
             return;
         }
 
         super.onStateReplaced(state, world, pos, newState, moved);
-    }
-
-    private boolean isFuelHavingTorchBlock(BlockState state) {
-        return state.isOf(ModBlocks.CRUDE_TORCH_LIT)
-                || state.isOf(ModBlocks.CRUDE_TORCH_SMOULDER)
-                || state.isOf(ModBlocks.CRUDE_WALL_TORCH_LIT)
-                || state.isOf(ModBlocks.CRUDE_WALL_TORCH_SMOULDER);
     }
 
     public void smoulder(World world, BlockPos pos, BlockState state) {

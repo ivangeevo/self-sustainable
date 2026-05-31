@@ -1,18 +1,21 @@
 package org.btwr.self_sustainable.item.items;
 
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.Vec3d;
 import org.btwr.self_sustainable.block.blocks.AbstractCrudeTorchBlock;
+import org.btwr.self_sustainable.block.blocks.BrickOvenBlock;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.item.component.TorchFuelComponent;
 import org.btwr.self_sustainable.item.interfaces.IgnitableTorchItem;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.util.ModTorchHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -53,12 +56,22 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
         }
 
         // Direct hit on an ignition source (campfire, lit block, etc.)
-        if (isIgnitionSource(state)) {
-            if (torchState != TorchFireState.UNLIT) return ActionResult.FAIL;
-            if (!world.isClient && player != null) {
-                lightTorch(stack, world, pos, player, hand);
+        if (state.getBlock().btwr$getCanBlockLightItemOnFire(world, pos)) {
+            if (state.getBlock() instanceof BrickOvenBlock ovenBlock) {
+                BlockHitResult hit = new BlockHitResult(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), context.getSide(), pos, false);
+                if (torchState == TorchFireState.UNLIT && ovenBlock.isBottomPortionClick(hit, pos)) {
+                    if (!world.isClient && player != null) {
+                        lightTorch(stack, world, pos, player, hand);
+                    }
+                    return ActionResult.SUCCESS;
+                }
             }
-            return ActionResult.SUCCESS;
+            if (torchState == TorchFireState.UNLIT) {
+                if (!world.isClient && player != null) {
+                    lightTorch(stack, world, pos, player, hand);
+                }
+                return ActionResult.SUCCESS;
+            }
         }
 
         return super.useOnBlock(context);
@@ -96,7 +109,7 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
             }
         }
 
-        world.playSound(null, soundPos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
+        world.playSound(null, soundPos, ModSoundEvents.TORCH_IGNITE, SoundCategory.BLOCKS, 0.5f, 1.2f);
     }
 
     @Override

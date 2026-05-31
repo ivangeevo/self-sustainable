@@ -20,7 +20,8 @@ public class SelfSustainableBlockTagProvider extends FabricTagProvider.BlockTagP
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
-                .add(ModBlocks.OVEN_BRICK);
+                .add(ModBlocks.OVEN_BRICK)
+                .add(ModBlocks.OVEN_BRICK_MORTARED);
 
         // Blocks that can ignite items without any specific properties (like LIT or FIRE_LEVEL)
         getOrCreateTagBuilder(ModTags.Blocks.DIRECTLY_IGNITES_ITEM_ON_USE)
@@ -35,12 +36,15 @@ public class SelfSustainableBlockTagProvider extends FabricTagProvider.BlockTagP
                 .add(Blocks.SOUL_TORCH)
                 .add(Blocks.SOUL_WALL_TORCH);
 
-        getOrCreateTagBuilder(ModTags.Blocks.LIT_TORCHES)
-                .addTag(ModTags.Blocks.VANILLA_LIT_TORCHES)
+        getOrCreateTagBuilder(ModTags.Blocks.CRUDE_LIT_TORCHES)
                 .add(ModBlocks.CRUDE_TORCH_LIT)
                 .add(ModBlocks.CRUDE_TORCH_SMOULDER)
                 .add(ModBlocks.CRUDE_WALL_TORCH_LIT)
                 .add(ModBlocks.CRUDE_WALL_TORCH_SMOULDER);
+
+        getOrCreateTagBuilder(ModTags.Blocks.LIT_TORCHES)
+                .addTag(ModTags.Blocks.VANILLA_LIT_TORCHES)
+                .addTag(ModTags.Blocks.CRUDE_LIT_TORCHES);
 
         getOrCreateTagBuilder(ModTags.Blocks.UNLIT_TORCHES)
                 .add(ModBlocks.TORCH_UNLIT)

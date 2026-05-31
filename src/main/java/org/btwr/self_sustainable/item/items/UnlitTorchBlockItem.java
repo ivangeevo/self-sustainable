@@ -10,6 +10,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.btwr.self_sustainable.block.blocks.BrickOvenBlock;
 import org.btwr.self_sustainable.item.ModItems;
 import org.btwr.self_sustainable.item.interfaces.IgnitableTorchItem;
 import org.btwr.self_sustainable.util.TorchIgnitionHelper;
@@ -41,6 +42,24 @@ public class UnlitTorchBlockItem extends VerticallyAttachableBlockItem implement
 
         // Direct hit on ignition source (campfire, lit block, etc.)
         if (isIgnitionSource(state)) {
+
+            // Handle click on brick oven
+            if (state.getBlock() instanceof BrickOvenBlock) {
+                // Only modify interaction on the front face
+                if (context.getSide() != state.get(BrickOvenBlock.FACING)) return ActionResult.PASS;
+
+                if (!world.isClient && player != null) {
+                    // if it's lit, and it's a bottom portion
+                    double relativeClickY = context.getHitPos().y - pos.getY();
+                    if (relativeClickY < BrickOvenBlock.CLICK_Y_BOTTOM_PORTION) {
+                        lightTorch(heldStack, world, pos, player, hand);
+                        return ActionResult.SUCCESS;
+                        // else fail on other attempts
+                    } else {
+                        return ActionResult.FAIL;
+                    }
+                }
+            }
             if (!world.isClient && player != null) {
                 lightTorch(heldStack, world, pos, player, hand);
             }

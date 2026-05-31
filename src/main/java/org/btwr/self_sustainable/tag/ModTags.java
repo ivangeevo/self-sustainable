@@ -16,6 +16,7 @@ public class ModTags {
 
         /** All vanilla torches which are considered lit **/
         public static final TagKey<Block> VANILLA_LIT_TORCHES = createTag("vanilla_lit_torches");
+        public static final TagKey<Block> CRUDE_LIT_TORCHES = createTag("crude_lit_torches");
 
         public static final TagKey<Block> LIT_TORCHES = createTag("lit_torches");
         public static final TagKey<Block> UNLIT_TORCHES = createTag("unlit_torches");

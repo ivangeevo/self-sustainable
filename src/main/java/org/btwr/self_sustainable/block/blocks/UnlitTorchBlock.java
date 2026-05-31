@@ -1,6 +1,5 @@
 package org.btwr.self_sustainable.block.blocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TorchBlock;

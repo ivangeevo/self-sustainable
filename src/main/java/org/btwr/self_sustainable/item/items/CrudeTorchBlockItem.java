@@ -109,7 +109,10 @@ public class CrudeTorchBlockItem extends VerticallyAttachableBlockItem implement
             }
         }
 
-        world.playSound(null, soundPos, ModSoundEvents.TORCH_IGNITE, SoundCategory.BLOCKS, 0.5f, 1.2f);
+        world.playSound(
+                null, soundPos, ModSoundEvents.TORCH_IGNITE,
+                SoundCategory.BLOCKS, 0.5f, 1.2f
+        );
     }
 
     @Override

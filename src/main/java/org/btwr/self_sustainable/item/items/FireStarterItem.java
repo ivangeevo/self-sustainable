@@ -62,7 +62,6 @@ public abstract class FireStarterItem extends Item implements IFirestarterItem {
 
     @Override
     public void performUseEffects(ItemUsageContext context) {
-
     }
 
     @Override

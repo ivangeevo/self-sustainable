@@ -41,7 +41,8 @@ public class UnlitTorchBlockItem extends VerticallyAttachableBlockItem implement
         }
 
         // Direct hit on ignition source (campfire, lit block, etc.)
-        if (isIgnitionSource(state)) {
+        Block clickedBlock = context.getWorld().getBlockState(pos).getBlock();
+        if (isDirectIgnitionSource(state) || clickedBlock.btwr$getCanBlockLightItemOnFire(world, pos)) {
 
             // Handle click on brick oven
             if (state.getBlock() instanceof BrickOvenBlock) {

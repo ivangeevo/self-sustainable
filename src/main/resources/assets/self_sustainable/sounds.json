@@ -1,0 +1,20 @@
+{
+  "oven_ignite": {
+    "subtitle": "subtitles.self_sustainable.oven_ignite",
+    "sounds": [
+      {
+        "name": "minecraft:entity.ghast.shoot",
+        "type": "event"
+      }
+    ]
+  },
+  "torch_ignite": {
+    "subtitle": "subtitles.self_sustainable.torch_ignite",
+    "sounds": [
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event"
+      }
+    ]
+  }
+}

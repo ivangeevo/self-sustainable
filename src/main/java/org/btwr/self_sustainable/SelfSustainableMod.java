@@ -11,6 +11,7 @@ import org.btwr.self_sustainable.network.SyncWickerBasketS2C;
 import org.btwr.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 import org.btwr.self_sustainable.registry.FuelRegistryManager;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.util.WorldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ public class SelfSustainableMod implements ModInitializer {
 
         ModBlocks.register();
         ModItems.register();
+        ModSoundEvents.register();
         ModBlockEntities.register();
         ModComponentsTypes.register();
         ModItemGroup.register();

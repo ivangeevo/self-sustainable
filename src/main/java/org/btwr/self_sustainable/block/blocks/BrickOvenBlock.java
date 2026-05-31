@@ -3,7 +3,9 @@ package org.btwr.self_sustainable.block.blocks;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.*;
 import net.minecraft.world.BlockView;
@@ -35,6 +37,8 @@ import net.minecraft.world.WorldAccess;
 import org.btwr.self_sustainable.tag.ModTags;
 import org.btwr.self_sustainable.util.TickableBlockEntity;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
 
@@ -74,6 +78,28 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
     @Override
     public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world,
                                           BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        TagKey<Item> mortaringItems = org.btwr.tough_environment.tag.ModTags.Items.MORTARING_ITEMS;
+        if ((stack.isIn(mortaringItems) || stack.isOf(Items.CLAY_BALL)) && !isMortared()) {
+            BlockState mortaredState = ModBlocks.OVEN_BRICK_MORTARED.getDefaultState()
+                    .with(LIT, state.get(LIT))
+                    .with(FUEL_LEVEL, state.get(FUEL_LEVEL))
+                    .with(FACING, state.get(FACING));
+
+            if (!world.isClient) {
+                BlockEntity oldBE = world.getBlockEntity(pos);
+                NbtCompound nbt = oldBE != null ? oldBE.createNbtWithId(world.getRegistryManager()) : null;
+
+                world.setBlockState(pos, mortaredState);
+
+                if (nbt != null && world.getBlockEntity(pos) instanceof BrickOvenBE newOvenBE) {
+                    nbt.putString("id", Objects.requireNonNull(BlockEntityType.getId(newOvenBE.getType())).toString());
+                    newOvenBE.read(nbt, world.getRegistryManager());
+                    newOvenBE.markDirty();
+                }
+
+                world.playSound(null, pos, ModSoundEvents.OVEN_MORTAR, SoundCategory.BLOCKS);
+            }
+        }
 
         if (hit.getSide() != state.get(FACING)) {
             return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
@@ -85,6 +111,7 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
             if (stack.getItem() instanceof VerticallyAttachableBlockItem) {
                 boolean isWallAttachable = b instanceof WallTorchBlock
                         || b instanceof UnlitWallTorchBlock
+                        || b instanceof CrudeWallTorchBlock
                         || b instanceof WallMountedBlock
                         || b instanceof AbstractBannerBlock
                         || b instanceof WallSignBlock
@@ -132,6 +159,11 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
                     return ActionResult.SUCCESS;
                 }
             }
+
+            if (heldStack.isIn(ModTags.Items.DIRECT_IGNITERS)) {
+                return ActionResult.CONSUME_PARTIAL;
+            }
+
         } else if (isBottomPortionClick(hit, pos) && !heldStack.isEmpty()) {
             // Handle fuel here
             Item item = heldStack.getItem();
@@ -153,7 +185,7 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
                             world.playSound(
                                     null,
                                     pos,
-                                    SoundEvents.ENTITY_GHAST_SHOOT,
+                                    ModSoundEvents.OVEN_INSERT_FUEL_ACTIVE,
                                     SoundCategory.BLOCKS,
                                     0.25f,
                                     ((world.random.nextFloat() - world.random.nextFloat()) * 0.7f + 1.0f) * 2.0f
@@ -162,7 +194,7 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
                             world.playSound(
                                     null,
                                     pos,
-                                    SoundEvents.ENTITY_ITEM_PICKUP,
+                                    ModSoundEvents.OVEN_INSERT_FUEL,
                                     SoundCategory.BLOCKS,
                                     0.25f,
                                     ((world.random.nextFloat() - world.random.nextFloat()) * 0.7f + 1.0f) * 2.0f
@@ -177,6 +209,8 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
 
                 return ActionResult.SUCCESS;
             }
+
+            return ActionResult.FAIL;
         }
 
         return ActionResult.PASS;
@@ -332,7 +366,9 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
 
         if (blockEntity instanceof BrickOvenBE ovenBE) {
             // Drops the contents inside when the block is destroyed
-            ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getCookStack());
+            if (!newState.isOf(ModBlocks.OVEN_BRICK_MORTARED)) {
+                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), ovenBE.getCookStack());
+            }
         }
 
         super.onStateReplaced(state, world, pos, newState, moved);
@@ -445,7 +481,13 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
         
         if (!world.isClient && projectile.isOnFire() && projectile.canModifyAt(world, pos)) {
             world.setBlockState(pos, state.with(Properties.LIT, true), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-            IgnitableBlock.playLitFX(world, pos);
+            world.playSound(
+                    null,
+                    BlockPos.ofFloored(pos.toCenterPos()),
+                    ModSoundEvents.OVEN_IGNITE, SoundCategory.BLOCKS,
+                    0.2F + world.random.nextFloat() * 0.1F,
+                    world.random.nextFloat() * 0.25F + 1.25F
+            );
         }
     }
 

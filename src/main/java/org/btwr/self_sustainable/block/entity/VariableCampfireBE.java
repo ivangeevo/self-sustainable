@@ -1,9 +1,10 @@
 package org.btwr.self_sustainable.block.entity;
 
+import net.minecraft.sound.SoundCategory;
 import org.btwr.self_sustainable.block.interfaces.added.CampfireBlockAdded;
-import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.CampfireState;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.util.MiscUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -146,7 +147,13 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
                         if (adjacentCampfireBE != null && isAdjacentCampfireLightableFromSpread(adjacentState)) {
                             adjacentCampfireBE.changeFireLevel(world, 1);
                             adjacentCampfireBE.onFirstLit();
-                            IgnitableBlock.playLitFX(world, pos);
+                            world.playSound(
+                                    null,
+                                    BlockPos.ofFloored(pos.toCenterPos()),
+                                    ModSoundEvents.CAMPFIRE_IGNITE, SoundCategory.BLOCKS,
+                                    0.2F + world.random.nextFloat() * 0.1F,
+                                    world.random.nextFloat() * 0.25F + 1.25F
+                            );
                         }
                     }
                 }
@@ -273,7 +280,11 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
                     changeFireLevel(world, desiredFireLevel);
 
                     if (desiredFireLevel == 1 && currentFireLevel == 2) {
-                        IgnitableBlock.playExtinguishSound(world, pos, false);
+                        float fizzPitch = 2.6F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.8F;
+                        world.playSound(
+                                null, pos, ModSoundEvents.CAMPFIRE_EXTINGUISH,
+                                SoundCategory.BLOCKS, 0.5F, fizzPitch
+                        );
                     }
 
                     return desiredFireLevel;

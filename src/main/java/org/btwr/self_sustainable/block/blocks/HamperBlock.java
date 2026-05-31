@@ -69,7 +69,7 @@ public class HamperBlock extends AbstractBasketBlock {
 
             if (blockEntity instanceof HamperBE be) {
                 player.openHandledScreen(be);
-                be.updateOpen(state);
+                be.updateOpen(world, state);
                 world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
                 PiglinBrain.onGuardedBlockInteracted(player, true);
             }

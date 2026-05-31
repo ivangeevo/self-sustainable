@@ -26,8 +26,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.btwr.self_sustainable.block.entity.VariableCampfireBE;
-import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
 import org.btwr.self_sustainable.block.utils.CampfireState;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.tag.ModTags;
 
 import java.util.Map;
@@ -71,7 +71,12 @@ public class ModUseBlockEvents {
                     if (!world.isClient) {
                         campfireBE.changeFireLevel(world, 0);
                     }
-                    IgnitableBlock.playExtinguishSound(world, pos, false);
+                    float pitch = 2.6F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.8F;
+                    world.playSound(
+                            null, pos, ModSoundEvents.CAMPFIRE_EXTINGUISH,
+                            SoundCategory.BLOCKS, 0.5F, pitch
+                    );
+
                     return ActionResult.SUCCESS;
                 }
 
@@ -163,7 +168,13 @@ public class ModUseBlockEvents {
                                 campfireBE.addBurnTime(state, itemBurnTime);
                                 heldStack.decrementUnlessCreative(1, player);
                             }
-                            IgnitableBlock.playLitFX(world, pos);
+                            world.playSound(
+                                    null,
+                                    BlockPos.ofFloored(pos.toCenterPos()),
+                                    ModSoundEvents.CAMPFIRE_IGNITE, SoundCategory.BLOCKS,
+                                    0.2F + world.random.nextFloat() * 0.1F,
+                                    world.random.nextFloat() * 0.25F + 1.25F
+                            );
                             return ActionResult.SUCCESS;
                         }
                     }

@@ -25,12 +25,10 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         addItemGroup("ss_group", "Self Sustainable!", tb);
         this.addBlockTranslations(tb);
         this.addItemTranslations(tb);
+        this.addSoundTranslations(tb);
         this.addTagTranslations(tb);
         //this.addConfigTranslations(tb);
         this.addEmiTranslations(tb);
-
-        tb.add("subtitles.self_sustainable.oven_ignite", "Oven ignites");
-        tb.add("subtitles.self_sustainable.torch_ignite", "Torch ignites");
 
         tb.add("container.hamper", "Hamper");
     }
@@ -83,6 +81,29 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         //addConfigMenuTitle("Self Sustainable Configuration Menu", tb);
         //addConfigCategory("general", "General Options", tb);
         //addConfig("exampleConfigOption", "Example config option", tb);
+    }
+
+    private void addSoundTranslations(TranslationBuilder tb) {
+        tb.add("subtitles.self_sustainable.primitive_firestarter_use", "Rubbing sticks together");
+        tb.add("subtitles.self_sustainable.campfire_ignite", "Campfire ignites");
+        tb.add("subtitles.self_sustainable.campfire_burning", "Campfire burning");
+        tb.add("subtitles.self_sustainable.oven_ignite", "Oven ignites");
+        tb.add("subtitles.self_sustainable.oven_insert_fuel", "Putting fuel in oven");
+        tb.add("subtitles.self_sustainable.oven_insert_fuel_active", "Refueling oven");
+        tb.add("subtitles.self_sustainable.oven_mortar", "Mortared block");
+        tb.add("subtitles.self_sustainable.torch_ignite", "Torch ignites");
+        tb.add("subtitles.self_sustainable.torch_smoulder", "Torch smoulders");
+        tb.add("subtitles.self_sustainable.torch_extinguish", "Torch extinguishes");
+        tb.add("subtitles.self_sustainable.knitting", "Knitting");
+        tb.add("subtitles.self_sustainable.knitting_finish", "Wool knit finished");
+        tb.add("subtitles.self_sustainable.wicker_weaving", "Weaving wicker");
+        tb.add("subtitles.self_sustainable.wicker_weaving_finish", "Wicker finished");
+        tb.add("subtitles.self_sustainable.wicker_basket_open", "Wicker basket opens");
+        tb.add("subtitles.self_sustainable.wicker_basket_close", "Wicker basket closes");
+        tb.add("subtitles.self_sustainable.wicker_basket_insert_item", "Item put into wicker basket");
+        tb.add("subtitles.self_sustainable.wicker_basket_take_out_item", "Item taken out of wicker basket");
+        tb.add("subtitles.self_sustainable.hamper_open", "Hamper opens");
+        tb.add("subtitles.self_sustainable.hamper_close", "Hamper closes");
     }
 
     private void addTagTranslations(TranslationBuilder tb) {

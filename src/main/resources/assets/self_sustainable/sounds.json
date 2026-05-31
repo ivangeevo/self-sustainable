@@ -1,4 +1,40 @@
 {
+  "primitive_firestarter_use": {
+    "subtitle": "subtitles.self_sustainable.primitive_firestarter_use",
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.eat",
+        "type": "event"
+      }
+    ]
+  },
+  "campfire_ignite": {
+    "subtitle": "subtitles.self_sustainable.campfire_ignite",
+    "sounds": [
+      {
+        "name": "minecraft:entity.ghast.shoot",
+        "type": "event"
+      }
+    ]
+  },
+  "campfire_burning": {
+    "subtitle": "subtitles.self_sustainable.campfire_burning",
+    "sounds": [
+      {
+        "name": "minecraft:block.fire.ambient",
+        "type": "event"
+      }
+    ]
+  },
+  "campfire_extinguish": {
+    "subtitle": "subtitles.self_sustainable.campfire_extinguish",
+    "sounds": [
+      {
+        "name": "minecraft:block.fire.extinguish",
+        "type": "event"
+      }
+    ]
+  },
   "oven_ignite": {
     "subtitle": "subtitles.self_sustainable.oven_ignite",
     "sounds": [
@@ -8,11 +44,146 @@
       }
     ]
   },
+  "oven_insert_fuel": {
+    "subtitle": "subtitles.self_sustainable.oven_insert_fuel",
+    "sounds": [
+      {
+        "name": "minecraft:entity.item.pickup",
+        "type": "event"
+      }
+    ]
+  },
+  "oven_insert_fuel_active": {
+    "subtitle": "subtitles.self_sustainable.oven_insert_fuel_active",
+    "sounds": [
+      {
+        "name": "minecraft:entity.ghast.shoot",
+        "type": "event"
+      }
+    ]
+  },
+  "oven_mortar": {
+    "subtitle": "subtitles.self_sustainable.oven_mortar",
+    "sounds": [
+      {
+        "name": "minecraft:entity.slime.attack",
+        "type": "event"
+      }
+    ]
+  },
   "torch_ignite": {
     "subtitle": "subtitles.self_sustainable.torch_ignite",
     "sounds": [
       {
         "name": "minecraft:item.firecharge.use",
+        "type": "event"
+      }
+    ]
+  },
+  "torch_smoulder": {
+    "subtitle": "subtitles.self_sustainable.torch_smoulder",
+    "sounds": [
+      {
+        "name": "minecraft:block.fire.extinguish",
+        "type": "event"
+      }
+    ]
+  },
+  "torch_extinguish": {
+    "subtitle": "subtitles.self_sustainable.torch_extinguish",
+    "sounds": [
+      {
+        "name": "minecraft:block.fire.extinguish",
+        "type": "event"
+      }
+    ]
+  },
+  "knitting": {
+    "subtitle": "subtitles.self_sustainable.knitting",
+    "sounds": [
+      {
+        "name": "minecraft:block.wood.step",
+        "type": "event"
+      }
+    ]
+  },
+  "knitting_finish": {
+    "subtitle": "subtitles.self_sustainable.knitting_finish",
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.step",
+        "type": "event"
+      }
+    ]
+  },
+  "wicker_weaving": {
+    "subtitle": "subtitles.self_sustainable.wicker_weaving",
+    "sounds": [
+      {
+        "name": "minecraft:block.grass.step",
+        "type": "event"
+      }
+    ]
+  },
+  "wicker_weaving_finish": {
+    "subtitle": "subtitles.self_sustainable.wicker_weaving_finish",
+    "sounds": [
+      {
+        "name": "minecraft:block.grass.step",
+        "type": "event"
+      }
+    ]
+  },
+  "wicker_basket_open": {
+    "subtitle": "subtitles.self_sustainable.wicker_basket_open",
+    "sounds": [
+      {
+        "name": "minecraft:block.gravel.step",
+        "type": "event"
+      }
+    ]
+  },
+  "wicker_basket_close": {
+    "subtitle": "subtitles.self_sustainable.wicker_basket_close",
+    "sounds": [
+      {
+        "name": "minecraft:block.gravel.step",
+        "type": "event"
+      }
+    ]
+  },
+  "wicker_basket_insert_item": {
+    "subtitle": "subtitles.self_sustainable.wicker_basket_insert_item",
+    "sounds": [
+      {
+        "name": "minecraft:block.gravel.step",
+        "type": "event"
+      }
+    ]
+  },
+  "wicker_basket_take_out_item": {
+    "subtitle": "subtitles.self_sustainable.wicker_basket_take_out_item",
+    "sounds": [
+      {
+        "name": "minecraft:block.gravel.step",
+        "type": "event"
+      }
+    ]
+  },
+  "hamper_open": {
+    "subtitle": "subtitles.self_sustainable.hamper_open",
+    "sounds": [
+      {
+        "name": "minecraft:block.gravel.step",
+        "type": "event"
+      }
+    ]
+  },
+  "hamper_close": {
+    "subtitle": "subtitles.self_sustainable.hamper_close",
+    "sounds": [
+      {
+        "name": "minecraft:block.gravel.step",
         "type": "event"
       }
     ]

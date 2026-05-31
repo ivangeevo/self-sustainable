@@ -6,13 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.btwr.self_sustainable.item.ModItems;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
 import org.btwr.self_sustainable.item.component.TorchFuelComponent;
 import org.btwr.self_sustainable.item.items.CrudeTorchBlockItem;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.jetbrains.annotations.NotNull;
 
 public class TorchItemEntityHandler {
@@ -43,12 +43,10 @@ public class TorchItemEntityHandler {
         boolean inFluid = false;
 
         if (fluidState.isIn(FluidTags.WATER)) {
-            // Get the actual fluid surface height at this block
-            // getHeight() returns a fraction (0.0 - 1.0), add block Y for world height
+            // Actual fluid surface height at this block
             float fluidSurfaceY = pos.getY() + fluidState.getHeight(world, pos);
 
-            // Entity Y is at the bottom of the bounding box (feet position)
-            // so check if feet are below the actual fluid surface
+            // Check if the entity bottom is below the actual fluid surface
             inFluid = entity.getY() < fluidSurfaceY;
         }
 
@@ -61,8 +59,9 @@ public class TorchItemEntityHandler {
 
     private static void onItemLandsInWater(ItemEntity entity, ItemStack stack, World world) {
         world.playSound(null, entity.getBlockPos(),
-                SoundEvents.BLOCK_FIRE_EXTINGUISH,
-                SoundCategory.BLOCKS, 0.5f, 1.0f);
+                ModSoundEvents.TORCH_EXTINGUISH,
+                SoundCategory.BLOCKS, 0.5f, 1.0f
+        );
 
         if (isCrudeLitTorch(stack)) {
             entity.discard();
@@ -79,7 +78,8 @@ public class TorchItemEntityHandler {
 
         ItemEntity drop = new ItemEntity(world,
                 entity.getX(), entity.getY(), entity.getZ(),
-                replacement.copyWithCount(stack.getCount()));
+                replacement.copyWithCount(stack.getCount())
+        );
         drop.setVelocity(entity.getVelocity());
         return drop;
     }

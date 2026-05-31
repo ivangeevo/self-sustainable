@@ -1,6 +1,7 @@
 package org.btwr.self_sustainable.item.items;
 
 import org.btwr.self_sustainable.item.interfaces.added.ItemStackAdded;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.util.WorldUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -8,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -82,7 +82,7 @@ public class FireStarterItemPrimitive extends FireStarterItem {
         PlayerEntity player = context.getPlayer();;
 
         assert player != null;
-        player.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5f + 0.5f * (float)player.getRandom().nextInt(2),
+        player.playSound(ModSoundEvents.PRIMITIVE_FIRESTARTER_USE, 0.5f + 0.5f * (float)player.getRandom().nextInt(2),
                 (player.getRandom().nextFloat() * 0.25f) + 1.75f);
 
         if (!player.getWorld().isClient()) {

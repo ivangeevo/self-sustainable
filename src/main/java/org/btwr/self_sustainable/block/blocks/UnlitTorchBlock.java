@@ -6,6 +6,7 @@ import net.minecraft.block.TorchBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.SimpleParticleType;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
@@ -14,7 +15,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.btwr.self_sustainable.block.ModBlocks;
-import org.btwr.self_sustainable.block.interfaces.IgnitableBlock;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.tag.ModTags;
 
 /** Custom torch block for the unlit variant of the vanilla torches. **/
@@ -67,10 +68,19 @@ public class UnlitTorchBlock extends TorchBlock {
                     }
                 }
 
-                IgnitableBlock.playLitFX(world, pos);
-            }
-            else {
-                IgnitableBlock.playExtinguishSound(world, pos, true);
+                world.playSound(
+                        null,
+                        BlockPos.ofFloored(pos.toCenterPos()),
+                        ModSoundEvents.TORCH_IGNITE, SoundCategory.BLOCKS,
+                        0.2F + world.random.nextFloat() * 0.1F,
+                        world.random.nextFloat() * 0.25F + 1.25F
+                );
+            } else {
+                float fizzPitch = 1F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.2F;
+                world.playSound(
+                        null, pos, ModSoundEvents.TORCH_EXTINGUISH,
+                        SoundCategory.BLOCKS, 0.1F, fizzPitch
+                );
             }
         }
 

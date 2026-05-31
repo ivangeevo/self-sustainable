@@ -185,9 +185,16 @@ public abstract class AbstractBasketBE extends BlockEntity implements Inventory,
 
     protected abstract int getInventorySize();
 
-    /** Play opening/insert item in sound based on a direction **/
-    public abstract void playSoftSound(BlockState state);
+    /** Play soft interaction sound **/
+    public abstract void playOpenSound(BlockState state);
 
-    /** Play closing/taken item out sound based on a direction **/
-    public abstract void playHarshSound(BlockState state);
+    /** Play harsh interaction sound **/
+    public abstract void playCloseSound(BlockState state);
+
+    /** Play insert item in sound based **/
+    public abstract void playInsertSound(BlockState state);
+
+    /** Play taken item out sound based **/
+    public abstract void playTakeOutSound(BlockState state);
+
 }

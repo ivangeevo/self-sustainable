@@ -84,7 +84,6 @@ public class WickerBasketBlock extends AbstractBasketBlock {
         return this.getVoxelShape(state);
     }
 
-    /**
     @Override
     protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         WickerBasketBE be = (WickerBasketBE) world.getBlockEntity(pos);
@@ -100,73 +99,24 @@ public class WickerBasketBlock extends AbstractBasketBlock {
             } else if (stack.isEmpty()) {
                 ItemStack taken = inv.copy();
                 be.setStack(slot, ItemStack.EMPTY);
-                be.playSoftSound(state);
+                be.playInsertSound(state);
                 if (!player.getInventory().insertStack(taken)) {
                     be.dropStack(taken, 0.3f);
                 }
             } else if (inv.isEmpty()) {
                 be.setStack(slot, stack);
                 player.setStackInHand(hand, ItemStack.EMPTY);
-                be.playHarshSound(state);
-            } else if (stack.isOf(inv.getItem()) && inv.getCount() < inv.getMaxCount()) {
-                int maxCount = inv.getMaxCount();
-                boolean overflow = stack.getCount() + inv.getCount() < inv.getMaxCount();
-                int remainder = overflow ? (stack.getCount() + inv.getCount()) & maxCount : 0;
-
-                inv.setCount(Math.min(stack.getCount() + inv.getCount(), maxCount));
-                be.playHarshSound(state);
-                stack.setCount(remainder);
-            } else {
-                ItemStack newStack = be.getStack(slot).copy();
-                be.setStack(slot, stack);
-                player.setStackInHand(hand, ItemStack.EMPTY);
-                be.playHarshSound(state);
-                if (!player.getInventory().insertStack(newStack)) {
-                    be.dropStack(newStack, 0.3f);
-                }
-            }
-
-            be.markDirty();
-            return ItemActionResult.SUCCESS;
-        }
-
-        return ItemActionResult.FAIL;
-    }
-     **/
-
-    @Override
-    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        WickerBasketBE be = (WickerBasketBE) world.getBlockEntity(pos);
-
-        if (be != null) {
-            int slot = getSlot(hit, state.get(FACING));
-            if (slot == -1 || !state.get(OPEN)) return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-
-            ItemStack inv = be.getStack(slot);
-
-            if (stack.isEmpty() && inv.isEmpty()) {
-                return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-            } else if (stack.isEmpty()) {
-                ItemStack taken = inv.copy();
-                be.setStack(slot, ItemStack.EMPTY);
-                be.playSoftSound(state);
-                if (!player.getInventory().insertStack(taken)) {
-                    be.dropStack(taken, 0.3f);
-                }
-            } else if (inv.isEmpty()) {
-                be.setStack(slot, stack);
-                player.setStackInHand(hand, ItemStack.EMPTY);
-                be.playHarshSound(state);
+                be.playTakeOutSound(state);
             } else if (stack.isOf(inv.getItem()) && inv.getCount() < inv.getMaxCount()) {
                 int maxCount = inv.getMaxCount();
                 int total = stack.getCount() + inv.getCount();
                 inv.setCount(Math.min(total, maxCount));
-                be.playHarshSound(state);
+                be.playTakeOutSound(state);
                 stack.setCount(Math.max(0, total - maxCount));
             } else {
                 ItemStack taken = inv.copy();
                 be.setStack(slot, ItemStack.EMPTY);
-                be.playSoftSound(state);
+                be.playInsertSound(state);
                 if (!player.getInventory().insertStack(taken)) {
                     be.dropStack(taken, 0.3f);
                 }

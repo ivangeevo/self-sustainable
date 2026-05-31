@@ -41,6 +41,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.*;
 import net.minecraft.world.dimension.NetherPortal;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
@@ -238,13 +239,25 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                         if (state.get(FIRE_LEVEL) > 0 || state.get(FUEL_STATE) == CampfireState.SMOULDERING) {
                             campfireBE.addBurnTime(state, stack, itemBurnTime);
                             stack.decrement(stack.getCount());
-                            IgnitableBlock.playLitFX(world, pos);
+                            world.playSound(
+                                    null,
+                                    BlockPos.ofFloored(pos.toCenterPos()),
+                                    ModSoundEvents.CAMPFIRE_IGNITE, SoundCategory.BLOCKS,
+                                    0.2F + world.random.nextFloat() * 0.1F,
+                                    world.random.nextFloat() * 0.25F + 1.25F
+                            );
                         }
                         // all other items burn at fuel level higher than 1
                     }
                     else if (state.get(FIRE_LEVEL) > 1) {
                         stack.decrement(stack.getCount());
-                        IgnitableBlock.playLitFX(world, pos);
+                        world.playSound(
+                                null,
+                                BlockPos.ofFloored(pos.toCenterPos()),
+                                ModSoundEvents.CAMPFIRE_IGNITE, SoundCategory.BLOCKS,
+                                0.2F + world.random.nextFloat() * 0.1F,
+                                world.random.nextFloat() * 0.25F + 1.25F
+                        );
                     }
                 }
             }
@@ -287,7 +300,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                 double e = pos.getY();
                 double f = (double) pos.getZ() + 0.5;
 
-                world.playSound(d, e, f, SoundEvents.BLOCK_FIRE_AMBIENT,
+                world.playSound(d, e, f, ModSoundEvents.CAMPFIRE_BURNING,
                         SoundCategory.BLOCKS, fVolume,
                         random.nextFloat() * 0.7F + 0.3F, false);
             }
@@ -367,7 +380,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
                 BlockPos soundPos = new BlockPos((int) (pos.getX() + 0.5D), (int) (pos.getY() + 0.5D), (int) (pos.getZ() + 0.5D));
 
-                world.playSound(null, soundPos, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.BLOCKS, 1F,
+                world.playSound(null, soundPos, ModSoundEvents.CAMPFIRE_IGNITE, SoundCategory.BLOCKS, 1F,
                         world.random.nextFloat() * 0.4F + 0.8F
                 );
 
@@ -385,7 +398,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                 }
                  **/
             } else {
-                IgnitableBlock.playExtinguishSound(world, pos, false);
+                float fizzPitch = 2.6F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.8F;
+                world.playSound(
+                        null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH,
+                        SoundCategory.BLOCKS, 0.5F, fizzPitch
+                );
             }
 
             return true;
@@ -442,7 +459,11 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         btwr$changeFireLevel(world, pos, 0);
 
         if (!world.isClient()) {
-            IgnitableBlock.playExtinguishSound(world, pos, true);
+            float fizzPitch = 1F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.2F;
+            world.playSound(
+                    null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH,
+                    SoundCategory.BLOCKS, 0.1F, fizzPitch
+            );
         }
     }
 

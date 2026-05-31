@@ -30,6 +30,7 @@ import org.btwr.self_sustainable.block.blocks.WickerBasketBlock;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.util.TickableBlockEntity;
 
 import static net.minecraft.state.property.Properties.OPEN;
@@ -47,13 +48,13 @@ public class HamperBE extends LootableContainerBlockEntity implements TickableBl
     private final ViewerCountManager stateManager = new ViewerCountManager() {
         @Override
         protected void onContainerOpen(World world, BlockPos pos, BlockState state) {
-            HamperBE.this.playSoftSound(state);
+            HamperBE.this.playOpenSound(world, state);
             HamperBE.this.setOpen(state, true);
         }
 
         @Override
         protected void onContainerClose(World world, BlockPos pos, BlockState state) {
-            HamperBE.this.playHarshSound(state);
+            HamperBE.this.playCloseSound(world, state);
             HamperBE.this.setOpen(state, false);
         }
 
@@ -72,13 +73,13 @@ public class HamperBE extends LootableContainerBlockEntity implements TickableBl
         }
     };
 
-    public void updateOpen(BlockState state) {
+    public void updateOpen(World world, BlockState state) {
         if (!state.get(OPEN)) {
             this.setOpen(state, true);
-            this.playSoftSound(state);
+            this.playOpenSound(world, state);
         } else {
             this.setOpen(state, false);
-            this.playHarshSound(state);
+            this.playCloseSound(world, state);
         }
     }
 
@@ -97,7 +98,6 @@ public class HamperBE extends LootableContainerBlockEntity implements TickableBl
         if (!this.readLootTable(nbt)) {
             Inventories.readNbt(nbt, this.inventory, registryLookup);
         }
-
     }
 
     @Override
@@ -151,23 +151,21 @@ public class HamperBE extends LootableContainerBlockEntity implements TickableBl
         }
     }
 
-    public void playSoftSound(BlockState state) {
-        if (this.world == null) return;
+    public void playOpenSound(World world, BlockState state) {
         this.playSoundTowardsFacing(
-                this.world,
+                world,
                 state,
-                SoundEvents.BLOCK_GRAVEL_STEP,
+                ModSoundEvents.HAMPER_OPEN,
                 0.25F + (world.getRandom().nextFloat() * 0.1F),
                 0.5F + (world.getRandom().nextFloat() * 0.1F)
         );
     }
 
-    public void playHarshSound(BlockState state) {
-        if (this.world == null) return;
+    public void playCloseSound(World world, BlockState state) {
         this.playSoundTowardsFacing(
-                this.world,
+                world,
                 state,
-                SoundEvents.BLOCK_GRAVEL_STEP,
+                ModSoundEvents.HAMPER_CLOSE,
                 0.1F + (world.getRandom().nextFloat() * 0.1F),
                 1F + (world.getRandom().nextFloat() * 0.25F)
         );

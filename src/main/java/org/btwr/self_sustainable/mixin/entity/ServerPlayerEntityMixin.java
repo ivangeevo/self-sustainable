@@ -12,10 +12,10 @@ import net.minecraft.item.Items;
 import net.minecraft.item.VerticallyAttachableBlockItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -84,7 +84,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         if (player.isSubmergedInWater()) {
             if (isBurning(torchItem)) {
                 stack.decrement(1);
-                player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
+                player.getWorld().playSound(null, pos.up(), ModSoundEvents.TORCH_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
             }
         }
     }
@@ -94,7 +94,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         if (player.isSubmergedInWater() && stack.isOf(Items.TORCH)) {
             ItemStack unlitTorch = new ItemStack(ModItems.TORCH_UNLIT, stack.getCount());
             player.getInventory().setStack(slot, unlitTorch);
-            player.getWorld().playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
+            player.getWorld().playSound(null, pos.up(), ModSoundEvents.TORCH_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private void rainTorch(CrudeTorchBlockItem torchItem, ItemStack stack, World world, BlockPos pos) {
         if (isBurning(torchItem)) {
             stack.decrement(1);
-            world.playSound(null, pos.up(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
+            world.playSound(null, pos.up(), ModSoundEvents.TORCH_EXTINGUISH, SoundCategory.PLAYERS, 0.5f, 1f);
         }
     }
 

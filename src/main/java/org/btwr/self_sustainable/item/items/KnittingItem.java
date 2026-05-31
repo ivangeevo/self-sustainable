@@ -11,6 +11,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.world.World;
 
 import org.btwr.self_sustainable.item.ModItems;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.btwr.self_sustainable.util.DyeColorUtils;
 import org.btwr.self_sustainable.util.ItemUtils;
 import org.btwr.shared_library.api.item.ProgressiveCraftingItem;
@@ -26,7 +27,7 @@ public class KnittingItem extends ProgressiveCraftingItem {
     @Override
     protected void playCraftingFX(ItemStack stack, World world, LivingEntity player) {
         player.playSound(
-                SoundEvents.BLOCK_WOOD_STEP,
+                ModSoundEvents.KNITTING,
                 0.25F + 0.25F * (float) world.random.nextInt(2),
                 (world.random.nextFloat() - world.random.nextFloat()) * 0.25F + 1.75F
         );
@@ -37,15 +38,10 @@ public class KnittingItem extends ProgressiveCraftingItem {
         DyeColor color = getColor(stack);
 
         ItemStack woolStack = new ItemStack(ModItems.WOOL_KNITS.get(color), 1);
-        //woolStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(color.getEntityColor(), false));
         woolStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(color.getEntityColor() & 0x00FFFFFF, false));
         PlayerEntity player = (PlayerEntity)user;
-        world.playSound(
-                player,
-                player.getBlockPos(),
-                SoundEvents.BLOCK_WOOL_STEP,
-                SoundCategory.BLOCKS,
-                1F,
+        player.playSound(
+                ModSoundEvents.KNITTING_FINISH, 1F,
                 world.getRandom().nextFloat() * 0.1F + 0.9F
         );
         ItemUtils.givePlayerStackOrEject(player, woolStack);

@@ -4,12 +4,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.btwr.self_sustainable.block.utils.TorchFireState;
 import org.btwr.self_sustainable.item.items.CrudeTorchBlockItem;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 
 public final class TorchIgnitionHelper {
 
@@ -27,7 +27,10 @@ public final class TorchIgnitionHelper {
                 player.getInventory().offHand.set(0, infiniteLitTorch);
             }
 
-            world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
+            world.playSound(
+                    null, pos, ModSoundEvents.TORCH_IGNITE,
+                    SoundCategory.BLOCKS, 0.5f, 1.2f
+            );
         }
     }
 
@@ -53,7 +56,11 @@ public final class TorchIgnitionHelper {
                 }
             }
 
-            world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
+            world.playSound(
+                    null, pos, ModSoundEvents.TORCH_IGNITE,
+                    SoundCategory.BLOCKS, 0.5f, 1.2f
+            );
         }
     }
+
 }

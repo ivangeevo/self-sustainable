@@ -29,14 +29,17 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         //this.addConfigTranslations(tb);
         this.addEmiTranslations(tb);
 
+        tb.add("subtitles.self_sustainable.oven_ignite", "Oven ignites");
+        tb.add("subtitles.self_sustainable.torch_ignite", "Torch ignites");
+
         tb.add("container.hamper", "Hamper");
     }
 
     private void addBlockTranslations(TranslationBuilder tb) {
         tb.add(ModBlocks.OVEN_BRICK, "Brick Oven");
+        tb.add(ModBlocks.OVEN_BRICK_MORTARED, "Mortared Brick Oven");
         tb.add(ModBlocks.WICKER_BASKET, "Wicker Basket");
         tb.add(ModBlocks.HAMPER, "Hamper");
-
     }
 
     private void addItemTranslations(TranslationBuilder tb) {

@@ -97,6 +97,11 @@ public abstract class AbstractCrudeTorchBlock extends BlockWithEntity implements
     }
 
     @Override
+    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        return AbstractTorchBlock.sideCoversSmallSquare(world, pos.down(), Direction.UP);
+    }
+
+    @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
         super.onPlaced(world, pos, state, placer, itemStack);
@@ -111,8 +116,17 @@ public abstract class AbstractCrudeTorchBlock extends BlockWithEntity implements
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return AbstractTorchBlock.sideCoversSmallSquare(world, pos.down(), Direction.UP);
+    protected BlockState getStateForNeighborUpdate(
+            BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
+    ) {
+        return direction == Direction.DOWN && !this.canPlaceAt(state, world, pos)
+                ? Blocks.AIR.getDefaultState()
+                : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    }
+
+    @Override
+    public boolean btwr$getCanBlockLightItemOnFire(WorldAccess world, BlockPos pos) {
+        return world.getBlockState(pos).isIn(ModTags.Blocks.CRUDE_LIT_TORCHES);
     }
 
     @Override

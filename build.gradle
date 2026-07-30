@@ -77,7 +77,7 @@ dependencies {
     // For runtime of LambDynamicLights.
     // Include only if you need to test in your dev env compatibility with LambDynamicLights.
     // Replace with runtimeOnly if you want the dependency to be transitive.
-    //modLocalRuntime("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lamb_dynamic_lights_version}")
+    modLocalRuntime("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lamb_dynamic_lights_version}")
 }
 
 processResources {

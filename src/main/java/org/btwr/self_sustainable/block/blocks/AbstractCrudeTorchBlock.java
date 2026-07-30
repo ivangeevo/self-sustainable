@@ -20,7 +20,6 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -164,7 +163,7 @@ public abstract class AbstractCrudeTorchBlock extends BlockWithEntity implements
                 float fizzPitch = 2.6F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.8F;
 
                 world.playSound(
-                        null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH,
+                        null, pos, ModSoundEvents.TORCH_EXTINGUISH,
                         SoundCategory.BLOCKS, 0.5F, fizzPitch
                 );
 
@@ -178,7 +177,7 @@ public abstract class AbstractCrudeTorchBlock extends BlockWithEntity implements
 
     @Override
     protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.getBlock() != newState.getBlock() && newState.isIn(ModTags.Blocks.CRUDE_LIT_TORCHES)) {
+        if (state.getBlock() != newState.getBlock()) {
             return;
         }
 

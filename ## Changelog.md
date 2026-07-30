@@ -6,15 +6,16 @@
 
 
 + Torch fixes:
-  + Fixed missing texture/model for the unlit soul wall torch
+  + Fixed a missing texture/model for the unlit soul wall torch
   + Fixed crude torches to properly break if the block below them is broken
-  + Fixed torches to extinguish when the item falls into water
+  + Fixed torch items not extinguishing when they fall into water
   + Fixed unlit torches to properly light up from falling lava and fire blocks
 
 
 + Misc
   + Added many dedicated sound events for things like using primitive firestarters, igniting stuff, knitting, etc.
-  
+  + Updated the mod to Fabric Loader 0.116.15, Fabric Loader 0.19.3 & BTWR: Shared Library 0.8.5
+
 ## v0.5.3
 + Added LambDynamicLights compatibility for the crude torch items
 + Changed the bow drill to be craftable with other string items from the Fabric conventional "strings" item tag instead of just string

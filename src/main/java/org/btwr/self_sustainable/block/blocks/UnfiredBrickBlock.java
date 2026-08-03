@@ -28,6 +28,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import org.btwr.self_sustainable.sound.ModSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
 public class UnfiredBrickBlock extends BlockWithEntity {
@@ -89,7 +90,7 @@ public class UnfiredBrickBlock extends BlockWithEntity {
 
             if (horizontalOverlap && onTop) {
                 // break block
-                world.playSound(null, pos, SoundEvents.ENTITY_SLIME_ATTACK, SoundCategory.BLOCKS, (0.5F + 1.0F) / 2.0F, 0.1F * 0.8F);
+                world.playSound(null, pos, ModSoundEvents.STEP_ON_WET_BRICK, SoundCategory.BLOCKS, (0.5F + 1.0F) / 2.0F, 0.1F * 0.8F);
                 world.addBlockBreakParticles(pos, state);
                 dropBlockAsItem(world, pos);
                 world.removeBlock(pos, false);

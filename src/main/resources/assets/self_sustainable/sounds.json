@@ -187,5 +187,14 @@
         "type": "event"
       }
     ]
+  },
+  "step_on_wet_brick": {
+    "subtitle": "subtitles.self_sustainable.step_on_wet_brick",
+    "sounds": [
+      {
+        "name": "minecraft:entity.slime.attack",
+        "type": "event"
+      }
+    ]
   }
 }

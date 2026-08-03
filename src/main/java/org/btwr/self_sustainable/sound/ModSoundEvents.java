@@ -28,6 +28,7 @@ public class ModSoundEvents {
     public static final SoundEvent WICKER_BASKET_TAKE_OUT_ITEM = register("wicker_basket_take_out_item");
     public static final SoundEvent HAMPER_OPEN = register("hamper_open");
     public static final SoundEvent HAMPER_CLOSE = register("hamper_close");
+    public static final SoundEvent STEP_ON_WET_BRICK = register("step_on_wet_brick");
 
     private static SoundEvent register(String name) {
         Identifier id = IdUtils.ofSS(name);

@@ -1,6 +1,5 @@
 package org.btwr.self_sustainable.mixin.entity;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.HungerManager;
@@ -8,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.btwr.self_sustainable.compat.CompatUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,7 +41,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     private void onJump(CallbackInfo ci) {
-        if (!FabricLoader.getInstance().isModLoaded("im_movens")) {
+        if (!CompatUtils.isModLoaded("im_movens")) {
             super.jump();
             this.incrementStat(Stats.JUMP);
             if (this.isSprinting()) {
@@ -57,7 +57,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci) {
-        if (!FabricLoader.getInstance().isModLoaded("im_movens")) {
+        if (!CompatUtils.isModLoaded("im_movens") || !CompatUtils.isModLoaded("granular_hunger")) {
             PlayerEntity player = (PlayerEntity) (Object) this;
 
             // TODO: Fix? Maybe only serverPlayerEntity should heal?
@@ -66,16 +66,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                     && player.getHungerManager().getFoodLevel() >= 9)
             {
                 player.heal(1.0F);
-
                 // Maybe add a minimal exhaustion on heal when the im-movens mod is not present
-                //  I was also tinkering with adding a satisfying sound on heal? dunno
-                //player.addExhaustion(0.2f);
-
-                // Play Brewing Stand Bubble sound
-                //playSound(SoundEvents.BLOCK_BREWING_STAND_BREW, 0.5f, 0.6f);
-
-                // Play Enchanting Table Use sound
-                //playSound(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 0.3f, 0.8f);
             }
         }
     }

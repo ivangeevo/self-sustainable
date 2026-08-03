@@ -15,6 +15,8 @@
 + Misc
   + Added many dedicated sound events for things like using primitive firestarters, igniting stuff, knitting, etc.
   + Fixed wet brick block to only break when an entity collides on the exact shape of the block instead of when entering the full shape of the block space it's standing on
+  + Fixed/added proper sound event for the wet brick when it breaks from being stepped on
+  + Fixed double healing which happened when using Self Sustainable and Granular Hunger together
   + Updated the mod to Fabric Loader 0.116.15, Fabric Loader 0.19.3 & BTWR: Shared Library 0.8.5
 
 ## v0.5.3

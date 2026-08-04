@@ -1,8 +1,12 @@
 ## v???(dev)
 
+## v0.6
+### Warning, this is a game breaking update. Proceed with caution!
+
 + Oven changes/fixes:
   + Added mortared variant for the oven
   + Fixed fuel level displaying incorrectly
+  + Changed a lot on how ovens work internally, so this will likely break stuff with existing ovens in your worlds
 
 
 + Torch fixes:

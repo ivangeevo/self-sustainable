@@ -1,6 +1,5 @@
 package org.btwr.self_sustainable.item.component;
 
-import com.bwt.items.BwtItems;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.ComponentMap;
@@ -43,8 +42,8 @@ public class FoodComponentModifier {
         context.modify(Items.COOKED_PORKCHOP, builder -> modifyEntry(builder, replaceWith(5).build()));
         context.modify(Items.COOKED_MUTTON, builder -> modifyEntry(builder, replaceWith(4).build()));
         context.modify(Items.COOKED_RABBIT, builder -> modifyEntry(builder, replaceWith(3).build()));
-        context.modify(Items.COOKED_COD, builder -> modifyEntry(builder, replaceWith(2).build()));
-        context.modify(Items.COOKED_SALMON, builder -> modifyEntry(builder, replaceWith(2).build()));
+        context.modify(Items.COOKED_COD, builder -> modifyEntry(builder, replaceWith(4).build()));
+        context.modify(Items.COOKED_SALMON, builder -> modifyEntry(builder, replaceWith(4).build()));
         context.modify(Items.APPLE, builder -> modifyEntry(builder, replaceWith(1).build()));
         context.modify(Items.MUSHROOM_STEW, builder -> modifyEntry(builder, replaceWith(2).build()));
         context.modify(Items.COOKIE, builder -> modifyEntry(builder, replaceWith(1).build()));
@@ -91,9 +90,9 @@ public class FoodComponentModifier {
             context.modify(ModItems.COOKED_CARROT, builder -> modifyEntry(builder, replaceWith(2).build()));
             context.modify(ModItems.CHOCOLATE, builder -> modifyEntry(builder, replaceWith(2).build()));
             context.modify(ModItems.CHOCOLATE_MILK, builder -> modifyEntry(builder, replaceWith(3).build()));
-
         }
 
+        /**
         if (FabricLoader.getInstance().isModLoaded("bwt")) {
             context.modify(BwtItems.rawEggItem, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addHungerEffect(600, 2), 0.3F).build()));
             context.modify(BwtItems.wolfChopItem, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(1200, 2), 0.3F).statusEffect(addSlownessEffect(1000, 2), 0.1F).build()));
@@ -102,6 +101,7 @@ public class FoodComponentModifier {
             context.modify(BwtItems.cookedWolfChopItem, builder -> modifyEntry(builder, replaceWith(5).build()));
             context.modify(BwtItems.donutItem, builder -> modifyEntry(builder, new FoodComponent.Builder().nutrition(1).snack().saturationModifier(0f).build()));
         }
+         **/
     }
 
     // Directly modify the builder with access widening the put method (it was reflection before)

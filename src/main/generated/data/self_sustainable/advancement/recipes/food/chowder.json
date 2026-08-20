@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cooked_potato": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:foods/cooked_potato"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "self_sustainable:chowder"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cooked_potato"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "self_sustainable:chowder"
+    ]
+  }
+}

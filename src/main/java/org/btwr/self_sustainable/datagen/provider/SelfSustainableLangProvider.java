@@ -75,6 +75,22 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         tb.add(ModItems.WOOL_CHESTPLATE, "Wool Jacket");
         tb.add(ModItems.WOOL_LEGGINGS, "Wool Britches");
         tb.add(ModItems.WOOL_BOOTS, "Bootsies");
+
+        tb.add(ModItems.COOKED_KEBAB, "Cooked Kebab");
+        tb.add(ModItems.EGG_SCRAMBLED_COOKED, "Scrambled Eggs");
+        tb.add(ModItems.EGG_SCRAMBLED_RAW, "Raw Scrambled Eggs");
+        tb.add(ModItems.HAM_AND_EGGS, "Ham and Eggs");
+        tb.add(ModItems.HEARTY_STEW, "Hearty Stew");
+        tb.add(ModItems.MUSHROOM_OMELETTE_COOKED, "Mushroom Omelette");
+        tb.add(ModItems.MUSHROOM_OMELETTE_RAW, "Raw Mushroom Omelette");
+        tb.add(ModItems.PORK_DINNER, "Pork Dinner");
+        tb.add(ModItems.RAW_KEBAB, "Raw Kebab");
+        tb.add(ModItems.SANDWICH, "Tasty Sandwich");
+        tb.add(ModItems.STEAK_AND_POTATOES, "Steak and Potatoes");
+        tb.add(ModItems.STEAK_DINNER, "Steak Dinner");
+        tb.add(ModItems.WOLF_DINNER, "Wolf Dinner");
+        tb.add(ModItems.CHICKEN_SOUP, "Chicken Soup");
+        tb.add(ModItems.CHOWDER, "Chowder");
     }
 
     private void addConfigTranslations(TranslationBuilder tb) {

@@ -11,6 +11,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import org.btwr.self_sustainable.item.component.ModFoodComponents;
 import org.btwr.self_sustainable.item.items.*;
 import org.btwr.self_sustainable.material.SelfSustainableArmorMaterials;
 import org.btwr.self_sustainable.registry.KnittingColorRegistry;
@@ -153,6 +154,32 @@ public class ModItems {
                     .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xFFFFFF, false))
             )
     );
+
+    // Food items
+    // Raw
+    public static final Item EGG_SCRAMBLED_RAW = registerItem("egg_scrambled_raw", new Item(
+            new Item.Settings().food(ModFoodComponents.EGGS_SCRAMBLED_RAW)
+    ));
+    public static final Item MUSHROOM_OMELETTE_RAW = registerItem("mushroom_omelette_raw", new Item( new Item.Settings().food(ModFoodComponents.MUSHROOM_OMELETTE_RAW)));
+
+    // Cooked
+    public static final Item EGG_SCRAMBLED_COOKED = registerItem("egg_scrambled_cooked", new Item( new Item.Settings().food(ModFoodComponents.EGG_SCRAMBLED_COOKED)));
+    public static final Item MUSHROOM_OMELETTE_COOKED = registerItem("mushroom_omelette_cooked", new Item( new Item.Settings().food(ModFoodComponents.MUSHROOM_OMELETTE_COOKED)));
+
+    // Special food items
+    public static final Item SANDWICH = registerItem( "sandwich", new Item (new Item.Settings().food(ModFoodComponents.SANDWICH)));
+    public static final Item HAM_AND_EGGS = registerItem( "ham_and_eggs", new Item (new Item.Settings().food(ModFoodComponents.HAM_AND_EGGS)));
+    public static final Item CHOWDER = registerItem( "chowder", new Item (new Item.Settings().food(ModFoodComponents.CHOWDER)));
+    public static final Item STEAK_AND_POTATOES = registerItem( "steak_and_potatoes", new Item (new Item.Settings().food(ModFoodComponents.STEAK_AND_POTATOES)));
+    public static final Item RAW_KEBAB = registerItem( "raw_kebab", new Item (new Item.Settings().food(ModFoodComponents.KEBAB_RAW)));
+    public static final Item COOKED_KEBAB = registerItem( "cooked_kebab", new Item (new Item.Settings().food(ModFoodComponents.KEBAB_COOKED)));
+    public static final Item STEAK_DINNER = registerItem( "steak_dinner", new Item (new Item.Settings().food(ModFoodComponents.STEAK_DINNER)));
+    public static final Item PORK_DINNER = registerItem( "pork_dinner", new Item (new Item.Settings().food(ModFoodComponents.PORK_DINNER)));
+    public static final Item WOLF_DINNER = registerItem( "wolf_dinner", new Item (new Item.Settings().food(ModFoodComponents.WOLF_DINNER)));
+
+    public static final Item CHICKEN_SOUP = registerItem( "chicken_soup", new Item (new Item.Settings().food(ModFoodComponents.CHICKEN_SOUP)));
+
+    public static final Item HEARTY_STEW = registerItem( "hearty_stew", new Item(new Item.Settings().food(ModFoodComponents.HEARTY_STEW)));
 
     public static final Map<DyeColor, Item> WOOL_KNITS = new EnumMap<>(DyeColor.class);
     public static final Map<DyeColor, Item> WOOLS = new EnumMap<>(DyeColor.class);

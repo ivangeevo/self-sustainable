@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_egg_scrambled_raw": {
+      "conditions": {
+        "items": [
+          {
+            "items": "self_sustainable:egg_scrambled_raw"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "self_sustainable:egg_scrambled_cooked_from_oven_cooking"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_egg_scrambled_raw"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "self_sustainable:egg_scrambled_cooked_from_oven_cooking"
+    ]
+  }
+}

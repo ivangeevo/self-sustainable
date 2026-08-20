@@ -3,16 +3,27 @@ package org.btwr.self_sustainable.event.events;
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
+import net.minecraft.loot.condition.AnyOfLootCondition;
+import net.minecraft.loot.condition.InvertedLootCondition;
+import net.minecraft.loot.condition.LootCondition;
+import net.minecraft.loot.condition.MatchToolLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
+import net.minecraft.loot.function.SetCountLootFunction;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
+import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
+import org.btwr.shared_library.api.tag.BTWRConventionalTags;
 import org.btwr.shared_library.mixin.accessors.ItemEntryAccessor;
 import org.btwr.shared_library.mixin.accessors.LootPoolBuilderAccessor;
 import org.btwr.shared_library.util.utils.IdUtils;
@@ -26,6 +37,7 @@ public class ModLootTableEvents {
 
     public static void register() {
         LootTableEvents.MODIFY.register(ModLootTableEvents::modifySheepLoot);
+        LootTableEvents.REPLACE.register(ModLootTableEvents::replaceChestLootTable);
     }
 
     // Replaces sheep wool block drops with the mod wool items
@@ -55,5 +67,53 @@ public class ModLootTableEvents {
             });
             ((LootPoolBuilderAccessor) poolBuilder).setEntries(ImmutableList.<LootPoolEntry>builder().addAll(entries));
         });
+    }
+
+
+
+    // Doesn't seem to work properly
+    private static LootTable replaceChestLootTable(RegistryKey<LootTable> key, LootTable original, LootTableSource source, RegistryWrapper.WrapperLookup registries) {
+        //if (!source.isBuiltin()) {
+        if (Blocks.CHEST.getLootTableKey().equals(key)) {
+            LootTable.Builder newTable = LootTable.builder();
+
+            newTable.pool(LootPool.builder()
+                    .with(ItemEntry.builder(Items.CHEST))
+                    .conditionally(withStrongAxe())
+            );
+
+            /**
+            newTable.pool(LootPool.builder()
+                    .with(ItemEntry.builder(BwtItems.sawDustItem)
+                            .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(6))))
+                    .conditionally(withoutStrongAxe())
+            );
+             **/
+
+            newTable.pool(LootPool.builder()
+                    .with(ItemEntry.builder(Items.STICK)
+                            .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(2))))
+                    .conditionally(withoutStrongAxe())
+            );
+
+            return newTable.build();
+        }
+        //}
+        return null;
+    }
+
+    private static LootCondition.Builder withStrongAxe() {
+        return AnyOfLootCondition.builder(
+                MatchToolLootCondition.builder(
+                        ItemPredicate.Builder.create().tag(BTWRConventionalTags.Items.MODERN_AXES)
+                ),
+                MatchToolLootCondition.builder(
+                        ItemPredicate.Builder.create().tag(BTWRConventionalTags.Items.ADVANCED_AXES)
+                )
+        );
+    }
+
+    private static LootCondition.Builder withoutStrongAxe() {
+        return InvertedLootCondition.builder(withStrongAxe());
     }
 }

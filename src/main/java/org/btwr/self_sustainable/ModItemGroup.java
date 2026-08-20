@@ -52,6 +52,22 @@ public class ModItemGroup {
                         entries.add(ModBlocks.WICKER_BASKET);
                         entries.add(ModBlocks.HAMPER);
 
+                        entries.add(ModItems.SANDWICH);
+                        entries.add(ModItems.HAM_AND_EGGS);
+                        entries.add(ModItems.CHOWDER);
+                        entries.add(ModItems.EGG_SCRAMBLED_RAW);
+                        entries.add(ModItems.EGG_SCRAMBLED_COOKED);
+                        entries.add(ModItems.MUSHROOM_OMELETTE_RAW);
+                        entries.add(ModItems.MUSHROOM_OMELETTE_COOKED);
+                        entries.add(ModItems.STEAK_AND_POTATOES);
+                        entries.add(ModItems.RAW_KEBAB);
+                        entries.add(ModItems.COOKED_KEBAB);
+                        entries.add(ModItems.STEAK_DINNER);
+                        entries.add(ModItems.PORK_DINNER);
+                        entries.add(ModItems.WOLF_DINNER);
+                        entries.add(ModItems.CHICKEN_SOUP);
+                        entries.add(ModItems.HEARTY_STEW);
+
                         // TO ADD:
                         //entries.add(ModBlocks.SMOKER_BRICK);
 

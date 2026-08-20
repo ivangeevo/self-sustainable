@@ -69,6 +69,9 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
 
         // Progressive Crafting Recipes
         this.createProgressiveCrafting(exporter);
+
+        // Food recipes
+        this.registerFoodRecipes(exporter);
     }
 
     private void generateVanillaRecipesOverride(RecipeExporter exporter) {
@@ -106,7 +109,7 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
                 .input('S', Items.STICK)
                 .pattern("SS")
                 .pattern("SS")
-                .criterion("has_stick", RecipeProvider.conditionsFromItem(Items.STICK))
+                .criterion("has_stick", conditionsFromItem(Items.STICK))
                 .showNotification(true)
                 .offerTo(exporter, IdUtils.ofMC("campfire"));
 
@@ -150,6 +153,34 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
         disableVanilla(exporter, "cooked_salmon" + fs);
         disableVanilla(exporter, "cooked_cod" + fs);
         disableVanilla(exporter, "baked_potato" + fs);
+    }
+
+    private void registerFoodRecipes(RecipeExporter exporter) {
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.EGG_SCRAMBLED_RAW,2).input(Items.EGG).input(Items.MILK_BUCKET).criterion("has_egg", conditionsFromItem(Items.EGG)).offerTo(exporter);
+        //createSmelting(Ingredient.ofItems(ModItems.EGG_SCRAMBLED_RAW), RecipeCategory.FOOD, ModItems.EGG_SCRAMBLED_COOKED, 0.2f, 200).criterion("has_egg", conditionsFromItem(Items.EGG)).offerTo(exporter);
+        //createCampfireCooking(Ingredient.ofItems(ModItems.EGG_SCRAMBLED_RAW), RecipeCategory.FOOD, ModItems.EGG_SCRAMBLED_COOKED, 0.30f, 600).criterion("has_egg", conditionsFromItem(Items.EGG)).offerTo(exporter, Identifier.ofVanilla("egg_scrambled_cooked_from_campfire_cooking"));
+        //createSmoking(Ingredient.ofItems(ModItems.EGG_SCRAMBLED_RAW), RecipeCategory.FOOD, ModItems.EGG_SCRAMBLED_COOKED, 0.30f, 100).criterion("has_egg", conditionsFromItem(Items.EGG)).offerTo(exporter, Identifier.ofVanilla("egg_scrambled_cooked_from_smoking"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.MUSHROOM_OMELETTE_RAW,2).input('E', Items.EGG).input('M', Items.BROWN_MUSHROOM).pattern("EM").pattern("MM").criterion("has_brown_mushroom", conditionsFromItem(Items.BROWN_MUSHROOM)).offerTo(exporter);
+        //createSmelting(Ingredient.ofItems(ModItems.MUSHROOM_OMELETTE_RAW), RecipeCategory.FOOD, ModItems.MUSHROOM_OMELETTE_COOKED, 0.2f, 200).criterion("has_raw_omelette", conditionsFromItem(ModItems.MUSHROOM_OMELETTE_RAW)).offerTo(exporter);
+        //createCampfireCooking(Ingredient.ofItems(ModItems.MUSHROOM_OMELETTE_RAW), RecipeCategory.FOOD, ModItems.MUSHROOM_OMELETTE_COOKED, 0.30f, 600).criterion("has_raw_omelette", conditionsFromItem(ModItems.MUSHROOM_OMELETTE_RAW)).offerTo(exporter, Identifier.ofVanilla("mushroom_omelette_cooked_from_campfire_cooking"));
+        //createSmoking(Ingredient.ofItems(ModItems.MUSHROOM_OMELETTE_RAW), RecipeCategory.FOOD, ModItems.MUSHROOM_OMELETTE_COOKED, 0.30f, 100).criterion("has_raw_omelette", conditionsFromItem(ModItems.MUSHROOM_OMELETTE_RAW)).offerTo(exporter, Identifier.ofVanilla("mushroom_omelette_cooked_from_smoking"));
+
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.SANDWICH,2).input(Items.BREAD).input(BTWRConventionalTags.Items.COOKED_MEATS_FOR_SANDWICH).criterion("has_bread", conditionsFromItem(Items.BREAD)).offerTo(exporter);
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.HAM_AND_EGGS,2).input(Items.COOKED_PORKCHOP).input(BTWRConventionalTags.Items.COOKED_EGG_FOODS).criterion("has_cooked_egg", RecipeProvider.conditionsFromTag(BTWRConventionalTags.Items.COOKED_EGG_FOODS)).offerTo(exporter);
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.STEAK_AND_POTATOES,2).input(Items.COOKED_BEEF).input(BTWRConventionalTags.Items.COOKED_POTATO_FOODS).criterion("has_cooked_potato", RecipeProvider.conditionsFromTag(BTWRConventionalTags.Items.COOKED_POTATO_FOODS)).offerTo(exporter);
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.CHOWDER).input(ConventionalItemTags.COOKED_FISH_FOODS).input(Items.MILK_BUCKET).input(Items.BOWL).criterion("has_cooked_potato", RecipeProvider.conditionsFromTag(BTWRConventionalTags.Items.COOKED_POTATO_FOODS)).offerTo(exporter);
+
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.RAW_KEBAB,3).input(Items.CARROT).input(Items.BROWN_MUSHROOM).input(Items.MUTTON).input(Items.STICK).criterion("has_carrot", conditionsFromItem(Items.CARROT)).offerTo(exporter);
+        //createSmelting(Ingredient.ofItems(ModItems.RAW_KEBAB), RecipeCategory.FOOD, ModItems.COOKED_KEBAB, 0.30f, 200).criterion("has_raw_kebab", conditionsFromItem(ModItems.RAW_KEBAB)).offerTo(exporter);
+        //createSmoking(Ingredient.ofItems(ModItems.RAW_KEBAB), RecipeCategory.FOOD, ModItems.COOKED_KEBAB, 0.40f, 100).criterion("has_raw_kebab", conditionsFromItem(ModItems.RAW_KEBAB)).offerTo(exporter, Identifier.ofVanilla("cooked_kebab_from_smoking"));
+
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.STEAK_DINNER,3).input(Items.COOKED_BEEF).input(BTWRConventionalTags.Items.COOKED_POTATO_FOODS).input(Items.CARROT).criterion("has_carrot", conditionsFromItem(Items.CARROT)).offerTo(exporter);
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.PORK_DINNER,3).input(Items.COOKED_PORKCHOP).input(BTWRConventionalTags.Items.COOKED_POTATO_FOODS).input(Items.CARROT).criterion("has_carrot", conditionsFromItem(Items.CARROT)).offerTo(exporter);
+        //ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.WOLF_DINNER,3).input(BwtItems.cookedWolfChopItem).input(BTWRConventionalTags.Items.COOKED_POTATO_FOODS).input(Items.CARROT).criterion("has_carrot", conditionsFromItem(Items.CARROT)).offerTo(exporter);
+
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.CHICKEN_SOUP,1).input(Items.COOKED_CHICKEN).input(Items.CARROT).input(Items.BAKED_POTATO).input(Items.BOWL).criterion("has_baked_potato", conditionsFromItem(Items.BAKED_POTATO)).offerTo(exporter);
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.HEARTY_STEW,1).input(ConventionalItemTags.COOKED_MEAT_FOODS).input(Items.CARROT).input(Items.BAKED_POTATO).input(Items.BROWN_MUSHROOM).input(Items.BOWL).criterion("has_carrot", conditionsFromItem(Items.CARROT)).offerTo(exporter);
     }
 
     private void moddedShaped(RecipeExporter exporter) {
@@ -302,22 +333,25 @@ public class SelfSustainableRecipeProvider extends FabricRecipeProvider implemen
 
     private void createOvenCooking(RecipeExporter exporter) {
         // Food
-        offerOvenCooking(Items.BAKED_POTATO, RecipeCategory.FOOD, Ingredient.ofItems(Items.POTATO), 0.25f, 1600).criterion("has_potato", RecipeProvider.conditionsFromItem(Items.POTATO)).offerTo(exporter, Identifier.of("self_sustainable", "baked_potato" + foc));
-        offerOvenCooking(Items.COOKED_CHICKEN, RecipeCategory.FOOD, Ingredient.ofItems(Items.CHICKEN), 0.15f, 1600).criterion("has_chicken", RecipeProvider.conditionsFromItem(Items.CHICKEN)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_chicken" + foc));
-        offerOvenCooking(Items.COOKED_BEEF, RecipeCategory.FOOD, Ingredient.ofItems(Items.BEEF), 0.15f, 1600).criterion("has_beef", RecipeProvider.conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_beef" + foc));
-        offerOvenCooking(Items.COOKED_PORKCHOP, RecipeCategory.FOOD, Ingredient.ofItems(Items.PORKCHOP), 0.15f, 1600).criterion("has_porkchop", RecipeProvider.conditionsFromItem(Items.PORKCHOP)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_porkchop" + foc));
-        offerOvenCooking(Items.COOKED_MUTTON, RecipeCategory.FOOD, Ingredient.ofItems(Items.MUTTON), 0.15f, 1600).criterion("has_mutton", RecipeProvider.conditionsFromItem(Items.MUTTON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_mutton" + foc));
-        offerOvenCooking(Items.COOKED_RABBIT, RecipeCategory.FOOD, Ingredient.ofItems(Items.RABBIT), 0.10f, 1600).criterion("has_rabbit", RecipeProvider.conditionsFromItem(Items.RABBIT)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_rabbit" + foc));
-        offerOvenCooking(Items.COOKED_COD, RecipeCategory.FOOD, Ingredient.ofItems(Items.COD), 0.10f, 1600).criterion("has_cod", RecipeProvider.conditionsFromItem(Items.COD)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_cod" + foc));
-        offerOvenCooking(Items.COOKED_SALMON, RecipeCategory.FOOD, Ingredient.ofItems(Items.SALMON), 0.10f, 1600).criterion("has_salmon", RecipeProvider.conditionsFromItem(Items.SALMON)).offerTo(exporter, Identifier.of("self_sustainable", "cooked_salmon" + foc));
+        offerOvenCooking(Items.BAKED_POTATO, RecipeCategory.FOOD, Ingredient.ofItems(Items.POTATO), 0.25f, 1600).criterion(hasItem(Items.POTATO), conditionsFromItem(Items.POTATO)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "baked_potato" + foc));
+        offerOvenCooking(Items.COOKED_CHICKEN, RecipeCategory.FOOD, Ingredient.ofItems(Items.CHICKEN), 0.15f, 1600).criterion(hasItem(Items.CHICKEN), conditionsFromItem(Items.CHICKEN)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "cooked_chicken" + foc));
+        offerOvenCooking(Items.COOKED_BEEF, RecipeCategory.FOOD, Ingredient.ofItems(Items.BEEF), 0.15f, 1600).criterion(hasItem(Items.BEEF), conditionsFromItem(Items.BEEF)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "cooked_beef" + foc));
+        offerOvenCooking(Items.COOKED_PORKCHOP, RecipeCategory.FOOD, Ingredient.ofItems(Items.PORKCHOP), 0.15f, 1600).criterion(hasItem(Items.PORKCHOP), conditionsFromItem(Items.PORKCHOP)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "cooked_porkchop" + foc));
+        offerOvenCooking(Items.COOKED_MUTTON, RecipeCategory.FOOD, Ingredient.ofItems(Items.MUTTON), 0.15f, 1600).criterion(hasItem(Items.MUTTON), conditionsFromItem(Items.MUTTON)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "cooked_mutton" + foc));
+        offerOvenCooking(Items.COOKED_RABBIT, RecipeCategory.FOOD, Ingredient.ofItems(Items.RABBIT), 0.10f, 1600).criterion(hasItem(Items.RABBIT), conditionsFromItem(Items.RABBIT)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "cooked_rabbit" + foc));
+        offerOvenCooking(Items.COOKED_COD, RecipeCategory.FOOD, Ingredient.ofItems(Items.COD), 0.10f, 1600).criterion(hasItem(Items.COD), conditionsFromItem(Items.COD)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "cooked_cod" + foc));
+        offerOvenCooking(Items.COOKED_SALMON, RecipeCategory.FOOD, Ingredient.ofItems(Items.SALMON), 0.10f, 1600).criterion(hasItem(Items.SALMON), conditionsFromItem(Items.SALMON)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "cooked_salmon" + foc));
+        offerOvenCooking(ModItems.EGG_SCRAMBLED_COOKED, RecipeCategory.FOOD, Ingredient.ofItems(ModItems.EGG_SCRAMBLED_RAW), 0.10f, 1600).criterion(hasItem(ModItems.EGG_SCRAMBLED_RAW), conditionsFromItem(ModItems.EGG_SCRAMBLED_RAW)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "egg_scrambled_cooked" + foc));
+        offerOvenCooking(ModItems.MUSHROOM_OMELETTE_COOKED, RecipeCategory.FOOD, Ingredient.ofItems(ModItems.MUSHROOM_OMELETTE_RAW), 0.10f, 1600).criterion(hasItem(ModItems.MUSHROOM_OMELETTE_RAW), conditionsFromItem(ModItems.MUSHROOM_OMELETTE_RAW)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "mushroom_omelette_cooked" + foc));
+        offerOvenCooking(ModItems.COOKED_KEBAB, RecipeCategory.FOOD, Ingredient.ofItems(ModItems.RAW_KEBAB), 0.10f, 1600).criterion(hasItem(ModItems.RAW_KEBAB), conditionsFromItem(ModItems.RAW_KEBAB)).offerTo(exporter, Identifier.of(SelfSustainableMod.MOD_ID, "cooked_kebab" + foc));
 
         // Ores
-        offerOvenCooking(Items.IRON_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_IRON), 0.25f, 12800).criterion("has_raw_iron", RecipeProvider.conditionsFromItem(Items.RAW_IRON)).offerTo(exporter, IdUtils.ofSS("iron_ingot" + foc));
-        offerOvenCooking(Items.GOLD_INGOT , RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_GOLD), 0.35f, 12800).criterion("has_raw_gold", RecipeProvider.conditionsFromItem(Items.RAW_GOLD)).offerTo(exporter, IdUtils.ofSS("gold_ingot" + foc));
-        offerOvenCooking(Items.COPPER_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_COPPER), 0.20f, 12800).criterion("has_raw_copper", RecipeProvider.conditionsFromItem(Items.RAW_COPPER)).offerTo(exporter, IdUtils.ofSS("copper_ingot" + foc));
+        offerOvenCooking(Items.IRON_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_IRON), 0.25f, 12800).criterion("has_raw_iron", conditionsFromItem(Items.RAW_IRON)).offerTo(exporter, IdUtils.ofSS("iron_ingot" + foc));
+        offerOvenCooking(Items.GOLD_INGOT , RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_GOLD), 0.35f, 12800).criterion("has_raw_gold", conditionsFromItem(Items.RAW_GOLD)).offerTo(exporter, IdUtils.ofSS("gold_ingot" + foc));
+        offerOvenCooking(Items.COPPER_INGOT, RecipeCategory.MISC, Ingredient.ofItems(Items.RAW_COPPER), 0.20f, 12800).criterion("has_raw_copper", conditionsFromItem(Items.RAW_COPPER)).offerTo(exporter, IdUtils.ofSS("copper_ingot" + foc));
 
         // Other
-        offerOvenCooking(Items.BRICK, RecipeCategory.MISC, Ingredient.ofItems(ModItems.BRICK_UNFIRED), 0.10f, 6000).criterion("has_brick_unfired", RecipeProvider.conditionsFromItem(ModItems.BRICK_UNFIRED)).offerTo(exporter, IdUtils.ofSS("brick") + foc);
+        offerOvenCooking(Items.BRICK, RecipeCategory.MISC, Ingredient.ofItems(ModItems.BRICK_UNFIRED), 0.10f, 6000).criterion("has_brick_unfired", conditionsFromItem(ModItems.BRICK_UNFIRED)).offerTo(exporter, IdUtils.ofSS("brick") + foc);
     }
 
     private void generateWoolArmorRecipes(RecipeExporter exporter) {

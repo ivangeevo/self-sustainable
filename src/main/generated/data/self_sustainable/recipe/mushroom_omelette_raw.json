@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:egg"
+    },
+    "M": {
+      "item": "minecraft:brown_mushroom"
+    }
+  },
+  "pattern": [
+    "EM",
+    "MM"
+  ],
+  "result": {
+    "count": 2,
+    "id": "self_sustainable:mushroom_omelette_raw"
+  }
+}

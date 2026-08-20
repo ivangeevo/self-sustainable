@@ -1,0 +1,13 @@
+{
+  "type": "self_sustainable:oven_cooking",
+  "category": "food",
+  "cookingTime": 1600,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "self_sustainable:egg_scrambled_raw"
+  },
+  "result": {
+    "count": 1,
+    "id": "self_sustainable:egg_scrambled_cooked"
+  }
+}

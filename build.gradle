@@ -55,11 +55,11 @@ dependencies {
     //modImplementation files("libs/btwr-shared-library-${project.btwr_sl_version}.jar")
 
     // Tough Environment
-    modImplementation "maven.modrinth:tough-environment:${project.tough_environment_version}"
-    //modImplementation files("libs/tough_environment-${project.tough_environment_version}-1.21.1.jar")
+    modCompileOnly "maven.modrinth:tough-environment:${project.tough_environment_version}"
+    //modCompileOnly files("libs/tough_environment-${project.tough_environment_version}-1.21.1.jar")
 
     // Better With Time
-    //modCompileOnly "maven.modrinth:better-with-time:${project.bwt_version}"
+    modCompileOnly "maven.modrinth:better-with-time:${project.bwt_version}"
 
     // BTWR: Core
     modCompileOnly "maven.modrinth:btwr-core:${project.btwr_core_version}"

@@ -100,6 +100,12 @@ public class SelfSustainableItemTagProvider extends FabricTagProvider.ItemTagPro
             getOrCreateTagBuilder(ModTags.Items.WOOL_KNIT_ITEMS)
                     .add(item);
         }
+
+        getOrCreateTagBuilder(ModTags.Items.AXES_CAN_HARVEST_CHEST)
+                .add(Items.IRON_AXE)
+                .add(Items.DIAMOND_AXE)
+                .add(Items.NETHERITE_AXE)
+                .addOptionalTag(Identifier.of("bwt", "battle_axe"));
     }
 
 }

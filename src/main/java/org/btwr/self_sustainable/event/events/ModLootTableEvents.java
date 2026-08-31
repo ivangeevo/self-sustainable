@@ -1,29 +1,27 @@
 package org.btwr.self_sustainable.event.events;
 
+import com.bwt.items.BwtItems;
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
-import net.minecraft.loot.condition.AnyOfLootCondition;
 import net.minecraft.loot.condition.InvertedLootCondition;
 import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.condition.MatchToolLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
-import org.btwr.shared_library.api.tag.BTWRConventionalTags;
+import org.btwr.self_sustainable.loot.StrongChestAxeLootCondition;
 import org.btwr.shared_library.mixin.accessors.ItemEntryAccessor;
 import org.btwr.shared_library.mixin.accessors.LootPoolBuilderAccessor;
 import org.btwr.shared_library.util.utils.IdUtils;
@@ -69,9 +67,6 @@ public class ModLootTableEvents {
         });
     }
 
-
-
-    // Doesn't seem to work properly
     private static LootTable replaceChestLootTable(RegistryKey<LootTable> key, LootTable original, LootTableSource source, RegistryWrapper.WrapperLookup registries) {
         //if (!source.isBuiltin()) {
         if (Blocks.CHEST.getLootTableKey().equals(key)) {
@@ -82,13 +77,14 @@ public class ModLootTableEvents {
                     .conditionally(withStrongAxe())
             );
 
-            /**
-            newTable.pool(LootPool.builder()
-                    .with(ItemEntry.builder(BwtItems.sawDustItem)
-                            .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(6))))
-                    .conditionally(withoutStrongAxe())
-            );
-             **/
+            // Add a saw dust drop if Better With Time is present
+            if (FabricLoader.getInstance().isModLoaded("bwt")) {
+                 newTable.pool(LootPool.builder()
+                 .with(ItemEntry.builder(BwtItems.sawDustItem)
+                 .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(6))))
+                 .conditionally(withoutStrongAxe())
+                 );
+            }
 
             newTable.pool(LootPool.builder()
                     .with(ItemEntry.builder(Items.STICK)
@@ -103,17 +99,11 @@ public class ModLootTableEvents {
     }
 
     private static LootCondition.Builder withStrongAxe() {
-        return AnyOfLootCondition.builder(
-                MatchToolLootCondition.builder(
-                        ItemPredicate.Builder.create().tag(BTWRConventionalTags.Items.MODERN_AXES)
-                ),
-                MatchToolLootCondition.builder(
-                        ItemPredicate.Builder.create().tag(BTWRConventionalTags.Items.ADVANCED_AXES)
-                )
-        );
+        return StrongChestAxeLootCondition.builder();
     }
 
     private static LootCondition.Builder withoutStrongAxe() {
         return InvertedLootCondition.builder(withStrongAxe());
     }
+
 }

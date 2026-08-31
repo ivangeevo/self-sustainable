@@ -29,6 +29,7 @@ public class ModSoundEvents {
     public static final SoundEvent HAMPER_OPEN = register("hamper_open");
     public static final SoundEvent HAMPER_CLOSE = register("hamper_close");
     public static final SoundEvent STEP_ON_WET_BRICK = register("step_on_wet_brick");
+    public static final SoundEvent WOODEN_CHEST_INCORRECT_BREAK = register("wooden_chest_incorrect_break");
 
     private static SoundEvent register(String name) {
         Identifier id = IdUtils.ofSS(name);

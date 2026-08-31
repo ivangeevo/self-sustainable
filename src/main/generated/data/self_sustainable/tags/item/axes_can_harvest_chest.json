@@ -1,0 +1,11 @@
+{
+  "values": [
+    "minecraft:iron_axe",
+    "minecraft:diamond_axe",
+    "minecraft:netherite_axe",
+    {
+      "id": "#bwt:battle_axe",
+      "required": false
+    }
+  ]
+}

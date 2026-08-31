@@ -196,5 +196,14 @@
         "type": "event"
       }
     ]
+  },
+  "wooden_chest_incorrect_break": {
+    "subtitle": "subtitles.self_sustainable.wooden_chest_incorrect_break",
+    "sounds": [
+      {
+        "name": "minecraft:entity.zombie.break_wooden_door",
+        "type": "event"
+      }
+    ]
   }
 }

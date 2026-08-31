@@ -56,6 +56,8 @@ public class ModTags {
         // for the BTWR modpack so that we can change it to the Tough Environment's wooden chisel
         public static final TagKey<Item> CAMPFIRE_SPITS = createTag("campfire_spits");
 
+        public static final TagKey<Item> AXES_CAN_HARVEST_CHEST = createTag("axes_can_harvest_chest");
+
         private static TagKey<Item> createTag (String name) {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(SelfSustainableMod.MOD_ID, name));
         }

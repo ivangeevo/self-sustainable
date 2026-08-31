@@ -121,6 +121,7 @@ public class SelfSustainableLangProvider extends FabricLanguageProvider {
         tb.add("subtitles.self_sustainable.hamper_open", "Hamper opens");
         tb.add("subtitles.self_sustainable.hamper_close", "Hamper closes");
         tb.add("subtitles.self_sustainable.step_on_wet_brick", "Wet Brick breaks");
+        tb.add("subtitles.self_sustainable.wooden_chest_incorrect_break", "Wooden chest shatters");
     }
 
     private void addTagTranslations(TranslationBuilder tb) {

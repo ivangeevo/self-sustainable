@@ -7,6 +7,7 @@ import org.btwr.self_sustainable.event.ModEvents;
 import org.btwr.self_sustainable.item.ModItems;
 import org.btwr.self_sustainable.item.component.FoodComponentModifier;
 import org.btwr.self_sustainable.item.component.ModComponentsTypes;
+import org.btwr.self_sustainable.loot.ModLootConditionTypes;
 import org.btwr.self_sustainable.network.SyncWickerBasketS2C;
 import org.btwr.self_sustainable.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
@@ -35,6 +36,7 @@ public class SelfSustainableMod implements ModInitializer {
         ModBlockEntities.register();
         ModComponentsTypes.register();
         ModItemGroup.register();
+        ModLootConditionTypes.initialize();
         ModEvents.register();
 
         ModRecipes.register();

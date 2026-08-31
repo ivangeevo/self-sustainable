@@ -59,7 +59,7 @@ dependencies {
     //modImplementation files("libs/tough_environment-${project.tough_environment_version}-1.21.1.jar")
 
     // Better With Time
-    modCompileOnly "maven.modrinth:better-with-time:${project.bwt_version}"
+    //modCompileOnly "maven.modrinth:better-with-time:${project.bwt_version}"
 
     // BTWR: Core
     modCompileOnly "maven.modrinth:btwr-core:${project.btwr_core_version}"

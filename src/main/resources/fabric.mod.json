@@ -4,12 +4,8 @@
   "version":"${version}",
   "name":"Self Sustainable",
   "description":"Real survival, scarcity, very rewarding. Are you ready?",
-  "authors":[
-    "ivangeevo"
-  ],
-  "contact":{
-    "repo":"https://github.com/ivangeevo/self-sustainable"
-  },
+  "authors":["ivangeevo"],
+  "contact":{"repo":"https://github.com/ivangeevo/self-sustainable"},
   "license":"CC-BY 4.0",
   "icon":"assets/self_sustainable/icon.png",
   "environment":"*",

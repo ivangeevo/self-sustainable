@@ -15,18 +15,14 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.btwr.self_sustainable.block.blocks.AbstractBasketBlock;
-import org.btwr.self_sustainable.block.blocks.HamperBlock;
-import org.btwr.self_sustainable.block.blocks.WickerBasketBlock;
 import org.btwr.self_sustainable.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +33,7 @@ import static net.minecraft.state.property.Properties.OPEN;
 
 public class HamperBE extends LootableContainerBlockEntity implements TickableBlockEntity {
 
-    private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(18, ItemStack.EMPTY);
+    private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
 
     protected float animationAngle, lastAnimationAngle;
 

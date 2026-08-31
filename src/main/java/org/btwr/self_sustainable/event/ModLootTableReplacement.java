@@ -6,25 +6,15 @@ import net.minecraft.data.server.loottable.BlockLootTableGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
-import net.minecraft.loot.condition.*;
-import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.util.Identifier;
-import org.btwr.shared_library.api.tag.BTWRConventionalTags;
 
 import java.util.List;
 import java.util.Set;
 
 public abstract class ModLootTableReplacement extends BlockLootTableGenerator {
-
-    // Condition for MODERN_AXES or ADVANCED_AXES tag check
-    private static final LootCondition.Builder WITH_STRONG_AXE = MatchToolLootCondition.builder(
-            ItemPredicate.Builder.create()
-                    .tag(BTWRConventionalTags.Items.MODERN_AXES)
-                    .tag(BTWRConventionalTags.Items.ADVANCED_AXES)
-    );
 
     private static final List<Identifier> planks = List.of(
             Identifier.ofVanilla("oak_planks"),
@@ -47,7 +37,6 @@ public abstract class ModLootTableReplacement extends BlockLootTableGenerator {
 
     // Method to replace planks' loot tables with a tool-based condition using AlternativeEntry.builder
     public static void replacePlanksWithToolCondition() {
-
         LootTableEvents.REPLACE.register((key, original, source, registries) -> {
             if (source.isBuiltin()) {
                 for (Identifier blockId : planks) {
@@ -55,7 +44,6 @@ public abstract class ModLootTableReplacement extends BlockLootTableGenerator {
 
                     if (blockToModify.getLootTableKey().equals(key)) {
                         LootTable.Builder newTable = LootTable.builder();
-
 
                         // Add the alternative entry to the loot table
                         newTable.pool(LootPool.builder());

@@ -45,7 +45,6 @@ public class ModUseBlockEvents {
 
         // Flint and steel modification as a firestarter
         UseBlockCallback.EVENT.register(ModUseBlockEvents::onUseFlintAndSteel);
-
     }
 
     private static ActionResult onUseCampfire(PlayerEntity player, World world, Hand hand, BlockHitResult hit) {

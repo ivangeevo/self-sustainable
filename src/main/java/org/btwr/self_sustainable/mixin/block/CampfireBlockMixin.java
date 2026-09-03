@@ -213,9 +213,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     private void injectedOnEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci)
     {
-        boolean canBurn = state.get(FIRE_LEVEL) > 1;
+        boolean canBurnLiving = state.get(FIRE_LEVEL) > 1;
 
-        if (canBurn && entity instanceof LivingEntity) {
+        if (canBurnLiving && entity instanceof LivingEntity) {
             entity.damage(world.getDamageSources().inFire(), this.fireDamage);
         }
 
@@ -231,8 +231,14 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                     if (state.get(FUEL_STATE) == CampfireState.BURNED_OUT) {
                         return;
                     }
-                    this.fuels = Ingredient.ofStacks(this.getAllowedFuels().stream().filter(item -> item.isEnabled(world.getEnabledFeatures())).map(ItemStack::new));
 
+                    this.fuels = Ingredient.ofStacks(
+                            AbstractFurnaceBlockEntity.createFuelTimeMap()
+                                    .keySet()
+                                    .stream()
+                                    .filter(item -> item.isEnabled(world.getEnabledFeatures()))
+                                    .map(ItemStack::new)
+                    );
 
                     // fuel items can burn at fuel level 1(or higher) or smouldering
                     if (this.fuels.test(stack)) {
@@ -247,17 +253,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
                                     world.random.nextFloat() * 0.25F + 1.25F
                             );
                         }
-                        // all other items burn at fuel level higher than 1
-                    }
-                    else if (state.get(FIRE_LEVEL) > 1) {
+                        // all other items burn at fuel level higher than 2
+                    } else if (state.get(FIRE_LEVEL) > 2) {
                         stack.decrement(stack.getCount());
-                        world.playSound(
-                                null,
-                                BlockPos.ofFloored(pos.toCenterPos()),
-                                ModSoundEvents.CAMPFIRE_IGNITE, SoundCategory.BLOCKS,
-                                0.2F + world.random.nextFloat() * 0.1F,
-                                world.random.nextFloat() * 0.25F + 1.25F
-                        );
                     }
                 }
             }
@@ -266,15 +264,6 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
 
         super.onEntityCollision(state, world, pos, entity);
         ci.cancel();
-    }
-
-    private boolean canItemAddToFuelTime(World world, BlockState state, ItemStack stack) {
-        // if thrown item is in the fuel time map and also if the campfire is in an appropriate state to accept fuel items
-        return this.fuels.test(stack) && (state.get(FIRE_LEVEL) > 0 || state.get(FUEL_STATE) == CampfireState.SMOULDERING);
-    }
-
-    protected Set<Item> getAllowedFuels() {
-        return AbstractFurnaceBlockEntity.createFuelTimeMap().keySet();
     }
 
     // Making it randomly display only if the FIRE Level is more than 0, instead of the LIT property.
@@ -499,4 +488,8 @@ public abstract class CampfireBlockMixin extends BlockWithEntity implements Igni
         }
     }
 
+    @Override
+    public boolean btwr$getCanBlockLightItemOnFire(WorldAccess world, BlockPos pos) {
+        return world.getBlockState(pos).get(FIRE_LEVEL) > 1;
+    }
 }

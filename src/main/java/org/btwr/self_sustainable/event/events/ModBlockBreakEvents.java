@@ -25,9 +25,7 @@ public class ModBlockBreakEvents {
 
         if (!state.isIn(ConventionalBlockTags.WOODEN_CHESTS)) return;
 
-        boolean isStrongEnough = isChestHarvestingAxe(player);
-
-        if (!isStrongEnough && !player.getAbilities().creativeMode) {
+        if (!isChestHarvestingAxe(player) && !player.getAbilities().creativeMode) {
             world.playSound(
                     null,
                     pos,

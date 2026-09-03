@@ -1,4 +1,14 @@
 ## v???(dev)
++ Added new food combinations (moved them from BTWR: Core) as it makes more sense for them to be in this mod as it changes food values
++ Added being able to craft ham and eggs with cooked scrambled eggs. This is a workaround which allows Ham and Eggs to be a valid recipe, which only normally requires cooked eggs from the Better With Time mod.
++ Added a new mod item tag for axes which can fully harvest wooden chests. This ties in with the change below for wooden chests
++ Added the ability for campfires to spread fire around them in the same way they do in BTW
++ Changed wooden chests to not drop the full block without the proper tool. They can now only be collected with an iron axe or above (excluding golden axes)
++ Fixed campfire burning non-fuel items on its middle flame setting. Now it will only burn them when on high flame
++ Fixed campfire making a sound when non-fuel items burn
++ Fixed campfire not extinguishing when rained on
++ Updated the LICENSE file in the source code to show the correct license
++ Updated the mod to Fabric Loader 0.19.5
 
 ## v0.6
 ### Warning, this is a game breaking update. Proceed with caution!

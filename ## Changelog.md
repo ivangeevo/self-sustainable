@@ -4,6 +4,8 @@
 + Added a new mod item tag for axes which can fully harvest wooden chests. This ties in with the change below for wooden chests
 + Added the ability for campfires to spread fire around them in the same way they do in BTW
 + Changed wooden chests to not drop the full block without the proper tool. They can now only be collected with an iron axe or above (excluding golden axes)
++ Fixed cooked salmon and cooked cod giving only one shank when eaten instead of two
++ Fixed oven fuel insertion sound while lit being too high pitch
 + Fixed campfire burning non-fuel items on its middle flame setting. Now it will only burn them when on high flame
 + Fixed campfire making a sound when non-fuel items burn
 + Fixed campfire not extinguishing when rained on
@@ -31,12 +33,12 @@
   + Fixed wet brick block to only break when an entity collides on the exact shape of the block instead of when entering the full shape of the block space it's standing on
   + Fixed/added proper sound event for the wet brick when it breaks from being stepped on
   + Fixed double healing which happened when using Self Sustainable and Granular Hunger together
-  + Updated the mod to Fabric Loader 0.116.15, Fabric Loader 0.19.3 & BTWR: Shared Library 0.8.5
+  + Updated the mod to Fabric API 0.116.15, Fabric Loader 0.19.3 & BTWR: Shared Library 0.8.5
 
 ## v0.5.3
 + Added LambDynamicLights compatibility for the crude torch items
 + Changed the bow drill to be craftable with other string items from the Fabric conventional "strings" item tag instead of just string
-+ Updated the mod to Fabric Loader 0.116.11, Fabric Loader 0.19.2 & BTWR: Shared Library 0.8.4
++ Updated the mod to Fabric API 0.116.11, Fabric Loader 0.19.2 & BTWR: Shared Library 0.8.4
 
 ## v0.5.2
 + Fixed crafting the knitting item causing a dupe of the ingredients

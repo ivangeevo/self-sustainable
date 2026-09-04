@@ -187,8 +187,8 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
                                     pos,
                                     ModSoundEvents.OVEN_INSERT_FUEL_ACTIVE,
                                     SoundCategory.BLOCKS,
-                                    0.25f,
-                                    ((world.random.nextFloat() - world.random.nextFloat()) * 0.7f + 1.0f) * 2.0f
+                                    0.2f + world.random.nextFloat() * 0.1f,
+                                    world.random.nextFloat() * 0.25f + 1.25f
                             );
                         } else {
                             world.playSound(

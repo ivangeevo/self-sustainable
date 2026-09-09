@@ -62,13 +62,17 @@ dependencies {
     modCompileOnly "maven.modrinth:better-with-time:${project.bwt_version}"
 
     // BTWR: Core
-    modCompileOnly "maven.modrinth:btwr-core:${project.btwr_core_version}"
+    //modCompileOnly "maven.modrinth:btwr-core:${project.btwr_core_version}"
+    modCompileOnly files("libs/btwr-core-${project.btwr_core_version}-1.21.1.jar")
 
     // Vegehenna
     modCompileOnly "maven.modrinth:vegehenna:${project.vegehenna_version}"
 
     // Granular Hunger
     modCompileOnly "maven.modrinth:granular-hunger:${project.granular_hunger_version}"
+
+    // Creeper Shearing
+    modCompileOnly "maven.modrinth:creeper-shearing:${project.creeper_shearing_version}-Fabric"
 
     // The API of LambDynamicLights.
     // This is only required for compilation if you're using the Java API.

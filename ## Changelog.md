@@ -4,6 +4,7 @@
 + Added a new mod item tag for axes which can fully harvest wooden chests. This ties in with the change below for wooden chests
 + Added the ability for campfires to spread fire around them in the same way they do in BTW
 + Changed wooden chests to not drop the full block without the proper tool. They can now only be collected with an iron axe or above (excluding golden axes)
++ Fixed inserting an item in the brick oven causing the game to crash when Tough Environment is not present
 + Fixed cooked salmon and cooked cod giving only one shank when eaten instead of two
 + Fixed oven fuel insertion sound while lit being too high pitch
 + Fixed campfire burning non-fuel items on its middle flame setting. Now it will only burn them when on high flame

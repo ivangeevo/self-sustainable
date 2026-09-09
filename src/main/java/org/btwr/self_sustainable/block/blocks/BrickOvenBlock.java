@@ -3,8 +3,10 @@ package org.btwr.self_sustainable.block.blocks;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.*;
@@ -76,10 +78,21 @@ public class BrickOvenBlock extends BlockWithEntity implements IgnitableBlock {
     }
 
     @Override
-    public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world,
-                                          BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        TagKey<Item> mortaringItems = org.btwr.tough_environment.tag.ModTags.Items.MORTARING_ITEMS;
-        if ((stack.isIn(mortaringItems) || stack.isOf(Items.CLAY_BALL)) && !isMortared()) {
+    public ItemActionResult onUseWithItem(
+            ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit
+    ) {
+        TagKey<Item> mortaringItems = null;
+
+        boolean toughEnvLoaded = false;
+
+        if (FabricLoader.getInstance().isModLoaded("tough_environment")) {
+            toughEnvLoaded = true;
+            mortaringItems = TagKey.of(RegistryKeys.ITEM, Identifier.of("tough_environment", "mortaring_items"));
+        }
+
+        boolean canTEMortar = toughEnvLoaded && (mortaringItems != null && stack.isIn(mortaringItems));
+
+        if (canTEMortar || (stack.isOf(Items.CLAY_BALL) && !isMortared())) {
             BlockState mortaredState = ModBlocks.OVEN_BRICK_MORTARED.getDefaultState()
                     .with(LIT, state.get(LIT))
                     .with(FUEL_LEVEL, state.get(FUEL_LEVEL))

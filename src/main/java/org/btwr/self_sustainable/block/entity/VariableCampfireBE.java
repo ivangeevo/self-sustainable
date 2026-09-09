@@ -193,6 +193,28 @@ public class VariableCampfireBE extends BlockEntity implements Clearable {
                     }
                 }
 
+                // Disabled because I still can't seem to match proper fuel values for fuel items
+                // and meat pretty much always burns when adding another fuel after it dies down to level 1
+                // Otherwise this section works as intended
+                /**
+                // Burn the cook stack if Animageddon is loaded
+                if (FabricLoader.getInstance().isModLoaded("animageddon")) {
+                    Item burnedMeatItem = Registries.ITEM.get(Identifier.of("animageddon", "burned_meat"));
+
+                    if (state.get(FIRE_LEVEL) >= 3 && !itemStack.isOf(burnedMeatItem)) {
+                        campfireBE.cookBurningCounter++;
+                        int timeToBurnFood = campfireBE.getTotalCookTime() / 2;
+
+                        if (campfireBE.burnTimeCountdown >= timeToBurnFood) {
+                            campfireBE.itemsBeingCooked.set(0, new ItemStack(burnedMeatItem));
+
+                            campfireBE.cookCounter = 0;
+                            campfireBE.cookBurningCounter = 0;
+                        }
+                    }
+                }
+                 **/
+
                 if (bl) {
                     markDirty(world, pos, state);
                 }

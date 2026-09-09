@@ -152,8 +152,7 @@ public class ModUseBlockEvents {
                     if (state.get(FIRE_LEVEL) > 0 || state.get(FUEL_STATE) == CampfireState.SMOULDERING) {
                         int itemBurnTime = 0;
                         if (!heldStack.isEmpty()) {
-                            itemBurnTime = AbstractFurnaceBlockEntity.createFuelTimeMap()
-                                    .getOrDefault(heldStack.getItem(), 0);
+                            itemBurnTime = getItemFuelValue(heldStack);
                         }
 
                         // Disallow using log blocks as fuel (this doesn't disallow normal block placing while right-clicking on it though)
@@ -251,4 +250,11 @@ public class ModUseBlockEvents {
 
         return false;
     }
+
+    // The divider by two was added because I was testing how to fix wrong fuel values for campfire.
+    // I was told that campfires are / 2 of ovens, but couldn't find any proof in BTW code
+    private static int getItemFuelValue(ItemStack stack) {
+      return AbstractFurnaceBlockEntity.createFuelTimeMap().getOrDefault(stack.getItem(), 0)/** / 2**/;
+    }
+
 }

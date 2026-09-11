@@ -7,13 +7,11 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import org.btwr.vegehenna.item.ModItems;
-
-import static org.btwr.core.item.ModItems.BEAST_LIVER_COOKED;
-import static org.btwr.core.item.ModItems.BEAST_LIVER_RAW;
-import static org.btwr.creeper_shearing.item.ModItems.CREEPER_OYSTERS;
-import static org.btwr.self_sustainable.item.ModItems.*;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
+import org.btwr.self_sustainable.item.ModItems;
 
 public class FoodComponentModifier {
 
@@ -68,38 +66,36 @@ public class FoodComponentModifier {
         context.modify(Items.POISONOUS_POTATO, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addPoisonEffect(200, 1), 1.0F).build()));
         context.modify(Items.CHORUS_FRUIT, builder -> modifyEntry(builder, replaceWith(1).build()));
 
-        
-        context.modify(CHOWDER, builder -> modifyEntry(builder, replaceWith(5).build()));
-        context.modify(EGG_SCRAMBLED_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
-        context.modify(MUSHROOM_OMELETTE_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
-        context.modify(RAW_KEBAB, builder -> modifyEntry(builder, replaceWith(6).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
-        context.modify(EGG_SCRAMBLED_COOKED, builder -> modifyEntry(builder, replaceWith(4).build()));
-        context.modify(MUSHROOM_OMELETTE_COOKED, builder -> modifyEntry(builder, replaceWith(4).build()));
-        context.modify(SANDWICH, builder -> modifyEntry(builder, replaceWith(5).build()));
-        context.modify(HAM_AND_EGGS, builder -> modifyEntry(builder, replaceWith(6).build()));
-        context.modify(STEAK_AND_POTATOES, builder -> modifyEntry(builder, replaceWith(6).build()));
-        context.modify(COOKED_KEBAB, builder -> modifyEntry(builder, replaceWith(8).build()));
-        context.modify(STEAK_DINNER, builder -> modifyEntry(builder, replaceWith(8).build()));
-        context.modify(PORK_DINNER, builder -> modifyEntry(builder, replaceWith(8).build()));
-        context.modify(WOLF_DINNER, builder -> modifyEntry(builder, replaceWith(8).build()));
-        context.modify(CHICKEN_SOUP, builder -> modifyEntry(builder, replaceWith(8).build()));
-        context.modify(HEARTY_STEW, builder -> modifyEntry(builder, createStew(10).build()));
+        context.modify(ModItems.CHOWDER, builder -> modifyEntry(builder, replaceWith(5).build()));
+        context.modify(ModItems.EGG_SCRAMBLED_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+        context.modify(ModItems.MUSHROOM_OMELETTE_RAW, builder -> modifyEntry(builder, replaceWith(3).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+        context.modify(ModItems.RAW_KEBAB, builder -> modifyEntry(builder, replaceWith(6).statusEffect(addHungerEffect(600, 2), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+        context.modify(ModItems.EGG_SCRAMBLED_COOKED, builder -> modifyEntry(builder, replaceWith(4).build()));
+        context.modify(ModItems.MUSHROOM_OMELETTE_COOKED, builder -> modifyEntry(builder, replaceWith(4).build()));
+        context.modify(ModItems.SANDWICH, builder -> modifyEntry(builder, replaceWith(5).build()));
+        context.modify(ModItems.HAM_AND_EGGS, builder -> modifyEntry(builder, replaceWith(6).build()));
+        context.modify(ModItems.STEAK_AND_POTATOES, builder -> modifyEntry(builder, replaceWith(6).build()));
+        context.modify(ModItems.COOKED_KEBAB, builder -> modifyEntry(builder, replaceWith(8).build()));
+        context.modify(ModItems.STEAK_DINNER, builder -> modifyEntry(builder, replaceWith(8).build()));
+        context.modify(ModItems.PORK_DINNER, builder -> modifyEntry(builder, replaceWith(8).build()));
+        context.modify(ModItems.WOLF_DINNER, builder -> modifyEntry(builder, replaceWith(8).build()));
+        context.modify(ModItems.CHICKEN_SOUP, builder -> modifyEntry(builder, replaceWith(8).build()));
+        context.modify(ModItems.HEARTY_STEW, builder -> modifyEntry(builder, createStew(10).build()));
 
         if (FabricLoader.getInstance().isModLoaded("creeper_shearing")) {
-            context.modify(CREEPER_OYSTERS, builder -> modifyEntry(builder, replaceWith(1).statusEffect(addPoisonEffect(100, 0), 1.0F).build()));
+            context.modify(getOptionalItem("creeper_shearing", "creeper_oysters"), builder -> modifyEntry(builder, replaceWith(1).statusEffect(addPoisonEffect(100, 0), 1.0F).build()));
         }
 
         if (FabricLoader.getInstance().isModLoaded("btwr")) {
-            context.modify(BEAST_LIVER_RAW, builder -> modifyEntry(builder, replaceWith(5).statusEffect(addHungerEffect(600, 1), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
-            context.modify(BEAST_LIVER_COOKED, builder -> modifyEntry(builder, replaceWith(6).build()));
+            context.modify(getOptionalItem("btwr", "beast_liver_raw"), builder -> modifyEntry(builder, replaceWith(5).statusEffect(addHungerEffect(600, 1), 0.3F).statusEffect(addSlownessEffect(1000, 1), 0.1F).build()));
+            context.modify(getOptionalItem("btwr", "beast_liver_cooked"), builder -> modifyEntry(builder, replaceWith(6).build()));
         }
 
-
         if (FabricLoader.getInstance().isModLoaded("vegehenna")) {
-            context.modify(ModItems.BOILED_POTATO, builder -> modifyEntry(builder, replaceWith(1).build()));
-            context.modify(ModItems.COOKED_CARROT, builder -> modifyEntry(builder, replaceWith(2).build()));
-            context.modify(ModItems.CHOCOLATE, builder -> modifyEntry(builder, replaceWith(2).build()));
-            context.modify(ModItems.CHOCOLATE_MILK, builder -> modifyEntry(builder, replaceWith(3).build()));
+            context.modify(getOptionalItem("vegehenna", "boiled_potato"), builder -> modifyEntry(builder, replaceWith(1).build()));
+            context.modify(getOptionalItem("vegehenna", "cooked_carrot"), builder -> modifyEntry(builder, replaceWith(2).build()));
+            context.modify(getOptionalItem("vegehenna", "chocolate"), builder -> modifyEntry(builder, replaceWith(2).build()));
+            context.modify(getOptionalItem("vegehenna", "chocolate_milk"), builder -> modifyEntry(builder, replaceWith(3).build()));
         }
 
         /**
@@ -149,6 +145,10 @@ public class FoodComponentModifier {
 
     private static StatusEffectInstance addPoisonEffect(int dur, int amp) {
         return new StatusEffectInstance(StatusEffects.POISON, dur, amp, false, false, false);
+    }
+
+    private static Item getOptionalItem(String modId, String path) {
+        return Registries.ITEM.get(Identifier.of(modId, path));
     }
 
 }

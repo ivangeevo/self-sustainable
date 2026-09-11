@@ -1,6 +1,5 @@
 package org.btwr.self_sustainable.event.events;
 
-import com.bwt.items.BwtItems;
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
@@ -80,7 +79,7 @@ public class ModLootTableEvents {
             // Add a saw dust drop if Better With Time is present
             if (FabricLoader.getInstance().isModLoaded("bwt")) {
                  newTable.pool(LootPool.builder()
-                 .with(ItemEntry.builder(BwtItems.sawDustItem)
+                 .with(ItemEntry.builder(Registries.ITEM.get(Identifier.of("bwt", "saw_dust")))
                  .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(6))))
                  .conditionally(withoutStrongAxe())
                  );

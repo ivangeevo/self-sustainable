@@ -1,4 +1,4 @@
-## v???(dev)
+## v0.7
 + Added new food combinations (moved them from BTWR: Core) as it makes more sense for them to be in this mod as it changes food values
 + Added being able to craft ham and eggs with cooked scrambled eggs. This is a workaround which allows Ham and Eggs to be a valid recipe, which only normally requires cooked eggs from the Better With Time mod.
 + Added a new mod item tag for axes which can fully harvest wooden chests. This ties in with the change below for wooden chests
